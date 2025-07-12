@@ -1,0 +1,91 @@
+<?xml version='1.0'?>
+<PapyrusProject xmlns="PapyrusProject.xsd" 
+    Flags="TESV_Papyrus_Flags.flg" 
+    Game="sse"
+    Anonymize="true" 
+    Output="Scripts" 
+    Optimize="false" 
+    Release="false" 
+    Zip="false"
+    Package="false"
+    Final="false">
+    <Variables>
+        <!-- Set the name of your mod: -->
+        <Variable Name="ModName" Value="SummonNastyCritters" />
+        <!-- The folder where you store all of your mods -->
+        <Variable Name="ModsFolder" Value="C:\Skyrim\dev\mods" />
+    </Variables>
+    <Imports>
+        <Import>@ModsFolder\SKSE64\Scripts\Source</Import>
+        <Import>@ModsFolder\SkyrimNet DOM\Headers</Import>
+        <Import>@ModsFolder\SkyrimNet\Source\Scripts</Import>
+        <Import>@ModsFolder\JContainers\scripts\source</Import>
+        <Import>@ModsFolder\UIExtensions\scripts\Source</Import>
+        <Import>@ModsFolder\SkyrimNet SexLab\Scripts\Source</Import>
+            <Import>@ModsFolder\OSL Aroused\Scripts\Source</Import>
+            <Import>@ModsFolder\SexLabFrameworkAE_v166b\scripts\Source</Import>
+                <Import>@ModsFolder\MfgFix\Source\Scripts</Import>
+                <Import>@ModsFolder\Fores New Idles in Skyrim SE - FNIS SE\scripts\source</Import>
+                <Import>@ModsFolder\RaceMenu\scripts\source</Import>
+                <Import>@ModsFolder\FNIS Creature Pack SE\scripts\source</Import>
+            <Import>@ModsFolder\Papyrus MessageBox - SKSE NG\Scripts\Source</Import>
+
+        <!-- 
+        <Import>@ModsFolder\powerofthree's Papyrus Extender\Source\scripts</Import>
+        <Import>@ModsFolder\Papyrus MessageBox - SKSE NG\Scripts\Source</Import>
+
+        <Import>@ModsFolder\PAH Diary Of Mine\Scripts\Source</Import>
+                <Import>@ModsFolder/ZAZ 7.0SE-Rev1/scripts/source</Import>
+                    <Import>@ModsFolder/Fores New Idles in Skyrim SE - FNIS SE/scripts/source</Import>
+            <Import>@ModsFolder/SkyUI/scripts/Source</Import>
+            <Import>@ModsFolder/Paradise Halls Enhanced (PAHE) SSE/scripts/source</Import>
+            <Import>@ModsFolder\OStim Standalone - Advanced Adult Animation Framework\Scripts\Source</Import>
+            <Import>@ModsFolder\XP32 Maximum Skeleton Special Extended\Scripts\Source</Import>
+            <Import>@ModsFolder\PAHSlaveCart SE\Scripts\Source</Import>
+            <Import>@ModsFolder\SexLabArousedSSELoose\Scripts\Source</Import>
+            <Import>@ModsFolder\MME SGO4\Scripts\Source</Import>
+            <Import>@ModsFolder\Schlongs of Skyrim SE\Scripts\Source</Import>
+            <Import>@ModsFolder\Milk Mod Economy\Scripts\Source</Import>
+            <Import>@ModsFolder\Devious Devices NG\Source</Import>
+            <Import>@ModsFolder\Devious Expressions\Scripts\Source</Import>
+
+            <Import>@ModsFolder\ConsoleUtilSSE NG\Scripts\Source</Import>
+                <Import>@ModsFolder/PapyrusUtil SE - Modders Scripting Utility Functions\Scripts\Source</Import>
+            <Import>@ModsFolder\MCM Recorder\Scripts\Source</Import>
+        <Import>@ModsFolder\SummonNastyCritters\Scripts\Headers</Import>
+
+        <Import>@ModsFolder\FINS Creature Pack SE\Scripts\Source</Import>
+        <Import>@ModsFolder\SkyUI_5.1_SDK\Scripts\Source</Import>
+        <Import>@ModsFolder\SlaveTatsSE\Source\Scripts</Import>
+        <Import>@ModsFolder\JContainers SE\scripts\source</Import>
+        -->
+        <Import>C:\Skyrim\dev\skyrim\Data\Scripts\Source</Import>
+    </Imports>
+    <Folders>
+        <!-- Relative path to folder containing .psc Papyrus source code files for this project -->
+        <Folder>./Scripts/Source</Folder>
+    </Folders>
+    <!-- The following section is for .bsa archives. You can enable it by setting Package="true" in the PapyrusProject -->
+    <Packages Output=".">
+        <Package Name="@ModName" RootDir=".">
+            <Match In="Scripts">*.pex</Match>
+            <!-- <Match In="interface\translations">*.txt</Match> -->
+        </Package>
+        <!-- If you have any texture files, uncomment the following to create a Textures .bsa archive with texture files -->
+        <!-- <Package Name="@ModName - Textures" RootDir=".">
+            <Include>*.dds</Include>
+        </Package> -->
+    </Packages>
+    <!-- The following section is for .zip archive. You can enable it by setting Zip="true" in the PapyrusProject -->
+    <ZipFiles Output="Build">
+        <ZipFile Name="@ModName" RootDir="." Compression="deflate">
+            <Include>@ModName.esp</Include>
+            <Include NoRecurse="true">*.bsa</Include>
+            <Match In="Scripts\Source">*.psc</Match>
+        </ZipFile>
+    </ZipFiles>
+    <!-- This will remove any *.bsa files in this directory *after* the build, if there are any. Set UseInBuild="false" to disable. -->
+    <PostBuildEvent Description="Post-Build Remove BSA Files" UseInBuild="true">
+        <Command>del /s /q /f *.bsa</Command>
+    </PostBuildEvent>
+</PapyrusProject>

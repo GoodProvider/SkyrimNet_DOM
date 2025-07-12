@@ -1,0 +1,20 @@
+[
+    ["Disrespectful"," {{ decnpc(npc.UUID).name }} shows disrespect towards a {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"being disrespectful\"}"],
+    ["BeggingStop"," {{ decnpc(npc.UUID).name }} tells a {superior} to stop.",
+         "{\"superior\": \"Actor\", \"type\":\"begging to stop\"}"],
+    ["Yelling"," {{ decnpc(npc.UUID).name }} is yelling at {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"yelling\"}"],
+    ["Struggling"," {{ decnpc(npc.UUID).name }} is struggling to escape {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"struggling\"}"],
+    ["Angry"," {{ decnpc(npc.UUID).name }} is angry with {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"angry\"}"],
+    ["NotRespectful"," {{ decnpc(npc.UUID).name }} is not respectful to {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"not respectful\"}"],
+    ["DidntListen"," {{ decnpc(npc.UUID).name }} didn't listen to {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"didnt listen\"}"],
+    ["DidntObey"," {{ decnpc(npc.UUID).name }} didn't obey {superior}.",
+         "{\"superior\": \"Actor\", \"type\":\"didnt obey\", \"choice\":\"disobey\"}"],
+    ["NoSex"," {{ decnpc(npc.UUID).name }} didn't obey by {superior} for sex.",
+         "{\"superior\": \"Actor\", \"type\":\"didnt obey\", \"choice\":\"no sex\"}"]
+]

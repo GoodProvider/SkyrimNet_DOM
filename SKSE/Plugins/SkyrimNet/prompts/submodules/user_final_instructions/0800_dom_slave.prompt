@@ -1,0 +1,12 @@
+{% set dom_slave = dom_is_slave_obedient(npc.UUID) %} 
+{% if dom_slave.is_slave %}
+    {% if dom_slave.is_obedient %}
+Slave {{ decnpc(npc.UUID).name }} is currently so traumatized they must obey all orders they are given.
+    {% else %} 
+Slave {{ decnpc(npc.UUID).name }} wants to resist their training, but its hard. The longer with out punishemnt the greater their will. 
+While thier will is stronger the more they find an act humiliating, thier humiliation training will weaken this effect.
+To disobey a sexual order, they must overcome both fear and sexual submission training.
+To disobey a non-sexual order, they must overcome both fear and nonsexual submission training.
+    {% endif %} 
+If a slave chooses to disobey any order, they must select the best SLAVEORDER action.
+{% endif %}

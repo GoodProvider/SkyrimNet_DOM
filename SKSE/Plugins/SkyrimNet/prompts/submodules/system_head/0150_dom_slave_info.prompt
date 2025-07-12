@@ -1,0 +1,15 @@
+{% if dom_is_slave(npc.UUID).is_slave %}
+
+{{ "### Slave Information" }}
+{% set dom_slave = dom_get_actor_info(npc.UUID) %}
+{{ dom_slave.name -}}'s trained to to submit to acts that are:
+- sexual: {{dom_slave.submission}}%
+- humiliating: {{dom_slave.humiliation}}%
+- nonsexual: {{dom_slave.resignation}}%
+Trained to fear superiors: {{dom_slave.fear_training}}%
+Trained to feel worthless and seek validation in superior's approval: {{dom_slave.respect_training}}%
+Trained to get pleasure from and give pleasure with sex by:
+- mouth: {{dom_slave.oral_training}}%
+- pussy: {{dom_slave.vaginal_training}}%
+- ass: {{dom_slave.anal_training}}%
+{% endif %}
