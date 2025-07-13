@@ -10,7 +10,7 @@ DOM_API Property api = None Auto
 Function Register_Events(SkyrimNet_DOM_Main _main)
     main = _main 
     player = Game.GetPlayer()
-    player_name = player.GetLeveledActorBase().GetName()
+    player_name = player.GetDisplayName()
     Quest DOM01 = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") AS Quest 
     DOM_core domcore = DOM01 as DOM_Core
     DOM_SlaveManager manager = DOM01 AS DOM_SlaveManager
@@ -75,9 +75,9 @@ int Function RegisterShortLivedEvent(String eventId, String eventType, String de
     Debug.Notification("SkyrimNet:"+description)
     String name = ""
     if targetActor == None 
-        name = sourceActor.GetLeveledActorBase().getName()
+        name = sourceActor.GetDisplayName()
     else
-        name = targetActor.GetLeveledActorBase().getName()
+        name = targetActor.GetDisplayName()
     endif 
     msg = name+" "+msg
     eventId = "DOM "+name+" "+eventId
@@ -89,13 +89,13 @@ int Function RegisterShortLivedEvent(String eventId, String eventType, String de
     if SexLab != None 
         String names = "" 
         if SexLab.IsActorActive(sourceActor) 
-            names += sourceActor.GetLeveledActorBase().GetName()
+            names += sourceActor.GetDisplayName()
         endif 
         if targetActor != None && SexLab.IsActorActive(targetActor)
             if names != ""
                 names += ","
             endif 
-            names += sourceActor.GetLeveledActorBase().GetName()
+            names += sourceActor.GetDisplayName()
         endif 
         if names != "" 
             Trace("RegisterShortLivedEvent: "+names+" already having sex")
@@ -143,14 +143,14 @@ EndFunction
     ;endif
 ;    Debug.TraceAndBox("Before capture")
 ;    SkyrimNetApi.RegisterShortLivedEvent("dom_event", \
-;        player.GetLeveledActorBase().getName()+" over powers "+slave.GetLeveledActorBase().getName()+", forcing them to the ground, and enslaving them.",\
+;        player.GetDisplayName()+" over powers "+slave.GetDisplayName()+", forcing them to the ground, and enslaving them.",\
 ;        player, slave)
 ;    Debug.TraceAndBox("Added capture event")
 ;EndFunction
 
 Event OnCaptureAnimation(Form akTarget, string capture_msg, bool is_from_behind, bool is_unconscious)
     Actor slave = akTarget as Actor 
-    String msg = player.GetLeveledActorBase().getName()
+    String msg = player.GetDisplayName()
     if is_from_behind
         msg += " comes from behind, "
     endif 
@@ -158,7 +158,7 @@ Event OnCaptureAnimation(Form akTarget, string capture_msg, bool is_from_behind,
     if  is_unconscious
         msg += " an unconscious "
     endif 
-    msg += slave.GetLeveledActorBase().getName()+" thier body, but not their mind."
+    msg += slave.GetDisplayName()+" thier body, but not their mind."
     Trace("OnCaptureAnimation : "+ msg)
 ;    SkyrimNetApi.DirectNarration("*"+msg+"*", player, slave)
 
@@ -167,7 +167,7 @@ EndEvent
 
 Event OnLostVirginity(Form akRef, String type )
     Actor slave = akRef as Actor 
-    String msg = slave.GetLeveledActorBase().getName()
+    String msg = slave.GetDisplayName()
     if type == "same"
         msg += " had sex with a person of the same gender for the first time."
     elseif type == "gang"
@@ -185,7 +185,7 @@ Event OnRunaway(Form akRef)
     JFormMap.setInt(runningMap, akRef, 1)
     Actor slave = (akRef as Actor)
     Actor target = None
-    String name  = slave.GetLeveledActorBase().getName()
+    String name  = slave.GetDisplayName()
     String msg = name+" is running away. To afraid to turn back!"
     OnHelper("runaway","running", slave, msg)
 EndEvent 
@@ -243,7 +243,7 @@ EndEvent
 ; guilt, rape, insult, threat, sex, care, 
 Event OnComforted(Form akRef, String type, Bool isObedient)
     Debug.MessageBox(type+" "+isObedient)
-    String name = (akRef as Actor).GetLeveledActorBase().GetName()
+    String name = (akRef as Actor).GetDisplayName()
     String msg = None
     if type == "sex" 
         msg = " comforts "+name+" with in loveing sex"
@@ -269,7 +269,7 @@ EndEvent
 
 Event OnKinkDiscovered(Form akRef, String type)
     Actor slave = akRef as Actor 
-    String msg = "*"+player.GetLeveledActorBase()+" discovered "+slave.GetLeveledActorBase().getName()+" "+type+" kink.*"
+    String msg = "*"+player.GetLeveledActorBase()+" discovered "+slave.GetDisplayName()+" "+type+" kink.*"
     RegisterEvent("kink discovered", msg, player, slave)
 EndEvent 
 
@@ -280,11 +280,11 @@ EndEvent
 
 Event OnPunished(Form akRef, string punish_method, string punish_reason, bool is_obedient)
     Actor slave = akRef as Actor 
-    String slave_name = slave.GetLeveledActorBase().getName()
+    String slave_name = slave.GetDisplayName()
     Debug.MessageBox("OnPunishement "+slave_name+" "+punish_method+" "+punish_reason)
     Trace("OnPunishement "+slave_name+" "+punish_method+" "+punish_reason)
 
-    String msg = player.GetLeveledActorBase().getName()+" punished " \
+    String msg = player.GetDisplayName()+" punished " \
         + slave_name+" with "+punish_method+" for "+punish_reason+"."
 
     if punish_method == "whip" 

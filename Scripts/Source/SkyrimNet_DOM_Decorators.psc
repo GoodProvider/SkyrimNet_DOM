@@ -66,7 +66,7 @@ String Function Get_Actor_Info(Actor akActor) global
         Trace("Get_DOM_Slave_INfo: DOM_API is None",true)
         return ""
     endif
-    String slave_name = akActor.GetLeveledActorBase().GetName()
+    String slave_name = akActor.GetDisplayName()
     if !api.IsDOMSlave(akActor)
         Trace("Get_DOM_Slave_INfo: "+slave_name+" is not a slave")
         return "{\"is_slave\":false}"
@@ -82,7 +82,7 @@ String Function Get_Actor_Info(Actor akActor) global
 
     String json = "{\"is_slave\":true" \
     + ",\"name\":\"" + slave_name+"\"" \
-    + ",\"owner\":\"" + Game.GetPlayer().GetLeveledActorBase().GetName()+"\"" \
+    + ",\"owner\":\"" + Game.GetPlayer().GetDisplayName()+"\"" \
     + ",\"is_obedient\"" +is_obedient \
     + ",\"mood\":\"" + core.GetMood(akActor)+"\""\
     + ",\"state\":\"" + Add_State(slave)+"\""\
