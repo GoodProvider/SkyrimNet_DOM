@@ -1,12 +1,34 @@
-{% set dom_slave = dom_is_slave_obedient(npc.UUID) %} 
-{% if dom_slave.is_slave %}
-    {% if dom_slave.is_obedient %}
-Slave {{ decnpc(npc.UUID).name }} is currently so traumatized they must obey all orders they are given.
-    {% else %} 
-Slave {{ decnpc(npc.UUID).name }} wants to resist their training, but its hard. The longer with out punishemnt the greater their will. 
-While thier will is stronger the more they find an act humiliating, thier humiliation training will weaken this effect.
-To disobey a sexual order, they must overcome both fear and sexual submission training.
-To disobey a non-sexual order, they must overcome both fear and nonsexual submission training.
-    {% endif %} 
-If a slave chooses to disobey any order, they must select the best SLAVEORDER action.
+{% if is_in_faction(npc.UUID, "DOMActorFaction") %}
+    {% if worn_has_keyword(npc.UUID, "DOMWornBlindfold") %}
+    -  {{ decnpc(npc.UUID).name }}'s eyes are covered and they can see nothing. 
+    {% endif %}
+    {% if worn_has_keyword(npc.UUID, "DOMWornGag") %}
+    -  {{ decnpc(npc.UUID).name }}'s mouth is gagged. They can only communicate with mumbles and gestures. 
+    {% endif %}
+    {% if worn_has_keyword(npc.UUID, "DOMWornWrist") %}
+    -  {{ decnpc(npc.UUID).name }}'s wrists are tied. They can not use their hands.
+    {% endif %}
+    {% if worn_has_keyword(npc.UUID, "BodyBag") %}
+    -  {{ decnpc(npc.UUID).name }} is inside a body bag, they can not see, speak (barely mumble), or move.
+    {% endif %}
+    {% if worn_has_keyword(npc.UUID, "DOMWornPlugAnal") %}
+    -  {{ decnpc(npc.UUID).name }} has a primitive anal plug up thier ass, creating a profound sense of fullness. 
+    {% endif %}
+    {% if worn_has_keyword(npc.UUID, "DOMWornPlugVaginal") %}
+    -  {{ decnpc(npc.UUID).name }} has a primitive plug up thier vagina, proving a decent amount of sexual stimulation to the wearer.
+    {% endif %}
+    {% set dom = dom_get_final_instructions(npc.UUID) %} 
+    {% if dom.is_masturbating %}
+        - {{dom.name}} is currently masturbating. ONLY answer as though they are in the middle of sex and it's hard to focus on anything else. Broken sentences are fine.
+    {% endif %}
+    {% if dom.is_slave %}
+        {% if dom.is_obedient %}
+    - Slave {{ dom.name }} is currently so traumatized they must obey all orders they are given.
+        {% else %} 
+    - Slave {{ dom.name }} wants to resist their training, but its hard. The longer with out punishemnt the greater their will.  While their will is stronger the more they find an act humiliating, their humiliation training will weaken this effect.
+      - To disobey a sexual order, they must overcome both fear and sexual submission training.
+      - To disobey a non-sexual order, they must overcome both fear and nonsexual submission training.
+    - If a slave chooses to disobey any order, they must select the best SLAVEORDER action.
+        {% endif %} 
+    {% endif %}
 {% endif %}

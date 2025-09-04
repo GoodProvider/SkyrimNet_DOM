@@ -1,4 +1,4 @@
-{% if dom_is_slave(npc.UUID).is_slave %}
+{% if is_in_faction(npc.UUID, "DOMActorFaction") and dom_is_slave(npc.UUID).is_slave %}
 {% set dom_slave = dom_get_actor_info(npc.UUID) %}
 {{ dom_slave.name }} is {{ dom_slave.owner -}}'s slave.  She feels {{dom_slave.mood}}, {{ dom_slave.state }} .
 {% endif %}

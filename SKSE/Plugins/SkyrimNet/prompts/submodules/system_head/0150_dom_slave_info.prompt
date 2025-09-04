@@ -1,4 +1,4 @@
-{% if dom_is_slave(npc.UUID).is_slave %}
+{% if is_in_faction(npc.UUID, "DOMActorFaction") and dom_is_slave(npc.UUID).is_slave %}
 
 {{ "### Slave Information" }}
 {% set dom_slave = dom_get_actor_info(npc.UUID) %}
@@ -12,4 +12,15 @@ Trained to get pleasure from and give pleasure with sex by:
 - mouth: {{dom_slave.oral_training}}%
 - pussy: {{dom_slave.vaginal_training}}%
 - ass: {{dom_slave.anal_training}}%
+- Arousal: {%
+    if dom_slave.is_aroused_for == 0.0 %} no arousal {%
+    else if dom_slave.is_aroused_for < 20.0 %} slight arousal, faint blush in cheeks {%
+    else if dom_slave.is_aroused_for < 40.0 %} would enjoy sex with someone they like, faint blush in cheeks {%
+    else if dom_slave.is_aroused_for < 60.0 %} wants sex with someone they like, blushed cheeks {%
+    else if dom_slave.is_aroused_for < 80.0 %} wants to ask for sex with someone they like, blushed cheeks{%
+    else if dom_slave.is_aroused_for < 95.0 %} wants to beg for sex with someone they desire, blushed cheeks and other subtle signs of sexual arousal  {%
+    else if dom_slave.is_aroused_for < 100.0 %} helplessly begs for sex, will consider masturbation, blushed cheeks and signs of sexual arousal {%
+        else %} helplessly grovels for sex. if begging has failed,  will consider masturbation or rape, blushed cheeks and obvious signs of sexual arousal {%
+    endif %} ( {{ dom_slave.is_aroused_for }}% )
+
 {% endif %}
