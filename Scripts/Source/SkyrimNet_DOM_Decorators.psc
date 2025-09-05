@@ -19,26 +19,29 @@ Function Register_Decorators() global
     if success != 0
         Trace("RegisterDecorator failed: dom_is_slave_obedient",true)
     endif 
+    success = SkyrimNetApi.RegisterDecorator("dom_get_final_instructions", "SkyrimNet_DOM_Decorators", "get_final_instructions")
+    if success != 0
+        Trace("RegisterDecorator failed: dom_get_final_instructions",true)
+    endif 
 EndFunction
 
 String Function Is_Slave(Actor akActor) global
     Bool is_slave = False 
 
-    Quest DOM01 = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as Quest
-    if DOM01 != None 
-        is_slave = (DOM01 as DOM_API).IsDOMSlave(akActor)
+    DOM_API d_api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
+    if d_api != None && akActor.IsInFaction(d_api.DOMActorFaction)
+        is_slave = d_api.IsDOMSlave(akActor)
     endif 
 
     return "{\"is_slave\":"+is_slave+"}"
 EndFunction
 
 String Function Is_Slave_Obedient(Actor akActor) global
-    Quest DOM01 = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as Quest
-    DOM_API api = DOM01 as DOM_API
+    DOM_API d_api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
     String is_slave = ":false"
     String is_obedient = ":false"
-    if api != None
-        DOM_Actor slave = api.GetDOMActor(akActor)
+    if d_api != None && akActor.IsInFaction(d_api.DOMActorFaction)
+        DOM_Actor slave = d_api.GetDOMActor(akActor)
         if slave != None 
             is_slave = ":true"
             if slave.mind.IsObedient()
@@ -47,6 +50,33 @@ String Function Is_Slave_Obedient(Actor akActor) global
         endif
     endif 
     return "{\"is_slave\""+is_slave+", \"is_obedient\""+is_obedient+"}"
+EndFunction
+
+String Function get_final_instructions(Actor akActor) global
+    DOM_API d_api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
+    String is_slave = ":false"
+    String is_obedient = ":false"
+    String masturbating = ":false"
+    String behaviour = ""
+    if d_api != None && akActor.IsInFaction(d_api.DOMActorFaction)
+        DOM_Actor slave = d_api.GetDOMActor(akActor)
+        if slave != None 
+            is_slave = ":true"
+            if slave.mind.IsObedient()
+                is_obedient = ":true"
+            endif
+            behaviour = slave.behaviour
+            if slave.behaviour == "masturbate"
+                masturbating = ":true"
+            endif 
+        endif
+    endif 
+    return "{\"name\":\""+akActor.GetDisplayName()+"\""\
+        +",\"is_slave\""+is_slave\
+        +",\"is_obedient\""+is_obedient\
+        +",\"is_masturbating\""+masturbating\
+        +",\"behaviour\":\""+behaviour+"\""\
+        +"}"
 EndFunction
 
 String Function BehaviourToStr(String behavior) global
@@ -95,7 +125,12 @@ String Function Get_Actor_Info(Actor akActor) global
     + ",\"vaginal_training\":" + mind.vaginal_training\
     + ",\"anal_training\":" + mind.anal_training\
     + ",\"oral_training\":" + mind.oral_training\
+    + ",\"arousal_factor\":" + mind.arousal_factor\
+    + ",\"is_aroused_for\":" + mind.is_aroused_for\
+    + ",\"is_enraptured_for\":" + mind.is_enraptured_for\
     + "}"
+
+    Debug.Notification("factor: "+mind.arousal_factor+" aroused: "+mind.is_aroused_for+" enraptured:"+mind.is_enraptured_for)
 
     return json
 EndFunction

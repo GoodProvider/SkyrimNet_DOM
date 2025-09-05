@@ -1,5 +1,14 @@
 Scriptname DOM_API extends Quest
 
+DOM_Core Property DOM auto
+
+Faction Property DOMActorFaction auto 
+Faction Property DOMPlayerSlaveFaction auto 
+Faction Property DOMPlayerSlaverFaction auto
+
+String[] Property validMoods auto
+String[] Property TraitNames auto
+
 DOM_Actor Function GetDOMActor(Actor akActor) 
 EndFunction
 

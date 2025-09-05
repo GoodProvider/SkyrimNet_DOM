@@ -186,9 +186,13 @@ Function SlaveOrder_StripDress_Execute(Actor akActor, string contextJson, string
             Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: DOM_API is None", true)
             return 
         endif
+        if !api.IsDOMSlave(akActor)
+            Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: "+akActor.GetDisplayName()+" is not a DOM slave")
+            return 
+        endif 
         DOM_Actor slave = api.GetDOMActor(akActor)
         if slave == None 
-            Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: slave is None")
+            Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: "+akActor.GetDisplayName()+" GetDomActor returned NONE ")
             return 
         endif 
         if type == "strip"

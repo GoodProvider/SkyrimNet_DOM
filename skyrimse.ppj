@@ -22,6 +22,7 @@
         <Import>@ModsFolder\JContainers\scripts\source</Import>
         <Import>@ModsFolder\UIExtensions\scripts\Source</Import>
         <Import>@ModsFolder\SkyrimNet SexLab\Scripts\Source</Import>
+            <Import>@ModsFolder\SkyrimNet SexLab\Headers\SLO Aroused NG</Import>
             <Import>@ModsFolder\OSL Aroused\Scripts\Source</Import>
             <Import>@ModsFolder\SexLabFrameworkAE_v166b\scripts\Source</Import>
                 <Import>@ModsFolder\MfgFix\Source\Scripts</Import>
@@ -29,6 +30,10 @@
                 <Import>@ModsFolder\RaceMenu\scripts\source</Import>
                 <Import>@ModsFolder\FNIS Creature Pack SE\scripts\source</Import>
             <Import>@ModsFolder\Papyrus MessageBox - SKSE NG\Scripts\Source</Import>
+            <Import>@ModsFolder\SkyUI\scripts\Source</Import>
+        <Import>@ModsFolder\SkyrimNet_DDUDNG\Scripts\Source</Import>
+        <Import>@ModsFolder\SkyrimNet_DDUDNG\Headers</Import>
+
 
         <!-- 
         <Import>@ModsFolder\powerofthree's Papyrus Extender\Source\scripts</Import>
@@ -59,7 +64,7 @@
         <Import>@ModsFolder\SlaveTatsSE\Source\Scripts</Import>
         <Import>@ModsFolder\JContainers SE\scripts\source</Import>
         -->
-        <Import>C:\Skyrim\dev\skyrim\Data\Scripts\Source</Import>
+        <Import>C:\Skyrim\dev\skyrim\Data\Source\Scripts</Import>
     </Imports>
     <Folders>
         <!-- Relative path to folder containing .psc Papyrus source code files for this project -->

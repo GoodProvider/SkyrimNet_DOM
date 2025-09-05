@@ -16,3 +16,27 @@ EndFunction
 
 bool Function IsObedient() ; will obey
 EndFunction
+
+float __arousal_factor = 0.0
+Float Property arousal_factor Hidden ; is getting more and more aroused
+	float Function get()
+	EndFunction
+	Function set(float value)
+	EndFunction
+EndProperty
+
+Int __is_aroused_for = 0 ; has reached the arousal plateau, orgasm is possible
+Int Property is_aroused_for Hidden
+	Int Function get()
+	EndFunction
+	Function set(Int value)
+	EndFunction
+EndProperty
+
+Int __is_enraptured_for = 0 ; is ecstatic
+Int Property is_enraptured_for Hidden
+	Int Function get()
+	EndFunction
+	Function set(Int value)
+	EndFunction
+EndProperty
