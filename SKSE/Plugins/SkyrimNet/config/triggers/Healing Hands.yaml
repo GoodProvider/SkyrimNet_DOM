@@ -1,0 +1,20 @@
+name: "Healing Hands"
+description: "Heals all wounds, from a split lip to wounded pussy. The target is left pain free."
+
+eventCriteria:
+  eventType: "hit"
+  schemaConditions:
+    - fieldPath: "weapon_id"
+      operator: "equals"
+      value: 316402
+
+response:
+  type: "direct_narration"
+  content: "{{originator}} casts a warm yellow swirling light around {{target}} healing all welts, wounds, and pain.  Leaving {{target}} with out pain or blemish, and a warm feeling of gratitude to {{originator}}."
+
+audience: "target"
+
+enabled: true
+probability: 1
+cooldownSeconds: 5
+priority: 1
