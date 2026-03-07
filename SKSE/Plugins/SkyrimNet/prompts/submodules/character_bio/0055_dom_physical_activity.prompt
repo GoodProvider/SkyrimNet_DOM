@@ -1,0 +1,14 @@
+render_mode: {{render_mode}}
+{% if dom_actor.loaded and ( render_mode == "dialogue_target" or render_mode == "short_inline" or show_internal) %}
+    {% if dom_actor.punishment.whipping_active == true %} 
+       - {{dom_actor.name}} is being whipped as punishment for {{dom_actor.punishment.whipping_reason_name}}.
+    {% else if dom_actor.behaviour != "" and dom_actor.behaviour != "masturbating" %}
+        - {{actor_name}} is {{ dom_actor.behaviour }}
+    {% endif %} 
+    {% if actor_rape_victim %}
+       - {{actor_name}} is being raped as punishment for {{dom_actor.punishment.next_reason}}.
+    {% endif %} 
+    {% if dom_actor.is_masturbating and (render_mode == "short_inline" or render_mode =="dialogue_target") %}
+       - {{dom_actor.name}} is masturbating.
+    {% endif %} 
+{% endif %}

@@ -1,0 +1,32 @@
+{% if (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+    {% set dom_is_in_faction = is_in_faction(actorUUID, "DOMPlayerSlaveFaction") %}
+    {% set dom_actor.loaded = false %} 
+    {% set dom_actor.source = "none" %}
+    {% set dom_actor_fname = "SkyrimNet_DOM/actors/"+actor_name+".json" %}
+    {% if dom_is_in_faction %} 
+        {% if not isTimePaused %} 
+            {% set dom_actor = dom_get_actor_info(actorUUID) %}
+        {% endif %} 
+        {% if not dom_actor.loaded and json_file_exists(dom_actor_fname) %} 
+            {% set dom_actor = read_json(dom_actor_fname) %} 
+            {% set dom_actor.loaded = true %}
+            {% set dom_actor.source = "file" %}
+        {% endif %}
+    {% endif %}
+    ########### Dom Actor 
+    {{ dom_actor }} 
+    
+    {% if dom_actor.loaded %}  
+        {% if dom_actor.is_aroused_for <= 30 %}
+            {% set arousal_state = "not_aroused" %}
+        {% else %}
+            {% if dom_actor.is_aroused_for > 0 %}
+                {% set arousal_state = "extremely_aroused" %}
+            {% else if dom_actor < 60 %} 
+                {% set arousal_state = "moderately_aroused" %}
+            {% else %}
+                {% set arousal_state = "highly_aroused" %}
+            {% endif %}
+        {% endif %} 
+    {% endif %}
+{% endif %}

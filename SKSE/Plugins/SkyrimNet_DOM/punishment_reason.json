@@ -1,0 +1,97 @@
+[
+  {
+    "actionName": "begging to stop",
+    "description": "begging to stop, from",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"begging to stop\"}"
+  },
+  {
+    "actionName": "cowering",
+    "description": "cowering before ",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"cowering\"}"
+  },
+  {
+    "actionName": "yelling",
+    "description": "raising their voice disrespectfully to",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"yelling\"}"
+  },
+  {
+    "actionName": "being a bad slave",
+    "description": "failing to be a good slave for",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"being a bad slave\"}"
+  },
+  {
+    "actionName": "being jealous",
+    "description": "showing inappropriate jealousy regarding",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"being jealous\"}"
+  },
+  {
+    "actionName": "being angry",
+    "description": "displayed an insolent or angry expression toward",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"being angry\"}"
+  },
+  {
+    "actionName": "being disrespectful",
+    "description": "shows disrespect towards a",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"being disrespectful\"}"
+  },
+  {
+    "actionName": "didnt listen",
+    "description": "ignored the verbal instructions given by",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"didnt listen\"}"
+  },
+  {
+    "actionName": "didnt obey",
+    "description": "explicitly disobeyed a direct order from",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"didnt obey\"}"
+  },
+  {
+    "actionName": "didnt masturbate",
+    "description": "failed to perform for when told to masturbate",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"didnt masturbate\"}"
+  },
+  {
+    "actionName": "refusing to have sex",
+    "description": "refused to comply with the sexual demands of",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to have sex\"}"
+  },
+  {
+    "actionName": "refusing to strip",
+    "description": "refused to remove their clothing when ordered by",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to strip\"}"
+  },
+  {
+    "actionName": "breaking restraints",
+    "description": "attempted to break or tamper with the restraints applied by",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"breaking restraints\"}"
+  },
+  {
+    "actionName": "running away",
+    "description": "attempted to flee from",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"running away\"}"
+  },
+  {
+    "actionName": "orgasming",
+    "description": "experienced an unauthorized orgasm, despite forbidden to do so by",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"orgasming\"}"
+  },
+  {
+    "actionName": "refusing to shower",
+    "description": "refused to clean themselves as commanded by",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to shower\"}"
+  },
+  {
+    "actionName": "not walking on four",
+    "description": "failed to maintain a quadrupedal posture as ordered by",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"not walking on four\"}"
+  },
+  {
+    "actionName": "refusing to give a bath",
+    "description": "refused to perform bathing services for",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to give a bath\"}"
+  },
+  {
+    "actionName": "being a bad slaver",
+    "description": "failed to properly manage or discipline other slaves",
+    "schema": "{\"superior\": \"Actor\", \"type\":\"being a bad slaver\"}"
+  }
+]

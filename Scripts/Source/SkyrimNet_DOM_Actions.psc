@@ -1,225 +1,402 @@
 Scriptname SkyrimNet_DOM_Actions
+import SkyrimNet_DOM_Utils
 
 ;------------------------------------
-; DOM Actions  
+; Shared Functions 
 ;------------------------------------
-Function Trace(String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utils.Trace("[SkyrimNet_DOM_Actions]", msg, Notification)
+Function Trace(String func, String msg, Bool Notification = false) global
+    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_Actions",func, msg, Notification)
+EndFunction
+DOM_ACtor Function Get_Slave(String func, Actor slaveActor,bool error_non_dom_actor=False) global
+    return SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions",func, slaveActor, error_non_dom_actor, false)
 EndFunction
 
+;------------------------------------
+; Register ACtions 
+;------------------------------------
 Function Register_Actions() global 
-
-    SkyrimNetApi.RegisterAction("SlaveOrder_No_Sex", \
-        "Disobeys a <superior>'s order to have sex", \
-        "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "Disobey_Execute",  \
-        "", "PAPYRUS", \
-        10, "{\"superior\": \"Actor\", \"type\":\"no sex\"")
-
+    Trace("Register_Actions","Registering Actions")
     ;--------------------------------------
     ; SlaveOrder handled by Disobey
     ;--------------------------------------
-    int slave_orders = JValue.readFromFile("Data/SkyrimNet_DOM/slave_orders.json")
-    i = 0 
-    count = JArray.count(slave_orders)
+    int slave_orders = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/slave_orders.json")
+    int i = 0 
+    int count = JArray.count(slave_orders)
     while i < count
         int order = JArray.getObj(slave_orders,i)
         String actionName = JArray.getStr(order,0)
         String description = JArray.getStr(order,1)
         String schemaJson = JArray.getStr(order,2)
-        SkyrimNetApi.RegisterAction("SlaveOrder_"+actionName, description, \
+        SkyrimNetApi.RegisterAction("DOMSLAVE_"+actionName, description, \
             "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
             "SkyrimNet_DOM_Actions", "Disobey_Execute",  \
             "", "PAPYRUS", 1, schemaJson)
         i += 1
     endwhile
 
-    SkyrimNetApi.RegisterAction("SlaveOrder_Strip", \
-        "'{{ decnpc(npc.UUID).name }} was ordered to <strip> clothes by <superior>, they have choosen to <choice>.", \
-        "SkyrimNet_DOM_Actions", "SlaveStrip_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_StripDress_Execute",  \
-        "", "PAPYRUS", \
-        10, "{\"superior\": \"Actor\", \"choice\":\"obey|disobey\", \"type\":\"strip|dress\"}")
-    SkyrimNetApi.RegisterAction("SlaveOrder_Dress", \
-        "'{{ decnpc(npc.UUID).name }} was ordered to dress by <superior>, they have choosen to <choice>.", \
-        "SkyrimNet_DOM_Actions", "SlaveDress_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_StripDress_Execute",  \
-        "", "PAPYRUS", \
-        10, "{\"superior\": \"Actor\", \"choice\":\"obey|disobey\", \"type\":\"dress\"}")
-    return 
+    String actions_fname = "Data/SKSE/Plugins/SkyrimNet_DOM/actions.json"
+    Trace("RegisterActions","loading "+actions_fname)
 
-    SkyrimNetApi.RegisterAction("SlaveOrder_TypeTarget", \
-        "'{{ decnpc(npc.UUID).name }} was ordered to <type> <target> by <superior>, they have choosen to <choice>.", \
-        "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_Target_Execute",  \
-        "", "PAPYRUS", \
-        10, "{\"superior\": \"Actor\", \"target\":\"Actor\", \"type\":\"follow|wait\", \"choice\":\"obey|disobey\"}")
-    SkyrimNetApi.RegisterAction("SlaveOrder_SexTarget", \
-        "'{{ decnpc(npc.UUID).name }} was ordered to have <type> sex with <target> by <superior>, they have choosen to <choice>.", \
-        "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_SexTarget_Execute",  \
-        "", "PAPYRUS", \
-        15, "{\"superior\": \"Actor\", \"target\":\"Actor\", \"type\":\"anal|vaginal|oral\", \"choice\":\"obey|disobey\", \"aggressive\":false}")
-    SkyrimNetApi.RegisterAction("SlaveOrder_Sex", \
-        "'{{ decnpc(npc.UUID).name }} was ordered to masturbate by <superior>, they have choosen to <choice>.", \
-        "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_SexTarget_Execute",  \
-        "", "PAPYRUS", \
-        10, "{\"superior\": \"Actor\",  \"type\":\"mastrubate\", \"choice\":\"obey|disobey\"}")
-
+    int actions = JValue.readFromFile(actions_fname) 
+    count = JArray.count(actions) 
+    i = 0 
+    while i < count 
+        int a = JArray.getObj(actions, i) 
+        Trace("RigsterActions", "i: "+i+" a: "+a)
+         if a > 0
+            String name = JMap.getStr(a, "name")
+            Trace("RegisterActions",\
+                i+" name: "+JMap.getStr(a, "name")\
+                +" description: "+JMap.getStr(a, "description")\
+                +" scriptFileName: "+JMap.getStr(a, "scriptFileName")\ 
+                +" execute: "+JMap.getStr(a, "execute")\
+                +" isEligible: "+JMap.getStr(a, "isEligible")\
+                +" priority: "+JMap.getInt(a, "priority")\
+                +" parameters: "+JMap.getStr(a, "parameters")\
+                +" tags: "+JMap.getStr(a, "tags"))
+            SkyrimNetApi.RegisterAction(\ 
+                JMap.getStr(a, "name"),\
+                JMap.getStr(a, "description"),\
+                JMap.getStr(a, "scriptFileName"), JMap.getStr(a, "isEligible"),\
+                JMap.getStr(a, "scriptFileName"), JMap.getStr(a, "execute"),\
+                "", "PAPYRUS", JMap.getInt(a, "priority"),\
+                JMap.getStr(a, "parameters"),\
+                "", JMap.getStr(a, "tags"))
+        else 
+            Trace("RegisterActions","Failed to get object from i: "+i)
+        endif 
+        i += 1 
+    endwhile 
 
     ;--------------------------------------
     ; Praise Reasons
     ;--------------------------------------
+    Trace("Register_Actions","Praise Reasons")
     String praise_reasons = "other" 
-    int reasons = JValue.readFromFile("Data/SkyrimNet_DOM/praise_reasons.json")
-    int i = 0 
-    int count = JArray.count(reasons)
-    while i < count
-        praise_reasons += "|"
-        praise_reasons += JArray.getStr(reasons,i)
-        i += 1
-    endwhile
+    String fname = "Data/SKSE/Plugins/StorageUtilData/PAH Diary Of Mine/PraisingReasons.json"
+    int reasons = JValue.readFromFile(fname) 
+    Trace("Register_Actions","reasons:"+reasons+" fname:"+fname)
+    if reasons > 0
+        i = 0 
+        count = JArray.count(reasons)
+        count = 1
+        while i < count
+            String id = ""+i
+            if i < 10 
+                id = "00"+id
+            elseif i < 100
+                id = "0"+id
+            endif 
+            String undefined = "undefined"+id
+            String path = "praisesList.Praise"+id+".reason"
+            String reason = JValue.solveStr(reasons,path,"")
+            if reason != "" && reason != undefined
+                praise_reasons += "|"
+                praise_reasons += reason
+            endif 
+            Trace("Register_Actions",i+" | "+undefined+" | "+path+" | "+reason)
+            i += 1
+        endwhile
 
-    SkyrimNetApi.RegisterAction("SlaveOrder_Praise", \
-        "'{{ decnpc(npc.UUID).name }} has been praised by <superior> for <reason>,  {{ decnpc(npc.UUID).name }} has choosen to <choice> the praise.", \
-        "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_Words_Execute",  \
-        "", "PAPYRUS", \
-        2, "{\"speaker\": \"Actor\", \"choice\":\"accept|reject\",\"type\":\"praise\",\"reason\":\""+praise_reasons+"\"}")
-
-    SkyrimNetApi.RegisterAction("SlaveOrder_Insulting", \
-        "'<superior> said hurtful words to {{ decnpc(npc.UUID).name }} by <kind> words,  {{ decnpc(npc.UUID).name }} has choosen to <choice> the those words.", \
-        "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
-        "SkyrimNet_DOM_Actions", "SlaveOrder_Words_Execute",  \
-        "", "PAPYRUS", \
-        2, "{\"superior\": \"Actor\", \"choice\":\"accept|reject\",\"type\":\"insulting\",\"kind\":\"try to dominating|calling them useless|degrading|demeaning|disgraceful|calling them worthless|hurtful\"}")
-
+        SkyrimNetApi.RegisterAction("Praise", \
+            "'{{ decnpc(npc.UUID).name }} has been praised by <superior> for <reason>,  {{ decnpc(npc.UUID).name }} has choosen to <choice> the praise.", \
+            "SkyrimNet_DOM_Actions", "IsSlave_IsEligible",  \
+            "SkyrimNet_DOM_Actions", "Words_Execute",  \
+            "", "PAPYRUS", \
+            2, "{\"superior\": \"Actor\", \"choice\":\"accept|reject\",\"type\":\"praise\",\"reason\":\""+praise_reasons+"\"}")
+        Trace("Register_Actions","praise_reasons: "+praise_reasons)
+    else
+        Trace("Register_Actions","Fail to load "+fname) 
+    endif 
 
 EndFunction
 
-Bool Function IsSlave_IsEligible(Actor akActor, string contextJson, string paramsJson) global
-    if !SkyrimNet_SexLab_Actions.SexTarget_IsEligible(akActor, contextJson, paramsJson)
+; -------------------------------
+Bool Function is_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
+    if !SkyrimNet_DOM_Utils.IsDOMSlave(slaveActor)
+        Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
         return False
-    endif
+    endif 
+    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions","is_masturbating",slaveActor) 
+    Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
+    return slave.is_behaviour_masturbate
+EndFunction 
 
-    DOM_API api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
-    if api == None
-        Trace("DOMSlave_Disobey_IsElibible: DOM_API is None",true)
+Bool Function is_not_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
+    if !SkyrimNet_DOM_Utils.IsDOMSlave(slaveActor)
+        Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
+        return False
+    endif 
+    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isElibible",slaveActor) 
+    Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
+    return !slave.is_behaviour_masturbate
+EndFunction
+
+Function masturbate_Start(Actor slaveActor, String contextJson, String paramsJson) global
+    Trace("Masturbate_Start","Starting "+slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
+
+    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Start", slaveActor, True) 
+    if slave == None 
+        return 
+    endif 
+
+    String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "start masturbating")
+    Actor superior = SkyrimNetAPi.GetJsonActor(paramsJson, "superior", Game.GetPlayer())
+    String position = SkyrimNetApi.GetJsonString(paramsJson, "position", "kneeling")
+    Trace("Masturbate_Start","slave:"+slaveActor.GetDisplayName()+" superior:"+superior.GetDisplayName()\
+        +" choice:"+choice+" position:"+position)
+    if choice == "start masturbating" || choice == "obey"
+        ;SkyrimNet_DOM_Utils. RegisterEvent(String event_name, String msg, Actor source=None, Actor target=None)
+        if !slave.is_behaviour_masturbate
+            if position == "kneeling"
+                slave.EnterMasturbateKneeling(superior) 
+            elseif position == "laying"
+                slave.EnterMasturbateLaying(superior) 
+            else
+                slave.EnterMasturbateStanding(superior) 
+            endif 
+        else
+            slave.MasturbateHarder(superior) 
+        endif 
+    Else
+        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions","Masturbate_Start", superior, slaveActor, slave, "didnt masturbate") 
+    endif 
+EndFunction 
+
+Function masturbate_Stop(Actor slaveActor, String contextJson, String paramsJson) global
+    Trace("Masturbate_Stop","Stopping "+slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
+
+    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Stop", slaveActor, True) 
+    if slave == None 
+        Trace("Masturbate_Stop","Failed to get slave for "+slaveActor.GetDisplayName())
+        return 
+    endif 
+    String reason = SkyrimNetApi.GetJsonString(paramsJson, "reason", "wanted")
+    if reason != "orderd"
+        SkyrimNet_Dom_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions","Masturbate_Stop", None, slaveActor, slave, "didnt masturbate")
+    endif 
+
+    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x5900, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+    main.d_keys.DOMDoStandStill(slaveActor)
+    Trace("Masturbate_Stop","slave:"+slaveActor.GetDisplayName()+" reason:"+reason)
+EndFunction 
+; -------------------------------
+Bool Function IsSlave_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global
+    SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
+    if !main.sexLab.IsValidActor(slaveActor) || slaveActor.IsDead() || slaveActor.IsInCombat() || main.sexLab.IsActorActive(slaveActor) || main.IsActorLocked(slaveActor) 
+        Trace("IsSlave_IsEligible",slaveActor.GetDisplayName()+" can't have sex")
         return False
     endif
-    Bool value = api.IsDOMSlave(akActor)
-    Trace(akActor.GetDisplayName()+" "+contextJson+" "+paramsJson+" "+value)
+    DOM_Actor slave = Get_Slave("IsSlave_IsEligible", slaveActor) 
+    bool is_slave = slave != None 
+    Trace("IsSlave_IsEligible",slaveActor.GetDisplayName()+" is_slave:"+is_slave)
+    return is_slave
+EndFunction 
+
+Function Disobey_Execute(Actor slaveActor, string contextJson, string paramsJson) global
+    DOM_Actor slave = Get_Slave("Disobey_Execute", slaveActor,true) 
+    if slave == None 
+        return 
+    endif 
+    String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "didnt obey")
+    Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", Game.GetPlayer()) 
+    SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Disobey_Execute", superior, slaveActor, slave, type) 
+EndFunction
+
+; The following paramsJson are used by hotkey functions to test thisfunction 
+; by_hotkey : required to turn on the functionality 
+Function Sex_Start(Actor slaveActor, string contextJson, string paramsJson) global
+    Trace("Sex_Start",slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
+    Sex_Start_Helper(slaveActor, contextJson, paramsJson, "None")
+EndFunction
+
+Function Rape_Target_Start(Actor slaveActor, string contextJson, string paramsJson) global
+    Trace("Rape_Target_Start",slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
+    Sex_Start_Helper(slaveActor, contextJson, paramsJson, "Target")
+EndFunction
+
+Function Rape_Speaker_Start(Actor slaveActor, string contextJson, string paramsJson) global
+    Trace("Rape_Speaker_Start",slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
+    Sex_Start_Helper(slaveActor, contextJson, paramsJson, "Speaker")
+EndFunction
+
+Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJson, String rape_victim) global
+    Trace("Sex_Start_Helper", slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
+    DOM_Actor slave = Get_Slave("Sex_Start_Helper", slaveActor,true) 
+    if slave == None 
+        return 
+    endif 
+
+    Actor player = Game.GetPlayer() 
+    Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", player)
+    String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "obey")
+    Bool rape = rape_victim == "Speaker" || rape_victim == "Target"
+
+    Trace("Sex_Start_Helper", "superior:"+superior.GetDisplayName()+" choice:"+choice+" rape:"+rape)
+
+    if choice == "obey" || rape
+        SkyrimNet_SexLab_Main sexlab_main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
+        if sexlab_main == None 
+            Trace("Sex_Start_Helper", "sexlab_main is None, aborting")
+            return 
+        endif 
+        Actor target = SkyrimNetApi.GetJsonActor(paramsJson, "target", player)
+
+        String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "")
+        
+        int DOMO1_ID = 0x00000D61
+        int DOM02Topic_ID = 0x000ED87C
+        String DOM_FILE = "DiaryOfMine.esm"
+        Form f = Game.GetFormFromFile(DOM02Topic_ID,DOM_FILE) 
+        DOM_KEYS d_keys = f as DOM_KEYS
+        DOM_sexlab d_sexlab = f as DOM_sexlab
+
+        ;String msg = "" 
+        ;float respectful_modifier = 1
+        ;if rape
+            ;msg = "' rape."
+            ;respectful_modifier = 0.4
+        ;else
+            ;msg = "'s request for sex."
+            ;respectful_modifier = 0.6
+            ;slave.Anim_PoseByString("LooseDialogueResponsePositive")
+        ;endif
+
+        ;bool not_respectful= false 
+        ;if slave.CanAnswer() 
+            ;not_respectful = slave.mind.IsNotRespectful(respectful_modifier)
+        ;endif 
+        ;if not_respectful 
+            ;msg = slaveActor.GetDisplayName()+" is being disrespectful about "+superior.GetDisplayName()+msg
+        ;else 
+            ;msg = slaveActor.GetDisplayName()+" respectfully submits to "+superior.GetDisplayName()+msg
+        ;endif 
+        ;slave.mind.sex_is_non_consensual = rape
+        if rape
+            Actor victim_actor = slaveActor 
+            if rape_victim == "Target"
+                victim_actor = target
+            endif 
+
+            if SkyrimNet_DOM_Utils.IsDOMSlave(victim_actor)
+                DOM_Actor victim_slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM", "Sex_Start_Helper", victim_actor) 
+                string reason
+                int imenu = d_keys.ShowDOMPunishmentMenu(slaveActor)
+                if imenu < 0
+                    reason = ""
+                else
+                    reason = d_keys.selectPunishmentReason[imenu]
+                    if reason == ""
+                        Trace("Sex_Start_Helper","Wheel menu returned invalid punishment reason")
+                    endif
+                endif
+                if reason != "" 
+                    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x5900, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+                    String desc = main.Get_Punishment_To_Description(reason) 
+                    if desc != "" 
+                        reason = desc+" "+superior.GetDisplayName()+"."
+                    endif 
+                endif 
+                String msg = superior.GetDisplayName()+" starts raping "+slaveActor.GetDisplayName()+" to punish them for "+reason+"."
+                SkyrimNet_DOM_Utils.RegisterEvent("DOM_Obey",msg, slaveActor, target)
+                slave.StartPunishingByActor(superior, reason, "rape")
+            endif 
+        else
+            String msg = slaveActor.GetDisplayName()+" respectfully submits to "+superior.GetDisplayName()+"."
+            SkyrimNet_DOM_Utils.RegisterEvent("DOM_Obey",msg, slaveActor, target)
+        endif 
+        Trace("Sex_Start_Helper",superior.GetDisplayName()+"'s "+slaveActor.GetDisplayName()\
+            +" target: "+target.GetDisplayName()+" rape:"+rape+" choice:"+choice)
+
+        SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+        sslThreadModel thread = SkyrimNet_SexLab_Actions.Sex_Start_Helper(slaveActor, contextJson, paramsJson, rape_victim, "SkyrimNet_DOM_AnimationEnd")
+        ((main as Quest) as SkyrimNet_DOM_Events).GetActorsReadyForScene(thread) 
+    Else
+        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Sex_Start_Helper", superior, slaveActor, slave, "refusing to have sex") 
+    endif 
+EndFunction
+
+Bool Function Comfort_Execute(Actor slaveActor, string contextJson, string paramsJson) global
+    String name = slaveActor.GetDisplayName()
+    DOM_Actor slave = Get_Slave("UndressDress_IsEligible", slaveActor) 
+    Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", Game.GetPlayer())
+    String method = SkyrimNetApi.GetJsonString(paramsJson, "method", "care")
+    String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "obey")
+    if choice == "obey" || choice == "is comforted"
+        Trace("Comfort_excute",slaveActor.GetDisplayName()+" comforted with "+method+" by "+superior.GetDisplayName())
+        slave.mind.StartComfortingWith(superior, method) 
+    else
+        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Comfortated_Execute", superior, slaveActor, slave, "didnt listen") 
+    endif 
+EndFunction 
+
+
+; ----------------------------------------------
+; Dress/Undress
+; ----------------------------------------------
+
+Bool Function Dress_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global
+    return UndressDress_IsEligible(slaveActor, contextJson, paramsJson, true)
+EndFunction
+
+Bool Function Undress_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global
+    return UndressDress_IsEligible(slaveActor, contextJson, paramsJson, false)
+EndFunction
+
+Bool Function UndressDress_IsEligible(Actor slaveActor, string contextJson, string paramsJson, Bool is_naked) global
+    String name = slaveActor.GetDisplayName()
+    DOM_Actor slave = Get_Slave("UndressDress_IsEligible", slaveActor) 
+    if slave == None 
+        Trace("UndressDress_IsEligible",name+" is not a name.")
+        return false 
+    endif 
+    bool value = slave.is_naked == is_naked
+    if is_naked
+        Trace("UndressDress_IsEligible","Slave "+name+" can dress: "+value)
+    else 
+        Trace("UndressDress_IsEligible","Slave "+name+" can undress: "+value)
+    endif 
     return value 
 EndFunction 
 
-Function Disobey_Execute(Actor akActor, string contextJson, string paramsJson) global
-    String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "didnt obey")
-    AddPunishmentReason(akActor, type) 
-EndFunction
-
-Function SlaveOrder_SexTarget_Execute(Actor akActor, string contextJson, string paramsJson) global
-    String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "obey")
-    Trace(akActor.GetDisplayName()+" choice: "+choice+" sextarget: "+contextJson+":"+paramsJson)
-    if choice == "obey"
-        Actor akTarget = SkyrimNetApi.GetJsonActor(paramsJson, "target", None)
-        String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "vaginal")
-        Bool rape = SkyrimNetApi.GetJsonBool(paramsJson, "rape", false)
-        Actor player = Game.GetPlayer() 
-        Debug.Trace("SexTarget target:"+akTarget+" type:"+type+" rape:"+rape)
-        ;if akTarget == player 
-            ;type = SkyrimNet_SexLab_Actions.YesNoDialog(rape, akTarget, akActor, player)
-        ;endif 
-        if type != "No"
-            DOM_API api = ( Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API)
-            if api == None
-                Trace("SlaveOrder_SexTarget_Execute: DOM_API is None",true)
-                return
-            endif
-            String slave_name = akActor.GetDisplayName()
-            if !api.IsDOMSlave(akActor)
-                Trace("SlaveOrder_SexTarget_Execute: "+slave_name+" is not a slave")
-                return
-            endif 
-            DOM_Actor slave = api.GetDOMActor(akActor)
-            slave.StartSexWithNPC(akTarget, type, rape)
-        endif 
-    Else
-        Debug.Trace("SexTarget no sex!!")
-        AddPunishmentReason(akActor, "no sex") 
-    endif 
-EndFunction
-
-; ----------------------------------------------
-; Strip 
-; ----------------------------------------------
-
-Bool Function SlaveStrip_IsEligible(Actor akActor, string contextJson, string paramsJson) global
-    return SlaveStripDress_IsEligible(akActor, contextJson, paramsJson, false)
-EndFunction
-
-Bool Function SlaveDress_IsEligible(Actor akActor, string contextJson, string paramsJson) global
-    return SlaveStripDress_IsEligible(akActor, contextJson, paramsJson, true)
-EndFunction
-
-Bool Function SlaveStripDress_IsEligible(Actor akActor, string contextJson, string paramsJson, Bool is_naked) global
-    DOM_API api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
-    if api == None
-        Trace("SlaveStrip_IsEligible: DOM_API is None", true)
-        return false
-    endif
-    DOM_Actor slave = api.GetDOMActor(akActor)
+Function UndressDress_Execute(Actor slaveActor, string contextJson, string paramsJson) global
+    Trace("UndressDress_Execute", slaveActor.GetDisplayName()+" context:"+ contextJson+" params:"+paramsJson)
+    DOM_Actor slave = Get_Slave("SripDress_Execute", slaveActor,true) 
     if slave == None 
-        Trace("SlaveStrip_IsEligible: slave is None")
-        return false
+        return 
     endif 
-    return slave.is_naked == is_naked
-EndFunction 
 
-Function SlaveOrder_StripDress_Execute(Actor akActor, string contextJson, string paramsJson) global
-    String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "strip")
-    Trace(akActor.GetDisplayName()+" "+type+":"+contextJson+":"+paramsJson)
+    String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "undress")
     String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "obey")
-    if choice == "obey"
-        DOM_API api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
-        if api == None
-            Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: DOM_API is None", true)
-            return 
-        endif
-        if !api.IsDOMSlave(akActor)
-            Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: "+akActor.GetDisplayName()+" is not a DOM slave")
-            return 
-        endif 
-        DOM_Actor slave = api.GetDOMActor(akActor)
-        if slave == None 
-            Trace("[SkyrimNet_DOM] DOMSlave_Srip_Execute: "+akActor.GetDisplayName()+" GetDomActor returned NONE ")
-            return 
-        endif 
-        if type == "strip"
-            slave.StripMore() 
+    Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", Game.GetPlayer()) 
+    if choice == "starts to undress" || choice == "starts to dress" || choice == "obey"
+        if type == "dress"
+            slave.UnsetShouldBeNaked(superior)
         else
-            slave.UnsetShouldBeNaked(Game.GetPlayer())
-            slave.Anim_DressUp(true)
+            if !slave.mind.should_be_naked
+                slave.mind.SetObedientTimer(1)
+            endif 
+            slave.SetShouldBeNaked(superior)
         endif 
-    Else
-        AddPunishmentReason(akActor, "refusing to strip") 
+    else 
+        String reason = "refusing to strip"
+        if choice == "dress" 
+            reason = "didnt listen"
+        endif 
+        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "UndressDress_Execute", superior, slaveActor, slave, reason)
     endif 
 EndFunction
 
-Function SlaveOrder_Words_Execute(Actor akActor, string contextJson, string paramsJson) global
-    Debug.Notification(akActor.GetDisplayName()+" words :"+contextJson+":"+paramsJson)
+Function Words_Execute(Actor slaveActor, string contextJson, string paramsJson) global
+    Trace("StripDress_Execute", slaveActor.GetDisplayName()+" context:"+ contextJson+" params:"+paramsJson)
+    DOM_Actor slave = Get_Slave("Words_Execute", slaveActor) 
+    if slave == None 
+        return 
+    endif 
+
     String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "accept")
+    Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", Game.GetPlayer()) 
     if choice == "accept"
-        DOM_API api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
-        if api == None
-            Trace("[SkyrimNet_DOM] DOMSlave_words_Execute: DOM_API is None",true)
-            return 
-        endif
-        DOM_Actor slave = api.GetDOMActor(akActor)
-        if slave == None 
-            Trace("[SkyrimNet_DOM] DOMSlave_Words_Execute: slave is None",true)
-            return 
-        endif 
         String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "being disrespectful")
         if type == "praise"
             String reason = SkyrimNetApi.GetJsonString(paramsJson, "reason", "good slave")
@@ -236,21 +413,6 @@ Function SlaveOrder_Words_Execute(Actor akActor, string contextJson, string para
             slave.StartInsultingWith(Game.GetPlayer(),kind)
         endif 
     Else
-        AddPunishmentReason(akActor, "didnt listen") 
+        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Words_Execute", superior, slaveActor, slave, "didnt listen") 
     endif 
-EndFunction
-
-Function AddPunishmentReason(Actor akActor, String reason_name) global
-    DOM_API api = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_API
-    if api == None
-        Trace("[SkyrimNet_DOM] Get_DOM_Slave_INfo: DOM_API is None",true)
-    endif
-    String slave_name = akActor.GetDisplayName()
-    if !api.IsDOMSlave(akActor)
-        Debug.TraceAndBox("[SkyrimNet_DOM] Get_DOM_Slave_INfo: "+slave_name+" is not a slave")
-    endif 
-    DOM_Mind mind = api.GetDOM_MindFromActor(akActor)
-    int reason = DOM_Util.GetPunishmentReasonIndexByName(reason_name)
-    mind.AddNextPunishmentReason(reason)
-    Debug.Notification(slave_name+" "+reason_name)
 EndFunction

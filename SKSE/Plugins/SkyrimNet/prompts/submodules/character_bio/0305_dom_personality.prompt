@@ -1,0 +1,39 @@
+{% if dom_actor.loaded and dom_actor.is_slave and render_mode == "full" %}
+    - Orgasms are emotionally powerful and important. They always leave a powerful emotional memory. 
+    {% if dom_actor.training_mind.submission >= 30 %} 
+        {% if dom_actor.training_mind.submission < 60 %} 
+            - {{actor_name}} is beginning to wonder if obeying sexual orders might be better than the alternative. 
+        {% else if dom_actor.training_mind.submission < 90 %} 
+            - {{actor_name}} thinks obeying sexual orders be better than the alternative. 
+        {% else %}
+            - {{actor_name}} knows obeying sexual orders is be better than the alternative. 
+        {% endif %}
+    {% endif %} 
+    {% if dom_actor.training_mind.humiliation >= 30 %} 
+        {% if dom_actor.training_mind.humiliation < 60 %} 
+            - {{actor_name}} is beginning to wonder if obeying a humiliating order might be better than the alternative. 
+        {% else if dom_actor.training_mind.humiliation < 90 %} 
+            - {{actor_name}} thinks obeying a humiliating order might be better than the alternative. 
+        {% else %}
+            - {{actor_name}} knows obeying a humiliating order might be better than the alternative. 
+        {% endif %}
+    {% endif %} 
+    {% if dom_actor.training_mind.fear < 30 %} 
+        - {{actor_name}} does not fear {{dom_actor.owner}}!
+    {% else if dom_actor.training_mind.fear < 60 %} 
+        - {{actor_name}} is a little afraid of {{dom_actor.owner}}.
+    {% else if dom_actor.training_mind.fear < 90 %} 
+        - {{actor_name}} is afraid of {{dom_actor.owner}}.
+    {% else %}
+        - {{actor_name}} terrified of {{dom_actor.owner}}!
+    {% endif %}
+    {% if dom_actor.training_mind.respect >= 30 %} 
+        {% if dom_actor.training_mind.respect < 60 %} 
+            - {{actor_name}} isn't certain they have worth. They are terrified that {{dom_actor.owner}} might be right. 
+        {% else if dom_actor.training_mind.respect < 90 %} 
+            - {{actor_name}} has begun to believe that they lack inherent value, maybe only in submission to others can they find meaning and identity.
+        {% else %}
+            - {{actor_name}} has fully internalized the idea that they are "worthless". Only through {{dom_actor.owner}} is there identity and value. 
+        {% endif %}
+    {% endif %} 
+{% endif %}

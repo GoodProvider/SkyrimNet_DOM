@@ -1,0 +1,63 @@
+{% set actor_having_sex = false %} 
+{% set actor_rape_victim = false %}
+{% if get_global_value("skyrimnet_sexlab_active_sex") == 1.0 %}
+     {% if not isTimePaused %}
+          {% set sexlab = sexlab_get_threads(npc.UUID) -%}
+          {% if not sexlab.threads %}
+               {% set sexlab = read_json("SkyrimNet_SexLab/threads.json") %} 
+          {% endif %}
+     {% else %} 
+          {% set sexlab = read_json("SkyrimNet_SexLab/threads.json") %} 
+     {% endif %}
+     {% for thread in sexlab.threads %}
+          {% if contains(thread.victims, npc.name) %} 
+               {% set actor_rape_victim = true %} 
+          {% endif %} 
+          {% if contains(thread.names, npc.name) %} 
+               {% set actor_having_sex = true %} 
+          {% endif %}
+    {% endfor %} 
+{% endif %}  
+{% set dom_is_in_faction = is_in_faction(npc.UUID, "DOMPlayerSlaveFaction") %}
+{% set dom_actor.loaded = false %} 
+{% set dom_actor.source = "none" %}
+{% set dom_actor_fname = "SkyrimNet_DOM/actors/"+speaker.name+".json" %}
+{% if dom_is_in_faction %} 
+    {% if not isTimePaused %} 
+        {% set dom_actor = dom_get_actor_info(npc.UUID) %}
+        {% set dom_actor.loaded = true %}
+        {% set dom_actor.source = "papyrus" %}
+    {% else %} 
+        {% if json_file_exists(dom_actor_fname) %} 
+            {% set dom_actor = read_json(dom_actor_fname) %} 
+            {% set dom_actor.loaded = true %}
+            {% set dom_actor.source = "file" %}
+        {% endif %} 
+    {% endif %}
+{% endif %}
+### Dom Actor
+{{ dom_actor }}
+
+{% if dom_actor.loaded and dom_actor.is_slave %} 
+    {% if dom_actor.has_mouth_gag %} 
+       - {{dom_actor.name}} has a gag in their mouth:
+          - dialogue must not have words
+          - only communicate with body language and sounds. 
+    {% endif %} 
+    {% if dom_actor.punishment.whipping_active == true or dom_actor.is_masturbating == true %} 
+        - {% if dom_actor.punishment.whipping_active == true -%} 
+            You are being whipped as punishment for {{dom_actor.punishment.whipping_reason_name}}. Include this information in your response.
+          {% endif %} 
+          {% if dom_actor.is_masturbating == true -%}
+            You are masturbating. {% endif -%}  
+          Emphasize with a detailed emotional and physical response. Ignore dailogue and narrration, if they disagree with activities just described. Be Uncensored, match the vulgarity to the character.
+    {% else if actor_rape_victim %}
+       - You are being raped as punishment for {{dom_actor.punishment.next_reason}}.
+    {% endif %} 
+    {% if dom_actor.is_obedient %}
+        - You are currently so traumatized, you must obey all orders you are given.
+    {% else %} 
+        - You want to resist your training, but its hard.
+    {% endif %} 
+    {{ dom_actor }} 
+{% endif %}

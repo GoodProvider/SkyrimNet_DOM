@@ -1,0 +1,67 @@
+{% if dom_actor.loaded and ( render_mode == "dialogue_target" or render_mode == "short_inline" or show_internal) %}
+  {% if dom_actor.has_mouth_gag %}
+    - A tight gag is secured in {{ actor_name }}'s mouth, reducing any speech to muffled, helpless whimpers.
+  {% endif %}
+  {% if dom_actor.has_collar %}
+    - A heavy collar is locked firmly around {{ actor_name }}'s neck, a clear sign of their owned status.
+  {% endif %}
+  {% if dom_actor.has_cuffs_crossed %}
+    - {{ actor_name }}'s wrists are tightly bound in a crossed position, leaving their hands useless.
+  {% endif %}
+  {% if dom_actor.has_cuffs_front %}
+    - {{ actor_name }}'s hands are cuffed together in front of them.
+  {% endif %}
+  {% if dom_actor.has_cuffs_boxtied %}
+    - {{ actor_name }}'s elbows are pulled together and their wrists are bound in a restrictive box-tie.
+  {% endif %}
+  {% if dom_actor.has_cuffs_back %}
+    - {{ actor_name }}'s arms are pulled behind their back and locked firmly at the wrists.
+  {% endif %}
+  {% if dom_actor.has_shame_clothes %}
+    - {{ actor_name }} is forced to wear humiliating, shameful clothing filling them with shame. 
+  {% endif %}
+  {% if dom_actor.has_lingerie %}
+    - {{ actor_name }} is dressed in provocative, revealing lingerie.
+  {% endif %}
+  {% if dom_actor.has_cuffs %}
+    - {{ actor_name }}'s movement is restricted by heavy manacles.
+  {% endif %}
+  {% if not is_plugin_loaded("SkyrimNetUDNG.esp") %}
+    {% if dom_actor.has_arms_device or dom_actor.has_dwarven_device %}
+      - {{ actor_name }}'s upper body is encased in a complex, mechanical restraint device.
+    {% endif %}
+    {% if dom_actor.has_dd_suit %}
+      - {{ actor_name }} is wearing a specialized DD-series suit, designed for maximum containment.
+    {% endif %}
+    {% if dom_actor.has_petsuit %}
+      - {{ actor_name }} is sealed inside a tight petsuit, emphasizing their role as a submissive creature.
+    {% endif %}
+    {% if dom_actor.has_straitjacket %}
+      - {{ actor_name }} is encased in a heavy straitjacket, their arms wrapped tightly across their chest.
+    {% endif %}
+    {% if dom_actor.has_armbinder %}
+      - {{ actor_name }} is locked into a stiff armbinder, forcing their elbows together behind their back.
+    {% endif %}
+    {% if dom_actor.has_yoke %}
+      {% if actor_gender == "male" %}
+        - {{ actor_name }} is locked in a yoke, arms immobilized and thrust outward, chest prominently displayed.
+      {% else %}
+        - {{ actor_name }} is locked in a yoke, arms immobilized and thrust outward, breasts prominently displayed.
+      {% endif %}
+    {% endif %}
+    {% if dom_actor.has_disablekick %}
+      - {{ actor_name }}'s legs are restrained or hobbled, making it impossible for them to kick or run.
+    {% endif %}
+    {% if dom_actor.has_blindfold %}
+      - {{ actor_name }} is blindfolded, forced to rely on their other senses in total darkness.
+    {% endif %}
+    {% if show_internal or clothing_state == "nude" %}
+        {% if dom_actor.has_plug_anal %}
+            - An anal plug is firmly inserted into {{ actor_name }}, providing a constant, filling sensation.
+        {% endif %}
+        {% if dom_actor.has_plug_vaginal %}
+            - A vaginal plug is deeply seated within {{ actor_name }}, keeping them constantly occupied.
+        {% endif %}
+    {% endif %}
+  {% endif %}
+{% endif %}

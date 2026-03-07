@@ -1,0 +1,112 @@
+[
+  {
+    "name": "DOMSlave_Start_being_punished_with_Rape",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "IsSlave_IsEligible",
+    "execute": "Sex_Execute",
+    "priority": 5,
+    "tags": "",
+    "description": "Slave {{decnpc(npc.UUID).name}} is starts getting punished with {style} {type} raped by {target}.",
+    "parameters": "{\"target\":\"Actor\", \"style\":\"forceful|normal|gentle\", \"type\":\"vaginal|oral|anal\", \"rape\":true}"
+  },
+  {
+    "name": "DOMSlave_Start_Sex_Ordered",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "IsSlave_IsEligible",
+    "execute": "Sex_Start",
+    "priority": 10,
+    "tags": "",
+    "description": "{{render_template(\"helpers/dom_action_sex_start\")}}",
+    "parameters": "{\"superior\": \"Actor\", \"choice\":\"obey|disobey\", \"dynamic\":\"submissive|dominant\", \"target\":\"Actor\", \"target_is_dominate\":\"false|true\", \"participate_0\":\"Optional first participate\", \"participate_1\":\"Optional Second additional participate\", \"participate_2\":\"Optional third additional participate\", \"participate_3\":\"Optional Fourth additional participate\", \"style\":\"forceful|normal|gentle\", \"type\":\"vaginal|oral|anal|blowjob|handjob|cunnilingus|fingering|dildo|footjob|boobjob|fisting|thighjob\"}"
+  },
+  {
+    "name": "DOMSlave_Start_Getting_Raped_by_Target",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "IsSlave_IsEligible",
+    "execute": "Rape_Target_Start",
+    "priority": 10,
+    "tags": "",
+    "description": "{{render_template(\"helpers/dom_action_rape_start\")}}",
+    "parameters": "{\"superior\": \"Actor\", \"choice\":\"obey|disobey\", \"dynamic\":\"submissive|dominant\", \"target\":\"Actor\", \"target_is_dominate\":\"false|true\", \"assailant_0\":\"Optional first assailant\", \"assailant_1\":\"Optional Second additional assailant\", \"assailant_2\":\"Optional third additional assailant\", \"assailant_3\":\"Optional Fourth additional assailant\", \"style\":\"forceful|normal|gentle\", \"type\":\"vaginal|oral|anal|blowjob|handjob|cunnilingus|fingering|dildo|footjob|boobjob|fisting|thighjob\"}"
+  },
+  {
+    "name": "DOMSlave_Start_Rape_Ordered",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "IsSlave_IsEligible",
+    "execute": "Rape_Speaker_Start",
+    "priority": 10,
+    "tags": "",
+    "description": "{{render_template(\"helpers/dom_action_raped_by_start\")}}",
+    "parameters": "{\"superior\": \"Actor\", \"dynamic\":\"submissive|dominant\", \"target\":\"Actor\", \"target_is_dominate\":\"false|true\", \"assailant_0\":\"Optional first assailant\", \"assailant_1\":\"Optional Second additional assailant\", \"assailant_2\":\"Optional third additional assailant\", \"assailant_3\":\"Optional Fourth additional assailant\", \"style\":\"forceful|normal|gentle\", \"type\":\"vaginal|oral|anal|blowjob|handjob|cunnilingus|fingering|dildo|footjob|boobjob|fisting|thighjob\"}"
+  },
+  {
+    "name": "DOMSLAVE_Given_Comfort",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "IsSlave_IsEligible",
+    "execute": "Comfort_Execute",
+    "priority": 20,
+    "tags": "",
+    "description": "Slave {{superior}} tried to comfort {{ decnpc(npc.UUID).name }}, {{ decnpc(npc.UUID).name }} {choice}.",
+    "parameters": "{\"superior\": \"Actor\", \"method\":\"care|guilt|threat|insult\", \"choice\": \"is comforted|rejects it\"}"
+  },
+  {
+    "name": "DOMSlave_Start_Masturbate",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "is_not_masturbating_isEligible",
+    "execute": "masturbate_Start",
+    "priority": 15,
+    "tags": "",
+    "description": "Slave {{ decnpc(npc.UUID).name }} was ordered to masturbate by {superior}, they have choosen to {choice}.",
+    "parameters": "{\"superior\":\"Actor\",  \"choice\":\"start masturbating|refuse to masturbate\", \"position\":\"kneeling\"}"
+  },
+  {
+    "name": "DOMSlave_Start_Masturbate_Harder",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "is_masturbating_isEligible",
+    "execute": "masturbate_Start",
+    "priority": 15,
+    "tags": "",
+    "description": "Slave {{ decnpc(npc.UUID).name }} was ordered to masturbate harder by {superior}, they have choosen to {choice}.",
+    "parameters": "{\"superior\":\"Actor\",  \"choice\":\"start masturbating|refuse to masturbate\", \"position\":\"kneeling\", \"harder\":true}"
+  },
+  {
+    "name": "DOMSlave_Stop_Masturbate",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "is_masturbating_isEligible",
+    "execute": "masturbate_stop",
+    "priority": 15,
+    "tags": "",
+    "description": "Slave {{ decnpc(npc.UUID).name }} stopped masturbating, because {reason} to.",
+    "parameters": "{\"reason\":\"orderd|wanted\", \"superior\":\"Actor\"}"
+  },
+  {
+    "name": "DOMSLAVE_Start_Undress",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "Undress_IsEligible",
+    "execute": "UndressDress_Execute",
+    "priority": 20,
+    "tags": "",
+    "description": "Slave {{ decnpc(npc.UUID).name }} was ordered to undress clothes by {superior}, {{ decnpc(npc.UUID).name }} {choice}.",
+    "parameters": "{\"superior\": \"Actor\", \"choice\": \"starts to undress|refuses to undress\", \"type\":\"undress\"}"
+  },
+  {
+    "name": "DOMSLAVE_End_Dress",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "Dress_IsEligible",
+    "execute": "UndressDress_Execute",
+    "priority": 20,
+    "tags": "",
+    "description": "{{ decnpc(npc.UUID).name }} was ordered to dress by {superior}, {{ decnpc(npc.UUID).name }} {choice}.",
+    "parameters": "{\"superior\": \"Actor\", \"choice\": \"starts to dress|refuses to dress\",\"type\":\"dress\"}"
+  },
+  {
+    "name": "DOMSlave_Given_Insult",
+    "scriptFileName": "SkyrimNet_DOM_Actions",
+    "isEligible": "IsSlave_IsEligible",
+    "execute": "Words_Execute",
+    "priority": 2,
+    "tags": "",
+    "description": "<superior> said hurtful words to {{ decnpc(npc.UUID).name }} by <kind> words,  {{ decnpc(npc.UUID).name }} has choosen to <choice> the those words.",
+    "parameters": "{\"superior\": \"Actor\", \"choice\":\"accept|reject\",\"type\":\"insulting\",\"kind\":\"try to dominating|calling them useless|degrading|demeaning|disgraceful|calling them worthless|hurtful\"}"
+  }
+]

@@ -1,0 +1,8 @@
+{% if dom_actor.loaded and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform" or render_mode == "dialogue_target" ) %}
+    {% if dom_actor.has_tears %}
+        - {{actor_name}}'s face is wet with tears.
+    {% endif %}
+    {% if dom_actor.has_brand %}
+        - {{actor_name}} has a brand scared into thier skin.
+    {% endif %}
+{% endif %}

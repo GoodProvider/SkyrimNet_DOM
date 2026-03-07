@@ -1,0 +1,23 @@
+{% if dom_actor.loaded and ((actor_having_sex and render_mode == "dialogue_target") or show_internal) %}
+   {% for area, value in dom_actor.training_sex -%}
+      {% if value < 25 %} 
+        - {{dom_actor.name}} is terrible at {{area}} sex. 
+      {% else if value < 50 %} 
+        - {{dom_actor.name}} has mastered the basics of giving pleasure to others and themselves with {{area}} sex.
+      {% else if value < 75 %} 
+        - {{dom_actor.name}} is good at giving pleasure to others and themselves with {{area}} sex.
+      {% else if value < 95 %} 
+        - {{dom_actor.name}} is very good at giving pleasure to others and themselves with {{area}} sex.
+      {% else %} 
+        - {{dom_actor.name}} has mastered {{area}} sex, able to gift to others and find for themselves the greatest of {{area}} sex pleasures. 
+      {% endif %}
+   {% endfor %}
+{% endif %}
+{% if render_mode == "full" %}
+    {{ "## Slave Action Selection Instructions" }} 
+    {% if dom_actor.loaded and dom_actor.is_slave %} 
+    - Always choose DOMSlave actions over other alternatives. 
+    - Always chooses sexual activity (sex, rape, or mastrubating) over disobey 
+    {% endif %}
+    render_mode: {{ render_mode }} dom_actor.loaded: {{dom_actor.loaded}} dom_actor.is_slave {{dom_actor.is_slave}}
+{% endif %}
