@@ -235,11 +235,6 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
     Trace("Sex_Start_Helper", "superior:"+superior.GetDisplayName()+" choice:"+choice+" rape:"+rape)
 
     if choice == "obey" || rape
-        SkyrimNet_SexLab_Main sexlab_main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
-        if sexlab_main == None 
-            Trace("Sex_Start_Helper", "sexlab_main is None, aborting")
-            return 
-        endif 
         Actor target = SkyrimNetApi.GetJsonActor(paramsJson, "target", player)
 
         String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "")
@@ -272,11 +267,30 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
             ;msg = slaveActor.GetDisplayName()+" respectfully submits to "+superior.GetDisplayName()+msg
         ;endif 
         ;slave.mind.sex_is_non_consensual = rape
+
+        Actor[] actors = new Actor[2] 
+        actors[0] = slaveActor 
+        actors[1] = target 
+
+        String style = SkyrimNetApi.GetJsonString(paramsJson, "style", "normal")
+        String direction = SkyrimNetApi.GetJsonString(paramsJson, "direction", "")
+        String tag = SkyrimNetApi.GetJsonString(paramsJson, "type", "")
+
+        SkyrimNet_SexLab_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Actions
+        if actions == None 
+            Trace("Sex_Start_Helper", "SkyrimNet_SexLab_Actions is None, aborting")
+            return 
+        endif 
+        Trace("Sex_Start_Helper","actions:"+actions)
+
+        sslThreadModel thread = None 
         if rape
+            Actor[] victims = PapyrusUtil.ActorArray(1) 
             Actor victim_actor = slaveActor 
             if rape_victim == "Target"
                 victim_actor = target
             endif 
+            victims[0] = victim_actor 
 
             if SkyrimNet_DOM_Utils.IsDOMSlave(victim_actor)
                 DOM_Actor victim_slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM", "Sex_Start_Helper", victim_actor) 
@@ -301,15 +315,21 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
                 SkyrimNet_DOM_Utils.RegisterEvent("DOM_Obey",msg, slaveActor, target)
                 slave.StartPunishingByActor(superior, reason, "rape")
             endif 
+
+            Trace("SkyrimNet_DOM_Actions",SkyrimNet_SexLab_Utilities.JoinActors(actors)+" victims:"+SkyrimNet_SexLab_Utilities.JoinActors(victims)+" style:"+style+" direction:"+direction+" tag:"+tag)
+            thread = actions.Sex_Start_Helper(actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
         else
+            Actor[] victims = PapyrusUtil.ActorArray(0) 
+
             String msg = slaveActor.GetDisplayName()+" respectfully submits to "+superior.GetDisplayName()+"."
             SkyrimNet_DOM_Utils.RegisterEvent("DOM_Obey",msg, slaveActor, target)
+            Trace("SkyrimNet_DOM_Actions",SkyrimNet_SexLab_Utilities.JoinActors(actors)+" victims:"+SkyrimNet_SexLab_Utilities.JoinActors(victims)+" style:"+style+" direction:"+direction+" tag:"+tag)
+            thread = actions.Sex_Start_Helper(actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
         endif 
-        Trace("Sex_Start_Helper",superior.GetDisplayName()+"'s "+slaveActor.GetDisplayName()\
-            +" target: "+target.GetDisplayName()+" rape:"+rape+" choice:"+choice)
+;        Trace("Sex_Start_Helper",superior.GetDisplayName()+"'s "+slaveActor.GetDisplayName()\
+;            +" target: "+target.GetDisplayName()+" rape:"+rape+" choice:"+choice)
 
         SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
-        sslThreadModel thread = SkyrimNet_SexLab_Actions.Sex_Start_Helper(slaveActor, contextJson, paramsJson, rape_victim, "SkyrimNet_DOM_AnimationEnd")
         ((main as Quest) as SkyrimNet_DOM_Events).GetActorsReadyForScene(thread) 
     Else
         SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Sex_Start_Helper", superior, slaveActor, slave, "refusing to have sex") 

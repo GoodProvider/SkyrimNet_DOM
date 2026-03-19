@@ -19,9 +19,10 @@
     {% endfor %} 
 {% endif %}  
 {% set dom_is_in_faction = is_in_faction(npc.UUID, "DOMPlayerSlaveFaction") %}
+{% set dom_actor.name = decnpc(npc.UUID).name %} 
 {% set dom_actor.loaded = false %} 
 {% set dom_actor.source = "none" %}
-{% set dom_actor_fname = "SkyrimNet_DOM/actors/"+speaker.name+".json" %}
+{% set dom_actor_fname = "SkyrimNet_DOM/actors/"+dom_actor.name+".json" %}
 {% if dom_is_in_faction %} 
     {% if not isTimePaused %} 
         {% set dom_actor = dom_get_actor_info(npc.UUID) %}
@@ -35,8 +36,6 @@
         {% endif %} 
     {% endif %}
 {% endif %}
-### Dom Actor
-{{ dom_actor }}
 
 {% if dom_actor.loaded and dom_actor.is_slave %} 
     {% if dom_actor.has_mouth_gag %} 
@@ -59,5 +58,4 @@
     {% else %} 
         - You want to resist your training, but its hard.
     {% endif %} 
-    {{ dom_actor }} 
 {% endif %}

@@ -37,6 +37,7 @@
             <Import>@ModsFolder\Papyrus MessageBox - SKSE NG\Scripts\Source</Import>
             <Import>@ModsFolder\SkyUI\scripts\Source</Import>
         <Import>@ModsFolder\SkyrimNet_UDNG\Scripts\Source</Import>
+        <Import>@ModsFolder\powerofthree's Papyrus Extender\Source\Scripts</Import>
 
         <!-- 
         <Import>@ModsFolder\SkyrimNet_DDUDNG\Headers</Import>
