@@ -1,14 +1,14 @@
 Scriptname SkyrimNet_DOM_Actions
-import SkyrimNet_DOM_Utils
+import SkyrimNet_DOM_Utilities
 
 ;------------------------------------
 ; Shared Functions 
 ;------------------------------------
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_Actions",func, msg, Notification)
+    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Actions",func, msg, Notification)
 EndFunction
 DOM_ACtor Function Get_Slave(String func, Actor slaveActor,bool error_non_dom_actor=False) global
-    return SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions",func, slaveActor, error_non_dom_actor, false)
+    return SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Actions",func, slaveActor, error_non_dom_actor, false)
 EndFunction
 
 ;------------------------------------
@@ -113,29 +113,29 @@ EndFunction
 
 ; -------------------------------
 Bool Function is_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
-    if !SkyrimNet_DOM_Utils.IsDOMSlave(slaveActor)
+    if !SkyrimNet_DOM_Utilities.IsDOMSlave(slaveActor)
         Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
         return False
     endif 
-    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions","is_masturbating",slaveActor) 
+    DOM_Actor slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Actions","is_masturbating",slaveActor) 
     Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
     return slave.is_behaviour_masturbate
 EndFunction 
 
 Bool Function is_not_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
-    if !SkyrimNet_DOM_Utils.IsDOMSlave(slaveActor)
+    if !SkyrimNet_DOM_Utilities.IsDOMSlave(slaveActor)
         Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
         return False
     endif 
-    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isElibible",slaveActor) 
+    DOM_Actor slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isElibible",slaveActor) 
     Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
     return !slave.is_behaviour_masturbate
 EndFunction
 
-Function masturbate_Start(Actor slaveActor, String contextJson, String paramsJson) global
+Function Masturbate_Start(Actor slaveActor, String contextJson, String paramsJson) global
     Trace("Masturbate_Start","Starting "+slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
 
-    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Start", slaveActor, True) 
+    DOM_Actor slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Start", slaveActor, True) 
     if slave == None 
         return 
     endif 
@@ -146,7 +146,7 @@ Function masturbate_Start(Actor slaveActor, String contextJson, String paramsJso
     Trace("Masturbate_Start","slave:"+slaveActor.GetDisplayName()+" superior:"+superior.GetDisplayName()\
         +" choice:"+choice+" position:"+position)
     if choice == "start masturbating" || choice == "obey"
-        ;SkyrimNet_DOM_Utils. RegisterEvent(String event_name, String msg, Actor source=None, Actor target=None)
+        ;SkyrimNet_DOM_Utilities. RegisterEvent(String event_name, String msg, Actor source=None, Actor target=None)
         if !slave.is_behaviour_masturbate
             if position == "kneeling"
                 slave.EnterMasturbateKneeling(superior) 
@@ -159,21 +159,21 @@ Function masturbate_Start(Actor slaveActor, String contextJson, String paramsJso
             slave.MasturbateHarder(superior) 
         endif 
     Else
-        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions","Masturbate_Start", superior, slaveActor, slave, "didnt masturbate") 
+        SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions","Masturbate_Start", superior, slaveActor, slave, "didnt masturbate") 
     endif 
 EndFunction 
 
 Function masturbate_Stop(Actor slaveActor, String contextJson, String paramsJson) global
     Trace("Masturbate_Stop","Stopping "+slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
 
-    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Stop", slaveActor, True) 
+    DOM_Actor slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Stop", slaveActor, True) 
     if slave == None 
         Trace("Masturbate_Stop","Failed to get slave for "+slaveActor.GetDisplayName())
         return 
     endif 
     String reason = SkyrimNetApi.GetJsonString(paramsJson, "reason", "wanted")
     if reason != "orderd"
-        SkyrimNet_Dom_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions","Masturbate_Stop", None, slaveActor, slave, "didnt masturbate")
+        SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions","Masturbate_Stop", None, slaveActor, slave, "didnt masturbate")
     endif 
 
     SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x5900, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
@@ -200,7 +200,7 @@ Function Disobey_Execute(Actor slaveActor, string contextJson, string paramsJson
     endif 
     String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "didnt obey")
     Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", Game.GetPlayer()) 
-    SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Disobey_Execute", superior, slaveActor, slave, type) 
+    SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions", "Disobey_Execute", superior, slaveActor, slave, type) 
 EndFunction
 
 ; The following paramsJson are used by hotkey functions to test thisfunction 
@@ -292,8 +292,8 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
             endif 
             victims[0] = victim_actor 
 
-            if SkyrimNet_DOM_Utils.IsDOMSlave(victim_actor)
-                DOM_Actor victim_slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM", "Sex_Start_Helper", victim_actor) 
+            if SkyrimNet_DOM_Utilities.IsDOMSlave(victim_actor)
+                DOM_Actor victim_slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM", "Sex_Start_Helper", victim_actor) 
                 string reason
                 int imenu = d_keys.ShowDOMPunishmentMenu(slaveActor)
                 if imenu < 0
@@ -312,19 +312,19 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
                     endif 
                 endif 
                 String msg = superior.GetDisplayName()+" starts raping "+slaveActor.GetDisplayName()+" to punish them for "+reason+"."
-                SkyrimNet_DOM_Utils.RegisterEvent("DOM_Obey",msg, slaveActor, target)
+                SkyrimNet_DOM_Utilities.RegisterEvent("DOM_Obey",msg, slaveActor, target)
                 slave.StartPunishingByActor(superior, reason, "rape")
             endif 
 
             Trace("SkyrimNet_DOM_Actions",SkyrimNet_SexLab_Utilities.JoinActors(actors)+" victims:"+SkyrimNet_SexLab_Utilities.JoinActors(victims)+" style:"+style+" direction:"+direction+" tag:"+tag)
-            thread = actions.Sex_Start_Helper(actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
+            thread = actions.Sex_Start_Helper(slaveActor, actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
         else
             Actor[] victims = PapyrusUtil.ActorArray(0) 
 
             String msg = slaveActor.GetDisplayName()+" respectfully submits to "+superior.GetDisplayName()+"."
-            SkyrimNet_DOM_Utils.RegisterEvent("DOM_Obey",msg, slaveActor, target)
+            SkyrimNet_DOM_Utilities.RegisterEvent("DOM_Obey",msg, slaveActor, target)
             Trace("SkyrimNet_DOM_Actions",SkyrimNet_SexLab_Utilities.JoinActors(actors)+" victims:"+SkyrimNet_SexLab_Utilities.JoinActors(victims)+" style:"+style+" direction:"+direction+" tag:"+tag)
-            thread = actions.Sex_Start_Helper(actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
+            thread = actions.Sex_Start_Helper(slaveActor, actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
         endif 
 ;        Trace("Sex_Start_Helper",superior.GetDisplayName()+"'s "+slaveActor.GetDisplayName()\
 ;            +" target: "+target.GetDisplayName()+" rape:"+rape+" choice:"+choice)
@@ -332,7 +332,7 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
         SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
         ((main as Quest) as SkyrimNet_DOM_Events).GetActorsReadyForScene(thread) 
     Else
-        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Sex_Start_Helper", superior, slaveActor, slave, "refusing to have sex") 
+        SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions", "Sex_Start_Helper", superior, slaveActor, slave, "refusing to have sex") 
     endif 
 EndFunction
 
@@ -346,7 +346,7 @@ Bool Function Comfort_Execute(Actor slaveActor, string contextJson, string param
         Trace("Comfort_excute",slaveActor.GetDisplayName()+" comforted with "+method+" by "+superior.GetDisplayName())
         slave.mind.StartComfortingWith(superior, method) 
     else
-        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Comfortated_Execute", superior, slaveActor, slave, "didnt listen") 
+        SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions", "Comfortated_Execute", superior, slaveActor, slave, "didnt listen") 
     endif 
 EndFunction 
 
@@ -403,7 +403,7 @@ Function UndressDress_Execute(Actor slaveActor, string contextJson, string param
         if choice == "dress" 
             reason = "didnt listen"
         endif 
-        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "UndressDress_Execute", superior, slaveActor, slave, reason)
+        SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions", "UndressDress_Execute", superior, slaveActor, slave, reason)
     endif 
 EndFunction
 
@@ -433,6 +433,6 @@ Function Words_Execute(Actor slaveActor, string contextJson, string paramsJson) 
             slave.StartInsultingWith(Game.GetPlayer(),kind)
         endif 
     Else
-        SkyrimNEt_DOM_Utils.AddPunishmentReason("SkyrimNet_DOM_Actions", "Words_Execute", superior, slaveActor, slave, "didnt listen") 
+        SkyrimNet_DOM_Utilities.AddPunishmentReason("SkyrimNet_DOM_Actions", "Words_Execute", superior, slaveActor, slave, "didnt listen") 
     endif 
 EndFunction

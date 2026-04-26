@@ -3,10 +3,10 @@ Scriptname SkyrimNet_DOM_Decorators
 ; DOM Decorations  
 ;------------------------------------
 Function Trace(String func, String msg, Bool notification = false) global
-    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_Decorations", func, msg, notification)
+    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Decorations", func, msg, notification)
 EndFunction
 DOM_Actor Function GetSlave(String func, Actor akActor) global
-    return SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
+    return SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
 EndFunction
 string Function TraceReturn(String func, String msg, Bool Notification = false) global 
     Trace(func, msg, Notification) 
@@ -58,10 +58,10 @@ String Function Get_Actor_Info(Actor akActor) global
     String behaviour = BehaviourToString(slave.behaviour)
     String is_masturbating = ":false"
     SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
-    if main.sexLab.IsActorActive(akActor) || SkyrimNet_DOM_Utils.Ostim_IsInOstim(akActor) 
+    if main.sexLab.IsActorActive(akActor) || SkyrimNet_DOM_Utilities.Ostim_IsInOstim(akActor) 
         behaviour = "having a sexual experience." 
     elseif slave.behaviour == "masturbate"
-        if !main.sexLab.IsActorActive(akActor) && !SkyrimNet_DOM_Utils.Ostim_IsInOstim(akActor) 
+        if !main.sexLab.IsActorActive(akActor) && !SkyrimNet_DOM_Utilities.Ostim_IsInOstim(akActor) 
             is_masturbating = ":true"
         endif 
     endif 

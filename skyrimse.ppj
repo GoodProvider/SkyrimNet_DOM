@@ -17,17 +17,17 @@
     </Variables>
     <Imports>
         <Import>@ModsFolder\SKSE64\Scripts\Source</Import>
-        <Import>@ModsFolder\SkyrimNet DOM\Headers\DOM</Import>
-        <Import>@ModsFolder\SkyrimNet DOM\Headers\OStim</Import>
-        <Import>@ModsFolder\SkyrimNet DOM\Headers\Devious Devices</Import>
+        <Import>@ModsFolder\SkyrimNet_DOM\Headers\DOM</Import>
+        <Import>@ModsFolder\SkyrimNet_DOM\Headers\OStim</Import>
+        <Import>@ModsFolder\SkyrimNet_DOM\Headers\Devious Devices</Import>
         <Import>@ModsFolder\SkyrimNet\Source\Scripts</Import>
         <Import>@ModsFolder\JContainers\scripts\source</Import>
         <Import>@ModsFolder\UIExtensions\scripts\Source</Import>
-        <Import>@ModsFolder\SkyrimNet SexLab\Scripts\Source</Import>
-            <Import>@ModsFolder\SkyrimNet SexLab\Headers</Import>
-            <Import>@ModsFolder\SkyrimNet SexLab\Headers\OStimNet</Import>
+        <Import>@ModsFolder\SkyrimNet_SexLab\Scripts\Source</Import>
+            <Import>@ModsFolder\SkyrimNet_SexLab\Headers</Import>
+            <Import>@ModsFolder\SkyrimNet_SexLab\Headers\OStimNet</Import>
+            <Import>@ModsFolder\SkyrimNet_SexLab\Headers\SLO Aroused NG</Import>
             <Import>@ModsFolder\SexLab Separate Orgasm\Scripts\Source</Import>
-            <Import>@ModsFolder\SkyrimNet SexLab\Headers\SLO Aroused NG</Import>
             <Import>@ModsFolder\SLO Aroused NG\Source\Scripts</Import>
             <Import>@ModsFolder\SexLabFrameworkAE_v166b\scripts\Source</Import>
                 <Import>@ModsFolder\MfgFix\Source\Scripts</Import>

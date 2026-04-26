@@ -1,109 +1,9 @@
 Scriptname SkyrimNet_DOM_Menu
 
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_Event", func, msg, Notification)
+    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
 EndFunction
 
-Function Target_Menu_Selection(Actor slaveActor, Actor player) global
-    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
-    SkyrimNet_DOM_Events events = (main as Quest) as SkyrimNet_DOM_Events
-    Trace("slaveActor_Menu_Selection",slaveActor.GetDisplayName())
-
-    bool manual_obedience = True 
-
-    String clothing_string = "undress"
-    DOM_Actor slave = SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Menu", "slaveActor_Menu_Selector", slaveActor, true) 
-    if slave.mind.should_be_naked == true ; mind.should_be_naked
-        clothing_string = "dress"
-    endif 
-    Trace("SelectAction","slave.is_naked:"+slave.is_naked+" should_be_naked:"+slave.mind.should_be_naked+" clothing:"+clothing_string)
-
-    int masturbate = 0
-    int sex = 1
-    int raped_by_player = 2
-    int rapes_the_player = 3
-    int clothing = 4
-    int cancel = 5
-
-    String[] buttons = new String[6]
-    int bondage = -2
-    if main.devices_group != None 
-        bondage = 5
-        cancel = 6
-
-        buttons = new String[7]
-        buttons[bondage] = "bondage"
-    else 
-        bondage = -2
-    endif 
-
-    buttons[masturbate] = "masturbate"
-    if slave.behaviour == "masturbate"
-        buttons[masturbate] = "masturbate harder"
-    endif 
-    buttons[sex] = "have sex with player"
-    buttons[raped_by_player] = "raped by player"
-    buttons[rapes_the_player] = "rapes the player"
-    buttons[clothing] = clothing_string
-    buttons[cancel] = "cancel"
-    String msg = "Should "+slaveActor.getDisplayName()+":"
-    int button = SkyMessage.ShowArray(msg, buttons, getIndex = true) as int  
-
-    Trace("slaveActor_Menu_Selection","button "+button+" == "+sex+" "+buttons[button])
-    if button == masturbate
-        Masturbate_Start(player, slaveActor, slave, manual_obedience)
-    elseif button == sex || button == raped_by_player || button == rapes_the_player
-
-        String rape_victim = "None" 
-        String obedience_question = "Will "+slaveActor.getDisplayName()+" "+buttons[button]+"?"
-        if button == raped_by_player
-            rape_victim = "Speaker"
-        elseif button == rapes_the_player
-            rape_victim = "Target"
-        endif 
-
-        String choice = "obey" 
-        if button != raped_by_player
-            if ObedienceSelector(slave, obedience_question, manual_obedience)
-                choice = "obey"
-            endif 
-        endif 
-
-        SkyrimNet_DOM_Actions.Sex_Start_Helper(slaveActor, "", "{\"target\":\""+player.GetDisplayName()+"\",\"choice\":\""+choice+"\", \"dynamic\":\"dominate\"}", rape_victim)
-    elseif button == clothing
-
-        ;--------------------------------------------------
-        ; How would they like it appear? 
-        int Forcefully = 0
-        int Normally = 1
-        int Gently = 2 
-        int Silently = 3
-
-        int By_Slave = -1
-        if button == clothing 
-            buttons = new String[5]
-            By_Slave = 3 
-            Silently = 4
-            buttons[By_Slave] = "By Slave" 
-        else 
-            buttons = new String[4]
-        endif 
-        buttons[Forcefully] = "forceful"
-        buttons[Normally] = "normal" 
-        buttons[Gently] = "gentle" 
-        buttons[Silently] = "( Silently )" 
-
-        msg = "How is "+slaveActor.getDisplayName()+" to be "+clothing_string+"ed?"
-
-        int button_style = SkyMessage.ShowArray(msg, buttons, getIndex = true) as int  
-        String style = buttons[button_style]
-
-        Clothing_Start(clothing_string, style, player, slaveActor, slave, manual_obedience)
-    elseif button == bondage 
-        Trace("slaveActor_Menu_Selection","bondge")
-        main.devices_group.UpdateDevices(slaveActor) 
-    endif 
-EndFunction 
 
 Function Masturbate_Start(Actor superior, Actor slaveActor , DOM_Actor slave, bool manual_obedience) global
     String choice = "" 
@@ -169,6 +69,106 @@ bool Function HasClothingInInventory(Actor akActor) global
     return False 
 EndFunction 
 
+Function Target_Menu_Selection(Actor slaveActor, Actor player) global
+    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+    SkyrimNet_DOM_Events events = (main as Quest) as SkyrimNet_DOM_Events
+    Trace("slaveActor_Menu_Selection",slaveActor.GetDisplayName())
+
+    bool manual_obedience = True 
+
+    String clothing_string = "undress"
+    DOM_Actor slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Menu", "slaveActor_Menu_Selector", slaveActor, true) 
+    if slave.mind.should_be_naked == true ; mind.should_be_naked
+        clothing_string = "dress"
+    endif 
+    Trace("SelectAction","slave.is_naked:"+slave.is_naked+" should_be_naked:"+slave.mind.should_be_naked+" clothing:"+clothing_string)
+
+    int masturbate = 0
+    int sex = 1
+    int raped_by_player = 2
+    int rapes_the_player = 3
+    int clothing = 4
+    int cancel = 5
+
+    String[] buttons = new String[6]
+    int bondage = -2
+    if main.devices_group != None 
+        bondage = 5
+        cancel = 6
+
+        buttons = new String[7]
+        buttons[bondage] = "bondage"
+    else 
+        bondage = -2
+    endif 
+
+    buttons[masturbate] = "masturbate"
+    if slave.behaviour == "masturbate"
+        buttons[masturbate] = "masturbate harder"
+    endif 
+    buttons[sex] = "have sex with player"
+    buttons[raped_by_player] = "raped by player"
+    buttons[rapes_the_player] = "rapes the player"
+    buttons[clothing] = clothing_string
+    buttons[cancel] = "cancel"
+    String msg = "Should "+slaveActor.getDisplayName()+":"
+    int button = SkyMessage.ShowArray(msg, buttons, getIndex = true) as int  
+
+    Trace("slaveActor_Menu_Selection","button "+button+" == "+sex+" "+buttons[button])
+    if button == masturbate
+        Masturbate_Start(player, slaveActor, slave, manual_obedience)
+    elseif button == sex || button == raped_by_player || button == rapes_the_player
+
+        String rape_victim = "None" 
+        String obedience_question = "Will "+slaveActor.getDisplayName()+" "+buttons[button]+"?"
+        if button == raped_by_player
+            rape_victim = "Speaker"
+        elseif button == rapes_the_player
+            rape_victim = "Target"
+        endif 
+
+        String choice = "obey" 
+        if button != raped_by_player
+            if SkyrimNet_DOM_Menu.ObedienceSelector(slave, obedience_question, manual_obedience)
+                choice = "obey"
+            endif 
+        endif 
+
+        SkyrimNet_DOM_Actions.Sex_Start_Helper(slaveActor, "", "{\"target\":\""+player.GetDisplayName()+"\",\"choice\":\""+choice+"\", \"dynamic\":\"dominate\"}", rape_victim)
+    elseif button == clothing
+
+        ;--------------------------------------------------
+        ; How would they like it appear? 
+        int Forcefully = 0
+        int Normally = 1
+        int Gently = 2 
+        int Silently = 3
+
+        int By_Slave = -1
+        if button == clothing 
+            buttons = new String[5]
+            By_Slave = 3 
+            Silently = 4
+            buttons[By_Slave] = "By Slave" 
+        else 
+            buttons = new String[4]
+        endif 
+        buttons[Forcefully] = "forceful"
+        buttons[Normally] = "normal" 
+        buttons[Gently] = "gentle" 
+        buttons[Silently] = "( Silently )" 
+
+        msg = "How is "+slaveActor.getDisplayName()+" to be "+clothing_string+"ed?"
+
+        int button_style = SkyMessage.ShowArray(msg, buttons, getIndex = true) as int  
+        String style = buttons[button_style]
+
+        Clothing_Start(clothing_string, style, player, slaveActor, slave, manual_obedience)
+    elseif button == bondage 
+        Trace("slaveActor_Menu_Selection","bondge")
+        main.devices_group.UpdateDevices(slaveActor) 
+    endif 
+EndFunction 
 
 Bool Function ObedienceSelector(DOM_Actor slave, String msg, Bool manual_obedience ) global
     if manual_obedience

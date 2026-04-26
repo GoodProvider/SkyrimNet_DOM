@@ -7,7 +7,7 @@ DOM_Keys Property d_keys Auto
 SkyrimNet_SexLab_Main Property sexlab_main Auto 
 
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_Main", func, msg, Notification)
+    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Main", func, msg, Notification)
 EndFunction
 
 ; Punsihemt 

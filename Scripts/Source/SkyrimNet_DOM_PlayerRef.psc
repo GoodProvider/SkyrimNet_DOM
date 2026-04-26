@@ -2,8 +2,8 @@ Scriptname SkyrimNet_DOM_PlayerRef extends ReferenceAlias
 
 SkyrimNet_DOM_Main Property main  Auto  
 
-Function Trace(String msg, String func, Bool Notification = false) global
-    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_PlayerRef", func, msg, Notification)
+Function Trace(String Func, String msg, Bool Notification = false) global
+    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_PlayerRef", func, msg, Notification)
 EndFunction
 
 Event OnPlayerLoadGame()

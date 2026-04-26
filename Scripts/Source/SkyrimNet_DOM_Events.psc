@@ -1,5 +1,5 @@
 Scriptname SkyrimNet_DOM_Events extends Quest  
-import SkyrimNet_DOM_Utils
+import SkyrimNet_DOM_Utilities
 
 SkyrimNet_DOM_Main Property main  Auto  
 SkyrimNet_SexLab_Main Property sexlab_main Auto
@@ -18,21 +18,21 @@ String events_log = "Data/SKSE/Plugins/SkyrimNet_DOM/events-log.json"
 ; Helper functions 
 ; --------------------------
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utils.Trace("SkyrimNet_DOM_Event", func, msg, Notification)
+    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
 EndFunction
 DOM_Actor Function GetSlave(String Func, Actor akActor)
-    return SkyrimNet_DOM_Utils.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
+    return SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
 EndFunction
 
 
 Function DirectNarration(String msg, Actor source, Actor target)
     SaveActorInfo(target)
-    SkyrimNet_DOM_Utils.DirectNarration(msg, source, target)
+    SkyrimNet_DOM_Utilities.DirectNarration(msg, source, target)
 EndFunction
 
 Function DirectNarration_Optional(String event_type, String msg, Actor source, Actor target, bool optional=False)
     SaveActorInfo(target)
-    SkyrimNet_DOM_Utils.DirectNarration_Optional(event_type, msg, source, target, optional) 
+    SkyrimNet_DOM_Utilities.DirectNarration_Optional(event_type, msg, source, target, optional) 
 EndFunction
 
 Function SaveActorInfo(Actor akActor, String actor_json = "")
@@ -286,7 +286,7 @@ Event OnOrgasm(Form akRef, String type)
     else
         msg += "."
     endif 
-    sexlab_main.DOMSlave_Orgasmed(slave, msg)
+    SkyrimNet_SexLab_DOM.DOMSlave_Orgasmed(slave, msg)
     ;DirectNarration(msg, slave)
 EndEvent
 
