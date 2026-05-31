@@ -13,18 +13,14 @@
             {% set dom_actor.source = "file" %}
         {% endif %}
     {% endif %}
-    ########### Dom Actor 
-    
     {% if dom_actor.loaded %}  
-        {% if dom_actor.is_aroused_for <= 30 %}
+        {% if dom_actor.is_aroused_for <= 0 %}
             {% set arousal_state = "not_aroused" %}
         {% else %}
-            {% if dom_actor.is_aroused_for > 0 %}
-                {% set arousal_state = "extremely_aroused" %}
-            {% else if dom_actor < 60 %} 
-                {% set arousal_state = "moderately_aroused" %}
-            {% else %}
+            {% if dom_actor.is_aroused_for > 10 %}
                 {% set arousal_state = "highly_aroused" %}
+            {% else %} 
+                {% set arousal_state = "moderately_aroused" %}
             {% endif %}
         {% endif %} 
     {% endif %}

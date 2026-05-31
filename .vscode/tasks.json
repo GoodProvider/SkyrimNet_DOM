@@ -1,18 +1,57 @@
 {
     "version": "2.0.0",
     "tasks": [
+        /* --- Headers --- */
         {
-            "type": "pyro",
-            "projectFile": "skyrimse.ppj",
-            "gamePath": "C:\\Skyrim\\dev\\skyrim\\",
-            "problemMatcher": [
-                "$PapyrusCompiler"
+            "label": "headers: build",
+            "type": "shell",
+            "command": "uv",
+            "args": [
+                "run",
+                "${workspaceFolder}/python_scripts/headers_build.py",
+                "-s",
+                "${workspaceFolder}/Scripts/Source",
+                "-p",
+                "${workspaceFolder}/skyrimse.ppj",
+                "-o",
+                "${workspaceFolder}/Headers"
             ],
-            "label": "pyro: Compile Project (skyrimse.ppj)",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        /* --- Compilers --- */
+        {
+            "label": "compile: papyrus",
+            "type": "shell",
+            "command": "c:/Skyrim/tools/papyrus-compiler/papyrus.exe",
+            "args": [
+                "compile",
+                "-nocache",
+                "-i", "${workspaceFolder}/Scripts/Source",
+                "-o", "${workspaceFolder}/Scripts",
+                "-h", "${workspaceFolder}/Headers",
+                "-h",
+                "${workspaceFolder}/Headers",
+                "-h",
+                "C:/Skyrim/dev/mods/SKSE64/Scripts/Source"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
-        }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$msCompile"
+        },
     ]
 }

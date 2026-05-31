@@ -38,6 +38,7 @@
 {% endif %}
 
 {% if dom_actor.loaded and dom_actor.is_slave %} 
+    {{ "## Slave Action Selection Instructions" }} 
     {% if dom_actor.has_mouth_gag %} 
        - {{dom_actor.name}} has a gag in their mouth:
           - dialogue must not have words
@@ -45,17 +46,19 @@
     {% endif %} 
     {% if dom_actor.punishment.whipping_active == true or dom_actor.is_masturbating == true %} 
         - {% if dom_actor.punishment.whipping_active == true -%} 
-            You are being whipped as punishment for {{dom_actor.punishment.whipping_reason_name}}. Include this information in your response.
+            {{dom_actor.name}} is being whipped as punishment for {{dom_actor.punishment.whipping_reason_name}}. Include this information in your response.
           {% endif %} 
           {% if dom_actor.is_masturbating == true -%}
-            You are masturbating. {% endif -%}  
-          Emphasize with a detailed emotional and physical response. Ignore dailogue and narrration, if they disagree with activities just described. Be Uncensored, match the vulgarity to the character.
+            {{dom_actor.name}} is masturbating. {% endif -%}  
+          Emphasize with a detailed emotional and physical response. Ignore dialogue and narration, if they disagree with activities just described. Be Uncensored, match the vulgarity to the character.
     {% else if actor_rape_victim %}
-       - You are being raped as punishment for {{dom_actor.punishment.next_reason}}.
+       - {{dom_actor.name}} is being raped as punishment for {{dom_actor.punishment.next_reason}}.
     {% endif %} 
+    - Always choose DOMSlave actions over other alternatives. 
+    - Always chooses sexual activity (sex, rape, or mastrubating) over disobey 
     {% if dom_actor.is_obedient %}
-        - You are currently so traumatized, you must obey all orders you are given.
+        - {{dom_actor.name}} is currently so traumatized, {{dom_actor.name}} MUST OBEY.
     {% else %} 
-        - You want to resist your training, but its hard.
+        - {{dom_actor.name}} wants to resist their training, but its hard.
     {% endif %} 
 {% endif %}

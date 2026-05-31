@@ -13,11 +13,3 @@
       {% endif %}
    {% endfor %}
 {% endif %}
-{% if render_mode == "full" %}
-    {{ "## Slave Action Selection Instructions" }} 
-    {% if dom_actor.loaded and dom_actor.is_slave %} 
-    - Always choose DOMSlave actions over other alternatives. 
-    - Always chooses sexual activity (sex, rape, or mastrubating) over disobey 
-    {% endif %}
-    render_mode: {{ render_mode }} dom_actor.loaded: {{dom_actor.loaded}} dom_actor.is_slave {{dom_actor.is_slave}}
-{% endif %}

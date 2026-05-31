@@ -1,7 +1,7 @@
 Scriptname SkyrimNet_DOM_Menu
 
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
+    SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
 EndFunction
 
 
@@ -12,7 +12,7 @@ Function Masturbate_Start(Actor superior, Actor slaveActor , DOM_Actor slave, bo
     else
         choice = "refuse to masturbate"
     endif 
-    SkyrimNet_DOM_Actions.masturbate_Start(slaveActor, "", "{\"choice\":\""+choice+"\"}")
+    SkyrimNet_DOM_Actions.masturbate_Start(slaveActor, "", '{"choice":'+choice+'"}')
 EndFunction
         
 Function Clothing_Start(String clothing_string, String style, Actor player, Actor slaveActor, DOM_Actor slave, bool manual_obedience) global
@@ -31,7 +31,7 @@ Function Clothing_Start(String clothing_string, String style, Actor player, Acto
             choice = "obey"
         endif 
         Trace("Clothing_Start",slave_name+" by slave choice:"+choice)
-        SkyrimNet_DOM_Actions.UndressDress_Execute(slaveActor,"", "{\"type\":\""+clothing_string+"\",\"choice\":\""+choice+"\"}")
+        SkyrimNet_DOM_Actions.UndressDress_Execute(slaveActor,"", '{"type":"'+clothing_string+'","choice":"'+choice+'"}')
         return 
     endif 
 
@@ -77,7 +77,7 @@ Function Target_Menu_Selection(Actor slaveActor, Actor player) global
     bool manual_obedience = True 
 
     String clothing_string = "undress"
-    DOM_Actor slave = SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Menu", "slaveActor_Menu_Selector", slaveActor, true) 
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Menu", "slaveActor_Menu_Selector", slaveActor, true) 
     if slave.mind.should_be_naked == true ; mind.should_be_naked
         clothing_string = "dress"
     endif 
@@ -134,7 +134,7 @@ Function Target_Menu_Selection(Actor slaveActor, Actor player) global
             endif 
         endif 
 
-        SkyrimNet_DOM_Actions.Sex_Start_Helper(slaveActor, "", "{\"target\":\""+player.GetDisplayName()+"\",\"choice\":\""+choice+"\", \"dynamic\":\"dominate\"}", rape_victim)
+        SkyrimNet_DOM_Actions.Sex_Start_Helper(slaveActor, "", '{"target":"'+player.GetDisplayName()+'","choice":"'+choice+'", "dynamic":"dominate"}', rape_victim)
     elseif button == clothing
 
         ;--------------------------------------------------
@@ -166,7 +166,7 @@ Function Target_Menu_Selection(Actor slaveActor, Actor player) global
         Clothing_Start(clothing_string, style, player, slaveActor, slave, manual_obedience)
     elseif button == bondage 
         Trace("slaveActor_Menu_Selection","bondge")
-        main.devices_group.UpdateDevices(slaveActor) 
+        (main.devices_group as skyrimnet_UDNG_Groups).UpdateDevices(slaveActor) 
     endif 
 EndFunction 
 

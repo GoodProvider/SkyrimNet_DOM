@@ -1,5 +1,5 @@
 Scriptname SkyrimNet_DOM_Events extends Quest  
-import SkyrimNet_DOM_Utilities
+import SkyrimNet_DOM_API
 
 SkyrimNet_DOM_Main Property main  Auto  
 SkyrimNet_SexLab_Main Property sexlab_main Auto
@@ -14,35 +14,57 @@ float Property timeLastEvent = 0.0 Auto
 bool last_order_refused = False 
 
 String events_log = "Data/SKSE/Plugins/SkyrimNet_DOM/events-log.json"
+
+; --------------------------
+; Helper functions 
+; --------------------------
+int notifications_size = 20 
+int notifications_next = 0
+bool notifications_full = False 
+string notifications_message_key = "skyrimnet_dom_notifications_message"
+string notifications_time_key = "skyrimnet_dom_notifications_time"
+
 ; --------------------------
 ; Helper functions 
 ; --------------------------
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
+    SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
 EndFunction
 DOM_Actor Function GetSlave(String Func, Actor akActor)
-    return SkyrimNet_DOM_Utilities.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
+    return SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
 EndFunction
 
 
-Function DirectNarration(String msg, Actor source, Actor target)
-    SaveActorInfo(target)
-    SkyrimNet_DOM_Utilities.DirectNarration(msg, source, target)
+Function DirectNarration(String msg, Actor slave)
+    SaveActorInfo(slave)
+    SkyrimNet_DOM_API.DirectNarration(msg, slave)
 EndFunction
 
-Function DirectNarration_Optional(String event_type, String msg, Actor source, Actor target, bool optional=False)
-    SaveActorInfo(target)
-    SkyrimNet_DOM_Utilities.DirectNarration_Optional(event_type, msg, source, target, optional) 
+Function DirectNarration_Optional(String event_type, String msg, Actor slave, bool optional=False)
+    SaveActorInfo(slave)
+    String slave_name = Actor_name(slave)
+    Trace("DirectNarration_Optional", "event_type:"+event_type+" msg:"+msg+" slave:"+slave_name+" optional:"+optional)
+    SkyrimNet_DOM_API.DirectNarration_Optional(event_type, msg, slave, None, optional) 
 EndFunction
 
 Function SaveActorInfo(Actor akActor, String actor_json = "")
     if actor_json == ""
         actor_json = SkyrimNet_DOM_Decorators.Get_Actor_Info(akActor)
     endif
-    String fname = "Data/SKSE/Plugins/SkyrimNet_DOM/actors/"+akActor.GetDisplayName()+".json"
-    Trace("SaveActorInfo","Saving actor info to "+fname)
-    Miscutil.WriteToFile(fname, actor_json, append=False)
+    if actor_json != "" 
+        String fname = "Data/SKSE/Plugins/SkyrimNet_DOM/actors/"+akActor.GetDisplayName()+".json"
+        Trace("SaveActorInfo","Saving actor info to "+fname)
+        Miscutil.WriteToFile(fname, actor_json, append=False)
+    endif 
 EndFunction
+
+String Function Actor_name(Actor akActor)
+    if akActor == None 
+        return "None"
+    else 
+        return akActor.GetDisplayName()
+    endif
+EndFunction 
 
 ; --------------------------
 ; Event Handlers
@@ -67,16 +89,16 @@ Function Register_Events(Quest DOM01)
     ; Register for DOM events
     RegisterForModEvent("DOM_CaptureAnimation", "OnCaptureAnimation")
     ;RegisterForModEvent("DOMOnCaptured", "OnCapured") ; handled above
-    RegisterForModEvent("DOMOnBehaviourChange", "OnBehaviourChange")
-    RegisterForModEvent("DOMOnInBag", "OnInBag") 
-    RegisterForModEvent("DOMOnOutBag", "OnOutBag") 
-    RegisterForModEvent("DOMOnCallForHelp", "OnCallForHelp") 
-    RegisterForModEvent("DOMOnOrgasm", "OnOrgasm")
-    RegisterForModEvent("DOMOnKinkDiscovered", "OnKinkDiscovered")
-    RegisterForModEvent("DOMOnLostVirginity", "OnLostVirginity")
-    RegisterForModEvent("DOMOnRunaway", "OnRunaway")
-    RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
+    ;RegisterForModEvent("DOMOnInBag", "OnInBag") 
+    ;RegisterForModEvent("DOMOnOutBag", "OnOutBag") 
+    ;RegisterForModEvent("DOMOnCallForHelp", "OnCallForHelp") 
+    ;RegisterForModEvent("DOMOnOrgasm", "OnOrgasm")
+    ;RegisterForModEvent("DOMOnKinkDiscovered", "OnKinkDiscovered")
+    ;RegisterForModEvent("DOMOnLostVirginity", "OnLostVirginity")
+    ;RegisterForModEvent("DOMOnRunaway", "OnRunaway")
+    ;RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
     RegisterForModEvent("DOMOnBehaviorChange", "OnBehaviorChange")
+    RegisterForModEvent("DOMOnNotificationSent", "OnNotificationSent")
     ;  -------
     ; will be handled (if at all) by decorators
     ;  -------
@@ -127,13 +149,14 @@ Bool Function GetLastOrderRefused_Reset()
     return current
 EndFunction
 
-int Function RegisterShortLivedEvent(String eventId, String eventType, String description, \
-                                    String data, int ttlMs, Actor sourceActor, Actor targetActor=None)
-    return SkyrimNetAPI.RegisterShortLivedEvent(eventId, eventType, description, data, ttlMs, sourceActor, targetActor)
+Function RegisterShortLivedEvent(String eventId, String eventType, String description, String data, int ttlMs, Actor sourceActor, Actor targetActor=None)
+    DirectNarration_Optional(eventType, description, sourceActor, targetActor, optional=true)
+    ;return SkyrimNetAPI.RegisterShortLivedEvent(eventId, eventType, description, data, ttlMs, sourceActor, targetActor)
 endFunction 
 
-int Function RegisterEvent(String eventType, String content, Actor originatorActor, Actor targetActor=None)
-    return SkyrimNetAPI.RegisterEvent(eventType, content, originatorActor, targetActor)
+Function RegisterEvent(String eventType, String description, Actor originatorActor, Actor targetActor=None)
+    DirectNarration_Optional(eventType, description, originatorActor, targetActor, optional=true)
+    ;SkyrimNetAPI.RegisterEvent(eventType, content, originatorActor, targetActor)
 EndFunction 
 
 Function RegisterShort_AddName(String eventId, String eventType, Form akRef, String description, int ttl=100000)
@@ -148,16 +171,17 @@ EndFunction
 
 Event OnCaptureAnimation(Form akTarget, string capture_msg, bool is_from_behind, bool is_unconscious)
     Actor slave = akTarget as Actor 
+    String name = slave.GetDisplayName() 
     String msg = player.GetDisplayName()
     if is_from_behind
         msg += " comes from behind, "
     endif 
-    msg += " grabs them by the throat, throws them to the ground, and enslaves "
+    msg += " grabs "name+" by the throat, throws "+name+" to the ground, and enslaves "
     if  is_unconscious
         msg += " an unconscious "
     endif 
-    msg += slave.GetDisplayName()+" their body, but not their mind."
-    DirectNarration(msg, player, slave)
+    msg += slave.GetDisplayName()+" "+name+"'s body, but not yet "+name+"'s mind."
+    DirectNarration(msg, slave)
 EndEvent
 
 Event OnLostVirginity(Form akRef, String type )
@@ -173,15 +197,74 @@ Event OnLostVirginity(Form akRef, String type )
             msg += " with red blood flowing down their legs."
         endif
     endif 
-    RegisterEvent("lost virginity",msg, player, slave) 
+    RegisterEvent("lost virginity",msg, slave) 
 EndEvent 
+
+; ----------------------------------
+; SetSendExternalEvents 
+; ----------------------------------
+Event OnNotificationSent(Form akRef, String notificationType, bool is_player_slave, String description)
+    Actor slave = akRef as Actor 
+    String slave_name = Actor_name(slave)
+    String player_name = player.getDisplayName() 
+    int i = StringUtil.Find(description, "your grasp as")
+    if StringUtil.Find(description, "your grasp as") >= 0 
+        description = slave_name "squirms under "+player_name+"'s grasp as "+player_name+"'s orgasm submerges "+player_name
+    endif 
+    Trace("OnNotificationSent", "notificationType:"+notificationType+" is_player_slave:"+is_player_slave+" description:"+description+" slave:"+slave_name, true)
+    if !notifications_full && notifications_next == 0 
+        StorageUtil.StringListResize(akRef, notifications_message_key, notifications_size, "") 
+    elseif notifications_next >= notifications_size 
+        notifications_full = true 
+        notifications_next = 0 
+    endif 
+    StorageUtil.StringListSet(akRef, notifications_message_key, notifications_next, description) 
+    Int minutes = Utility.GetINIFloat("iCalendarMinute:Calendar") As Int
+    Debug.Notification("minutes:"+Utility.GetINIFloat("iCalendarMinute:Calendar")+" => "+minutes)
+    StorageUtil.IntListSet(akRef, notifications_time_key, notifications_next, minutes) 
+    notifications_next += 1 
+    DirectNarration_Optional("notification", description, slave, optional=true)
+EndEvent
+
+String Function GetNotificationsJSON(Form akRef) 
+    String json = "" 
+    if notifications_full 
+        int i = notifications_next 
+        while i < notifications_size 
+            if json != '' 
+                json += ','
+            endif 
+            json += GetNotificationSingleJson(akRef, i) 
+            i += 1 
+        endwhile 
+    endif 
+    int j = 0
+    while j < notifications_next 
+
+        if json != '' 
+            json += ','
+        endif 
+        json += GetNotificationSingleJson(akRef, j) 
+        j += 1 
+    endwhile 
+
+    json = "["+json+"]"
+    Trace("GetNotificationsJSON",json)
+    return json 
+EndFunction 
+
+String Function GetNotificationSingleJson(Form akRef, int i) 
+    String message = Storageutil.StringListGet(akRef, notifications_message_key, i) 
+    int minutes = Storageutil.IntListGet(akRef, notifications_message_key, i) 
+    return '{"message":"'+message+'","minutes":'+minutes+'}'
+EndFunction 
 
 ; ------------------------ 
 
 Event OnRunaway(Form akRef)
+    Trace("OnRunaway",(akRef as Actor).GetDisplayName()+" is running away!")
     StorageUtil.SetStringValue(akRef, behaviour_current_key, "running_away")
     RegisterShort_AddName("runaway","running", akRef, "is running away. To afraid to turn back!")
-    Trace("OnRunaway",(akRef as ACtor).GetDisplayName()+" is running away!")
 EndEvent 
 
 Event OnBehaviourChange(Form akRef, String type)
@@ -189,6 +272,10 @@ Event OnBehaviourChange(Form akRef, String type)
     String msg = ""
     if current == "running_away"
         msg = "has been rundown and captured."
+        last_order_refused = True
+    elseif type == "running_away"
+        ;msg = "tries to run away, too afraid to turn back!"
+        msg = ""
         last_order_refused = True
     elseif type == "masturbate"
         msg = "obeys and starts masturbating."
@@ -199,17 +286,17 @@ Event OnBehaviourChange(Form akRef, String type)
         msg = "is "+SkyrimNet_DOM_Decorators.BehaviourToString(type)
     endif 
     Actor slave = akRef as Actor
-    String name_msg = slave.GetDisplayName()+" "+msg
-    if msg != ""
-        DirectNarration_Optional("behavoir", name_msg, player, slave, optional=true)
-    endif 
+    String name_msg = Actor_name(slave)+" "+msg
     Trace("OnBehaviourChange",current+"->"+type+" "+name_msg)
+    if msg != ""
+        DirectNarration_Optional(type, name_msg, slave, None, optional=true)
+    endif 
 EndEvent 
 
 Event OnMoodChange(Form akRef, String type)
     Actor slave = akRef as Actor
     String msg = mood_to_Sentence(slave.GetDisplayName(), type) 
-    DirectNarration_Optional("mood", msg, player, slave, optional=true)
+    DirectNarration_Optional("mood", msg, slave, None, optional=true)
     Trace("OnMoodChange",msg)
 EndEvent 
 
@@ -286,14 +373,13 @@ Event OnOrgasm(Form akRef, String type)
     else
         msg += "."
     endif 
-    SkyrimNet_SexLab_DOM.DOMSlave_Orgasmed(slave, msg)
-    ;DirectNarration(msg, slave)
+    SkyrimNet_SexLab_Handler_DOM.DOMSlave_Orgasmed(slave, msg)
 EndEvent
 
 Event OnKinkDiscovered(Form akRef, String type)
     Actor slave = akRef as Actor 
     String msg = player.GetDisplayName()+" discovers "+slave.GetDisplayName()+" has a fetish for "+type+"."
-    DirectNarration_Optional("kink discovered", msg, player, slave)
+    DirectNarration_Optional("kink discovered", msg, slave)
 EndEvent 
 
 
@@ -307,7 +393,7 @@ Event OnPriceInspection(Form sender, float value, bool isObedient)
     if !isObedient 
         msg = msg + slave.GetDisplayName()+" disobediently didn't cooperate with the inspection and finds it insulting. "
     endif 
-    DirectNarration_Optional("price inspection", msg, player, slave)
+    DirectNarration_Optional("price inspection", msg, slave)
 EndEvent 
 
 Event OnBodyInspection(Form sender, string inspectionMethod, string inspectionResults, bool isObedient)
@@ -317,7 +403,7 @@ Event OnBodyInspection(Form sender, string inspectionMethod, string inspectionRe
     if !isObedient 
         msg = msg + slave.GetDisplayName()+" disobediently didn't cooperate with the inspection. "
     endif 
-    DirectNarration_Optional("price inspection", msg, player, slave)
+    DirectNarration_Optional("price inspection", msg, slave)
 EndEvent 
 Event OnKissed(Form sender, string kissType, string kissResults, bool isObedient)
     last_order_refused = !isObedient
@@ -328,7 +414,7 @@ Event OnKissed(Form sender, string kissType, string kissResults, bool isObedient
     elseif !isObedient
         msg = slave.GetDisplayName()+" submit to "+player.GetDisplayName()+"'s "+kissType+" kiss."
     endif 
-    DirectNarration_Optional("price inspection", msg, player, slave)
+    DirectNarration_Optional("price inspection", msg, slave)
 EndEvent 
 
 Event OnPunished(Form akRef, string punish_method, string punish_reason, bool is_obedient)
@@ -350,7 +436,7 @@ Event OnPunished(Form akRef, string punish_method, string punish_reason, bool is
     if !is_obedient
         msg += slave_name+" refuses to submit."
     endif 
-    DirectNarration_Optional("punished", msg, player, slave)  
+    DirectNarration_Optional("punished", msg, slave)  
     Trace("OnPunishment",msg) 
 EndEvent 
 
@@ -388,7 +474,7 @@ Event OnComforted(Form akRef, String type, Bool isObedient)
         endif 
         accepted = "rejected"
     endif 
-    DirectNarration_Optional("comforted "+type+":"+accepted, msg, player, slave)
+    DirectNarration_Optional("comforted "+type+":"+accepted, msg, slave)
 EndEvent 
 
 Event OnPraised(Form sender, string praise_method, string praise_reason, bool isObedient)
@@ -409,7 +495,7 @@ Event OnPraised(Form sender, string praise_method, string praise_reason, bool is
         msg = msg + name+" refused to listen and rejects the praise." 
     endif
 
-    DirectNarration_Optional("praised", msg, player, slave)  
+    DirectNarration_Optional("praised", msg, slave)  
 EndEvent 
 
 Event OnFlattered(Form sender, string flatteryType, bool isObedient)
@@ -426,7 +512,7 @@ Event OnFlattered(Form sender, string flatteryType, bool isObedient)
         msg = msg + name+" refused to listen "+ower+"." 
     endif
 
-    DirectNarration_Optional("flattered", msg, player, slave)  
+    DirectNarration_Optional("flattered", msg, slave)  
 EndEvent 
 
 Event OnInsulted(Form sender, string insultType, bool isObedient)
@@ -443,7 +529,7 @@ Event OnInsulted(Form sender, string insultType, bool isObedient)
         msg = msg + name+" rejects "+ower+"'s cruel words." 
     endif
 
-    DirectNarration_Optional("insult", msg, player, slave)  
+    DirectNarration_Optional("insult", msg, slave)  
 EndEvent 
 
 Event OnPromised(Form sender, string promisedOath, bool isAccepted)
@@ -464,7 +550,7 @@ Event OnPromised(Form sender, string promisedOath, bool isAccepted)
         msg = msg + name+" refuses to believe "+ower+"'s promise." 
     endif
 
-    DirectNarration_Optional("promised", msg, player, slave)  
+    DirectNarration_Optional("promised", msg, slave)  
 EndEvent 
 
 Event OnThreatened(Form sender, string threatenedFor, bool isAccepted)
@@ -481,7 +567,7 @@ Event OnThreatened(Form sender, string threatenedFor, bool isAccepted)
         msg = msg + name+" refuses to accept "+ower+"'s warning." 
     endif
 
-    DirectNarration_Optional("threatened", msg, player, slave)  
+    DirectNarration_Optional("threatened", msg, slave)  
 EndEvent 
 
 Event OnUndress(Form sender, string undressType, bool isObedient) ; If isObedient is false stripping didn't occur
@@ -498,7 +584,7 @@ Event OnUndress(Form sender, string undressType, bool isObedient) ; If isObedien
         msg = msg + name+" refuses undress!"
     endif
 
-    DirectNarration_Optional("undress", msg, player, slave)  
+    DirectNarration_Optional("undress", msg, slave)  
 EndEvent 
 
 Event OnWashSelf(Form sender, string washType, bool isObedient) ; If isObedient is false washing didn't occur
@@ -515,7 +601,7 @@ Event OnWashSelf(Form sender, string washType, bool isObedient) ; If isObedient 
         msg = msg + name+" refuses wash themselves!"
     endif
 
-    DirectNarration_Optional("washSelf", msg, player, slave)  
+    DirectNarration_Optional("washSelf", msg, slave)  
 EndEvent 
 
 Event OnBranded(Form sender, string markName, string markArea, bool isObedient)
@@ -532,7 +618,7 @@ Event OnBranded(Form sender, string markName, string markArea, bool isObedient)
         msg = msg + name+" struggles and resists the branding!"
     endif
 
-    DirectNarration_Optional("brand", msg, player, slave)  
+    DirectNarration_Optional("brand", msg, slave)  
 EndEvent 
 
 Event OnSalute(Form sender, string saluteType, string salutePose, bool isObedient)
@@ -549,7 +635,7 @@ Event OnSalute(Form sender, string saluteType, string salutePose, bool isObedien
         msg = msg + name+" refuses to salute!"
     endif
 
-    DirectNarration_Optional("onsalute", msg, player, slave)  
+    DirectNarration_Optional("onsalute", msg, slave)  
 EndEvent 
 
 Event OnRecruited(Form sender, string mood, bool isNewActor) ; If not new actor, slaver was previously in DOM
@@ -559,7 +645,7 @@ Event OnRecruited(Form sender, string mood, bool isNewActor) ; If not new actor,
 
     String msg = ower+" recruits a "+mood+" "+name+" as a slave trainer."
 
-    DirectNarration_Optional("rectuit", msg, player, slave)  
+    DirectNarration_Optional("rectuit", msg, slave)  
 EndEvent 
 
 Event OnReleased(Form sender, string mood, bool isObedient)
@@ -572,18 +658,18 @@ Event OnReleased(Form sender, string mood, bool isObedient)
     if !isObedient 
         msg = msg + name+" doesn't want to be freed and resists the release!"
     endif  
-    DirectNarration_Optional("released", msg, player, slave)  
+    DirectNarration_Optional("released", msg, slave)  
 EndEvent 
 
 ;---------------------------------------------------
 ; Events 3 
 ;---------------------------------------------------
-Event OnNotificationSent(Form sender, string actorStatus, bool isPlayersSlave, string fullText)
-    Actor slave = sender as Actor 
-    if isPlayersSlave 
-        RegisterShortLivedEvent("slave", "misc", fullText, "", 120000, slave)
-    endif 
-EndEvent
+;Event OnNotificationSent(Form sender, string actorStatus, bool isPlayersSlave, string fullText)
+;    Actor slave = sender as Actor 
+;    if isPlayersSlave 
+;        RegisterShortLivedEvent("slave", "misc", fullText, "", 120000, slave)
+;    endif 
+;EndEvent
 
 ;---------------------------------------------------
 ; SexLab Events
@@ -597,11 +683,10 @@ Event SexLab_AnimationStart(int ThreadID, bool HasPlayer)
     while  0 <= i
         DOM_Actor domActor = main.d_api.GetDomActor(actors[i])
         if domActor != None 
-            Trace("SexLab_AnimationStart","main.d_sexlab:"+main.d_sexlab)
-            Trace("SexLab_AnimationStart","main.d_sexlab:"+main.d_sexlab+" DOMAnimatingFaction:", main.d_sexlab.DOMAnimatingFaction)
             actors[i].SetFactionRank(main.d_sexlab.DOMAnimatingFaction, 2)
-                    bool isACtive = sexlab_main.sexlab.IsActorActive(actors[i])
+            bool isACtive = sexlab_main.sexlab.IsActorActive(actors[i])
             bool canIdle = domActor.canIdle
+            thread.DisableOrgasm(actors[i])
             Trace("SexLab_AnimationStart","ThreadID: "+ThreadID+" Actor: "+actors[i].GetDisplayName()+" IsActorActive: "+isACtive+" canIdle: "+canIdle)
         endif 
         i -= 1

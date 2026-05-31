@@ -7,7 +7,7 @@ DOM_Keys Property d_keys Auto
 SkyrimNet_SexLab_Main Property sexlab_main Auto 
 
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_Utilities.Trace_Helper("SkyrimNet_DOM_Main", func, msg, Notification)
+    SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Main", func, msg, Notification)
 EndFunction
 
 ; Punsihemt 
@@ -15,7 +15,7 @@ int punishment_to_index = 0
 int punishment_to_description = 0
 
 ; Optional DD support
-Skyrimnet_UDNG_Groups Property devices_group = None AUTO
+Quest Property devices_group = None AUTO
 
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
@@ -68,7 +68,7 @@ Function Setup()
 
     ; DD Support 
     if MiscUtil.FileExists("Data/SkyrimNetUDNG.esp")
-        devices_group = Game.GetFormFromFile(0x800, "SkyrimNetUDNG.esp") as skyrimnet_UDNG_Groups
+        devices_group = Game.GetFormFromFile(0x800, "SkyrimNetUDNG.esp") as Quest
     else 
         devices_group = None 
     endif   
@@ -97,7 +97,7 @@ Function Load_Punishment_To_Index(String fname)
             str_index = "Punish"+index
         endif 
     endwhile 
-    Trace("Load_Punishment_To_Index",index+" punishments loaded from "+fname)
+    ;Trace("Load_Punishment_To_Index",index+" punishments loaded from "+fname)
 EndFunction 
 int Function Get_Punishment_To_Index(String reason)
     return JMap.getInt(punishment_to_index, reason, 0)
@@ -115,11 +115,10 @@ Function Load_Punishment_to_description(String fname)
     while 0 <= index  
         String reason = JValue.solveStr(punishments,"["+index+"].reason")
         String description = JValue.solveStr(punishments,"["+index+"].description")
-        Trace("Load_Punishment_to_description","reason:"+reason+" description:"+description) 
         JMap.setStr(punishment_to_description, reason, description) 
         index -= 1 
     endwhile 
-    Trace("Load_Punishment_To_Description","punishments loaded from "+fname)
+    ;Trace("Load_Punishment_To_Description","punishments loaded from "+fname)
 EndFunction 
 String Function Get_Punishment_To_Description(String reason) 
     return JMap.getStr(punishment_to_description, reason, "")
