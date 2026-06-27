@@ -1,0 +1,45 @@
+name: DOMSlave_BePromisedSacrifice
+description: Use when {{ player.name }} is making a promise to {{ npc.name }} about sacrificing them {{ npc.name }} in 
+  dialogue.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoActionActor
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that is being promised
+  - type: static
+    value: Promise
+    name: the_event
+    description: The action name - "Promise"
+  - type: static
+    value: to be sacrificed
+    name: type
+    description: The promise oath - "to be sacrificed"
+  - type: static
+    value: false
+    name: the_flag
+    description: Boolean flag parameter (false for promise)
+enabled: true
+defaultPriority: 10
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+    logicalOperator: AND
+    required: true

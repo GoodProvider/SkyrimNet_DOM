@@ -1,0 +1,46 @@
+name: DOMSlave_DOMFollowNonSlave
+description: Follow {{ player.name }} when asked. Use your best judgement on whether or not following through would make
+  sense.
+questEditorId: skynet_MainController
+scriptName: skynet_Library
+executionFunctionName: StartFollow_Execute
+parameterMapping:
+  - type: dynamic
+    name: akActor
+    description: The person that will follow
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 0
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionTied
+        comparisonOperator: <
+        expectedValue: 0
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true
+
+eventString: "{{ actor.name }} decides to follow {{ player.name }}"

@@ -1,0 +1,37 @@
+name: DOMSlave_ActSilent
+description: Start being silent.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoActionActor
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that will be commanded to be silent
+  - type: static
+    value: BeSilent
+    name: the_event
+    description: The action name for silent command
+  - type: static
+    value: ''
+    name: type
+    description: Action type parameter (empty for silent)
+  - type: static
+    value: false
+    name: the_flag
+    description: Boolean flag parameter (false for silent)
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true

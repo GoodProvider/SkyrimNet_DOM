@@ -1,0 +1,56 @@
+name: DOMSlave_StandStillSlave
+description: Stop and wait in place when ordered to stand still, stay put, or hold position.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoActionActor
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The slave who will stand still / wait in place
+  - type: static
+    value: StandStill
+    name: the_event
+    description: The action name for stand still command
+  - type: static
+    value: ''
+    name: type
+    description: Action type parameter (empty for stand still)
+  - type: static
+    value: false
+    name: the_flag
+    description: Boolean flag parameter (false for stand still)
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionTied
+        comparisonOperator: <
+        expectedValue: 0
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true
+eventString: "{{ actor.name }} stands still"
