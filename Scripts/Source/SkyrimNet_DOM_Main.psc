@@ -64,7 +64,7 @@ Function Setup()
     ((self as Quest) as SkyrimNet_DOM_Events).Register_Events(DOM01) 
 
     SkyrimNet_DOM_Decorators.Register_Decorators() 
-    SkyrimNet_DOM_Actions.Register_Actions() 
+;    SkyrimNet_DOM_Actions.Register_Actions() 
 
     ; DD Support 
     if MiscUtil.FileExists("Data/SkyrimNetUDNG.esp")

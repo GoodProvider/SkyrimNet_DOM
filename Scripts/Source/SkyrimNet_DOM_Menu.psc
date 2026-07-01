@@ -1,5 +1,7 @@
 Scriptname SkyrimNet_DOM_Menu
 
+SkyrimNet_DOM_Actions Property actions Auto
+
 Function Trace(String func, String msg, Bool Notification = false) global
     SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
 EndFunction
@@ -117,6 +119,8 @@ Function Target_Menu_Selection(Actor slaveActor, Actor player) global
     Trace("slaveActor_Menu_Selection","button "+button+" == "+sex+" "+buttons[button])
     if button == masturbate
         Masturbate_Start(player, slaveActor, slave, manual_obedience)
+    elseif button == sex 
+        actions.StartScene_Consensual_Two("sexual activities", slaveActor, player, player)
     elseif button == sex || button == raped_by_player || button == rapes_the_player
 
         String rape_victim = "None" 

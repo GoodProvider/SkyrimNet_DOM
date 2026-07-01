@@ -3,6 +3,7 @@ import SkyrimNet_DOM_API
 
 SkyrimNet_DOM_Main Property main  Auto  
 SkyrimNet_SexLab_Main Property sexlab_main Auto
+SkyrimNet_SexLab_Handler_DOM Property handler Auto
 Actor Property player  Auto  
 String Property player_name Auto
 
@@ -373,7 +374,7 @@ Event OnOrgasm(Form akRef, String type)
     else
         msg += "."
     endif 
-    SkyrimNet_SexLab_Handler_DOM.DOMSlave_Orgasmed(slave, msg)
+    handler.DOMSlave_Orgasmed(slave, msg)
 EndEvent
 
 Event OnKinkDiscovered(Form akRef, String type)

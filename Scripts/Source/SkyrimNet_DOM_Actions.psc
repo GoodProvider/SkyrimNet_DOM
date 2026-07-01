@@ -1,14 +1,62 @@
 Scriptname SkyrimNet_DOM_Actions extends Quest
 import SkyrimNet_DOM_API
 
+SkyrimNet_SexLab_Scene_Manager Property manager Auto
+SkyrimNet_SexLab_Actions Property actions Auto
+import SkyrimNet_SexLab_Utilities
+import SkyrimNet_DOM_API
+
+Idle Property pa_HugA Auto  ; IDLE:000F4699
+
 ;------------------------------------
 ; Shared Functions 
 ;------------------------------------
 Function Trace(String func, String msg, Bool Notification = false) global
     SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Actions",func, msg, Notification)
 EndFunction
-DOM_ACtor Function Get_Slave(String func, Actor slaveActor,bool error_non_dom_actor=False) global
+DOM_Actor Function Get_Slave(String func, Actor slaveActor,bool error_non_dom_actor=False) global
     return SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions",func, slaveActor, error_non_dom_actor, false)
+EndFunction
+
+;------------------------------------
+;  Action Functions 
+;------------------------------------
+Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior, Actor target, string style="", string method="", String direction="", String setting_name="")
+    String speaker_name = GetDisplayName(speaker)
+    String target_name = GetDisplayName(target)
+    String superior_name = GetDisplayName(superior)
+    Trace("StartScene_Consensual_Two","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name)
+    if method == "hug" || method == "single hug"
+        target.playIdleWithTarget(pa_HugA, speaker) 
+        Actor sender = speaker 
+        Actor receiver = target 
+        if direction == "get" || direction == "getting"
+            sender = target 
+            receiver = speaker 
+        endif 
+        String msg = sender.GetDisplayName()+" hugs "+receiver.GetDisplayName()+"."
+        DirectNarration(msg, speaker, target)
+        return None 
+    endif 
+    RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and "+direction+" "+method+" with "+target_name, speaker, target)
+    actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name) 
+EndFunction
+
+Function StartScene_Refused_Two(String intent, Actor rejector, Actor superior, string style="")
+    String rejector_name = GetDisplayName(rejector)
+    String superior_name = GetDisplayName(superior)
+    Trace("StartScene_Refused_Two","intent: "+intent+" "+rejector_name+" "+superior_name+" style: "+style)
+    if style == "normal" || style == "normally"
+        style = "" 
+    endif 
+    String msg = rejector_name+" "+style+" refused "+superior_name+"'s order to "+intent
+    DirectNarration(msg, rejector, superior) 
+
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isElibible",rejector, false) 
+    if slave != None 
+        AddPunishmentReason("SkyrimNet_DOM_Actions", "Sex_Start_Helper", superior, rejector, slave, "refusing to have sex") 
+    endif 
+
 EndFunction
 
 ;------------------------------------
@@ -112,25 +160,25 @@ Function Register_Actions() global
 EndFunction
 
 ; -------------------------------
-Bool Function is_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
-    if !SkyrimNet_DOM_API.IsDOMSlave(slaveActor)
-        Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
-        return False
-    endif 
-    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions","is_masturbating",slaveActor) 
-    Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
-    return slave.is_behaviour_masturbate
-EndFunction 
-
-Bool Function is_not_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
-    if !SkyrimNet_DOM_API.IsDOMSlave(slaveActor)
-        Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
-        return False
-    endif 
-    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isElibible",slaveActor) 
-    Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
-    return !slave.is_behaviour_masturbate
-EndFunction
+;Bool Function is_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
+;    if !SkyrimNet_DOM_API.IsDOMSlave(slaveActor)
+;        Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
+;        return False
+;    endif 
+;    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions","is_masturbating",slaveActor) 
+;    Trace("is_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
+;    return slave.is_behaviour_masturbate
+;EndFunction 
+;
+;Bool Function is_not_masturbating_isEligible(Actor slaveActor, string contextJson, string paramsJson) global
+;    if !SkyrimNet_DOM_API.IsDOMSlave(slaveActor)
+;        Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" isn't a slave")
+;        return False
+;    endif 
+;    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isElibible",slaveActor) 
+;    Trace("is_not_masturbating_isEligible",slaveActor.GetDisplayName()+" is_behaviour_masturbate:"+slave.is_behaviour_masturbate)
+;    return !slave.is_behaviour_masturbate
+;EndFunction
 
 Function Masturbate_Start(Actor slaveActor, String contextJson, String paramsJson) global
     Trace("Masturbate_Start","Starting "+slaveActor.GetDisplayName()+" context:"+contextJson+" params:"+paramsJson)
@@ -181,17 +229,17 @@ Function masturbate_Stop(Actor slaveActor, String contextJson, String paramsJson
     Trace("Masturbate_Stop","slave:"+slaveActor.GetDisplayName()+" reason:"+reason)
 EndFunction 
 ; -------------------------------
-Bool Function IsSlave_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global
-    SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
-    if !main.sexLab.IsValidActor(slaveActor) || slaveActor.IsDead() || slaveActor.IsInCombat() || main.sexLab.IsActorActive(slaveActor) || main.IsActorLocked(slaveActor) 
-        Trace("IsSlave_IsEligible",slaveActor.GetDisplayName()+" can't have sex")
-        return False
-    endif
-    DOM_Actor slave = Get_Slave("IsSlave_IsEligible", slaveActor) 
-    bool is_slave = slave != None 
-    Trace("IsSlave_IsEligible",slaveActor.GetDisplayName()+" is_slave:"+is_slave)
-    return is_slave
-EndFunction 
+;Bool Function IsSlave_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global
+;    SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
+;    if !main.sexLab.IsValidActor(slaveActor) || slaveActor.IsDead() || slaveActor.IsInCombat() || main.sexLab.IsActorActive(slaveActor) || main.IsActorLocked(slaveActor) 
+;        Trace("IsSlave_IsEligible",slaveActor.GetDisplayName()+" can't have sex")
+;        return False
+;    endif
+;    DOM_Actor slave = Get_Slave("IsSlave_IsEligible", slaveActor) 
+;    bool is_slave = slave != None 
+;    Trace("IsSlave_IsEligible",slaveActor.GetDisplayName()+" is_slave:"+is_slave)
+;    return is_slave
+;EndFunction 
 
 Function Disobey_Execute(Actor slaveActor, string contextJson, string paramsJson) global
     DOM_Actor slave = Get_Slave("Disobey_Execute", slaveActor,true) 
@@ -317,14 +365,14 @@ Function Sex_Start_Helper(Actor slaveActor, string contextJson, string paramsJso
             endif 
 
             Trace("SkyrimNet_DOM_Actions",SkyrimNet_SexLab_Utilities.JoinActors(actors)+" victims:"+SkyrimNet_SexLab_Utilities.JoinActors(victims)+" style:"+style+" direction:"+direction+" tag:"+tag)
-            thread = actions.Sex_Start_Helper(slaveActor, actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
+            ;thread = actions.Sex_Start_Helper(slaveActor, actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
         else
             Actor[] victims = PapyrusUtil.ActorArray(0) 
 
             String msg = slaveActor.GetDisplayName()+" respectfully submits to "+superior.GetDisplayName()+"."
             SkyrimNet_DOM_API.RegisterEvent("DOM_Obey",msg, slaveActor, target)
             Trace("SkyrimNet_DOM_Actions",SkyrimNet_SexLab_Utilities.JoinActors(actors)+" victims:"+SkyrimNet_SexLab_Utilities.JoinActors(victims)+" style:"+style+" direction:"+direction+" tag:"+tag)
-            thread = actions.Sex_Start_Helper(slaveActor, actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
+            ;thread = actions.Sex_Start_Helper(slaveActor, actors, victims, style, direction, tag, "SkyrimNet_DOM_AnimationEnd")
         endif 
 ;        Trace("Sex_Start_Helper",superior.GetDisplayName()+"'s "+slaveActor.GetDisplayName()\
 ;            +" target: "+target.GetDisplayName()+" rape:"+rape+" choice:"+choice)
