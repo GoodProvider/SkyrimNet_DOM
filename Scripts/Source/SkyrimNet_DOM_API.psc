@@ -1,4 +1,5 @@
 Scriptname SkyrimNet_DOM_API
+Import SkyrimNet_SexLab_Utilities
 
 Function Trace(String func, String msg, Bool Notification = false) global
     Trace_Helper("SkyrimNet_DOM_API", func, msg, Notification)
@@ -76,92 +77,30 @@ Function AddPunishmentReason(String file, String func, Actor superior, Actor sla
     RegisterEvent("Reason to Punish", msg, slaveActor, superior) 
 EndFunction
 
-; Narration Functions 
-; ------------------------------------------------------------
-; Narration Wrappers 
-; ------------------------------------------------------------
-
-
-Function DirectNarration(String msg, Actor source=None, Actor target=None) global
-    SkyrimNetApi.DirectNarration(msg, source, target)
-    ;SkyrimNetApi.RegisterEvent("sexlab_event", msg, source, target)
-    if source != None 
-        msg += " source:"+source.GetDisplayName()
-    endif 
-    if target != None 
-        msg += " target:"+target.GetDisplayName()
+; -------------------------------------------------------------
+Function Start_Masturbate(String intent, Actor speaker, Actor superior, String style="", String position="") global
+    SkyrimNet_DOM_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_DOM_Actions.esm") as SkyrimNet_DOM_Actions
+    if actions == None
+        Trace("Start_Masturbate","SkyrimNet_DOM_Actions is None")
+        return
     endif
-    Trace("DirectNarration", msg)
+    actions.StartScene_masturbate(intent, speaker, superior, style=style, position=position)
 EndFunction
 
-int Function DirectNarration_Optional(String event_type, String msg, Actor source=None, Actor target=None, bool optional=False) global
-    SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
-    if main == None 
-        Trace("DirectNarration_Optional","SkyrimNet_SexLab_Main is None")
-        return 0
-    endif 
-
-    bool source_none = source == None 
-    bool target_none = target == None 
-    Trace("DirectNarration_Optional","event_type:"+event_type+" msg:"+msg+" source_none:"+source_none+" target_none:"+target_none)
-
-    float unit_meter = 0.01465
-    float distance = (unit_meter*main.direct_narration_max_distance) + 1 
-    if source != None 
-        Actor player = Game.GetPlayer()
-        if player == source 
-            distance = 0 
-        else
-            distance = unit_meter*player.GetDistance(source) 
-        endif 
-    endif 
-
-    String type = "" 
-    int queue_size = SkyrimNetAPI.GetSpeechQueueSize()
-    int last_audio = SkyrimNetAPI.GetTimeSinceLastAudioEnded()/1000 ; in seconds
-    float time_current = Utility.GetCurrentRealTime() 
-    float time_delta = time_current - main.direct_narration_last_time 
-
-    if time_delta > main.direct_narration_cool_off && queue_size == 0 && (last_audio >= main.direct_narration_cool_off && distance <= main.direct_narration_max_distance)
-        SkyrimNetApi.DirectNarration(msg, source, target)
-        main.direct_narration_last_time = time_current
-        ;SkyrimNetApi.RegisterEvent(event_type, msg, source, target)
-        type = "direct"
-    else 
-        if !optional && msg != ""
-            SkyrimNetApi.RegisterEvent(event_type, msg, source, target)
-            type = "event"
-        else 
-            type = "skipped"
-        endif 
-    endif 
-
-    if source != None 
-        msg += " source:"+source.GetDisplayName()
-    endif 
-    if target != None 
-        msg += " target:"+target.GetDisplayName()
+Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior, Actor target, string style="", string method="", String direction="", String setting_name="") global
+    SkyrimNet_DOM_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_DOM_Actions.esm") as SkyrimNet_DOM_Actions
+    if actions == None
+        Trace("StartScene_Consensual_Two","SkyrimNet_DOM_Actions is None")
+        return
     endif
-    Trace("DirectNarration_Optional","type:"+type+" narration_delta:"+time_delta+" queue_size:"+queue_size+" last_audio_secs:"+last_audio+">?"+main.direct_narration_cool_off+" distance:"+distance+"<?"+main.direct_narration_max_distance+" msg:"+msg)
-    if type == "direct"
-        return 1
-    else 
-        return 0
-    endif 
+    actions.StartScene_Consensual_Two(intent, speaker, superior, target, style=style, method=method, direction=direction, setting_name=setting_name)
 EndFunction
 
-int Function RegisterEvent(String event_name, String msg, Actor source=None, Actor target=None) global
-    if msg != "" 
-        ; Sets up the log message
-        if source != None 
-            msg += " source:"+source.GetDisplayName()
-        endif 
-        if target != None 
-            msg += " target:"+target.GetDisplayName()
-        endif
-        Trace("RegisterEvent", "event_name:"+event_name+" msg:"+msg)
-
-        return SkyrimNetApi.RegisterEvent(event_name, msg, source, target)
-    endif 
-    return 0
+Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target=None, string style="", string method="", String direction="", bool speaker_victim=false, String setting_name="") global
+    SkyrimNet_DOM_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_DOM_Actions.esm") as SkyrimNet_DOM_Actions
+    if actions == None
+        Trace("StartScene_Nonconsensual_Two","SkyrimNet_DOM_Actions is None")
+        return
+    endif   
+    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, style=style, method=method, direction=direction, speaker_victim=speaker_victim, setting_name=setting_name)
 EndFunction

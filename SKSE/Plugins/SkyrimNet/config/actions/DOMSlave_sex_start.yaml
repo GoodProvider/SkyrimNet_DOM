@@ -8,7 +8,7 @@ defaultPriority: 8
 parameterMapping:
   - type: dynamic
     name: intent
-    description: one or two words (affection, lust, punish, teach, obedience, etc)
+    description: two to three words, make the sex clear
   - type: speaker
     name: speaker
     description: Speaker Actor parameter (triggering entity)

@@ -1,5 +1,6 @@
 Scriptname SkyrimNet_DOM_Events extends Quest  
 import SkyrimNet_DOM_API
+import SkyrimNet_SexLab_Utilities
 
 SkyrimNet_DOM_Main Property main  Auto  
 SkyrimNet_SexLab_Main Property sexlab_main Auto
@@ -21,31 +22,51 @@ String events_log = "Data/SKSE/Plugins/SkyrimNet_DOM/events-log.json"
 ; --------------------------
 int notifications_size = 20 
 int notifications_next = 0
-bool notifications_full = False 
-string notifications_message_key = "skyrimnet_dom_notifications_message"
-string notifications_time_key = "skyrimnet_dom_notifications_time"
+int actor_to_notifications = 0 
 
 ; --------------------------
 ; Helper functions 
 ; --------------------------
 Function Trace(String func, String msg, Bool Notification = false) global
-    SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
+    Trace_Helper("SkyrimNet_DOM_Event", func, msg, Notification)
 EndFunction
 DOM_Actor Function GetSlave(String Func, Actor akActor)
-    return SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
+    return SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor)
 EndFunction
 
+Function Setup(Quest DOM01) 
+    main = (self as Quest) as SkyrimNet_DOM_Main
+    sexlab_main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
+    handler = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab_Handler_DOM.esp") as SkyrimNet_SexLab_Handler_DOM
+    
+    if sexlab_main == None 
+        Trace("Setup","sexlab_main is None, aborting")
+        return 
+    endif 
+    if handler == None 
+        Trace("Setup","handler is None, aborting")
+        return 
+    endif 
+    player = Game.GetPlayer()
+    player_name = player.GetDisplayName()
+
+    if actor_to_notifications == 0 
+        actor_to_notifications = JMap.object() 
+        JValue.retain(actor_to_notifications) 
+    endif 
+    Register_Events(DOM01)
+EndFunction
 
 Function DirectNarration(String msg, Actor slave)
     SaveActorInfo(slave)
-    SkyrimNet_DOM_API.DirectNarration(msg, slave)
+    SkyrimNet_SexLab_Utilities.DirectNarration(msg, slave)
 EndFunction
 
 Function DirectNarration_Optional(String event_type, String msg, Actor slave, bool optional=False)
     SaveActorInfo(slave)
     String slave_name = Actor_name(slave)
     Trace("DirectNarration_Optional", "event_type:"+event_type+" msg:"+msg+" slave:"+slave_name+" optional:"+optional)
-    SkyrimNet_DOM_API.DirectNarration_Optional(event_type, msg, slave, None, optional) 
+    SkyrimNet_SexLab_Utilities.DirectNarration_Optional(event_type, msg, slave, None, optional) 
 EndFunction
 
 Function SaveActorInfo(Actor akActor, String actor_json = "")
@@ -88,17 +109,17 @@ Function Register_Events(Quest DOM01)
     ; SetSendExternalEvents 
     ; ----------------------------------
     ; Register for DOM events
-    RegisterForModEvent("DOM_CaptureAnimation", "OnCaptureAnimation")
+    ;RegisterForModEvent("DOMOnEventAnimateAbductionFloor", "OnCaptureAnimation")
     ;RegisterForModEvent("DOMOnCaptured", "OnCapured") ; handled above
     ;RegisterForModEvent("DOMOnInBag", "OnInBag") 
     ;RegisterForModEvent("DOMOnOutBag", "OnOutBag") 
-    ;RegisterForModEvent("DOMOnCallForHelp", "OnCallForHelp") 
+    RegisterForModEvent("DOMOnCallForHelp", "OnCallForHelp") 
     ;RegisterForModEvent("DOMOnOrgasm", "OnOrgasm")
-    ;RegisterForModEvent("DOMOnKinkDiscovered", "OnKinkDiscovered")
-    ;RegisterForModEvent("DOMOnLostVirginity", "OnLostVirginity")
-    ;RegisterForModEvent("DOMOnRunaway", "OnRunaway")
+    RegisterForModEvent("DOMOnKinkDiscovered", "OnKinkDiscovered")
+    RegisterForModEvent("DOMOnLostVirginity", "OnLostVirginity")
+    RegisterForModEvent("DOMOnRunaway", "OnRunaway")
     ;RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
-    RegisterForModEvent("DOMOnBehaviorChange", "OnBehaviorChange")
+    RegisterForModEvent("DOMOnBehaviourChange", "OnBehaviourChange")
     RegisterForModEvent("DOMOnNotificationSent", "OnNotificationSent")
     ;  -------
     ; will be handled (if at all) by decorators
@@ -151,12 +172,12 @@ Bool Function GetLastOrderRefused_Reset()
 EndFunction
 
 Function RegisterShortLivedEvent(String eventId, String eventType, String description, String data, int ttlMs, Actor sourceActor, Actor targetActor=None)
-    DirectNarration_Optional(eventType, description, sourceActor, targetActor, optional=true)
+    SkyrimNet_SexLab_Utilities.DirectNarration_Optional(eventType, description, sourceActor, targetActor, optional_is_dropped=true)
     ;return SkyrimNetAPI.RegisterShortLivedEvent(eventId, eventType, description, data, ttlMs, sourceActor, targetActor)
 endFunction 
 
 Function RegisterEvent(String eventType, String description, Actor originatorActor, Actor targetActor=None)
-    DirectNarration_Optional(eventType, description, originatorActor, targetActor, optional=true)
+    SkyrimNet_SexLab_Utilities.DirectNarration_Optional(eventType, description, originatorActor, targetActor, optional_is_dropped=true)
     ;SkyrimNetAPI.RegisterEvent(eventType, content, originatorActor, targetActor)
 EndFunction 
 
@@ -170,20 +191,30 @@ EndFunction
 ; SetSendExternalEvents 
 ; ----------------------------------
 
-Event OnCaptureAnimation(Form akTarget, string capture_msg, bool is_from_behind, bool is_unconscious)
-    Actor slave = akTarget as Actor 
-    String name = slave.GetDisplayName() 
-    String msg = player.GetDisplayName()
-    if is_from_behind
-        msg += " comes from behind, "
-    endif 
-    msg += " grabs "name+" by the throat, throws "+name+" to the ground, and enslaves "
-    if  is_unconscious
-        msg += " an unconscious "
-    endif 
-    msg += slave.GetDisplayName()+" "+name+"'s body, but not yet "+name+"'s mind."
-    DirectNarration(msg, slave)
-EndEvent
+; Appears to be deprecated, but leaving it here for now. 
+;Event OnCaptureAnimation(Form akTarget, string capture_msg, bool is_from_behind, bool is_unconscious)
+;Event OnCaptureAnimation(Form akTarget, string capture_msg, string type, bool flag)
+;    Actor slave = akTarget as Actor 
+;    String name = GetDisplayname(slave)
+;    Trace("OnCaptureAnimation","akTarget:"+slave+" capture_msg:"+capture_msg+" type:"+type+" flag:"+flag)
+;    String msg = player.GetDisplayName()
+;    ;if is_from_behind
+;        ;msg += " comes from behind, "
+;    ;endif 
+;    msg += " grabs "name+" by the throat, throws "+name+" to the ground, and enslaves "
+;    ;if  is_unconscious
+;        ;msg += " an unconscious "
+;    ;endif 
+;    msg += slave.GetDisplayName()+" "+name+"'s body, but not yet "+name+"'s mind."
+;    DirectNarration(msg, slave)
+;EndEvent
+
+;Event OnCapture(Form akTarget, string mood, bool is_player_slave)
+;    Actor slave = akTarget as Actor 
+;    String name = GetDisplayname(slave) 
+;    String msg = player.GetDisplayName()+" has captured "+name+" and enslaved "+name+"'s body, but not yet "+name+"'s mind."
+;    DirectNarration(msg, slave)
+;EndEvent
 
 Event OnLostVirginity(Form akRef, String type )
     Actor slave = akRef as Actor 
@@ -205,59 +236,121 @@ EndEvent
 ; SetSendExternalEvents 
 ; ----------------------------------
 Event OnNotificationSent(Form akRef, String notificationType, bool is_player_slave, String description)
+    if OnNotifcationSkip(description) 
+        return 
+    endif 
+
     Actor slave = akRef as Actor 
-    String slave_name = Actor_name(slave)
-    String player_name = player.getDisplayName() 
-    int i = StringUtil.Find(description, "your grasp as")
-    if StringUtil.Find(description, "your grasp as") >= 0 
-        description = slave_name "squirms under "+player_name+"'s grasp as "+player_name+"'s orgasm submerges "+player_name
+    if slave == None 
+        Trace("OnNotificationSent","akRef is not an Actor, skipping")
+        return
+    endif
+
+    int i = StringUtil.Find(description, "orgasm")
+    String slave_name = slave.GetDisplayName()
+    if i >= 0 
+        i = StringUtil.Find(description, "melts")
+        if i >= 0 
+
+            Quest DOM = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as Quest
+            DOM_API api = DOM as DOM_API
+            if api != None
+                DOM_Actor dslave = api.GetDOMActor(slave)
+                if  dslave.behaviour == "masturbate"
+                    DirectNarration(description+". "+slave_name+" is orgasming.", slave)
+                    return 
+                endif 
+            endif 
+            handler.DOMSlave_Orgasmed(slave, description)
+            return
+        else 
+            Trace("OnNotificationSent", "--- orgasm found in description, skipping: "+description)
+            return 
+        endif 
+    else 
+        ; replace you and your
+        description = ReplaceWord(description, "your", player_name+"'s")
+        description = ReplaceWord(description, "you", player_name)
     endif 
-    Trace("OnNotificationSent", "notificationType:"+notificationType+" is_player_slave:"+is_player_slave+" description:"+description+" slave:"+slave_name, true)
-    if !notifications_full && notifications_next == 0 
-        StorageUtil.StringListResize(akRef, notifications_message_key, notifications_size, "") 
-    elseif notifications_next >= notifications_size 
-        notifications_full = true 
-        notifications_next = 0 
+
+
+    Trace("OnNotificationSent", "next: "+notifications_next+" notificationType: '" + notificationType + "'' is_player_slave: " + is_player_slave + " description: '" + description + "' slave:" + slave_name)
+    int notifications = GetNotifications(slave)
+    ; ---------------- Capture -------------------
+    if notificationType == "freshly captured" && notifications < 1 
+        description = player_name+" grabs "+slave_name+" by the throat, throws "+slave_name+" to the ground, and enslaves "+slave_name+". "+description
+    endif
+
+    ;int i = StringUtil.Find(description, "your grasp as")
+    ;if StringUtil.Find(description, "your grasp as") >= 0 
+    ;    description = slave_name + "squirms under " + player_name + "'s grasp as " + player_name + "'s orgasm submerges " + player_name
+    ;endif 
+    if notifications < 1 
+        String uuid = slave.GetFormID() as String 
+        notifications = JArray.objectWithSize(notifications_size) 
+        JValue.retain(notifications)
+        JMap.setObj(actor_to_notifications, uuid, notifications) 
+        i = 0 
+        while i < notifications_size 
+            int note = JMap.object() 
+            JMap.setStr(note, "_message", "") 
+            JMap.setFlt(note, "_timestamp", 0.0) 
+            JValue.retain(note) 
+            JArray.setObj(notifications, i, note) 
+            i += 1
+        endwhile 
     endif 
-    StorageUtil.StringListSet(akRef, notifications_message_key, notifications_next, description) 
-    Int minutes = Utility.GetINIFloat("iCalendarMinute:Calendar") As Int
-    Debug.Notification("minutes:"+Utility.GetINIFloat("iCalendarMinute:Calendar")+" => "+minutes)
-    StorageUtil.IntListSet(akRef, notifications_time_key, notifications_next, minutes) 
+
+    Float rawDaysPassed = Utility.GetCurrentGameTime()
+    Trace("OnNotificationSent", "notifications_next: "+notifications_next+" notifications_size: "+notifications_size, true)
+    int note = JArray.getObj(notifications, notifications_next)
+    JMap.setStr(note, "_message", description) 
+    JMap.setFlt(note, "_timestamp", rawDaysPassed)
+
     notifications_next += 1 
+    if notifications_next >= notifications_size 
+        notifications_next = 0
+    endif 
+
     DirectNarration_Optional("notification", description, slave, optional=true)
 EndEvent
 
-String Function GetNotificationsJSON(Form akRef) 
-    String json = "" 
-    if notifications_full 
-        int i = notifications_next 
-        while i < notifications_size 
-            if json != '' 
-                json += ','
-            endif 
-            json += GetNotificationSingleJson(akRef, i) 
-            i += 1 
-        endwhile 
+bool Function OnNotifcationSkip(String description)
+    if StringUtil.Find(description, "was just captured") >= 0 
+        return true 
     endif 
-    int j = 0
-    while j < notifications_next 
-
-        if json != '' 
-            json += ','
-        endif 
-        json += GetNotificationSingleJson(akRef, j) 
-        j += 1 
-    endwhile 
-
-    json = "["+json+"]"
-    Trace("GetNotificationsJSON",json)
-    return json 
+    return false
 EndFunction 
 
-String Function GetNotificationSingleJson(Form akRef, int i) 
-    String message = Storageutil.StringListGet(akRef, notifications_message_key, i) 
-    int minutes = Storageutil.IntListGet(akRef, notifications_message_key, i) 
-    return '{"message":"'+message+'","minutes":'+minutes+'}'
+int Function GetNotifications(Actor slave)
+    String uuid = slave.GetFormID() as String 
+    Float currentDaysPassed = Utility.GetCurrentGameTime()
+    int i = 0 
+    int num_notes = 0
+    int notifications = JMap.getObj(actor_to_notifications, uuid)
+    while i < notifications_size
+        int note = JArray.getObj(notifications, i)
+        Float timestamp = JMap.getFlt(note, "_timestamp", 0.0)
+        if timestamp != 0.0 && timestamp <= currentDaysPassed
+            num_notes += 1
+        endif 
+        i += 1 
+    endwhile
+    if num_notes == notifications_size
+        return notifications
+    endif 
+
+    int notes = JArray.objectWithSize(num_notes)
+    i = 0 
+    while i < notifications_size
+        int note = JArray.getObj(notifications, i)
+        Float timestamp = JMap.getFlt(note, "_timestamp", 0.0)
+        if timestamp != 0.0 && timestamp <= currentDaysPassed
+            JArray.setObj(notes, i, note)
+        endif 
+        i += 1
+    endwhile
+    return notes
 EndFunction 
 
 ; ------------------------ 
@@ -290,14 +383,14 @@ Event OnBehaviourChange(Form akRef, String type)
     String name_msg = Actor_name(slave)+" "+msg
     Trace("OnBehaviourChange",current+"->"+type+" "+name_msg)
     if msg != ""
-        DirectNarration_Optional(type, name_msg, slave, None, optional=true)
+        DirectNarration_Optional(type, name_msg, slave, None)
     endif 
 EndEvent 
 
 Event OnMoodChange(Form akRef, String type)
     Actor slave = akRef as Actor
     String msg = mood_to_Sentence(slave.GetDisplayName(), type) 
-    DirectNarration_Optional("mood", msg, slave, None, optional=true)
+    DirectNarration_Optional("mood", msg, slave, None)
     Trace("OnMoodChange",msg)
 EndEvent 
 
@@ -369,7 +462,7 @@ Event OnOrgasm(Form akRef, String type)
         msg += " despite being raped."
     elseif type == "kink"
         msg += " from "+slave.GetDisplayName()+"'s sexual kink."
-    elseif type == "kink"
+    elseif type == "magic"
         msg += ", because of a magical effect."
     else
         msg += "."
@@ -427,8 +520,8 @@ Event OnPunished(Form akRef, string punish_method, string punish_reason, bool is
 
     if punish_method == "whip" 
         msg += " Leaving red angry welts across "+slave_name+"'s body and speckles of her blood on the floor."
-    elseif punish_method == "slmain.d_aping"
-        msg += " Leaving "+slave_name+"'s check bright red and stinging."
+    elseif punish_method == "slapping"
+        msg += " Leaving "+slave_name+"'s cheek bright red and stinging."
     elseif punish_method == "spanking"
         msg += " Leaving "+slave_name+"'s ass bright red and stinging."
     elseif punish_method == "choking"

@@ -29,10 +29,24 @@ String Function BehaviourToString(String behavior) global
 EndFunction
 
 String Function Get_Actor_Info(Actor akActor) global
+    ; Create a new JMap object
+    Int not_slave_obj = JMap.object()
+
+    ; Populate the base values
+    JMap.setInt(not_slave_obj, "_loaded", 1) ; 1 represents True
+    JMap.setStr(not_slave_obj, "_source", "Get_Actor_Info")
+    JMap.setInt(not_slave_obj, "_is_slave", 0) ; 0 represents False
+
+    ; If you need this as a string representation later:
+    String not_slave_json = JValue.toJSONString(not_slave_obj)
+
+    ; Release memory if you aren't retaining this object in a long-term property
+    JValue.release(not_slave_obj)
+
     SkyrimNet_DOM_Events events = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Events
     if events == None
         Trace("Get_DOM_Slave_INfo","events is None")
-        return ""
+        return not_slave_json
     endif
 
     Quest DOM = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as Quest
@@ -40,17 +54,11 @@ String Function Get_Actor_Info(Actor akActor) global
     DOM_Core DOM01 = DOM as DOM_Core
     if api == None
         Trace("Get_DOM_Slave_INfo","DOM_API is None")
-        return ""
+        return not_slave_json
     endif
-    if !api.IsDOMSlave(akActor)
-        Trace("Get_DOM_Slave_Info",akActor.GetDisplayName()+" is not a slave")
-        return '{"loaded":true,"source":"Get_Actor_Info","is_slave":false}'
-    endif 
-
     DOM_Actor slave = api.GetDOMActor(akActor)
     if slave == None 
-        Trace("Get_DOM_Slave_Info","api.GetDOMActor(akActor) returned None")
-        return "" 
+        return not_slave_json
     endif 
 
     DOM_Mind mind = slave.mind
@@ -61,13 +69,13 @@ String Function Get_Actor_Info(Actor akActor) global
     endif 
 
     String behaviour = BehaviourToString(slave.behaviour)
-    String is_masturbating = ":false"
+    int is_masturbating = 0
     SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
     if main.sexLab.IsActorActive(akActor) || SkyrimNet_DOM_API.Ostim_IsInOstim(akActor) 
         behaviour = "having a sexual experience." 
     elseif slave.behaviour == "masturbate"
         if !main.sexLab.IsActorActive(akActor) && !SkyrimNet_DOM_API.Ostim_IsInOstim(akActor) 
-            is_masturbating = ":true"
+            is_masturbating = 1
         endif 
     endif 
 
@@ -75,84 +83,105 @@ String Function Get_Actor_Info(Actor akActor) global
     int next_punishment_reason = slave.mind.GetNextPunishmentReasonByIndex()
     String next_punishment_reason_name = DOM01.GetJSONPunishmentReasonNameByIndex(next_punishment_reason,slave.actorSex)
 
-    String actor_json = '{"loaded":true,"source":"Get_Actor_Info","is_slave":true' \
-        + ',"name":"'+akActor.GetDisplayName()+'"' \
-        + ',"owner":"' +owner+'"' \
-        \
-        + ',"is_obedient"' + Bool_String(mind.IsObedient()) \
-        +', "last_order_refused"'+Bool_String(events.GetLastOrderRefused_Reset()) \
-        \
-        + ',"mood_sentence":"' + events.Mood_to_Sentence(akActor.GetDisplayName(), DOM01.GetMood(akActor))+'"'\
-        + ',"has_tears"' + Bool_String(slave.hasTears()) \
-        + ',"behaviour":"' + behaviour+'"'\
-        \
-        + ',"training_mind":{'\
-        +   '"submission":' + mind.submission\
-        +   ',"resignation":' + mind.resignation\
-        +   ',"humiliation":' + mind.humiliation\
-        +   ',"fear":' + mind.fear_training\
-        +   ',"respect":' + mind.respect_training\
-        +  '}'\
-        \
-        + ',"training_sex":{'\
-        +    '"vaginal":' + mind.vaginal_training\
-        +    ',"anal":' + mind.anal_training\
-        +    ',"oral":' + mind.oral_training\
-        +  '}'\
-        \
-        + ',"arousal_factor":' + mind.arousal_factor\
-        + ',"is_aroused_for":' + mind.is_aroused_for\
-        + ',"is_enraptured_for":' + mind.is_enraptured_for\
-        \
-        + ',"known_fetishes":"' + mind.GetListOfKnownKinks()+'"'\
-        + ',"hidden_fetishes":"' + mind.GetListOfHiddenKinks()+'"'\
-        \
-        + ',"dirty_level":' + slave.dirty_level \
-        + ',"wet_level":' + slave.wet_level \
-        \
-        + ',"is_naked"' + Bool_String(slave.is_naked) \
-        + ',"has_mouth_gag"' + Bool_String(slave.has_mouth_gag) \
-        + ',"has_collar"' + Bool_String(slave.has_collar) \
-        + ',"has_cuffs_crossed"' + Bool_String(slave.has_cuffs_crossed) \
-        + ',"has_cuffs_front"' + Bool_String(slave.has_cuffs_front) \
-        + ',"has_cuffs_boxtied"' + Bool_String(slave.has_cuffs_boxtied) \
-        + ',"has_cuffs_back"' + Bool_String(slave.has_cuffs_back) \
-        + ',"has_arms_device"' + Bool_String(slave.has_arms_device) \
-        + ',"has_dwarven_device"' + Bool_String(slave.has_dwarven_device) \
-        + ',"has_dd_suit"' + Bool_String(slave.has_dd_suit) \
-        + ',"has_petsuit"' + Bool_String(slave.has_petsuit) \
-        + ',"has_straitjacket"' + Bool_String(slave.has_straitjacket) \
-        + ',"has_cuffs"' + Bool_String(slave.has_cuffs) \
-        + ',"has_armbinder"' + Bool_String(slave.has_armbinder) \
-        + ',"has_yoke"' + Bool_String(slave.has_yoke) \
-        + ',"has_disablekick"' + Bool_String(slave.has_disablekick) \
-        + ',"has_device"' + Bool_String(slave.has_device) \
-        + ',"has_blindfold"' + Bool_String(slave.has_blindfold) \
-        + ',"has_leash"' + Bool_String(slave.has_leash) \
-        + ',"has_plug_anal"' + Bool_String(slave.has_plug_anal) \
-        + ',"has_plug_vaginal"' + Bool_String(slave.has_plug_vaginal) \
-        + ',"has_weapon_in_inventory"' + Bool_String(slave.has_weapon_in_inventory) \
-        + ',"has_weapon"' + Bool_String(slave.has_weapon > 0) \
-        + ',"has_shame_clothes"' + Bool_String(slave.has_shame_clothes) \
-        + ',"has_lingerie"' + Bool_String(slave.has_lingerie) \
-        + ',"has_heels"' + Bool_String(slave.has_heels) \
-        + ',"has_brand"' + Bool_String(slave.HasMark()) \
-        \
-        + ',"is_masturbating"' + is_masturbating \
-        + ',"is_restrained"' + Bool_String(slave.is_restrained) \
-        + ',"is_bounded"' + Bool_String(slave.is_bounded) \
-        + ',"is_jailed"' + Bool_String(slave.is_jailed) \
-        \
-        + ',"notifications":'+events.GetNotificationsJSON(akActor)\
-        \
-        + ',"punishment":{'\
-        +    '"next_reason":"'+next_punishment_reason_name+'"' \
-        +    ',"whipping_active"'+Bool_String(slave.mind.whipping_active) \
-        +    ',"whipping_reason_name":"'+slave.mind.whipping_reason_name+'"' \
-        +    ',"current_reason_name":"'+slave.mind.current_punishment_reason_name+'"' \
-        +  '}'\
-        + '}'
-    events.SaveActorInfo(akActor, actor_json)
+    ; 1. Create the main Actor JSON object
+    Int actor_obj = JMap.object()
+
+    ; 2. Add top-level primitive values
+    JMap.setInt(actor_obj, "_loaded", 1)
+    JMap.setStr(actor_obj, "_source", "Get_Actor_Info")
+    JMap.setInt(actor_obj, "_is_slave", 1)
+    JMap.setStr(actor_obj, "_name", akActor.GetDisplayName()) ; Assuming akActor is your DOM_Actor
+    JMap.setStr(actor_obj, "_owner", owner) ; Replace with your variable
+    JMap.setInt(actor_obj, "_is_obedient", mind.isObedient()as Int)
+    JMap.setStr(actor_obj, "_mood_sentence", events.Mood_to_Sentence(akActor.GetDisplayName(), DOM01.GetMood(akActor)))
+    JMap.setInt(actor_obj, "_has_tears", slave.hasTears() as Int)
+    JMap.setStr(actor_obj, "_behaviour", behaviour)
+
+    ; 3. Build and nest the "_training_mind" sub-object
+    Int training_mind = JMap.object()
+    JMap.setObj(actor_obj, "_training_mind", training_mind)
+        JMap.setInt(training_mind, "_submission", mind.submission as Int)
+        JMap.setInt(training_mind, "_resignation", mind.resignation as Int)
+        JMap.setInt(training_mind, "_humiliation", mind.humiliation as Int)
+        JMap.setInt(training_mind, "_fear", mind.fear_training as Int)
+        JMap.setInt(training_mind, "_respect", mind.respect_training as Int)
+
+
+    ; 4. Build and nest the "_training_sex" sub-object
+    Int training_sex = JMap.object()
+    JMap.setObj(actor_obj, "_training_sex", training_sex)
+        JMap.setFlt(training_sex, "_vaginal", mind.vaginal_training)
+        JMap.setFlt(training_sex, "_anal", mind.anal_training)
+        JMap.setFlt(training_sex, "_oral", mind.oral_training)
+
+    ; 5. Sexual Kinks
+    JMap.setStr(actor_obj, "_known_fetishes", mind.GetListOfKnownKinks())
+    JMap.setStr(actor_obj, "_hidden_fetishes", mind.GetListOfHiddenKinks())
+
+    ; 6. Arousal 
+    JMap.setFlt(actor_obj, "_arousal_factor", mind.arousal_factor)
+    JMap.setInt(actor_obj, "_is_aroused_for", mind.is_aroused_for)
+    JMap.setInt(actor_obj, "_is_enraptured_for", mind.is_enraptured_for)
+
+    ; 7. Body
+    JMap.setFlt(actor_obj, "_dirty_level", slave.dirty_level)
+    JMap.setFlt(actor_obj, "_wet_level", slave.wet_level)
+    JMap.setInt(actor_obj, "_is_naked", slave.is_naked as Int)
+
+    ; 8. Bondage
+    JMap.setInt(actor_obj, "_has_mouth_gag", slave.has_mouth_gag as Int)
+    JMap.setInt(actor_obj, "_has_collar", slave.has_collar as Int)
+    JMap.setInt(actor_obj, "_has_cuffs_crossed", slave.has_cuffs_crossed as Int)
+    JMap.setInt(actor_obj, "_has_cuffs_front", slave.has_cuffs_front as Int)
+    JMap.setInt(actor_obj, "_has_cuffs_boxtied", slave.has_cuffs_boxtied as Int)
+    JMap.setInt(actor_obj, "_has_cuffs_back", slave.has_cuffs_back as Int)
+    JMap.setInt(actor_obj, "_has_lingerie", slave.has_lingerie as Int)
+    JMap.setInt(actor_obj, "_has_cuffs", slave.has_cuffs as Int)
+    JMap.setInt(actor_obj, "_has_arms_device", slave.has_arms_device as Int)
+    JMap.setInt(actor_obj, "_has_dwarven_device", slave.has_dwarven_device as Int)
+    JMap.setInt(actor_obj, "_has_dd_suit", slave.has_dd_suit as Int)
+    JMap.setInt(actor_obj, "_has_petsuit", slave.has_petsuit as Int)
+    JMap.setInt(actor_obj, "_has_straitjacket", slave.has_straitjacket as Int)
+    JMap.setInt(actor_obj, "_has_armbinder", slave.has_armbinder as Int)
+    JMap.setInt(actor_obj, "_has_yoke", slave.has_yoke as Int)
+    JMap.setInt(actor_obj, "_has_disablekick", slave.has_disablekick as Int)
+    JMap.setInt(actor_obj, "_has_plug_anal", slave.has_plug_anal as Int)
+    JMap.setInt(actor_obj, "_has_plug_vaginal", slave.has_plug_vaginal as Int)
+    JMap.setInt(actor_obj, "_has_blindfold", slave.has_blindfold as Int)
+    JMap.setInt(actor_obj, "_has_leash", slave.has_leash as Int)
+    JMap.setInt(actor_obj, "_has_shame_clothes", slave.has_shame_clothes as Int)
+    JMap.setInt(actor_obj, "_has_heels", slave.has_heels as Int)
+    JMap.setInt(actor_obj, "_has_mark", slave.HasMark() as Int)
+
+    JMap.setInt(actor_obj, "_is_in_love", mind.IsInLove() as Int)
+    JMap.setInt(actor_obj, "_is_devoted", mind.IsDevoted() as Int)
+    JMap.setInt(actor_obj, "_is_ashamed", mind.IsAshamed() as Int)
+
+    JMap.setInt(actor_obj, "_is_masturbating", is_masturbating)
+    JMap.setInt(actor_obj, "_is_restrained", slave.is_restrained as Int)
+    JMap.setInt(actor_obj, "_is_bound", slave.is_bounded as Int)
+    JMap.setInt(actor_obj, "_is_jailed", slave.is_jailed as Int)
+
+    int notifications = events.GetNotifications(akActor)
+    if notifications < 1 
+        notifications = JArray.object()
+    endif 
+    JMap.setObj(actor_obj, "_notifications", notifications) 
+
+    ; 6. Build and nest the "_punishment" sub-object
+    Int punishment = JMap.object()
+    JMap.setObj(actor_obj, "_punishment", punishment)
+        JMap.setStr(punishment, "_next_reason", next_punishment_reason_name)
+        JMap.setInt(punishment, "_whipping_active", mind.whipping_active as Int)
+        JMap.setStr(punishment, "_whipping_reason_name", mind.whipping_reason_name)
+        JMap.setStr(punishment, "_current_reason_name", mind.current_punishment_reason_name)
+
+    ; If passing the data to the UI or SKSE API, you can stringify it:
+    String actor_json = JValue.toJSONString(actor_obj)
+
+    ; Important: Clean up the main object (which recursively cleans up nested objects) 
+    ; to prevent memory leaks if you aren't saving it to a JContainer file/form.
+    JValue.release(actor_obj)
     return TraceReturn("Get_Actor_Info", actor_json) 
 EndFunction
 

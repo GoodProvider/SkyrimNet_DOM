@@ -1,13 +1,13 @@
-{% if dom_actor.loaded and ( render_mode == "dialogue_target" or render_mode == "short_inline" or show_internal) %}
-    {% if render_mode == "dialogue_target" or render_mode == "short_inline" %}
-        {% if actor_dom.known_fetishes != "" %}
-            - {{dom_actor.name}}'s known sexual fetishes: {{dom_actor.known_fetishes}}
-        {% endif %}
-    {% else if show_internal %}
-        - status: slave 
-        - owner: {{dom_actor.owner}} 
-        - {{dom_actor.mood_sentence}}
-        - Your hidden sexual fetishes: {{dom_actor.hidden_fetishes}}
-        - Your sexual fetishes discovered by {{player.name}}: {{dom_actor.known_fetishes}}
+{% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+{% set show_external_only = (render_mode == "dialogue_target") %}
+{% if dom_is_slave_faction and (show_external or show_internal) %} 
+    {% if dom_is_slave_faction and show_internal %}
+        - status: slave  
+        - owner: {{dom_actor._owner}} 
+        - {{dom_actor._mood_sentence}}
+        - Your hidden sexual fetishes: {{dom_actor._hidden_fetishes}}
+        {% if dom_actor._known_fetishes != "" %} 
+        - Your sexual fetishes discovered by {{player.name}}: {{dom_actor._known_fetishes}}
+        {% endif %} 
     {% endif %} 
 {% endif %}

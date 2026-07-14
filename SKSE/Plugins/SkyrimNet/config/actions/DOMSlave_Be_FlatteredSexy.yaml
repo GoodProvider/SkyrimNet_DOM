@@ -22,10 +22,5 @@ eligibilityRules:
           - DOMPlayerSlaveFaction
         comparisonOperator: ==
         expectedValue: 1
-      - decoratorName: is_in_combat
-        arguments:
-          - currentActor
-        comparisonOperator: ==
-        expectedValue: false
     logicalOperator: AND
-    required: true
+    required: false

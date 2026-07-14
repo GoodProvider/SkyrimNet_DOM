@@ -1,66 +1,71 @@
-{% if dom_actor.loaded and ( render_mode == "dialogue_target" or render_mode == "short_inline" or show_internal) %}
-  {% if dom_actor.has_mouth_gag %}
-    - A tight gag is secured in {{ actor_name }}'s mouth, reducing any speech to muffled, helpless whimpers.
+{% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+{% set show_external_only = (render_mode == "dialogue_target") %}
+{% if show_external or show_internal %}
+{% set dom_is_slave_faction = is_in_faction(actorUUID, "DOMPlayerSlaveFaction") %}
+{% set dom_actor_fname = "SkyrimNet_DOM/actors/"+decnpc(actorUUID).name+".json" %}
+{% set dom_actor = read_json(dom_actor_fname) %} 
+{% if dom_actor._has_mouth_gag %}
+    - A tight gag is secured in {{dom_actor._name}}'s mouth, reducing any speech to muffled, helpless whimpers.
   {% endif %}
-  {% if dom_actor.has_collar %}
-    - A heavy collar is locked firmly around {{ actor_name }}'s neck, a clear sign of their owned status.
+  {% if dom_actor._has_collar %}
+    - A heavy collar is locked firmly around {{dom_actor._name}}'s neck, a clear sign of their owned status.
   {% endif %}
-  {% if dom_actor.has_cuffs_crossed %}
-    - {{ actor_name }}'s wrists are tightly bound in a crossed position, leaving their hands useless.
+  {% if dom_actor._has_cuffs_crossed %}
+    - {{dom_actor._name}}'s wrists are tightly bound in a crossed position, leaving their hands useless.
   {% endif %}
-  {% if dom_actor.has_cuffs_front %}
-    - {{ actor_name }}'s hands are cuffed together in front of them.
+  {% if dom_actor._has_cuffs_front %}
+    - {{dom_actor._name}}'s hands are cuffed together in front of them.
   {% endif %}
-  {% if dom_actor.has_cuffs_boxtied %}
-    - {{ actor_name }}'s elbows are pulled together and their wrists are bound in a restrictive box-tie.
+  {% if dom_actor._has_cuffs_boxtied %}
+    - {{dom_actor._name}}'s elbows are pulled together and their wrists are bound in a restrictive box-tie.
   {% endif %}
-  {% if dom_actor.has_cuffs_back %}
-    - {{ actor_name }}'s arms are pulled behind their back and locked firmly at the wrists.
+  {% if dom_actor._has_cuffs_back %}
+    - {{dom_actor._name}}'s arms are pulled behind their back and locked firmly at the wrists.
   {% endif %}
-  {% if dom_actor.has_shame_clothes %}
-    - {{ actor_name }} is forced to wear humiliating, shameful clothing filling them with shame. 
+  {% if dom_actor._has_shame_clothes %}
+    - {{dom_actor._name}} is forced to wear humiliating, shameful clothing filling them with shame. 
   {% endif %}
-  {% if dom_actor.has_lingerie %}
-    - {{ actor_name }} is dressed in provocative, revealing lingerie.
+  {% if dom_actor._has_lingerie %}
+    - {{dom_actor._name}} is dressed in provocative, revealing lingerie.
   {% endif %}
-  {% if dom_actor.has_cuffs %}
-    - {{ actor_name }}'s movement is restricted by heavy manacles.
+  {% if dom_actor._has_cuffs %}
+    - {{dom_actor._name}}'s movement is restricted by heavy manacles.
   {% endif %}
   {% if not is_plugin_loaded("SkyrimNetUDNG.esp") %}
-    {% if dom_actor.has_arms_device or dom_actor.has_dwarven_device %}
-      - {{ actor_name }}'s upper body is encased in a complex, mechanical restraint device.
+    {% if dom_actor._has_arms_device or dom_actor._has_dwarven_device %}
+      - {{dom_actor._name}}'s upper body is encased in a complex, mechanical restraint device.
     {% endif %}
-    {% if dom_actor.has_dd_suit %}
-      - {{ actor_name }} is wearing a specialized DD-series suit, designed for maximum containment.
+    {% if dom_actor._has_dd_suit %}
+      - {{dom_actor._name}} is wearing a specialized DD-series suit, designed for maximum containment.
     {% endif %}
-    {% if dom_actor.has_petsuit %}
-      - {{ actor_name }} is sealed inside a tight petsuit, emphasizing their role as a submissive creature.
+    {% if dom_actor._has_petsuit %}
+      - {{dom_actor._name}} is sealed inside a tight petsuit, emphasizing their role as a submissive creature.
     {% endif %}
-    {% if dom_actor.has_straitjacket %}
-      - {{ actor_name }} is encased in a heavy straitjacket, their arms wrapped tightly across their chest.
+    {% if dom_actor._has_straitjacket %}
+      - {{dom_actor._name}} is encased in a heavy straitjacket, their arms wrapped tightly across their chest.
     {% endif %}
-    {% if dom_actor.has_armbinder %}
-      - {{ actor_name }} is locked into a stiff armbinder, forcing their elbows together behind their back.
+    {% if dom_actor._has_armbinder %}
+      - {{dom_actor._name}} is locked into a stiff armbinder, forcing their elbows together behind their back.
     {% endif %}
-    {% if dom_actor.has_yoke %}
+    {% if dom_actor._has_yoke %}
       {% if actor_gender == "male" %}
-        - {{ actor_name }} is locked in a yoke, arms immobilized and thrust outward, chest prominently displayed.
+        - {{dom_actor._name}} is locked in a yoke, arms immobilized and thrust outward, chest prominently displayed.
       {% else %}
-        - {{ actor_name }} is locked in a yoke, arms immobilized and thrust outward, breasts prominently displayed.
+        - {{dom_actor._name}} is locked in a yoke, arms immobilized and thrust outward, breasts prominently displayed.
       {% endif %}
     {% endif %}
-    {% if dom_actor.has_disablekick %}
-      - {{ actor_name }}'s legs are restrained or hobbled, making it impossible for them to kick or run.
+    {% if dom_actor._has_disablekick %}
+      - {{dom_actor._name}}'s legs are restrained or hobbled, making it impossible for them to kick or run.
     {% endif %}
-    {% if dom_actor.has_blindfold %}
-      - {{ actor_name }} is blindfolded, forced to rely on their other senses in total darkness.
+    {% if dom_actor._has_blindfold %}
+      - {{dom_actor._name}} is blindfolded, forced to rely on their other senses in total darkness.
     {% endif %}
     {% if show_internal or clothing_state == "nude" %}
-        {% if dom_actor.has_plug_anal %}
-            - An anal plug is firmly inserted into {{ actor_name }}, providing a constant, filling sensation.
+        {% if dom_actor._has_plug_anal %}
+            - An anal plug is firmly inserted into {{dom_actor._name}}, providing a constant, filling sensation.
         {% endif %}
-        {% if dom_actor.has_plug_vaginal %}
-            - A vaginal plug is deeply seated within {{ actor_name }}, keeping them constantly occupied.
+        {% if dom_actor._has_plug_vaginal %}
+            - A vaginal plug is deeply seated within {{dom_actor._name}}, keeping them constantly occupied.
         {% endif %}
     {% endif %}
   {% endif %}

@@ -1,8 +1,8 @@
 {% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform"%}
-    {% if dom_actor.loaded and length(dom_actor.notifications) > 0 %} 
+    {% if dom_actor._loaded and length(dom_actor._notifications) > 0 %} 
         ## Slave Events 
-        {% for notification in dom_actor.notifications %}
-            {{notification.message}} ({{notification.minutes}} minutes ago) 
+        {% for notification in dom_actor._notifications %}
+            {{notification._message}} ({{notification._minutes}} minutes ago) 
         {% endfor %}
     {% endif %} 
 {% endif %}

@@ -11,7 +11,6 @@ Event OnPlayerLoadGame()
     if main == None 
         Trace("OnPlayerLoadGame"," main is None")
     else
-        Trace("OnPlayerLoadGame"," main is not None")
         main.Setup()
     endif 
 EndEvent

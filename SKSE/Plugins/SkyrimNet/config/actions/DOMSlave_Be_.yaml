@@ -10,11 +10,6 @@ eligibilityRules:
           - DOMPlayerSlaveFaction
         comparisonOperator: '>'
         expectedValue: 0
-      - decoratorName: get_global_value
-        arguments:
-          - SkyrimNet_SexLab_ostim_player
-        comparisonOperator: ==
-        expectedValue: 0
       - decoratorName: get_faction_rank
         arguments:
           - currentActor

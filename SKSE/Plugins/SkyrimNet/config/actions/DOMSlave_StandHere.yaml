@@ -11,6 +11,12 @@ enabled: true
 defaultPriority: 7
 eligibilityRules:
   - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
       - decoratorName: is_in_combat
         arguments:
           - currentActor

@@ -23,6 +23,9 @@ Event OnInit()
 EndEvent
 
 Function Setup()
+
+;    SkyrimNet_DOM_Actions.Register_Actions() 
+
     Trace("Setup","starting setup")
     Load_Punishment_To_Index("Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/PunishmentReasons.json")
     Load_Punishment_to_description("Data/SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json")
@@ -61,10 +64,9 @@ Function Setup()
     endif 
 
     Trace("Setup","DOM01:"+DOM01)
-    ((self as Quest) as SkyrimNet_DOM_Events).Register_Events(DOM01) 
-
     SkyrimNet_DOM_Decorators.Register_Decorators() 
-;    SkyrimNet_DOM_Actions.Register_Actions() 
+    ((self as Quest) as SkyrimNet_DOM_Actions).Setup() 
+    ((self as Quest) as SkyrimNet_DOM_Events).Setup(DOM01) 
 
     ; DD Support 
     if MiscUtil.FileExists("Data/SkyrimNetUDNG.esp")
