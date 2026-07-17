@@ -129,15 +129,6 @@ Function AddPunishmentReason(String reason, Actor rejector, Actor superior)
 
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions","is_not_masturbating_isEligible",rejector, false) 
     if slave != None 
-        if reason == "having a forbidden orgasm"
-            reason = "orgasming"
-        elseif reason == "refusing to walk on all fours"
-            reason = "not walking on four"
-        elseif reason == "refused obey"
-            reason = "didnt obey"
-        elseif reason == "refused to masturbate"
-            reason = "didnt masturbate"
-        endif 
         SkyrimNet_DOM_API.AddPunishmentReason("SkyrimNet_DOM_Actions", "Sex_Start_Helper", superior, rejector, slave, reason) 
     endif 
 
