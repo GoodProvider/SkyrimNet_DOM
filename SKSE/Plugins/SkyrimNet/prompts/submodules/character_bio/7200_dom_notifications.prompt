@@ -1,8 +1,14 @@
-{% if render_mode == "full" or render_mode == "thoughts" or render_mode == "transform"%}
-    {% if dom_actor._loaded and length(dom_actor._notifications) > 0 %} 
-        ## Slave Events 
+{% if existsIn(dom_actor, "_notifications") and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
+    {% if dom_actor._loaded and length(dom_actor._notifications) > 0 %}
+        ## Slave Events
         {% for notification in dom_actor._notifications %}
-            {{notification._message}} ({{notification._minutes}} minutes ago) 
+            {% if notification._minutes <= 59 %}
+            {{notification._message}} ({{notification._minutes}} minutes ago)
+            {% else if notification._minutes <= 1439 %}
+            {{notification._message}} ({{notification._hours}} hours ago)
+            {% else %}
+            {{notification._message}} ({{notification._days}} days ago)
+            {% endif %}
         {% endfor %}
-    {% endif %} 
+    {% endif %}
 {% endif %}
