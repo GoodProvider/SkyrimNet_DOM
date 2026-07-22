@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review_checkpoint>
+  <meta>
+    <title>SkyrimNet_DOM Review Checkpoint</title>
+    <pass>4</pass>
+    <status>applied</status>
+    <location>Repo root next to review-guide.xml</location>
+    <companion>review_execution-plan.xml + review_summary.md</companion>
+    <line-number-note>Line numbers include commented lines, counted from 1.</line-number-note>
+    <note>
+      Pass 4 applied. Undress/dress YAML actions + Undress_Execute/Dress_Execute (no choice gate).
+      Dress keeps Dress_IsEligible; Undress uses DoFlowers slave+free rules only.
+    </note>
+  </meta>
+
+  <findings>
+    <finding id="P0-1" severity="critical" status="fixed">show_external → show_external_only in character_bio prompts</finding>
+    <finding id="P0-2" severity="critical" status="fixed">0413 uses shared dom_actor; no read_json clobber</finding>
+    <finding id="C6" severity="critical" status="fixed">per-actor notifications_next map; dense compact write index j; write to ring not compact</finding>
+    <finding id="I3" severity="important" status="fixed">OnBehaviourChange SetStringValue behaviour key</finding>
+    <finding id="I2" severity="important" status="already_fixed">Load_Punishment_Reasons .reason/.aliases/.index</finding>
+    <finding id="I6" severity="important" status="fixed">helper + PunishementOther → canonical reason list</finding>
+    <finding id="I8" severity="important" status="fixed">orphans under domslave_punish; StartScene_Punish_Two wrapper; spanking + whipping_oral YAML</finding>
+    <finding id="P1-5" severity="important" status="fixed">0410 tears/mark under _loaded only</finding>
+    <finding id="N1" severity="important" status="fixed">deleted dead orgasm melts block</finding>
+    <finding id="N2" severity="important" status="fixed">OnCallForHelp gag guard</finding>
+    <finding id="P1-8" severity="important" status="fixed">7200 no raw dump; existsIn parenthesized</finding>
+    <finding id="X1" severity="out_of_scope" status="fixed">promise values money/pain/freedom/to be gentle</finding>
+    <finding id="X2" severity="out_of_scope" status="fixed">physical praise YAMLs enabled:false</finding>
+    <finding id="X3" severity="out_of_scope" status="fixed">Pose_Submissive value: submissive</finding>
+    <finding id="P2-cat" severity="out_of_scope" status="fixed">Be/Pose/FightForMe customCategory aligned</finding>
+    <finding id="P3" severity="minor" status="fixed">Thread/actors/actions None guards; Trace string Events</finding>
+    <finding id="M-A" severity="minor" status="already_fixed">sentinel -1 overnight</finding>
+    <finding id="U1" severity="important" status="fixed">
+      Undress_Execute / Dress_Execute in Scripts/Source/SkyrimNet_DOM_Actions.psc (always-apply; no choice gate).
+      Legacy UndressDress_Execute kept for menu. Lines ~165-182.
+    </finding>
+    <finding id="U2" severity="important" status="fixed">
+      DOMSlave_Undress.yaml: DoFlowers slave+free eligibilityRules only; no Undress_IsEligible.
+    </finding>
+    <finding id="U3" severity="important" status="fixed">
+      DOMSlave_dress.yaml: DoFlowers rules + Dress_IsEligible (naked-only; no faster decorator alternative).
+    </finding>
+  </findings>
+</review_checkpoint>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<review_execution-plan>
+  <meta>
+    <title>SkyrimNet_DOM Review Execution Plan</title>
+    <pass>4</pass>
+    <audience>AI agent</audience>
+    <status>applied</status>
+    <executed-note>
+      Pass 4 applied. Undress/dress actions. Pass 3 items remain applied from prior pass.
+    </executed-note>
+    <instruction>
+      Pass 4. Add Undress/Dress execute helpers and YAMLs. Do not modify Diary Of Mine scripts.
+      Line numbers include commented lines.
+    </instruction>
+  </meta>
+
+  <steps>
+    <step id="U1" actionable="true">Actions.psc: Undress_Execute / Dress_Execute always-apply helpers</step>
+    <step id="U2" actionable="true">DOMSlave_Undress.yaml: DoFlowers rules; no Undress_IsEligible</step>
+    <step id="U3" actionable="true">DOMSlave_dress.yaml: DoFlowers rules + Dress_IsEligible</step>
+  </steps>
+
+  <post-apply>
+    <item>Recompile SkyrimNet_DOM_Actions via skyrimse.ppj / pyro</item>
+    <item>Update checkpoint status to applied</item>
+  </post-apply>
+</review_execution-plan>

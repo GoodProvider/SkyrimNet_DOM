@@ -103,6 +103,10 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
         return None 
     endif 
     RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and "+direction+" "+method+" with "+target_name, speaker, target)
+    if actions == None
+        Trace("StartScene_Consensual_Two", "actions is None, aborting")
+        return
+    endif
     actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
@@ -114,7 +118,27 @@ Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superi
     if !speaker_victim
         RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and sexually assaults "+target_name+" by "+direction+" "+method, speaker, target)
     endif 
+    if actions == None
+        Trace("StartScene_Nonconsensual_Two", "actions is None, aborting")
+        return
+    endif
     actions.StartScene_Nonconsensual_Two(intent, speaker, target, style=style, method=method, direction=direction, speaker_victim=speaker_victim, setting_name=setting_name) 
+EndFunction
+
+Function StartScene_Punish_Two(String intent, Actor speaker, Actor superior, Actor target=None, string style="", string method="", String direction="", String setting_name="")
+    String speaker_name = GetDisplayname(speaker)
+    String superior_name = GetDisplayname(superior)
+    String target_name = GetDisplayname(target)
+    Trace("StartScene_Punish_Two","intent:"+intent+" speaker:"+speaker_name+" superior:"+superior_name+" target:"+target_name+" style: "+style+" method:"+method+" direction: "+direction+" setting_name:"+setting_name)
+    if target == speaker
+        target = superior
+    endif
+    RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and punishes "+target_name+" by "+direction+" "+method, speaker, target)
+    if actions == None
+        Trace("StartScene_Punish_Two", "actions is None, aborting")
+        return
+    endif
+    actions.StartScene_Punish_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name)
 EndFunction
 
 ;------------------------------------
@@ -137,6 +161,25 @@ EndFunction
 ; ----------------------------------------------
 ; Dress/Undress
 ; ----------------------------------------------
+
+Function Undress_Execute(Actor speaker, Actor superior)
+    DOM_Actor slave = Get_Slave("Undress_Execute", speaker, true)
+    if slave == None
+        return
+    endif
+    if !slave.mind.should_be_naked
+        slave.mind.SetObedientTimer(1)
+    endif
+    slave.SetShouldBeNaked(superior)
+EndFunction
+
+Function Dress_Execute(Actor speaker, Actor superior)
+    DOM_Actor slave = Get_Slave("Dress_Execute", speaker, true)
+    if slave == None
+        return
+    endif
+    slave.UnsetShouldBeNaked(superior)
+EndFunction
 
 Bool Function Dress_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global
     return UndressDress_IsEligible(slaveActor, contextJson, paramsJson, true)
