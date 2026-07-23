@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<release_guide>
+  <meta>
+    <title>SkyrimNet_DOM Release Docs Guide</title>
+    <audience>AI agent</audience>
+    <purpose>
+      Instructions for updating the documentation suite whenever a new release is prepared.
+      Do not bump packaging version or ship a zip until the docs steps below are done (or explicitly skipped by the user).
+    </purpose>
+  </meta>
+
+  <doc_map>
+    <file path="README.md" role="standalone">
+      Full-system description in present tense. No changelog body — only a Guides link to update.md.
+    </file>
+    <file path="update.md" role="changelog">
+      Short bullet list of deltas since the previous release only. Rewrite (or retitle) for each release.
+    </file>
+    <file path="Actions.md" role="user_guide">
+      How to edit/add YAML DOMSlave actions. Update when action patterns, families, or execute styles change.
+    </file>
+    <file path="Prompts.md" role="user_guide">
+      How to edit character_bio / user_final_instructions / helpers. Update when prompt trees or dom_actor load rules change.
+    </file>
+    <file path="Code.md" role="dev_guide">
+      Papyrus bridge map and compile notes. Update when scripts, pipelines, or conventions change.
+    </file>
+  </doc_map>
+
+  <baseline>
+    <step id="B1">Read Makefile VERSION and fomod/info.xml Version — that is the version about to be replaced.</step>
+    <step id="B2">
+      Diff against the previous release baseline (prefer git tag if present; else commit that set VERSION;
+      else contents of versions/SkyrimNet_DOM &lt;old&gt;.zip). Note: early releases may lack a git tag.
+    </step>
+    <step id="B3">
+      Inventory user-facing deltas: new/changed/removed YAML under SKSE/Plugins/SkyrimNet/config/actions/,
+      prompts under SKSE/Plugins/SkyrimNet/prompts/, punishment_reason.json, Scripts/Source/, Required deps.
+    </step>
+  </baseline>
+
+  <docs_update>
+    <step id="D1" file="update.md">
+      Retitle to Updates since &lt;previous VERSION&gt; (or Updates in &lt;new VERSION&gt; if preferred — stay consistent).
+      Replace bullets with ~5–10 short deltas only. No full feature dump. No packaging-only noise unless users must know.
+    </step>
+    <step id="D2" file="README.md">
+      Refresh Features / Required / Notes so they describe the full current system accurately.
+      Keep Alpha tone. Keep Guides section with one-line summaries linking Actions.md, Prompts.md, Code.md, update.md.
+      Point the Updates guide line at the new previous-version phrasing (e.g. what changed since X.Y.Z).
+      Do not paste the changelog into README.
+    </step>
+    <step id="D3" file="Actions.md">
+      Update only if YAML patterns changed (families, DOM_Keys vs SkyrimNet_DOM_Actions, eligibility,
+      punishment_reason flow, example paths). Keep copy-a-sibling workflow. Link back to README / Prompts / Code.
+    </step>
+    <step id="D4" file="Prompts.md">
+      Update only if prompt trees, namespace rules, dom_actor load, gates, or helpers changed.
+      Link back to README / Actions / Code.
+    </step>
+    <step id="D5" file="Code.md">
+      Update only if script map, Setup/punishment pipeline, compile path, or conventions changed.
+      Point at AGENTS.md for full rules; do not duplicate it. Link README / Actions / Prompts.
+    </step>
+  </docs_update>
+
+  <version_bump>
+    <step id="V1">Set Makefile VERSION to the new release number.</step>
+    <step id="V2">Regenerate or update fomod/info.xml Version (make release runs fomod-info.py — keep fomod-source in sync if used).</step>
+    <step id="V3">Confirm README Guides Updates line and update.md title still match the previous→new story.</step>
+  </version_bump>
+
+  <package>
+    <step id="P1">Compile Papyrus if scripts changed (skyrimse.ppj / pyro). Do not modify Diary Of Mine scripts.</step>
+    <step id="P2">Run make release (or equivalent) to write versions/SkyrimNet_DOM &lt;VERSION&gt;.zip.</step>
+    <step id="P3">Optional: create git tag matching VERSION after the user asks for a commit/tag.</step>
+  </package>
+
+  <rules>
+    <item>README = standalone current system. update.md = deltas only. Guides = how-to, not changelog.</item>
+    <item>Users edit YAML and prompts — keep Actions.md and Prompts.md accurate when those surfaces change.</item>
+    <item>Do not invent APIs or action families that are not in the tree.</item>
+    <item>Do not edit this release-guide.xml unless the doc process itself changes.</item>
+    <item>Only commit / tag / push when the user explicitly requests it.</item>
+  </rules>
+
+  <checklist>
+    <item>Diff vs previous VERSION baseline done</item>
+    <item>update.md rewritten for this release</item>
+    <item>README.md Features / Required / Notes / Guides accurate</item>
+    <item>Actions.md / Prompts.md / Code.md updated or confirmed unchanged</item>
+    <item>Makefile + fomod Version bumped</item>
+    <item>Scripts compiled if needed; release zip built</item>
+  </checklist>
+</release_guide>
