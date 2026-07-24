@@ -5,7 +5,7 @@ questEditorId: skynet_MainController
 scriptName: skynet_Library
 executionFunctionName: StartFollow_Execute
 parameterMapping:
-  - type: dynamic
+  - type: speaker
     name: akActor
     description: The person that will follow
 enabled: true
@@ -16,7 +16,7 @@ eligibilityRules:
           - currentActor
           - DOMPlayerSlaveFaction
         comparisonOperator: ==
-        expectedValue: 0
+        expectedValue: -1
       - decoratorName: is_in_combat
         arguments:
           - currentActor

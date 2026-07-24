@@ -1,4 +1,4 @@
-category: DOMSlave_Pose
+customCategory: SkyDOM_Pose
 name: DOMSlave_DoSubmissive
 description: Start performing a submissive pose.
 questEditorId: DOM02Topic
@@ -9,7 +9,7 @@ parameterMapping:
     name: akTarget
     description: The person that will perform the submissive pose
   - type: static
-    value: '"submissive"'
+    value: submissive
     name: type
     description: The entertain type - "submissive" for submissive pose
 enabled: false

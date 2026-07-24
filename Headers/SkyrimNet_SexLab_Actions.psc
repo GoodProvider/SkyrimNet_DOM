@@ -5,10 +5,11 @@ SexLabFramework Property sexlab Auto
 Idle Property pa_HugA Auto
 Function Trace(String func, String msg, Bool notification=False) global Native
 Function Setup() Native
+Bool Function Setup_CheckLinks() Native
 Function StartScene_Consensual_One(String intent, Actor speaker, string style="", String method="", String setting_name="") Native
 Function StartScene_Nonconsensual_One(String intent, Actor speaker, string style="", String method="", String setting_name="") Native
 Function StartScene_Consensual_Two(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="") Native
-Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor target=None, Actor victim, string style="", string method="", String direction="", String setting_name="") Native
+Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor target=None, Actor victim,string style="", string method="", String direction="", String setting_name="") Native
 Function StartScene_Nonconsensual_Two_SpeakerVictim(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="") Native
 Function StartScene_Nonconsensual_Two_TargetVictim(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="") Native
 Function StartScene_Consensual_Three(String intent, Actor speaker, Actor target, string style, string direction, string method, String setting_name="", Actor participate) Native

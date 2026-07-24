@@ -1,6 +1,6 @@
 customCategory: SkyDOM_Pose
 name: SkyDOM_Pose
-description:  'Start performing a [type] pose {"type":"on display (perfect posture)|human chair|tease pussy|present ass|present breasts|cute|submissive", "intent":"who, why, and how"}'
+description:  'Start performing a [type] pose {"type":"on display (perfect posture)|human chair|tease pussy|present ass|present breasts|cute|dance", "intent":"who, why, and how"}'
 enabled: true
 eligibilityRules:
   - conditions:

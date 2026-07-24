@@ -1,5 +1,5 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
-{% if show_internal %}
+{% if show_internal and dom_actor._loaded and dom_actor._is_slave %}
     {% if dom_actor._is_in_love %} 
         - {{dom_actor._name}} is in love with {{player.name}}
     {% else if dom_actor._is_devoted %} 

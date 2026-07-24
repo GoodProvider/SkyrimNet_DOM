@@ -1,14 +1,14 @@
 customCategory: domslave_sexual_activities
 name: DOMSlave_Start_Sex
-description: "[superior] commands you to [style] [direction] [method]"
+description: "[style] [direction] [method]"
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: StartScene_Consensual_Two
 defaultPriority: 8
 parameterMapping:
-  - type: dynamic
+  - type: static
     name: intent
-    description: two to three words, make the sex clear
+    value: sexual activities
   - type: speaker
     name: speaker
     description: Speaker Actor parameter (triggering entity)
@@ -30,3 +30,41 @@ parameterMapping:
   - type: static
     name: setting_name
     value: ""
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - OStimActorCountFaction
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: papyrus_util
+        arguments:
+          - "HasIntValue"
+          - currentActor
+          - "skyrimnet_sexlab_actor_lock"
+        comparisonOperator: ==
+        expectedValue: false

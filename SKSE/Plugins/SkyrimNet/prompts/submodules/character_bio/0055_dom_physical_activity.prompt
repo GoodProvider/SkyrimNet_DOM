@@ -1,15 +1,9 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
 {% set show_external_only = (render_mode == "dialogue_target") %}
-{% if show_external or show_internal %} 
-    {% if dom_actor._punishment._whipping_active == true %} 
+{% if (show_external_only or show_internal) and dom_actor._loaded %} 
+    {% if dom_actor._punishment._whipping_active %} 
        - {{dom_actor._name}} is being whipped as punishment for {{dom_actor._punishment._whipping_reason_name}}.
     {% else if dom_actor._behaviour != "" and dom_actor._behaviour != "masturbating." %}
         - {{dom_actor._name}} is {{ dom_actor._behaviour }}
-    {% endif %} 
-    {% if actor_rape_victim %}
-       - {{dom_actor._name}} is being raped as punishment for {{dom_actor._punishment._next_reason}}.
-    {% endif %} 
-    {% if dom_actor._is_masturbating and (render_mode == "short_inline" or render_mode =="dialogue_target") %}
-       - {{dom_actor._name}} is masturbating.
     {% endif %} 
 {% endif %}

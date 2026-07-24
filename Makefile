@@ -1,4 +1,4 @@
-VERSION=0.0.2
+VERSION=0.0.3
 NAME=SkyrimNet_DOM
 RELEASE_FILE=versions/SkyrimNet_DOM ${VERSION}.zip
 

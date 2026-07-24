@@ -1,6 +1,6 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
 {% set show_external_only = (render_mode == "dialogue_target") %}
-{% if show_external or show_internal %} 
+{% if show_external_only or show_internal %} 
     {% set dom_is_slave_faction = is_in_faction(actorUUID, "DOMPlayerSlaveFaction") %}
     {% set dom_actor._loaded = false %} 
     {% set dom_actor._source = "none" %}
@@ -16,10 +16,10 @@
         {% endif %}
     {% endif %}
     {% if dom_actor._loaded %}  
-        {% if dom_actor._is_aroused_for <= 0 %}
+        {% if dom_actor._arousal_factor <= 30 %}
             {% set arousal_state = "not_aroused" %}
         {% else %}
-            {% if dom_actor._is_aroused_for > 10 %}
+            {% if dom_actor._arousal_factor > 80 %}
                 {% set arousal_state = "highly_aroused" %}
             {% else %} 
                 {% set arousal_state = "moderately_aroused" %}

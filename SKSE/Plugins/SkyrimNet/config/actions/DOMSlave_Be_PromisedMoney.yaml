@@ -1,3 +1,4 @@
+customCategory: SkyDOM_Be
 name: DOMSlave_BePromisedMoney
 description: Use when {{ player.name }} is making a promise to {{ npc.name }} about giving {{ npc.name }} money in 
   dialogue.
@@ -13,7 +14,7 @@ parameterMapping:
     name: the_event
     description: The action name - "Promise"
   - type: static
-    value: player will give money
+    value: money
     name: type
     description: The promise oath - "player will give money"
   - type: static

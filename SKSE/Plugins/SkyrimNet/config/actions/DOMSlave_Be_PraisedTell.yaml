@@ -1,26 +1,17 @@
-category: DOMSlave_Be
+customCategory: SkyDOM_Be
 name: DOMSlave_Be_PraisedTell
 description: Use when {{ npc.name }} is being encouraged, praised, or motivated by {{ player.name }} or another 
   character in dialogue.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoActionActor
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: Praise_Tell_Execute
 parameterMapping:
   - type: speaker
-    name: akTarget
+    name: speaker
     description: The person that is being praised
-  - type: static
-    value: Praise
-    name: the_event
-    description: The action name - "Praise"
-  - type: static
-    value: tell
-    name: type
-    description: The praise type - "tell"
-  - type: static
-    value: false
-    name: the_flag
-    description: Boolean flag parameter (false for praise)
+  - type: dynamic
+    name: superior
+    description: Actor who is superior to the speaker
 enabled: true
 eligibilityRules:
   - conditions:

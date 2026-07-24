@@ -2,26 +2,41 @@
 <review_execution-plan>
   <meta>
     <title>SkyrimNet_DOM Review Execution Plan</title>
-    <pass>4</pass>
+    <pass>6</pass>
     <audience>AI agent</audience>
     <status>applied</status>
     <executed-note>
-      Pass 4 applied. Undress/dress actions. Pass 3 items remain applied from prior pass.
+      Pass 6 applied. Compiles (user confirmed).
+      SexLab Handler_DOM Start_Masturbate signature updated (no style).
     </executed-note>
     <instruction>
-      Pass 4. Add Undress/Dress execute helpers and YAMLs. Do not modify Diary Of Mine scripts.
-      Line numbers include commented lines.
+      Pass 6 complete. Do not modify Diary Of Mine scripts.
     </instruction>
   </meta>
 
   <steps>
-    <step id="U1" actionable="true">Actions.psc: Undress_Execute / Dress_Execute always-apply helpers</step>
-    <step id="U2" actionable="true">DOMSlave_Undress.yaml: DoFlowers rules; no Undress_IsEligible</step>
-    <step id="U3" actionable="true">DOMSlave_dress.yaml: DoFlowers rules + Dress_IsEligible</step>
+    <step id="C1" actionable="true">Events.Setup: do not abort on handler None; guard handler.DOMSlave_Orgasmed</step>
+    <step id="I3" actionable="true">OnBehaviourChange/OnMoodChange: optional=true</step>
+    <step id="I4" actionable="true">GetNotifications: chronological ring from next cursor</step>
+    <step id="I6" actionable="true">SexLab_AnimationStart/End: sexlab null guard</step>
+    <step id="M1" actionable="true">OnComforted: msg = player name + suffix</step>
+    <step id="M2" actionable="true">SaveActorInfo + key handlers: Actor None early return</step>
+    <step id="I1" actionable="true">Decorators: IsDOMSlave + mind None</step>
+    <step id="I5" actionable="true">Remove _is_masturbating emission; strip 0551 uses</step>
+    <step id="I2" actionable="true">Drop style from StartScene_masturbate + YAMLs + SexLab Handler_DOM</step>
+    <step id="I9" actionable="true">Praise_Tell_Execute + Be_PraisedTell YAML</step>
+    <step id="M3" actionable="true">Consensual_Two: if !target || target == speaker</step>
+    <step id="I10" actionable="true">Eligibility on sex_start, sex_refused, Be_Refused</step>
+    <step id="C2" actionable="true">0410: show_external_only gate; delete arousal rewrite</step>
+    <step id="I7" actionable="true">0551: _current_reason_name</step>
+    <step id="I8" actionable="true">0055/0015: _loaded guards</step>
+    <step id="I11" actionable="true">0551: sex refuse action name</step>
   </steps>
 
   <post-apply>
-    <item>Recompile SkyrimNet_DOM_Actions via skyrimse.ppj / pyro</item>
-    <item>Update checkpoint status to applied</item>
+    <item>Headers refreshed via headers_build.py</item>
+    <item>SexLab Handler_DOM / Interface Start_Masturbate no style</item>
+    <item>Recompile confirmed by user</item>
+    <item>Checkpoint status applied</item>
   </post-apply>
 </review_execution-plan>

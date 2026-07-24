@@ -1,3 +1,4 @@
+customCategory: SkyDOM_FightForMe
 name: DOMSlave_FightForMe
 description: Be ready to fight for {{ player.name }} when they are attacked. This makes you a combat companion who will 
   defend {{ player.name }} in battle.

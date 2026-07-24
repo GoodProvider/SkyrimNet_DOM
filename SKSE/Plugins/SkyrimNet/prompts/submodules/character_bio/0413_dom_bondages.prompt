@@ -1,9 +1,6 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
 {% set show_external_only = (render_mode == "dialogue_target") %}
-{% if show_external or show_internal %}
-{% set dom_is_slave_faction = is_in_faction(actorUUID, "DOMPlayerSlaveFaction") %}
-{% set dom_actor_fname = "SkyrimNet_DOM/actors/"+decnpc(actorUUID).name+".json" %}
-{% set dom_actor = read_json(dom_actor_fname) %} 
+{% if (show_external_only or show_internal) and dom_actor._loaded %}
 {% if dom_actor._has_mouth_gag %}
     - A tight gag is secured in {{dom_actor._name}}'s mouth, reducing any speech to muffled, helpless whimpers.
   {% endif %}

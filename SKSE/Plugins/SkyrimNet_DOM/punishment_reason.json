@@ -1,97 +1,226 @@
 [
   {
-    "actionName": "begging to stop",
-    "description": "begging to stop, from",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"begging to stop\"}"
+    "reason": "no reason",
+    "aliases": [],
+    "index": 0,
+    "description": " received punishment without a specific reason from "
   },
   {
-    "actionName": "cowering",
-    "description": "cowering before ",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"cowering\"}"
+    "reason": "begging to stop",
+    "aliases": [],
+    "index": 1,
+    "description": " was begging to stop "
   },
   {
-    "actionName": "yelling",
-    "description": "raising their voice disrespectfully to",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"yelling\"}"
+    "reason": "covering self",
+    "aliases": [],
+    "index": 2,
+    "description": " was covering themselves when ordered not to by "
   },
   {
-    "actionName": "being a bad slave",
-    "description": "failing to be a good slave for",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"being a bad slave\"}"
+    "reason": "cowering",
+    "aliases": [],
+    "index": 3,
+    "description": " was cowering before "
   },
   {
-    "actionName": "being jealous",
-    "description": "showing inappropriate jealousy regarding",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"being jealous\"}"
+    "reason": "crying",
+    "aliases": [],
+    "index": 4,
+    "description": " was crying in front of "
   },
   {
-    "actionName": "being angry",
-    "description": "displayed an insolent or angry expression toward",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"being angry\"}"
+    "reason": "talking",
+    "aliases": [],
+    "index": 5,
+    "description": " was talking when they should have been silent for "
   },
   {
-    "actionName": "being disrespectful",
-    "description": "shows disrespect towards a",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"being disrespectful\"}"
+    "reason": "yelling",
+    "aliases": [],
+    "index": 6,
+    "description": " was raising their voice disrespectfully to "
   },
   {
-    "actionName": "didnt listen",
-    "description": "ignored the verbal instructions given by",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"didnt listen\"}"
+    "reason": "struggling",
+    "aliases": [],
+    "index": 7,
+    "description": " was struggling against "
   },
   {
-    "actionName": "didnt obey",
-    "description": "explicitly disobeyed a direct order from",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"didnt obey\"}"
+    "reason": "posture correction",
+    "aliases": [],
+    "index": 8,
+    "description": " needed posture correction from "
   },
   {
-    "actionName": "didnt masturbate",
-    "description": "failed to perform for when told to masturbate",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"didnt masturbate\"}"
+    "reason": "being a bad slave",
+    "aliases": [],
+    "index": 9,
+    "description": " was failing to be a good slave for "
   },
   {
-    "actionName": "refusing to have sex",
-    "description": "refused to comply with the sexual demands of",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to have sex\"}"
+    "reason": "being a bad maid",
+    "aliases": ["being a bad servant"],
+    "index": 10,
+    "description": " was failing in their domestic duties for "
   },
   {
-    "actionName": "refusing to strip",
-    "description": "refused to remove their clothing when ordered by",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to strip\"}"
+    "reason": "being jealous",
+    "aliases": [],
+    "index": 11,
+    "description": " was showing inappropriate jealousy toward "
   },
   {
-    "actionName": "breaking restraints",
-    "description": "attempted to break or tamper with the restraints applied by",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"breaking restraints\"}"
+    "reason": "being angry",
+    "aliases": [],
+    "index": 12,
+    "description": " displayed an insolent or angry expression toward "
   },
   {
-    "actionName": "running away",
-    "description": "attempted to flee from",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"running away\"}"
+    "reason": "being disrespectful",
+    "aliases": [],
+    "index": 13,
+    "description": " showed disrespect toward "
   },
   {
-    "actionName": "orgasming",
-    "description": "experienced an unauthorized orgasm, despite forbidden to do so by",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"orgasming\"}"
+    "reason": "didnt fight",
+    "aliases": [],
+    "index": 14,
+    "description": " did not fight when ordered by "
   },
   {
-    "actionName": "refusing to shower",
-    "description": "refused to clean themselves as commanded by",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to shower\"}"
+    "reason": "didnt pose",
+    "aliases": [],
+    "index": 15,
+    "description": " did not hold the required pose for "
   },
   {
-    "actionName": "not walking on four",
-    "description": "failed to maintain a quadrupedal posture as ordered by",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"not walking on four\"}"
+    "reason": "didnt wait",
+    "aliases": [],
+    "index": 16,
+    "description": " did not wait as ordered by "
   },
   {
-    "actionName": "refusing to give a bath",
-    "description": "refused to perform bathing services for",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"refusing to give a bath\"}"
+    "reason": "didnt listen",
+    "aliases": [],
+    "index": 17,
+    "description": " ignored the verbal instructions given by "
   },
   {
-    "actionName": "being a bad slaver",
-    "description": "failed to properly manage or discipline other slaves",
-    "schema": "{\"superior\": \"Actor\", \"type\":\"being a bad slaver\"}"
+    "reason": "didnt obey",
+    "aliases": ["refused to obey a direct order", "refused obey"],
+    "index": 18,
+    "description": " explicitly disobeyed a direct order from "
+  },
+  {
+    "reason": "didnt masturbate",
+    "aliases": ["failed to masturbate when ordered", "refused to masturbate"],
+    "index": 19,
+    "description": " failed to perform when told to masturbate by "
+  },
+  {
+    "reason": "refusing to masturbate",
+    "aliases": [],
+    "index": 20,
+    "description": " refused to masturbate when ordered by "
+  },
+  {
+    "reason": "refusing to have sex",
+    "aliases": [],
+    "index": 21,
+    "description": " refused to comply with the sexual demands of "
+  },
+  {
+    "reason": "refusing to strip",
+    "aliases": [],
+    "index": 22,
+    "description": " refused to remove their clothing when ordered by "
+  },
+  {
+    "reason": "not stripping well enough",
+    "aliases": [],
+    "index": 23,
+    "description": " did not strip well enough for "
+  },
+  {
+    "reason": "breaking restraints",
+    "aliases": [],
+    "index": 24,
+    "description": " attempted to break or tamper with the restraints applied by "
+  },
+  {
+    "reason": "running away",
+    "aliases": [],
+    "index": 25,
+    "description": " attempted to flee from "
+  },
+  {
+    "reason": "moaning",
+    "aliases": [],
+    "index": 26,
+    "description": " was moaning without permission for "
+  },
+  {
+    "reason": "orgasming",
+    "aliases": [
+      "having a forbidden orgasm",
+      "having an orgasm without permission",
+      "forbidden orgasming"
+    ],
+    "index": 27,
+    "description": " experienced an unauthorized orgasm despite being forbidden by "
+  },
+  {
+    "reason": "refusing to shower",
+    "aliases": [],
+    "index": 28,
+    "description": " refused to clean themselves as commanded by "
+  },
+  {
+    "reason": "being dirty",
+    "aliases": [],
+    "index": 29,
+    "description": " was too dirty for the standards of "
+  },
+  {
+    "reason": "being a bad worker",
+    "aliases": [],
+    "index": 30,
+    "description": " was failing in their work for "
+  },
+  {
+    "reason": "being too slow",
+    "aliases": [],
+    "index": 31,
+    "description": " was too slow when working for "
+  },
+  {
+    "reason": "not walking on four",
+    "aliases": [
+      "refusing to walk on all fours",
+      "refusing to crawl on all fours",
+      "refusing to walking on four"
+    ],
+    "index": 32,
+    "description": " failed to maintain a quadrupedal posture as ordered by "
+  },
+  {
+    "reason": "refusing to give a bath",
+    "aliases": [],
+    "index": 33,
+    "description": " refused to perform bathing services for "
+  },
+  {
+    "reason": "being a bad whore",
+    "aliases": [],
+    "index": 34,
+    "description": " was failing in their duties as a whore for "
+  },
+  {
+    "reason": "being a bad slaver",
+    "aliases": [],
+    "index": 40,
+    "description": " failed to properly manage or discipline other slaves for "
   }
 ]

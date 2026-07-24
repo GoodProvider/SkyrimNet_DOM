@@ -56,12 +56,20 @@ String Function Get_Actor_Info(Actor akActor) global
         Trace("Get_DOM_Slave_INfo","DOM_API is None")
         return not_slave_json
     endif
+    if !api.IsDOMSlave(akActor)
+        Trace("Get_Actor_Info", akActor.GetDisplayName()+" is not a slave")
+        return not_slave_json
+    endif
     DOM_Actor slave = api.GetDOMActor(akActor)
     if slave == None 
         return not_slave_json
     endif 
 
     DOM_Mind mind = slave.mind
+    if !mind
+        Trace("Get_Actor_Info", akActor.GetDisplayName()+" mind is None")
+        return not_slave_json
+    endif
 
     String owner = Game.GetPlayer().GetDisplayName()
     if mind.actor_owner != None 
@@ -69,14 +77,13 @@ String Function Get_Actor_Info(Actor akActor) global
     endif 
 
     String behaviour = BehaviourToString(slave.behaviour)
-    int is_masturbating = 0
     SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
-    if main.sexLab.IsActorActive(akActor) || SkyrimNet_DOM_API.Ostim_IsInOstim(akActor) 
+    if main == None
+        Trace("Get_Actor_Info", "SkyrimNet_SexLab_Main is None, aborting sexlab checks")
+    elseif main.sexLab == None
+        Trace("Get_Actor_Info", "sexLab is None, aborting sexlab checks")
+    elseif main.sexLab.IsActorActive(akActor) || SkyrimNet_DOM_API.Ostim_IsInOstim(akActor) 
         behaviour = "having a sexual experience." 
-    elseif slave.behaviour == "masturbate"
-        if !main.sexLab.IsActorActive(akActor) && !SkyrimNet_DOM_API.Ostim_IsInOstim(akActor) 
-            is_masturbating = 1
-        endif 
     endif 
 
     Trace("Get_Actor_Info", "factor: "+mind.arousal_factor+" aroused: "+mind.is_aroused_for+" enraptured:"+mind.is_enraptured_for)
@@ -117,6 +124,7 @@ String Function Get_Actor_Info(Actor akActor) global
     ; 5. Sexual Kinks
     JMap.setStr(actor_obj, "_known_fetishes", mind.GetListOfKnownKinks())
     JMap.setStr(actor_obj, "_hidden_fetishes", mind.GetListOfHiddenKinks())
+    
 
     ; 6. Arousal 
     JMap.setFlt(actor_obj, "_arousal_factor", mind.arousal_factor)
@@ -157,7 +165,6 @@ String Function Get_Actor_Info(Actor akActor) global
     JMap.setInt(actor_obj, "_is_devoted", mind.IsDevoted() as Int)
     JMap.setInt(actor_obj, "_is_ashamed", mind.IsAshamed() as Int)
 
-    JMap.setInt(actor_obj, "_is_masturbating", is_masturbating)
     JMap.setInt(actor_obj, "_is_restrained", slave.is_restrained as Int)
     JMap.setInt(actor_obj, "_is_bound", slave.is_bounded as Int)
     JMap.setInt(actor_obj, "_is_jailed", slave.is_jailed as Int)
@@ -182,7 +189,9 @@ String Function Get_Actor_Info(Actor akActor) global
     ; Important: Clean up the main object (which recursively cleans up nested objects) 
     ; to prevent memory leaks if you aren't saving it to a JContainer file/form.
     JValue.release(actor_obj)
-    return TraceReturn("Get_Actor_Info", actor_json) 
+
+    ;return TraceReturn("Get_Actor_Info", actor_json) 
+    return actor_json
 EndFunction
 
 String function Bool_String(Bool val) global

@@ -1,0 +1,42 @@
+customCategory: domslave_sexual_activities
+name: DOMSLAVE_Sexual_Activities
+description: 'PARAMS: {"superior":"Actor", "type":"oral|vaginal|anal|masturbation|other", "intent":"Speakers intent with whom (if any), why, and how in third person"} - [type] sexual activities'
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - OStimActorCountFaction
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: papyrus_util
+        arguments:
+          - "HasIntValue"
+          - currentActor
+          - "skyrimnet_sexlab_actor_lock"
+        comparisonOperator: ==
+        expectedValue: false

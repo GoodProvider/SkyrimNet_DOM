@@ -1,6 +1,6 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
 {% set show_external_only = (render_mode == "dialogue_target") %}
-{% if actor_having_sex and show_external or show_internal %}
+{% if ((actor_having_sex and show_external_only) or show_internal) and dom_actor._loaded and dom_actor._is_slave %}
    {% if dom_actor._training_sex._vaginal < 25 %} 
      - Terrible at vaginal sex. 
    {% else if dom_actor._training_sex._vaginal < 50 %} 

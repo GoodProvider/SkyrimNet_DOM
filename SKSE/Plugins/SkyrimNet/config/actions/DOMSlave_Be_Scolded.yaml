@@ -1,3 +1,4 @@
+customCategory: SkyDOM_Be
 name: DOMSlave_BeScolded
 description: Use when {{ npc.name }} is being verbally scolded.
 questEditorId: DOM02Topic

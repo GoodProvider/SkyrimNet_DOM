@@ -1,0 +1,37 @@
+customCategory: domslave_sexual_activities
+name: DOMSlave_Sexual_Activities_Refused_Sex
+description: "[Rejector] refuses [Superior]"
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: AddPunishmentReason
+parameterMapping:
+  - type: dynamic
+    name: reason
+    description: "refusing to have sex|refusing to masturbate"
+  - type: speaker
+    name: rejector
+    description: Actor who rejected the sexual activity
+  - type: dynamic
+    name: superior
+    description: Actor who is superior to the rejector
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true

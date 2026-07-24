@@ -1,7 +1,7 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
 {% set show_external_only = (render_mode == "dialogue_target") %}
-{% if dom_is_slave_faction and (show_external or show_internal) %} 
-    {% if dom_is_slave_faction and show_internal %}
+{% if dom_is_slave_faction and dom_actor._loaded and dom_actor._is_slave and (show_external_only or show_internal) %} 
+    {% if show_internal %}
         - status: slave  
         - owner: {{dom_actor._owner}} 
         - {{dom_actor._mood_sentence}}

@@ -1,4 +1,4 @@
-category: DOMSlave_Be
+customCategory: SkyDOM_Be
 name: DOMSlave_Be_PraisedHoldChin
 description: Use when {{ npc.name }} is being encouraged, praised, or motivated by {{ player.name }} or another 
   character in dialogue.
@@ -21,7 +21,7 @@ parameterMapping:
     value: false
     name: the_flag
     description: Boolean flag parameter (false for praise)
-enabled: true
+enabled: false
 eligibilityRules:
   - conditions:
       - decoratorName: get_faction_rank

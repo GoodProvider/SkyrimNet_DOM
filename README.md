@@ -8,9 +8,9 @@ Basic SkyrimNet support for Diary of Mine. This is in a very rough state.
   - DOM does not expose everything it does as events; not every Ext2 path is registered here
 - SkyrimNet YAML actions for common slave orders (`SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_*.yaml`)
   - Social (`Be_`): flatter, insult, praise-tell, promises, scold, refuse
-  - Poses, FightForMe, chores/entertain, movement/posture, drink
+  - `Act*` (silent / respectful / maid), Poses, FightForMe, chores/entertain, movement/posture, drink
   - Dress / Undress
-  - Sex / masturbate / refuse (via SkyrimNet_SexLab scene helpers)
+  - Sex / masturbate / stop-masturbate / refuse (via SkyrimNet_SexLab scene helpers)
   - Punish (+ refused / other → punishment reasons)
 - Character bio prompts for DOM slaves (appearance, bondages, skills, aged notifications, and more)
 - Punishment reason mapping (`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`) for refuse / punish-other flows
@@ -44,4 +44,4 @@ Optional: SkyrimNetUDNG (device grouping when present).
 - **[Actions](Actions.md)** — Edit or add `DOMSlave_*.yaml` actions: eligibility, `parameterMapping`, DOM_Keys vs `SkyrimNet_DOM_Actions`.
 - **[Prompts](Prompts.md)** — Edit character_bio (shared namespace) and user_final_instructions (isolated namespaces); how `dom_actor` loads.
 - **[Code](Code.md)** — Papyrus bridge layout under `Scripts/Source`, events/actions/API/decorators, compile via `skyrimse.ppj`.
-- **[Updates](update.md)** — What changed since 0.0.2.
+- **[Updates](CHANGELOG.md)** — What changed since 0.0.2.

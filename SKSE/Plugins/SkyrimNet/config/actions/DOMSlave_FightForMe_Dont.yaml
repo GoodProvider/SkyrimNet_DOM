@@ -1,3 +1,4 @@
+customCategory: SkyDOM_FightForMe
 name: DOMSlave_DontFightForMe
 description: Never fight in any circumstance. Do not engage in combat, do not attack anyone, do not defend yourself or 
   {{ player.name }}. Remain completely pacifist.

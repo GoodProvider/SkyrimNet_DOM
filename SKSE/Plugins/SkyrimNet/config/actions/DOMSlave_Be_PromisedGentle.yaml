@@ -1,3 +1,4 @@
+customCategory: SkyDOM_Be
 name: DOMSlave_BePromisedGentle
 description: Use when {{ player.name }} is making a promise to {{ npc.name }} about being gentle with {{ npc.name }} in 
   dialogue.
@@ -13,7 +14,7 @@ parameterMapping:
     name: the_event
     description: The action name - "Promise"
   - type: static
-    value: player will be gentle
+    value: to be gentle
     name: type
     description: The promise oath - "player will be gentle"
   - type: static

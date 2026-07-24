@@ -21,10 +21,11 @@ Start from an existing file in the same family:
 | Family | Examples | Typical executor |
 |--------|----------|------------------|
 | `Be_` | flatter, insult, praise-tell, promises, scold, refuse | `DOM_Keys` / `DOMDoActionActor` |
+| `Act*` | `ActSilent`, `ActRespectful`, `ActMyMaid` | `DOM_Keys` |
 | `Pose_` | display, dance, chair, presentations | `DOM_Keys` |
 | FightForMe / chores / movement / drink | Follow, Kneel, DoFlowers, DrinkAlcohol | `DOM_Keys` |
 | Dress / Undress | `DOMSlave_Dress.yaml`, `DOMSlave_Undress.yaml` | `SkyrimNet_DOM_Actions` |
-| `sex_` / masturbate | start, refuse, masturbate harder | `SkyrimNet_DOM_Actions` |
+| `sex_` / masturbate / stop-masturbate | start, refuse, harder, stop allowed/disallowed | `SkyrimNet_DOM_Actions` |
 | `punish_` | spanking, whipping/oral, refused, other | `SkyrimNet_DOM_Actions` |
 
 Category parents (e.g. `DOMSlave_Be_.yaml`, `DOMSlave_Pose_.yaml`) group related actions — keep `customCategory` aligned with siblings.

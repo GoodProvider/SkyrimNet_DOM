@@ -1,4 +1,4 @@
-category: DOMSlave_Be
+customCategory: SkyDOM_Be
 name: DOMSlave_Be_PromisedFreedom
 description: Use when {{ player.name }} is making a promise to {{ npc.name }} about giving {{ npc.name }} freedom in 
   dialogue.
@@ -14,7 +14,7 @@ parameterMapping:
     name: the_event
     description: The action name - "Promise"
   - type: static
-    value: player will give freedom
+    value: freedom
     name: type
     description: The promise oath - "player will give freedom"
   - type: static

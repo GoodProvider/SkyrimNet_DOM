@@ -1,3 +1,4 @@
+customCategory: SkyDOM_Be
 name: DOMSlave_BePromisedPain
 description: Use when {{ player.name }} is making a promise to {{ npc.name }} about giving pain in dialogue.
 questEditorId: DOM02Topic
@@ -12,7 +13,7 @@ parameterMapping:
     name: the_event
     description: The action name - "Promise"
   - type: static
-    value: player will give pain
+    value: pain
     name: type
     description: The promise oath - "player will give pain"
   - type: static

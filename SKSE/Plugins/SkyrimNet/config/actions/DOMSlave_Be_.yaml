@@ -1,6 +1,6 @@
 customCategory: SkyDOM_Be
 name: SkyDOM_Be_Told
-description: 'Use when {{ npc.name }} is being [type] by {{ player.name }} or superior {"type":"flattered|insulted|praised|promised|scolded", "intent":"who, why, and how"}'
+description: 'Use when {{ npc.name }} is being [type] by {{ player.name }} or superior {"type":"flattered|insulted|praised|promised|scolded|refused", "intent":"who, why, and how"}'
 enabled: true
 eligibilityRules:
   - conditions:

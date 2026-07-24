@@ -1,0 +1,19 @@
+customCategory: domslave_stop_masturbating
+name: DOMSlave_Stop_Masturbating_Allowed
+description: "Stop masturbating with superior's permission"
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: StopScene_Masturbate
+parameterMapping:
+  - type: dynamic
+    name: intent
+    description: why the speaker is stopping masturbating with superior's permission, in third person
+  - type: speaker
+    name: speaker
+    description: Speaker Actor parameter (triggering entity)
+  - type: dynamic
+    name: superior
+    description: Actor who is superior to the speaker
+  - type: static 
+    name: allowed
+    value: true

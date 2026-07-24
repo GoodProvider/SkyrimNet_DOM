@@ -31,18 +31,10 @@ EndFunction
 ;------------------------------------
 ;  Action Functions 
 ;------------------------------------
-Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, String style="", String position="")
+Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, String position="")
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Start", speaker, True) 
     if slave == None 
         return 
-    endif 
-
-    if style == "forceful"
-        style = "hard"
-    elseif style == "normal"
-        style = ""
-    elseif style == "gentle"
-        style = "gentle"
     endif 
 
     ;SkyrimNet_DOM_API. RegisterEvent(String event_name, String msg, Actor source=None, Actor target=None)
@@ -54,9 +46,7 @@ Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, Str
         else
             slave.EnterMasturbateKneeling(superior) 
         endif 
-        RegisterEvent("DOM_Obey", speaker.GetDisplayName()+" obeys, and starts "+position+" to "+style+" masturbate for "+intent, speaker, superior)
     else
-        RegisterEvent("DOM_Obey", speaker.GetDisplayName()+" obeys, and tries to "+style+" masturbate harder for "+intent, speaker, superior)
         slave.MasturbateHarder(superior) 
     endif 
 EndFunction 
@@ -66,9 +56,7 @@ Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool
         return 
     endif 
 
-    if allowed
-        RegisterEvent("DOM_Obey", speaker.GetDisplayName()+" obeys, and stops masturbating for "+intent, speaker, superior)
-    else
+    if !allowed
         SkyrimNet_DOM_API.AddPunishmentReason("SkyrimNet_DOM_Actions", "StopScene_Masturbate", superior, speaker, slave, "didnt obey")
     endif 
 
@@ -86,9 +74,13 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
     String speaker_name = GetDisplayname(speaker)
     String target_name = GetDisplayname(target)
     String superior_name = GetDisplayname(superior)
-    if target  == speaker 
+    if !target || target == speaker 
         target = superior
     endif 
+    if !target
+        Trace("StartScene_Consensual_Two","target and superior are None, aborting")
+        return
+    endif
     Trace("StartScene_Consensual_Two","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name)
     if method == "hug" || method == "single hug"
         target.playIdleWithTarget(pa_HugA, speaker) 
@@ -102,7 +94,6 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
         DirectNarration(msg, speaker, target)
         return None 
     endif 
-    RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and "+direction+" "+method+" with "+target_name, speaker, target)
     if actions == None
         Trace("StartScene_Consensual_Two", "actions is None, aborting")
         return
@@ -110,37 +101,18 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
     actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
-Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target=None, string style="", string method="", String direction="", bool speaker_victim=false, String setting_name="")
+Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target, Actor victim, String style="", string method="", String direction="", String setting_name="")
     String speaker_name = GetDisplayname(speaker)
     String superior_name = GetDisplayname(superior)
     String target_name = GetDisplayname(target)
-    Trace("StartScene_Nonconsensual_Two","intent:"+intent+" speaker:"+speaker_name+" target:"+target_name+" speaker_victim:"+speaker_victim+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name)
-    if !speaker_victim
-        RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and sexually assaults "+target_name+" by "+direction+" "+method, speaker, target)
-    endif 
+    String victim_name = GetDisplayname(victim)
+    Trace("StartScene_Nonconsensual_Two","intent:"+intent+" speaker:"+speaker_name+" target:"+target_name+" victim:"+victim_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name)
     if actions == None
         Trace("StartScene_Nonconsensual_Two", "actions is None, aborting")
         return
     endif
-    actions.StartScene_Nonconsensual_Two(intent, speaker, target, style=style, method=method, direction=direction, speaker_victim=speaker_victim, setting_name=setting_name) 
+    actions.StartScene_Nonconsensual_Two(intent, speaker, target, victim, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
-
-Function StartScene_Punish_Two(String intent, Actor speaker, Actor superior, Actor target=None, string style="", string method="", String direction="", String setting_name="")
-    String speaker_name = GetDisplayname(speaker)
-    String superior_name = GetDisplayname(superior)
-    String target_name = GetDisplayname(target)
-    Trace("StartScene_Punish_Two","intent:"+intent+" speaker:"+speaker_name+" superior:"+superior_name+" target:"+target_name+" style: "+style+" method:"+method+" direction: "+direction+" setting_name:"+setting_name)
-    if target == speaker
-        target = superior
-    endif
-    RegisterEvent("DOM_Obey", speaker_name+" obeys "+superior_name+" and punishes "+target_name+" by "+direction+" "+method, speaker, target)
-    if actions == None
-        Trace("StartScene_Punish_Two", "actions is None, aborting")
-        return
-    endif
-    actions.StartScene_Punish_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name)
-EndFunction
-
 ;------------------------------------
 ;  Refused Functions 
 ;------------------------------------
@@ -261,4 +233,12 @@ Function Words_Execute(Actor slaveActor, string contextJson, string paramsJson) 
     Else
         SkyrimNet_DOM_API.AddPunishmentReason("SkyrimNet_DOM_Actions", "Words_Execute", superior, slaveActor, slave, "didnt listen") 
     endif 
+EndFunction
+
+Function Praise_Tell_Execute(Actor speaker, Actor superior)
+    DOM_Actor slave = Get_Slave("Praise_Tell_Execute", speaker, true)
+    if slave == None
+        return
+    endif
+    slave.StartPraising(superior, "", "tell")
 EndFunction

@@ -3,6 +3,8 @@ description: Undress / strip clothing. Use when {{ npc.name }} removes their clo
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: Undress_Execute
+eligibilityScriptName: SkyrimNet_DOM_Actions
+eligibilityFunctionName: Undress_IsEligible
 parameterMapping:
   - type: speaker
     name: speaker

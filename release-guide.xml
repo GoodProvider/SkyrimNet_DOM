@@ -11,9 +11,9 @@
 
   <doc_map>
     <file path="README.md" role="standalone">
-      Full-system description in present tense. No changelog body — only a Guides link to update.md.
+      Full-system description in present tense. No changelog body — only a Guides link to CHANGELOG.md.
     </file>
-    <file path="update.md" role="changelog">
+    <file path="CHANGELOG.md" role="changelog">
       Short bullet list of deltas since the previous release only. Rewrite (or retitle) for each release.
     </file>
     <file path="Actions.md" role="user_guide">
@@ -40,13 +40,13 @@
   </baseline>
 
   <docs_update>
-    <step id="D1" file="update.md">
+    <step id="D1" file="CHANGELOG.md">
       Retitle to Updates since &lt;previous VERSION&gt; (or Updates in &lt;new VERSION&gt; if preferred — stay consistent).
       Replace bullets with ~5–10 short deltas only. No full feature dump. No packaging-only noise unless users must know.
     </step>
     <step id="D2" file="README.md">
       Refresh Features / Required / Notes so they describe the full current system accurately.
-      Keep Alpha tone. Keep Guides section with one-line summaries linking Actions.md, Prompts.md, Code.md, update.md.
+      Keep Alpha tone. Keep Guides section with one-line summaries linking Actions.md, Prompts.md, Code.md, CHANGELOG.md.
       Point the Updates guide line at the new previous-version phrasing (e.g. what changed since X.Y.Z).
       Do not paste the changelog into README.
     </step>
@@ -67,7 +67,7 @@
   <version_bump>
     <step id="V1">Set Makefile VERSION to the new release number.</step>
     <step id="V2">Regenerate or update fomod/info.xml Version (make release runs fomod-info.py — keep fomod-source in sync if used).</step>
-    <step id="V3">Confirm README Guides Updates line and update.md title still match the previous→new story.</step>
+    <step id="V3">Confirm README Guides Updates line and CHANGELOG.md title still match the previous→new story.</step>
   </version_bump>
 
   <package>
@@ -77,7 +77,7 @@
   </package>
 
   <rules>
-    <item>README = standalone current system. update.md = deltas only. Guides = how-to, not changelog.</item>
+    <item>README = standalone current system. CHANGELOG.md = deltas only. Guides = how-to, not changelog.</item>
     <item>Users edit YAML and prompts — keep Actions.md and Prompts.md accurate when those surfaces change.</item>
     <item>Do not invent APIs or action families that are not in the tree.</item>
     <item>Do not edit this release-guide.xml unless the doc process itself changes.</item>
@@ -86,7 +86,7 @@
 
   <checklist>
     <item>Diff vs previous VERSION baseline done</item>
-    <item>update.md rewritten for this release</item>
+    <item>CHANGELOG.md rewritten for this release</item>
     <item>README.md Features / Required / Notes / Guides accurate</item>
     <item>Actions.md / Prompts.md / Code.md updated or confirmed unchanged</item>
     <item>Makefile + fomod Version bumped</item>

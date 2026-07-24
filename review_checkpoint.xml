@@ -2,44 +2,61 @@
 <review_checkpoint>
   <meta>
     <title>SkyrimNet_DOM Review Checkpoint</title>
-    <pass>4</pass>
+    <pass>6</pass>
     <status>applied</status>
     <location>Repo root next to review-guide.xml</location>
     <companion>review_execution-plan.xml + review_summary.md</companion>
     <line-number-note>Line numbers include commented lines, counted from 1.</line-number-note>
     <note>
-      Pass 4 applied. Undress/dress YAML actions + Undress_Execute/Dress_Execute (no choice gate).
-      Dress keeps Dress_IsEligible; Undress uses DoFlowers slave+free rules only.
+      Pass 6 applied. Compiles (user confirmed).
+      Handler optional; IsDOMSlave; drop masturbate style; notifications ring/optional;
+      remove _is_masturbating; prompts 0410/0055/0015/0551; Praise_Tell; eligibility.
+      SexLab Handler_DOM Start_Masturbate aligned (no style).
     </note>
   </meta>
 
   <findings>
-    <finding id="P0-1" severity="critical" status="fixed">show_external → show_external_only in character_bio prompts</finding>
-    <finding id="P0-2" severity="critical" status="fixed">0413 uses shared dom_actor; no read_json clobber</finding>
-    <finding id="C6" severity="critical" status="fixed">per-actor notifications_next map; dense compact write index j; write to ring not compact</finding>
-    <finding id="I3" severity="important" status="fixed">OnBehaviourChange SetStringValue behaviour key</finding>
-    <finding id="I2" severity="important" status="already_fixed">Load_Punishment_Reasons .reason/.aliases/.index</finding>
-    <finding id="I6" severity="important" status="fixed">helper + PunishementOther → canonical reason list</finding>
-    <finding id="I8" severity="important" status="fixed">orphans under domslave_punish; StartScene_Punish_Two wrapper; spanking + whipping_oral YAML</finding>
-    <finding id="P1-5" severity="important" status="fixed">0410 tears/mark under _loaded only</finding>
-    <finding id="N1" severity="important" status="fixed">deleted dead orgasm melts block</finding>
-    <finding id="N2" severity="important" status="fixed">OnCallForHelp gag guard</finding>
-    <finding id="P1-8" severity="important" status="fixed">7200 no raw dump; existsIn parenthesized</finding>
-    <finding id="X1" severity="out_of_scope" status="fixed">promise values money/pain/freedom/to be gentle</finding>
-    <finding id="X2" severity="out_of_scope" status="fixed">physical praise YAMLs enabled:false</finding>
-    <finding id="X3" severity="out_of_scope" status="fixed">Pose_Submissive value: submissive</finding>
-    <finding id="P2-cat" severity="out_of_scope" status="fixed">Be/Pose/FightForMe customCategory aligned</finding>
-    <finding id="P3" severity="minor" status="fixed">Thread/actors/actions None guards; Trace string Events</finding>
-    <finding id="M-A" severity="minor" status="already_fixed">sentinel -1 overnight</finding>
-    <finding id="U1" severity="important" status="fixed">
-      Undress_Execute / Dress_Execute in Scripts/Source/SkyrimNet_DOM_Actions.psc (always-apply; no choice gate).
-      Legacy UndressDress_Execute kept for menu. Lines ~165-182.
+    <finding id="C1" severity="critical" status="fixed">
+      Events.Setup continues when handler None; DOMSlave_Orgasmed guarded.
     </finding>
-    <finding id="U2" severity="important" status="fixed">
-      DOMSlave_Undress.yaml: DoFlowers slave+free eligibilityRules only; no Undress_IsEligible.
+    <finding id="C2" severity="critical" status="fixed">
+      0410: show_external_only + _loaded gate; arousal rewrite removed; tears wrap was prior fix.
     </finding>
-    <finding id="U3" severity="important" status="fixed">
-      DOMSlave_dress.yaml: DoFlowers rules + Dress_IsEligible (naked-only; no faster decorator alternative).
+    <finding id="I1" severity="important" status="fixed">
+      Decorators: IsDOMSlave + mind None before slave payload.
     </finding>
+    <finding id="I2" severity="important" status="fixed">
+      Dropped LLM style from StartScene_masturbate / Start_Masturbate / YAMLs; DOM position only.
+    </finding>
+    <finding id="I3" severity="important" status="fixed">
+      OnBehaviourChange/OnMoodChange: DirectNarration_Optional optional=true.
+    </finding>
+    <finding id="I4" severity="important" status="fixed">
+      GetNotifications walks ring from actor_to_notifications_next (oldest).
+    </finding>
+    <finding id="I5" severity="important" status="fixed">
+      Removed _is_masturbating from Decorators + 0551; GetThreads / actor_having_sex.
+    </finding>
+    <finding id="I6" severity="important" status="fixed">
+      SexLab_AnimationStart/End: sexlab null guard.
+    </finding>
+    <finding id="I7" severity="important" status="fixed">
+      0551 active rape: _current_reason_name.
+    </finding>
+    <finding id="I8" severity="important" status="fixed">
+      0055/0015 require dom_actor._loaded.
+    </finding>
+    <finding id="I9" severity="important" status="fixed">
+      Be_PraisedTell → Praise_Tell_Execute / StartPraising.
+    </finding>
+    <finding id="I10" severity="important" status="fixed">
+      sex_start, sex_refused, Be_Refused eligibilityRules.
+    </finding>
+    <finding id="I11" severity="important" status="fixed">
+      0551 sex refuse → DOMSlave_Sexual_Activities_Refused_Sex.
+    </finding>
+    <finding id="M1" severity="minor" status="fixed">OnComforted player name concat</finding>
+    <finding id="M2" severity="minor" status="fixed">SaveActorInfo / handlers Actor None guards</finding>
+    <finding id="M3" severity="minor" status="fixed">Consensual_Two None target remap</finding>
   </findings>
 </review_checkpoint>

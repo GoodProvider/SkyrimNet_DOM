@@ -8,4 +8,4 @@
     {% endif -%}
 {% endfor -%}
 {% set assailants_joined = join(assailants, ", ") -%}
-Slave {{ decnpc(npc.UUID).name }} was ordered to start {style} {type} raping {Target} by {superior}. Slave {{ decnpc(npc.UUID).name}} has choosen to {choice}. Optional additional assailants: {{assailants_joined}}.
+Slave {{ decnpc(npc.UUID).name }} was ordered to start {style} {type} raping {target} by {superior}. Slave {{ decnpc(npc.UUID).name}} has choosen to {choice}. Optional additional assailants: {{assailants_joined}}.

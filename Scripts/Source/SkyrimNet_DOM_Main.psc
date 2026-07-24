@@ -10,9 +10,11 @@ Function Trace(String func, String msg, Bool Notification = false) global
     SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Main", func, msg, Notification)
 EndFunction
 
-; Punsihemt 
+; Punishment reason lookup
+String PUNISHMENT_DEFAULT_REASON = "no reason"
 int punishment_to_index = 0 
 int punishment_to_description = 0
+int punishment_default_index = 0
 
 ; Optional DD support
 Quest Property devices_group = None AUTO
@@ -28,7 +30,8 @@ Function Setup()
 
     Trace("Setup","starting setup")
     Load_Punishment_To_Index("Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/PunishmentReasons.json")
-    Load_Punishment_to_description("Data/SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json")
+    Load_Punishment_Reasons("Data/SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json")
+    punishment_default_index = JMap.getInt(punishment_to_index, PUNISHMENT_DEFAULT_REASON, 0)
 
     String err_msg = "" 
     if !MiscUtil.FileExists("Data/DiaryOfMine.esm")
@@ -102,29 +105,71 @@ Function Load_Punishment_To_Index(String fname)
     ;Trace("Load_Punishment_To_Index",index+" punishments loaded from "+fname)
 EndFunction 
 int Function Get_Punishment_To_Index(String reason)
-    return JMap.getInt(punishment_to_index, reason, 0)
+    int index = JMap.getInt(punishment_to_index, reason, -1)
+    if index < 0
+        Trace("Get_Punishment_To_Index", "unknown reason token: "+reason)
+        return punishment_default_index
+    endif
+    return index
 EndFunction
 
-Function Load_Punishment_to_description(String fname) 
-    if punishment_to_description != 0 
-        JValue.release(punishment_to_description) 
-    endif 
-    punishment_to_description = JMap.object() 
-    JValue.retain(punishment_to_description) 
+Function Register_Punishment_Reason(String name, int index, String description)
+    if name == ""
+        return
+    endif
+    int existing = JMap.getInt(punishment_to_index, name, -1)
+    if existing >= 0 && existing != index
+        Trace("Register_Punishment_Reason", "index conflict for "+name+": was "+existing+", now "+index)
+    endif
+    JMap.setInt(punishment_to_index, name, index)
+    if description != ""
+        JMap.setStr(punishment_to_description, name, description)
+    endif
+EndFunction
+
+Function Load_Punishment_Reasons(String fname)
+    if punishment_to_description != 0
+        JValue.release(punishment_to_description)
+    endif
+    punishment_to_description = JMap.object()
+    JValue.retain(punishment_to_description)
 
     int punishments = JValue.readFromFile(fname)
-    int index = JArray.count(punishments) - 1 
-    while 0 <= index  
-        String reason = JValue.solveStr(punishments,"["+index+"].reason")
-        String description = JValue.solveStr(punishments,"["+index+"].description")
-        JMap.setStr(punishment_to_description, reason, description) 
-        index -= 1 
-    endwhile 
-    ;Trace("Load_Punishment_To_Description","punishments loaded from "+fname)
-EndFunction 
-String Function Get_Punishment_To_Description(String reason) 
-    return JMap.getStr(punishment_to_description, reason, "")
-EndFunction 
+    if punishments == 0
+        Trace("Load_Punishment_Reasons", "failed to read "+fname)
+        return
+    endif
+
+    int count = JArray.count(punishments)
+    int i = 0
+    while i < count
+        String reason = JValue.solveStr(punishments, "["+i+"].reason")
+        String description = JValue.solveStr(punishments, "["+i+"].description")
+        int index = JValue.solveInt(punishments, "["+i+"].index", -1)
+        if reason != "" && index >= 0
+            Register_Punishment_Reason(reason, index, description)
+            int aliases = JValue.solveObj(punishments, "["+i+"].aliases")
+            if aliases != 0
+                int acount = JArray.count(aliases)
+                int j = 0
+                while j < acount
+                    String alias_string = JArray.getStr(aliases, j)
+                    Register_Punishment_Reason(alias_string, index, description)
+                    j += 1
+                endwhile
+            endif
+        endif
+        i += 1
+    endwhile
+EndFunction
+
+String Function Get_Punishment_To_Description(String reason)
+    String description = JMap.getStr(punishment_to_description, reason, "")
+    if description == ""
+        description = JMap.getStr(punishment_to_description, PUNISHMENT_DEFAULT_REASON, "")
+    endif
+    return description
+EndFunction
 
 ;String Function Get_Reason_to_Punishment(String k) 
     ;return JMap.GetStr(reason_to_punishment, k, "") 
