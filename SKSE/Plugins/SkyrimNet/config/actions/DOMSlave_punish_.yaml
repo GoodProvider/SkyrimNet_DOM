@@ -1,6 +1,6 @@
 customCategory: domslave_punish
 name: DOMSLAVE_Punish
-description: 'PARAMS: {"superior":"Actor", "direction":"giving|getting", "intent":"who, why, and how"} - [superior] ordered you to [direction] punish by [Target] for [intent]'
+description: 'PARAMS: {"superior":"Actor", "direction":"giving|getting", "intent":"who, why, and how"} - commanded by [Superior] to [direction] punish by [Target] for [intent]'
 enabled: true
 eligibilityRules:
   - conditions:

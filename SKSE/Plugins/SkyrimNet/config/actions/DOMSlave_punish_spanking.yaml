@@ -1,6 +1,6 @@
 customCategory: domslave_punish
 name: DOMSlave_Punish_Spanking
-description: "[Victim] is punished by [direction] [style] spanking"
+description: "commanded by [Superior] to punish [Victim] by [direction] [style] spanking"
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: StartScene_Nonconsensual_Two

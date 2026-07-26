@@ -1,3 +1,5 @@
 temp
 ignore
 Headers
+
+python_scripts release-guide.xml review-guide.xml SKSE

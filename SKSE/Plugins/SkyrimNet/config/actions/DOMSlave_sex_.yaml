@@ -1,6 +1,6 @@
 customCategory: domslave_sexual_activities
 name: DOMSLAVE_Sexual_Activities
-description: 'PARAMS: {"superior":"Actor", "type":"oral|vaginal|anal|masturbation|other", "intent":"Speakers intent with whom (if any), why, and how in third person"} - [type] sexual activities'
+description: 'PARAMS: {"superior":"Actor", "type":"oral|vaginal|anal|masturbation|other", "intent":"Speakers intent with whom (if any), why, and how in third person"} - commanded by [Superior] to do [type] sexual activities'
 enabled: true
 eligibilityRules:
   - conditions:

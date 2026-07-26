@@ -1,5 +1,5 @@
 name: DOMSlave_dress
-description: Get dressed / put clothes back on. Use when {{ npc.name }} dresses.
+description: commanded by [Superior] to dress
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: Dress_Execute

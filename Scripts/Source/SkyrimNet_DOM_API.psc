@@ -112,24 +112,24 @@ int Function GetThreads() global
                     int thread = JMap.object()
 
                     int actor_obj = JMap.object()
-                    JMap.setStr(actor_obj, "_name", akSlave.GetDisplayName())
-                    JMap.setForm(actor_obj, "_form", akSlave)
-                    JMap.setInt(actor_obj, "_is_slave", 1)
+                    JMap.setStr(actor_obj, "name", akSlave.GetDisplayName())
+                    JMap.setForm(actor_obj, "form", akSlave)
+                    JMap.setInt(actor_obj, "is_slave", 1)
                     if slave.mind
-                        JMap.setFlt(actor_obj, "_arousal_factor", slave.mind.arousal_factor)
-                        JMap.setInt(actor_obj, "_is_aroused_for", slave.mind.is_aroused_for)
-                        JMap.setInt(actor_obj, "_is_enraptured_for", slave.mind.is_enraptured_for)
+                        JMap.setFlt(actor_obj, "arousal_factor", slave.mind.arousal_factor)
+                        JMap.setInt(actor_obj, "is_aroused_for", slave.mind.is_aroused_for)
+                        JMap.setInt(actor_obj, "is_enraptured_for", slave.mind.is_enraptured_for)
                     endif
 
                     int speaking_modifiers_obj = JArray.objectWithSize(1)
                     JArray.setStr(speaking_modifiers_obj, 0, "_pleasure_")
-                    JMap.setObj(actor_obj, "_speaking_modifiers", speaking_modifiers_obj)
+                    JMap.setObj(actor_obj, "speaking_modifiers", speaking_modifiers_obj)
 
                     int actors_obj = JArray.objectWithSize(1)
                     JArray.setObj(actors_obj, 0, actor_obj)
-                    JMap.setObj(thread, "_actors", actors_obj)
+                    JMap.setObj(thread, "actors", actors_obj)
 
-                    JMap.setStr(thread, "_description", akSlave.GetDisplayName()+" is masturbating")
+                    JMap.setStr(thread, "description", akSlave.GetDisplayName()+" is masturbating")
                     JArray.addObj(threads, thread)
                 endif
             endif 

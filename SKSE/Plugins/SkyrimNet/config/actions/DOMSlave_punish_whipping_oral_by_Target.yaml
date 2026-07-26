@@ -1,6 +1,6 @@
 customCategory: domslave_punish
 name: DOMSlave_Punish_Whipping_Oral
-description: "[Victim] is punished by [style] whipping and giving oral sex to [Target]"
+description: "commanded by [Superior] to punish [Victim] by [style] whipping and giving oral sex to [Target]"
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: StartScene_Nonconsensual_Two

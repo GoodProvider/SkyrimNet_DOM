@@ -28,6 +28,13 @@ Function Setup()
     pa_HugA = Game.GetFormFromFile(0x000F4699, "Skyrim.esm") as Idle
 EndFunction
 
+Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
+    String speaker_name = GetDisplayname(speaker)
+    String superior_name = GetDisplayname(superior)
+    String msg = speaker_name+" obeys "+superior_name+" and does "+action_desc
+    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", 100000, speaker, superior)
+EndFunction
+
 ;------------------------------------
 ;  Action Functions 
 ;------------------------------------
@@ -37,7 +44,6 @@ Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, Str
         return 
     endif 
 
-    ;SkyrimNet_DOM_API. RegisterEvent(String event_name, String msg, Actor source=None, Actor target=None)
     if !slave.is_behaviour_masturbate
         if position == "standing"
             slave.EnterMasturbateStanding(superior) 
@@ -98,6 +104,7 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
         Trace("StartScene_Consensual_Two", "actions is None, aborting")
         return
     endif
+    RegisterObeyCommand(speaker, superior, style+" "+direction+" "+method+" with "+target_name)
     actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
@@ -111,7 +118,28 @@ Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superi
         Trace("StartScene_Nonconsensual_Two", "actions is None, aborting")
         return
     endif
+    RegisterObeyCommand(speaker, superior, style+" "+direction+" "+method)
     actions.StartScene_Nonconsensual_Two(intent, speaker, target, victim, style=style, method=method, direction=direction, setting_name=setting_name) 
+EndFunction
+
+Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superior, Actor target, Actor third, string style="", string method="", String direction="", String setting_name="", Actor participate)
+    String speaker_name = GetDisplayname(speaker)
+    String target_name = GetDisplayname(target)
+    String superior_name = GetDisplayname(superior)
+    if !target || target == speaker 
+        target = superior
+    endif 
+    if !target
+        Trace("StartScene_Consensual_Two","target and superior are None, aborting")
+        return
+    endif
+    Trace("StartScene_Consensual_Two","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name+" participate:"+GetDisplayname(participate))
+    if actions == None
+        Trace("StartScene_Consensual_Three", "actions is None, aborting")
+        return
+    endif
+    RegisterObeyCommand(speaker, superior, style+" "+direction+" "+method+" with "+target_name)
+    actions.StartScene_Consensual_Three(intent, speaker, target, style, method, direction, setting_name, participate) 
 EndFunction
 ;------------------------------------
 ;  Refused Functions 
@@ -139,6 +167,7 @@ Function Undress_Execute(Actor speaker, Actor superior)
     if slave == None
         return
     endif
+    RegisterObeyCommand(speaker, superior, "undress")
     if !slave.mind.should_be_naked
         slave.mind.SetObedientTimer(1)
     endif
@@ -150,6 +179,7 @@ Function Dress_Execute(Actor speaker, Actor superior)
     if slave == None
         return
     endif
+    RegisterObeyCommand(speaker, superior, "dress")
     slave.UnsetShouldBeNaked(superior)
 EndFunction
 

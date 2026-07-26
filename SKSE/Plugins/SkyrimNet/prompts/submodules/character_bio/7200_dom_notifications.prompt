@@ -1,14 +1,14 @@
-{% if existsIn(dom_actor, "_notifications") and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
-    {% if dom_actor._loaded and length(dom_actor._notifications) > 0 %}
+{% if existsIn(dom_actor, "notifications") and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
+    {% if dom_actor.loaded and length(dom_actor.notifications) > 0 %}
         ## Slave Events
-        {% for notification in dom_actor._notifications %}
-            {% if notification._message != "" %} 
-              {% if notification._minutes <= 59 %}
-            {{notification._message}} ({{notification._minutes}} minutes ago)
-              {% else if notification._minutes <= 1439 %}
-            {{notification._message}} ({{notification._hours}} hours ago)
+        {% for notification in dom_actor.notifications %}
+            {% if notification.message != "" %} 
+              {% if notification.minutes <= 59 %}
+            {{notification.message}} ({{notification.minutes}} minutes ago)
+              {% else if notification.minutes <= 1439 %}
+            {{notification.message}} ({{notification.hours}} hours ago)
               {% else %}
-            {{notification._message}} ({{notification._days}} days ago)
+            {{notification.message}} ({{notification.days}} days ago)
               {% endif %}
             {% endif %} 
         {% endfor %}

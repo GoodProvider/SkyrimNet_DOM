@@ -1,5 +1,5 @@
 name: DOMSlave_Undress
-description: Undress / strip clothing. Use when {{ npc.name }} removes their clothes.
+description: commanded by [Superior] to undress
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: Undress_Execute

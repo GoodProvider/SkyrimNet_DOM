@@ -183,17 +183,11 @@ Bool Function GetLastOrderRefused_Reset()
 EndFunction
 
 Function RegisterShortLivedEvent(String eventId, String eventType, String description, String data, int ttlMs, Actor sourceActor, Actor targetActor=None)
-    if !SkyrimNet_SexLab_Utilities.DirectNarration_Optional(eventType, description, sourceActor, targetActor, true)
-        AddNotification(description, sourceActor)
-    endif
-    ;return SkyrimNetAPI.RegisterShortLivedEvent(eventId, eventType, description, data, ttlMs, sourceActor, targetActor)
-endFunction 
+    SkyrimNetApi.RegisterShortLivedEvent(eventId, eventType, description, data, ttlMs, sourceActor, targetActor)
+EndFunction 
 
 Function RegisterEvent(String eventType, String description, Actor originatorActor, Actor targetActor=None)
-    if !SkyrimNet_SexLab_Utilities.DirectNarration_Optional(eventType, description, originatorActor, targetActor, true)
-        AddNotification(description, originatorActor)
-    endif
-    ;SkyrimNetAPI.RegisterEvent(eventType, content, originatorActor, targetActor)
+    SkyrimNetApi.RegisterEvent(eventType, description, originatorActor, targetActor)
 EndFunction 
 
 Function RegisterShort_AddName(String eventId, String eventType, Form akRef, String description, int ttl=100000)
@@ -315,11 +309,11 @@ Function AddNotification(String description, Actor slave)
         int i = 0 
         while i < notifications_size 
             int noteInit = JMap.object() 
-            JMap.setStr(noteInit, "_message", "") 
-            JMap.setFlt(noteInit, "_timestamp", 0.0)
-            JMap.setInt(noteInit, "_minutes", 0)
-            JMap.setInt(noteInit, "_hours", 0)
-            JMap.setInt(noteInit, "_days", 0)
+            JMap.setStr(noteInit, "message", "") 
+            JMap.setFlt(noteInit, "timestamp", 0.0)
+            JMap.setInt(noteInit, "minutes", 0)
+            JMap.setInt(noteInit, "hours", 0)
+            JMap.setInt(noteInit, "days", 0)
             JValue.retain(noteInit) 
             JArray.setObj(notifications, i, noteInit) 
             i += 1
@@ -332,12 +326,12 @@ Function AddNotification(String description, Actor slave)
         last = notifications_size - 1
     endif 
     int note_last = JArray.getObj(notifications, last)
-    String message_last = JMap.getStr(note_last, "_message", "")
+    String message_last = JMap.getStr(note_last, "message", "")
     if message_last != description
         Float rawDaysPassed = Utility.GetCurrentGameTime()
         int note = JArray.getObj(notifications, next)
-        JMap.setStr(note, "_message", description)
-        JMap.setFlt(note, "_timestamp", rawDaysPassed)
+        JMap.setStr(note, "message", description)
+        JMap.setFlt(note, "timestamp", rawDaysPassed)
 
         next += 1 
         if next >= notifications_size 
@@ -362,9 +356,9 @@ Function UpdateNotificationAge(int note, Float timestamp)
         deltaDays = 0.0
     endif
     Int minutes = (deltaDays * 1440.0) as Int
-    JMap.setInt(note, "_minutes", minutes)
-    JMap.setInt(note, "_hours", minutes / 60)
-    JMap.setInt(note, "_days", minutes / 1440)
+    JMap.setInt(note, "minutes", minutes)
+    JMap.setInt(note, "hours", minutes / 60)
+    JMap.setInt(note, "days", minutes / 1440)
 EndFunction
 
 int Function GetNotifications(Actor slave)
@@ -378,16 +372,16 @@ int Function GetNotifications(Actor slave)
     int num_notes = 0
     while i < notifications_size
         int note = JArray.getObj(notifications, i)
-        Float timestamp = JMap.getFlt(note, "_timestamp", 0.0)
+        Float timestamp = JMap.getFlt(note, "timestamp", 0.0)
         if timestamp != 0.0 && timestamp <= currentDaysPassed
             UpdateNotificationAge(note, timestamp)
             num_notes += 1
         else 
-            JMap.setStr(note, "_message", "")
-            JMap.setFlt(note, "_timestamp", 0.0)
-            JMap.setInt(note, "_minutes", 0)
-            JMap.setInt(note, "_hours", 0)
-            JMap.setInt(note, "_days", 0)
+            JMap.setStr(note, "message", "")
+            JMap.setFlt(note, "timestamp", 0.0)
+            JMap.setInt(note, "minutes", 0)
+            JMap.setInt(note, "hours", 0)
+            JMap.setInt(note, "days", 0)
         endif 
         i += 1 
     endwhile
@@ -421,7 +415,7 @@ int Function GetNotifications(Actor slave)
             idx -= notifications_size
         endif
         int note = JArray.getObj(notifications, idx)
-        Float timestamp = JMap.getFlt(note, "_timestamp", 0.0)
+        Float timestamp = JMap.getFlt(note, "timestamp", 0.0)
         if timestamp != 0.0 && timestamp <= currentDaysPassed
             JArray.setObj(notes, j, note)
             j += 1

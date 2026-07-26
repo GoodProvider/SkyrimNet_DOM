@@ -1,9 +1,9 @@
 customCategory: domslave_sexual_activities
 name: DOMSlave_Start_Sex
-description: "[style] [direction] [method]"
+description: "commanded by [Superior] to [style] [direction] [method] with two actors"
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
-executionFunctionName: StartScene_Consensual_Two
+executionFunctionName: StartScene_Consensual_Three
 defaultPriority: 8
 parameterMapping:
   - type: static
@@ -30,6 +30,9 @@ parameterMapping:
   - type: static
     name: setting_name
     value: ""
+  - type: dynamic
+    name: participate
+    description: Actor who participates in the scene
 eligibilityRules:
   - conditions:
       - decoratorName: get_faction_rank
