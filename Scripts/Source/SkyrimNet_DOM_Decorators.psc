@@ -38,7 +38,7 @@ String Function Get_Actor_Info(Actor akActor) global
     JMap.setInt(not_slave_obj, "_is_slave", 0) ; 0 represents False
 
     ; If you need this as a string representation later:
-    String not_slave_json = JValue.toJSONString(not_slave_obj)
+    String not_slave_json = SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson(not_slave_obj)
 
     ; Release memory if you aren't retaining this object in a long-term property
     JValue.release(not_slave_obj)
@@ -184,7 +184,7 @@ String Function Get_Actor_Info(Actor akActor) global
         JMap.setStr(punishment, "_current_reason_name", mind.current_punishment_reason_name)
 
     ; If passing the data to the UI or SKSE API, you can stringify it:
-    String actor_json = JValue.toJSONString(actor_obj)
+    String actor_json = SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson(actor_obj)
 
     ; Important: Clean up the main object (which recursively cleans up nested objects) 
     ; to prevent memory leaks if you aren't saving it to a JContainer file/form.
