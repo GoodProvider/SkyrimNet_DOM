@@ -1,6 +1,6 @@
 customCategory: domslave_sexual_activities
-name: DOMSlave_Start_Sex
-description: "commanded by [Superior] to [style] [direction] [method] with two actors"
+name: DOMSlave_Sex_Three
+description: "[style] [direction] [method] with [Target] and [participate]"
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: StartScene_Consensual_Three
@@ -68,6 +68,6 @@ eligibilityRules:
         arguments:
           - "HasIntValue"
           - currentActor
-          - "skyrimnet_sexlab_actor_lock"
+          - "skyrimnet_sexlab_scene_actor_lock"
         comparisonOperator: ==
         expectedValue: false

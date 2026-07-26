@@ -65,7 +65,7 @@ Common execute functions:
 
 - `StartScene_Consensual_Two` / `StartScene_Nonconsensual_Two`
 - `StartScene_masturbate` / `StopScene_Masturbate`
-- `Undress_Execute` / `Dress_Execute`
+- `UndressDress_Execute` / `Dress_Execute`
 - `AddPunishmentReason`
 
 **Parameter names in YAML must match the Papyrus function signature** (see [Code](Code.md)). Wrong names or counts fail at runtime.
@@ -92,7 +92,7 @@ Reuse conditions from a sibling. Common pattern for slaves:
 - In `DOMPlayerSlaveFaction` (rank as required by siblings)
 - Not in combat
 - Not SexLab-animating / OStim / device faction
-- Not holding `skyrimnet_sexlab_actor_lock`
+- Not holding `skyrimnet_sexlab_scene_actor_lock`
 
 Tighten rules for scene actions; keep social `Be_` rules lighter when appropriate.
 

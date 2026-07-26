@@ -1,6 +1,6 @@
 customCategory: domslave_sexual_activities
 name: DOMSLAVE_Sexual_Activities
-description: 'PARAMS: {"superior":"Actor", "type":"oral|vaginal|anal|masturbation|other", "intent":"Speakers intent with whom (if any), why, and how in third person"} - commanded by [Superior] to do [type] sexual activities'
+description: 'PARAMS: {"superior":"Actor", "target":"Actor", "style":"forceful|normal|gentle", "direction":"giving|getting|fucking a|fucked in", "method":"ass|pussy|mouth|masturbation|handjob|boobjob|thighjob|fisting|dildo|fingering|footjob", "participate":"Actor (three only)", "intent":"who, why, and how"} - [style] [direction] [method] sexual activities'
 enabled: true
 eligibilityRules:
   - conditions:
@@ -37,6 +37,6 @@ eligibilityRules:
         arguments:
           - "HasIntValue"
           - currentActor
-          - "skyrimnet_sexlab_actor_lock"
+          - "skyrimnet_sexlab_scene_actor_lock"
         comparisonOperator: ==
         expectedValue: false

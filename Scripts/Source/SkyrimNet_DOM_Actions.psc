@@ -98,7 +98,7 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
         endif 
         String msg = sender.GetDisplayName()+" hugs "+receiver.GetDisplayName()+"."
         DirectNarration(msg, speaker, target)
-        return None 
+        return
     endif 
     if actions == None
         Trace("StartScene_Consensual_Two", "actions is None, aborting")
@@ -109,6 +109,16 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
 EndFunction
 
 Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target, Actor victim, String style="", string method="", String direction="", String setting_name="")
+    if !target || target == speaker
+        target = superior
+    endif
+    if !victim
+        victim = speaker
+    endif
+    if !target
+        Trace("StartScene_Nonconsensual_Two","target and superior are None, aborting")
+        return
+    endif
     String speaker_name = GetDisplayname(speaker)
     String superior_name = GetDisplayname(superior)
     String target_name = GetDisplayname(target)
@@ -122,7 +132,7 @@ Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superi
     actions.StartScene_Nonconsensual_Two(intent, speaker, target, victim, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
-Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superior, Actor target, Actor third, string style="", string method="", String direction="", String setting_name="", Actor participate)
+Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superior, Actor target, string style="", string method="", String direction="", String setting_name="", Actor participate)
     String speaker_name = GetDisplayname(speaker)
     String target_name = GetDisplayname(target)
     String superior_name = GetDisplayname(superior)
@@ -130,10 +140,10 @@ Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superio
         target = superior
     endif 
     if !target
-        Trace("StartScene_Consensual_Two","target and superior are None, aborting")
+        Trace("StartScene_Consensual_Three","target and superior are None, aborting")
         return
     endif
-    Trace("StartScene_Consensual_Two","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name+" participate:"+GetDisplayname(participate))
+    Trace("StartScene_Consensual_Three","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name+" participate:"+GetDisplayname(participate))
     if actions == None
         Trace("StartScene_Consensual_Three", "actions is None, aborting")
         return
@@ -162,12 +172,20 @@ EndFunction
 ; Dress/Undress
 ; ----------------------------------------------
 
-Function Undress_Execute(Actor speaker, Actor superior)
-    DOM_Actor slave = Get_Slave("Undress_Execute", speaker, true)
+; UndressDress_Execute → DOM_Actor.SetShouldBeNaked (PAH Diary of Mine)
+Function UndressDress_Execute(Actor speaker, Actor superior)
+    DOM_Actor slave = Get_Slave("UndressDress_Execute", speaker, true)
     if slave == None
         return
     endif
+    if !superior
+        superior = Game.GetPlayer()
+    endif
     RegisterObeyCommand(speaker, superior, "undress")
+    if !slave.mind
+        Trace("UndressDress_Execute", GetDisplayname(speaker)+" mind is None, aborting")
+        return
+    endif
     if !slave.mind.should_be_naked
         slave.mind.SetObedientTimer(1)
     endif
@@ -178,6 +196,9 @@ Function Dress_Execute(Actor speaker, Actor superior)
     DOM_Actor slave = Get_Slave("Dress_Execute", speaker, true)
     if slave == None
         return
+    endif
+    if !superior
+        superior = Game.GetPlayer()
     endif
     RegisterObeyCommand(speaker, superior, "dress")
     slave.UnsetShouldBeNaked(superior)
@@ -195,7 +216,7 @@ Bool Function UndressDress_IsEligible(Actor slaveActor, string contextJson, stri
     String name = slaveActor.GetDisplayName()
     DOM_Actor slave = Get_Slave("UndressDress_IsEligible", slaveActor) 
     if slave == None 
-        Trace("UndressDress_IsEligible",name+" is not a name.")
+        Trace("UndressDress_IsEligible",name+" is not a slave.")
         return false 
     endif 
     bool value = slave.is_naked == is_naked
@@ -205,34 +226,6 @@ Bool Function UndressDress_IsEligible(Actor slaveActor, string contextJson, stri
         Trace("UndressDress_IsEligible","Slave "+name+" can undress: "+value)
     endif 
     return value 
-EndFunction 
-
-Function UndressDress_Execute(Actor slaveActor, string contextJson, string paramsJson) global
-    Trace("UndressDress_Execute", slaveActor.GetDisplayName()+" context:"+ contextJson+" params:"+paramsJson)
-    DOM_Actor slave = Get_Slave("SripDress_Execute", slaveActor,true) 
-    if slave == None 
-        return 
-    endif 
-
-    String type = SkyrimNetApi.GetJsonString(paramsJson, "type", "undress")
-    String choice = SkyrimNetApi.GetJsonString(paramsJson, "choice", "obey")
-    Actor superior = SkyrimNetApi.GetJsonActor(paramsJson, "superior", Game.GetPlayer()) 
-    if choice == "starts to undress" || choice == "starts to dress" || choice == "obey"
-        if type == "dress"
-            slave.UnsetShouldBeNaked(superior)
-        else
-            if !slave.mind.should_be_naked
-                slave.mind.SetObedientTimer(1)
-            endif 
-            slave.SetShouldBeNaked(superior)
-        endif 
-    else 
-        String reason = "refusing to strip"
-        if choice == "dress" 
-            reason = "didnt listen"
-        endif 
-        SkyrimNet_DOM_API.AddPunishmentReason("SkyrimNet_DOM_Actions", "UndressDress_Execute", superior, slaveActor, slave, reason)
-    endif 
 EndFunction
 
 Function Words_Execute(Actor slaveActor, string contextJson, string paramsJson) global

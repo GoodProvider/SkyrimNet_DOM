@@ -127,7 +127,7 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("DOMOnKinkDiscovered", "OnKinkDiscovered")
     RegisterForModEvent("DOMOnLostVirginity", "OnLostVirginity")
     RegisterForModEvent("DOMOnRunaway", "OnRunaway")
-    ;RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
+    RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
     RegisterForModEvent("DOMOnBehaviourChange", "OnBehaviourChange")
     RegisterForModEvent("DOMOnNotificationSent", "OnNotificationSent")
     ;  -------

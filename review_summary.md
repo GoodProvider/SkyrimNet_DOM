@@ -1,27 +1,28 @@
-# SkyrimNet_DOM Review Summary (Pass 6)
+# SkyrimNet_DOM Review Summary (Pass 7)
 
-Companions: `review_checkpoint.xml`, `review_execution-plan.xml`.
+Companions: `review-checkpoint.xml`, `review_execution-plan.xml`.
 
-**Status: applied** — Pass 6 fixes. Compiles (user confirmed).
+**Status: applied** — Pass 7 fixes per user answers. Recompile Actions + Events.
 
-## Pass 6 applied
+## Applied
 
 | ID | Fix |
 |----|-----|
-| C1 | Events register when Handler_DOM missing; guard orgasm calls |
-| C2 | 0410: `show_external_only` + `_loaded`; removed arousal rewrite |
-| I1 | Decorators: `IsDOMSlave` + mind None |
-| I2 | Dropped LLM `style`; DOM `position` only; SexLab Handler aligned |
-| I3 | Behaviour/mood: `optional=true` |
-| I4 | Notification ring chronological from write cursor |
-| I5 | Removed `_is_masturbating`; 0551 uses GetThreads / `actor_having_sex` |
-| I6 | SexLab hooks: null-guard `sexlab` |
-| I7 | 0551 rape: `_current_reason_name` |
-| I8 | 0055/0015: `_loaded` |
-| I9 | Be_PraisedTell → `Praise_Tell_Execute` |
-| I10 | Eligibility on sex_start / sex_refused / Be_Refused |
-| I11 | Sex refuse → `DOMSlave_Sexual_Activities_Refused_Sex` |
-| M1–M3 | OnComforted name; Actor None guards; Consensual_Two target |
+| C1 | Actor lock → `skyrimnet_sexlab_scene_actor_lock` |
+| C2 | `DOMSlave_Sex_One` / `Sex_Two` / `Sex_Three` |
+| C3 | Removed unused `Actor third`; YAML↔PSC positional match |
+| I1 | Nonconsensual_Two target/victim guards |
+| I2 | Sex category PARAMS aligned to leaf style/method/direction |
+| I3 | Re-enabled `DOMOnMoodChange` |
+| I4 | Hug path `return` |
+| M1 | 0305 grammar |
+| M2 | `DOMSlave_Undress` → `UndressDress_Execute` → `SetShouldBeNaked`; description `undress` |
+| M3 | Consensual_Three Trace labels |
+
+## Undress wiring
+
+- YAML: `executionFunctionName: UndressDress_Execute`, description `undress` (no “commanded by [Superior]”)
+- PSC: `UndressDress_Execute(Actor speaker, Actor superior)` → PAH `DOM_Actor.SetShouldBeNaked(superior)`
 
 ## Rules unchanged
 

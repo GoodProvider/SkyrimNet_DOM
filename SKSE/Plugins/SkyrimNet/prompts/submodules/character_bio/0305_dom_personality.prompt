@@ -10,9 +10,9 @@
         {% if dom_actor.training_mind.submission < 60 %} 
             - {{dom_actor.name}} is beginning to wonder if obeying sexual orders might be better than the alternative. 
         {% else if dom_actor.training_mind.submission < 90 %} 
-            - {{dom_actor.name}} thinks obeying sexual orders be better than the alternative. 
+            - {{dom_actor.name}} thinks obeying sexual orders might be better than the alternative. 
         {% else %}
-            - {{dom_actor.name}} knows obeying sexual orders is be better than the alternative. 
+            - {{dom_actor.name}} knows obeying sexual orders is better than the alternative. 
         {% endif %}
     {% endif %} 
     {% if dom_actor.training_mind.humiliation >= 30 %} 

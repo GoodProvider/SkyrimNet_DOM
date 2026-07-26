@@ -1,8 +1,8 @@
 name: DOMSlave_Undress
-description: commanded by [Superior] to undress
+description: undress
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
-executionFunctionName: Undress_Execute
+executionFunctionName: UndressDress_Execute
 eligibilityScriptName: SkyrimNet_DOM_Actions
 eligibilityFunctionName: Undress_IsEligible
 parameterMapping:

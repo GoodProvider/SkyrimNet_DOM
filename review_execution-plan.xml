@@ -2,41 +2,33 @@
 <review_execution-plan>
   <meta>
     <title>SkyrimNet_DOM Review Execution Plan</title>
-    <pass>6</pass>
+    <pass>7</pass>
     <audience>AI agent</audience>
     <status>applied</status>
     <executed-note>
-      Pass 6 applied. Compiles (user confirmed).
-      SexLab Handler_DOM Start_Masturbate signature updated (no style).
+      Pass 7 applied. User: Sex_One/Two/Three; remove third; re-enable mood;
+      Undress→UndressDress_Execute + PAH SetShouldBeNaked; Undress YAML description "undress".
     </executed-note>
     <instruction>
-      Pass 6 complete. Do not modify Diary Of Mine scripts.
+      Pass 7 complete. Do not modify Diary Of Mine scripts. Recompile Actions + Events.
     </instruction>
   </meta>
 
   <steps>
-    <step id="C1" actionable="true">Events.Setup: do not abort on handler None; guard handler.DOMSlave_Orgasmed</step>
-    <step id="I3" actionable="true">OnBehaviourChange/OnMoodChange: optional=true</step>
-    <step id="I4" actionable="true">GetNotifications: chronological ring from next cursor</step>
-    <step id="I6" actionable="true">SexLab_AnimationStart/End: sexlab null guard</step>
-    <step id="M1" actionable="true">OnComforted: msg = player name + suffix</step>
-    <step id="M2" actionable="true">SaveActorInfo + key handlers: Actor None early return</step>
-    <step id="I1" actionable="true">Decorators: IsDOMSlave + mind None</step>
-    <step id="I5" actionable="true">Remove _is_masturbating emission; strip 0551 uses</step>
-    <step id="I2" actionable="true">Drop style from StartScene_masturbate + YAMLs + SexLab Handler_DOM</step>
-    <step id="I9" actionable="true">Praise_Tell_Execute + Be_PraisedTell YAML</step>
-    <step id="M3" actionable="true">Consensual_Two: if !target || target == speaker</step>
-    <step id="I10" actionable="true">Eligibility on sex_start, sex_refused, Be_Refused</step>
-    <step id="C2" actionable="true">0410: show_external_only gate; delete arousal rewrite</step>
-    <step id="I7" actionable="true">0551: _current_reason_name</step>
-    <step id="I8" actionable="true">0055/0015: _loaded guards</step>
-    <step id="I11" actionable="true">0551: sex refuse action name</step>
+    <step id="C1" actionable="true">Lock key skyrimnet_sexlab_scene_actor_lock</step>
+    <step id="C2" actionable="true">DOMSlave_Sex_One / Sex_Two / Sex_Three</step>
+    <step id="C3" actionable="true">Remove Actor third; Trace Consensual_Three</step>
+    <step id="I1" actionable="true">Nonconsensual_Two target/victim guards</step>
+    <step id="I2" actionable="true">sex_ category PARAMS</step>
+    <step id="I3" actionable="true">Register DOMOnMoodChange</step>
+    <step id="I4" actionable="true">Hug return</step>
+    <step id="M1" actionable="true">0305 grammar</step>
+    <step id="M2" actionable="true">UndressDress_Execute + Undress YAML</step>
+    <step id="M3" actionable="true">Trace labels (with C3)</step>
   </steps>
 
   <post-apply>
-    <item>Headers refreshed via headers_build.py</item>
-    <item>SexLab Handler_DOM / Interface Start_Masturbate no style</item>
-    <item>Recompile confirmed by user</item>
+    <item>Recompile SkyrimNet_DOM_Actions.psc and SkyrimNet_DOM_Events.psc</item>
     <item>Checkpoint status applied</item>
   </post-apply>
 </review_execution-plan>
