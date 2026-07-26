@@ -36,9 +36,9 @@ if a == None
 - Plain English words without wrapping are unsafe as protocol tokens for external matching.
 
 ## JSON keys for Skyrim-generated, externally processed JSON
-- Keys in JSON that Skyrim emits and that is consumed outside the game (decorators, threads.json, prompts) **must start with an underscore**, e.g. `_speaking_modifiers`, `_actors`, `_uuid`.
-- Leading `_` keeps keys unique under Skyrim's case-insensitive string pool and stable for case-sensitive external consumers.
-- Do not invent new bare keys (`speaking_modifiers`, `Actors`) for that pipeline; prefer `_speaking_modifiers`-style names.
+- Keys in JSON that Skyrim emits and that is consumed outside the game (decorators, threads.json, prompts) are **bare lowercase**, e.g. `speaking_modifiers`, `actors`, `uuid`.
+- Always serialize via `SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson` so export casing is stable regardless of Skyrim's string pool.
+- Leading `_` is reserved for protocol **values** only (e.g. `_pleasure_`, `_pain_`), not for JSON keys.
 
 ## naming convention  
 - Constant variable are all upper case: THIS_IS_A_CONSTANT
