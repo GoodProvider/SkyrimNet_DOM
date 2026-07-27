@@ -1,0 +1,38 @@
+# SkyrimNet_DOM
+
+> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items/triggers.
+
+## Read by job
+
+| Job | Start here |
+|-----|------------|
+| Player / FAQ / install | docs/players/overview.md, docs/players/requirements.md |
+| Author actions | docs/authors/actions.md |
+| Author prompts | docs/authors/prompts.md + docs/reference/{json-keys,protocol-tokens}.md |
+| Author events / punishment / content | docs/authors/events.md, docs/authors/punishment.md, docs/authors/content.md |
+| Develop Papyrus | docs/developers/papyrus.md, docs/reference/papyrus-rules.md |
+| Agent policy | AGENTS.md (safety, confidence, commits) |
+| Quirks | KNOWLEDGEBASE.md |
+| Release documentation | release-guide.xml, release-checkpoint.xml |
+| Changelog | CHANGELOG.md, CHANGELOG-user.md |
+| Short examples | Prefer snippets pointing at SKSE/Plugins/... shipped files |
+
+## Optional examples (in-tree)
+
+- Action YAML: SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_sex_start_2_penis.yaml
+- Punishment map: SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json
+- Item YAML: SKSE/Plugins/SkyrimNet/config/items/diaryofmine_EB8659.yaml
+
+## Do not ingest (unless debugging that area)
+
+- SSEEdit Cache/
+- versions/
+- Source copy/, Headers_Source/, fomod-source copy/, release-guide copy.xml
+- review-*.xml, review_*.md, reviews/, z-plan.md, punishment_checkpoint.xml
+- crashlog.txt, crash-*.log, Papyrus.0.log
+- *.refcache
+
+## Compile reminders
+
+- Papyrus: Cursor task `compile: pyro` / `skyrimse.ppj` (preferred)
+- Packaging: `make release` (maintainer-owned; see release-guide.xml)

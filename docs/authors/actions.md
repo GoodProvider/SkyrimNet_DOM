@@ -2,7 +2,7 @@
 
 Users are expected to tweak and add SkyrimNet actions. This guide covers the DOMSlave YAML set.
 
-See also: [README](../README.md) · [Prompts](Prompts.md) · [Code](Code.md) · [Punishment](Punishment.md) · [Events](Events.md)
+See also: [prompts.md](prompts.md) · [punishment.md](punishment.md) · [events.md](events.md) · [../developers/papyrus.md](../developers/papyrus.md)
 
 ## Where
 
@@ -62,7 +62,7 @@ SkyrimNet has a **hard limit of 8 parameters** on action YAMLs (`parameterMappin
 
 ### 1. DOM_Keys (social / pose / chore)
 
-Calls Diary of Mine directly. Example: [`DOMSlave_Be_PraisedTell.yaml`](../SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_Be_PraisedTell.yaml)
+Calls Diary of Mine directly. Example: [`DOMSlave_Be_PraisedTell.yaml`](../../SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_Be_PraisedTell.yaml)
 
 - `scriptName: DOM_Keys`
 - `executionFunctionName: DOMDoActionActor`
@@ -72,7 +72,7 @@ Copy a `Be_` or `Pose_` sibling and change the static event/type values to match
 
 ### 2. SkyrimNet_DOM_Actions (sex / punish / dress)
 
-Calls our bridge, which talks to DOM and/or SkyrimNet_SexLab. Example: [`DOMSlave_punish_spanking.yaml`](../SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_punish_spanking.yaml)
+Calls our bridge, which talks to DOM and/or SkyrimNet_SexLab. Example: [`DOMSlave_punish_spanking.yaml`](../../SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_punish_spanking.yaml)
 
 Common execute functions:
 
@@ -81,7 +81,7 @@ Common execute functions:
 - `UndressDress_Execute` / `Dress_Execute`
 - `AddPunishmentReason`
 
-**Parameter names in YAML must match the Papyrus function signature** (see [Code](Code.md)). Wrong names or counts fail at runtime. Stay within the **8-parameter** hard limit above.
+**Parameter names in YAML must match the Papyrus function signature** (see [../developers/papyrus.md](../developers/papyrus.md)). Wrong names or counts fail at runtime. Stay within the **8-parameter** hard limit above.
 
 `StartScene_Consensual_Three` and `StartScene_Nonconsensual_Two` omit `style` from the quest mapping and always pass `style=""` into SexLab. Two-person consensual YAML (`sex_start_2_penis` / `sex_start_2_no_penis`) still maps `style` into `StartScene_Consensual_Two`.
 
@@ -143,7 +143,7 @@ YAML faction rules alone are not enough for those actions.
 
 ## Punishment reasons
 
-Refuse / punish-other actions pass a `reason` string into `AddPunishmentReason`. Full checklist: [Punishment](Punishment.md).
+Refuse / punish-other actions pass a `reason` string into `AddPunishmentReason`. Full checklist: [punishment.md](punishment.md).
 
 Short version: strings must resolve via `punishment_reason.json` + DOM indexes + `dom_punishment_reason.prompt`. YAML-only changes are not enough.
 

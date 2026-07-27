@@ -2,4 +2,14 @@ temp
 ignore
 Headers
 
-python_scripts release-guide.xml review-guide.xml SKSE
+# Local / agent noise (do not commit)
+SSEEdit Cache/
+*.refcache
+versions/
+Source copy/
+Headers_Source/
+fomod-source copy/
+release-guide copy.xml
+crashlog.txt
+crash-*.log
+Papyrus.0.log

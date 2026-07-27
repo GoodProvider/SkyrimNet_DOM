@@ -1,8 +1,8 @@
 # Developer guide (Papyrus)
 
-How SkyrimNet_DOM bridges Diary of Mine to SkyrimNet. For YAML/prompt editing, see [Actions](Actions.md) and [Prompts](Prompts.md). Overview: [README](../README.md).
+How SkyrimNet_DOM bridges Diary of Mine to SkyrimNet. For YAML/prompt editing, see [../authors/actions.md](../authors/actions.md) and [../authors/prompts.md](../authors/prompts.md). Overview: [../players/overview.md](../players/overview.md).
 
-Also: [Events](Events.md) · [Punishment](Punishment.md) · [Content](Content.md). Full Papyrus / string-pool conventions: [AGENTS.md](../AGENTS.md).
+Also: [../authors/events.md](../authors/events.md) · [../authors/punishment.md](../authors/punishment.md) · [../authors/content.md](../authors/content.md). Contracts: [../reference/papyrus-rules.md](../reference/papyrus-rules.md), [../reference/json-keys.md](../reference/json-keys.md), [../reference/protocol-tokens.md](../reference/protocol-tokens.md).
 
 ## Role
 
@@ -22,7 +22,7 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | Script | Responsibility |
 |--------|----------------|
 | `SkyrimNet_DOM_Main` | Init / Setup; load punishment indexes + `punishment_reason.json`; register decorators; kick Actions/Events Setup |
-| `SkyrimNet_DOM_Events` | DOM → Direct Narration / `RegisterEvent` / short-lived events; SexLab anim start/end hooks — see [Events](Events.md) |
+| `SkyrimNet_DOM_Events` | DOM → Direct Narration / `RegisterEvent` / short-lived events; SexLab anim start/end hooks — see [../authors/events.md](../authors/events.md) |
 | `SkyrimNet_DOM_Actions` | YAML-callable executes: scenes, masturbate, dress/undress, `AddPunishmentReason` |
 | `SkyrimNet_DOM_API` | Shared helpers (`GetSlave`, `AddPunishmentReason`, scene wrappers, tracing) |
 | `SkyrimNet_DOM_Decorators` | Registers `dom_get_actor_info` for prompts |
@@ -33,7 +33,7 @@ Legacy `Register_Actions()` from `actions.json` is commented out — SkyrimNet l
 
 ## Punishment pipeline
 
-Full checklist: [Punishment](Punishment.md).
+Full checklist: [../authors/punishment.md](../authors/punishment.md).
 
 1. DOM’s `PunishmentReasons.json` (StorageUtilData) → numeric indexes
 2. `SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json` → LLM-facing names / aliases → those indexes
@@ -42,13 +42,13 @@ Full checklist: [Punishment](Punishment.md).
 ## SexLab bridge / arousal
 
 - YAML sex/punish/masturbate executes call `SkyrimNet_DOM_Actions`, which forwards into **SkyrimNet_SexLab** scene helpers / scene manager — not DOM sex APIs directly.
-- Watch the [8-parameter](Actions.md) limit (`style` dropped on some signatures).
-- DOM owns arousal; SLSO and other arousal mods do not drive DOM’s arousal factor (README Notes).
-- Anim start/end + orgasm notification routing: [Events](Events.md).
+- Watch the [8-parameter](../authors/actions.md) limit (`style` dropped on some signatures).
+- DOM owns arousal; SLSO and other arousal mods do not drive DOM’s arousal factor ([../players/overview.md](../players/overview.md)).
+- Anim start/end + orgasm notification routing: [../authors/events.md](../authors/events.md).
 
 ## Paused actor JSON
 
-DN paths call `SaveActorInfo`, writing `SKSE/Plugins/SkyrimNet_DOM/actors/<DisplayName>.json` for paused-prompt fallback. Live prompts use `dom_get_actor_info` — see [Prompts](Prompts.md) and [Events](Events.md).
+DN paths call `SaveActorInfo`, writing `SKSE/Plugins/SkyrimNet_DOM/actors/<DisplayName>.json` for paused-prompt fallback. Live prompts use `dom_get_actor_info` — see [../authors/prompts.md](../authors/prompts.md) and [../authors/events.md](../authors/events.md).
 
 ## When YAML is not enough
 
@@ -59,20 +59,14 @@ DN paths call `SaveActorInfo`, writing `SKSE/Plugins/SkyrimNet_DOM/actors/<Displ
 
 Parameter names and counts in YAML must match Papyrus exactly.
 
-## Conventions (short)
+## Conventions
 
-- Functions/Events: UpperCamelCase matching `EndFunction` / `EndEvent`
-- Variables/properties: lowerCamel / snake mix
-- Arrays: use `if a` — never `if a == None` (runtime error)
-- JSON keys for external consumers: bare lowercase (via SexLab `ObjectToLowerCaseKeyJson` where used)
-- Protocol **values** for case-sensitive matching: wrap in underscores (`_gagged_`) — not JSON keys
-
-See [AGENTS.md](../AGENTS.md) for the full list.
+Do not restate contracts here — see [../reference/papyrus-rules.md](../reference/papyrus-rules.md), [../reference/json-keys.md](../reference/json-keys.md), [../reference/protocol-tokens.md](../reference/protocol-tokens.md).
 
 ## Compile / tools
 
-- Project compile: `skyrimse.ppj` (preferred for this repo)
-- Caprica / Champollion: see tools notes in AGENTS.md
+- Project compile: `skyrimse.ppj` / Cursor task **`compile: pyro`** when available
+- Caprica / Champollion under game `tools/` (see [AGENTS.md](../../AGENTS.md))
 - Always include commented lines when citing line numbers
 
 ## Dependencies in code

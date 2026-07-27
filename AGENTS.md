@@ -1,176 +1,116 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Agent guidance for SkyrimNet_DOM (SkyrimNet ↔ Diary of Mine bridge, with SkyrimNet_SexLab).
 
-## What This Is
+## What this is
 
-A Skyrim mode that acts as a bridge between SkyrimNet and SexLab Framework.
+Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go through SkyrimNet_SexLab.
 
-## Key Paths
+## Key paths
 
-- **Repository root**: `c:\Skyrim\dev\mods\SkyrimNet_SexLab`
-- **Project Scripts (source)**: `Scripts/Source`
-- **Compiled Scripts output**: `Scripts` (project `Output`)
-- **Papyrus Headers**: `Headers`
-- **Guides**: `guides/` — [Actions](guides/Actions.md), [Prompts](guides/Prompts.md), [Events](guides/Events.md), [Punishment](guides/Punishment.md), [Content](guides/Content.md), [Code](guides/Code.md)
-- **SkyrimNet_SexLab docs**: [README](../SkyrimNet_SexLab/README.md) and guides — [Actions](../SkyrimNet_SexLab/guides/Actions.md), [Prompts](../SkyrimNet_SexLab/guides/Prompts.md), [Animations](../SkyrimNet_SexLab/guides/Animations.md), [Code](../SkyrimNet_SexLab/guides/Code.md)
+| Path | Role |
+|------|------|
+| `Scripts/Source/` | Papyrus source |
+| `Scripts/` | Compiled `.pex` |
+| `Headers/` | Papyrus headers |
+| `skyrimse.ppj` | Pyro project |
 
-These are the authoritative locations used by the Papyrus project file `skyrimse.ppj` for imports and compilation.
+Repo root: `c:\Skyrim\dev\mods\SkyrimNet_DOM`.
 
-# Papyrus rules 
-- Papyrus is case insensitive, so these are only for human reviewers
-- Papyrus does not allow an array variable (String[] a for example) to be compared to None `if a == None`, it must always be checked directly `if a`
-```Papayrus
-String[] a = None 
-; This will check that a is not None and not empty.
-if a 
-; This will cause run time errors
-if a == None
-- Papyrus is case insensitive (aA == Aa == aa == AA) 
-```
-  
-   - correct `String[] a = None; If a 
-## Commit Messages
-the first 72 character of a git must summaries the commit.
-```
-Update docs and adjust YAML eligibility rules:
-- Removed obsolete documentation files (Actions.md, Code.md, 
-  Prompts.md).
-- Updated AGENTS.md and README.md references to reflect the 
-  new guides structure.
-- Replaced `skyrimnet_sexlab_actor_lock` with 
-  `skyrimnet_sexlab_scene_actor_lock` in YAML action files.
-- Enhanced descriptions in punishment YAML files for clarity 
-  and consistency.
-```
+Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_SexLab/docs/) and [README](../SkyrimNet_SexLab/README.md).
 
-## String case and external consumers
-- Skyrim is case-insensitive for string identity. It uses the **first casing** of a given string that appears in the load order; later sources that differ only by case reuse that pooled form.
-- The game's **internal casing is unstable** across installs/load orders — do not rely on Title Case vs lowercase surviving unchanged.
-- When a string must be matched **outside** Skyrim (prompts, Inja `contains`, JSON tooling, SKSE plugins that do case-sensitive compares), wrap the token in underscores to guarantee uniqueness and a stable literal, e.g. `_pleasure_`, `_pain_`, `_gagged_`, `_kissing_`.
-- Plain English words without wrapping are unsafe as protocol tokens for external matching.
+## Documentation map
 
-## JSON keys for Skyrim-generated, externally processed JSON
-- Keys in JSON that Skyrim emits and that is consumed outside the game (decorators, threads.json, prompts) are **bare lowercase**, e.g. `speaking_modifiers`, `actors`, `uuid`.
-- Always serialize via `SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson` so export casing is stable regardless of Skyrim's string pool.
-- Leading `_` is reserved for protocol **values** only (e.g. `_pleasure_`, `_pain_`), not for JSON keys.
+| Job | Read |
+|-----|------|
+| Agent router | [llms.txt](llms.txt) |
+| Players | [docs/players/overview.md](docs/players/overview.md) |
+| Action YAML | [docs/authors/actions.md](docs/authors/actions.md) |
+| Prompts | [docs/authors/prompts.md](docs/authors/prompts.md) |
+| Events | [docs/authors/events.md](docs/authors/events.md) |
+| Punishment | [docs/authors/punishment.md](docs/authors/punishment.md) |
+| Content | [docs/authors/content.md](docs/authors/content.md) |
+| Papyrus | [docs/developers/papyrus.md](docs/developers/papyrus.md) |
+| Release docs | [release-guide.xml](release-guide.xml) + [release-checkpoint.xml](release-checkpoint.xml) |
 
-## naming convention  
-- Constant variable are all upper case: THIS_IS_A_CONSTANT
-- properties and variables:
-   -  start with a lower case letter: thisIsAVairable,  thisIs_Variable
-   - use mix of snake_case and camelCase
-- Functions and Events start with an Upper case letter. ThisIsAFunction, ThisIs_Function
-   - Match case to the close EndFunction, EndEvent 
+### Canonical contracts (do not restate elsewhere)
 
-## Prompts 
-SKSE/Plugins/SkyrimNet/prompts/submodules/character_bio's prompts are in the same namespace 
-SKSE/Plugins/SkyrimNet/prompts/submodules/user_final_instructions each prompt is it's own namespace.
+| Topic | File |
+|-------|------|
+| Papyrus language / naming / traces | [docs/reference/papyrus-rules.md](docs/reference/papyrus-rules.md) |
+| Protocol value tokens (`_pain_`, …) | [docs/reference/protocol-tokens.md](docs/reference/protocol-tokens.md) |
+| External JSON keys | [docs/reference/json-keys.md](docs/reference/json-keys.md) |
 
-#### Skyrim_DOM works with SkyrimNet_SexLab's prompts
-../SkyrimNet_SexLab/SKSE/Plugins/SkyrimNet/prompts
+## Compile
 
-## Installed Modding Tools
-Always include commented lines when calculating line number.
+- Papyrus: VS Code/Cursor task **`compile: pyro`** / `skyrimse.ppj` only (unless maintainer asks otherwise).
 
-All under `tools/`:
+Tools under game `tools/`: Champollion, Caprica, XEditLib, Spriggit (see notes in historical sessions / sibling repo).
 
-| Tool | Purpose | Usage |
-|------|---------|-------|
-| **Champollion** | Decompile Papyrus `.pex` → `.psc` | `tools/Champollion/Champollion.exe input.pex` |
-| **Caprica** | Compile Papyrus `.psc` → `.pex` | `tools/Caprica/Caprica.exe --game skyrim --import "Data/Scripts/Source" input.psc` |
-| **XEditLib.dll** | Programmatic ESP/ESM reading via FFI | Load with koffi in Node.js (see below) |
-| **Spriggit** | ESP ↔ YAML/JSON conversion (.NET) | `dotnet tool run spriggit serialize ...` |
+## Commit messages
 
-> **Note**: Install tools you need into a `tools/` folder in your game directory. See the [xeditlib](https://github.com/WingedGuardian/xeditlib) repo for XEditLib setup.
+Format (required for agent-generated commits):
 
-## INI Config Hierarchy
+1. Subject: ≤ ~72 chars, imperative summary of *why* / outcome (not a file dump).
+2. Blank line.
+3. Body: multi-line `-` bullets naming concrete artifacts (paths, keys, YAML action names, FormIDs).
 
-Settings load in this order (later overrides earlier):
-1. `Skyrim.ini` -- base settings
-3. `SkyrimPrefs.ini` -- user preferences (loaded last)
+Do not use a single paragraph essay. Do not use vague subjects (`update`, `fix`, `wip`, `compiled`).
 
-## Nexus Mod Research (Standing Rule)
+Good:
 
-**Always search a mod's Nexus mod page before investigating it.** Check the description, tutorials/articles, comments, and bug reports before going in blind. This saves enormous time -- most issues have been seen and documented by other users.
+    Fix DOM slave sex start eligibility for no-penis scenes
 
-## Knowledgebase
+    - SKSE/.../DOMSlave_sex_start_2_no_penis.yaml: gate on HasPenis
+    - Scripts/Source/SkyrimNet_DOM_Actions.psc: StartScene_Consensual_Two target assign
+    - docs/reference/json-keys.md: document bare lowercase keys
 
-`KNOWLEDGEBASE.md` (project root) is the master reference for all discovered quirks, gotchas, and cross-version differences. **Always consult it before making changes** to avoid repeating past mistakes.
+Bad:
 
-**Standing instruction**: After every debugging session, mod investigation, or web research, extract any new facts (engine quirks, VR vs SSE differences, API gotchas, tool limitations) and add them to KNOWLEDGEBASE.md. We learn from everything we come into contact with.
+    Refactored action functions and YAML configurations for improved clarity...
 
-## Top Gotchas (Always In Context)
+## Standing rules
 
-These are the most dangerous/common pitfalls. Consult `KNOWLEDGEBASE.md` for full details.
+- **Nexus first:** search the mod’s Nexus page before investigating blind.
+- **Knowledgebase:** consult [KNOWLEDGEBASE.md](KNOWLEDGEBASE.md) before changes; append new quirks after sessions.
+- **INI load order:** Skyrim.ini then SkyrimPrefs.ini (last wins).
+- **SE ≠ VR** — never assume parity.
+- **Prompts:** `character_bio` files share one namespace; each `user_final_instructions` file is its own namespace. DOM prompts coexist with SkyrimNet_SexLab under `SKSE/Plugins/SkyrimNet/prompts`.
 
-1. **RemoveSpell doesn't fire OnEffectFinish** -- use `DispelSpell` when cleanup logic exists
-2. **All effects on a spell must have the same casting type** -- mismatches cause silent failure
-3. **VMAD editing is fragile** -- use `GetFormFromFile()` to minimize properties; xEdit can't add scripts to VMAD
-4. **PlayIdle fails in VR** -- VRIK overrides skeleton IK; bypass with timed Papyrus scripts
-5. **Wait() unreliable under 100ms** -- merge sub-100ms gaps; use `RegisterForSingleUpdate` when possible
-6. **SSE != VR** for: camera, skeleton, collision, UI, input, SKSE addresses, physics (60Hz->90Hz)
-7. **ESL FormIDs must be in xx000800-xx000FFF** -- exceeding = crash or data corruption
-8. **Loose files always override BSAs** -- check for loose file conflicts before assuming BSA content wins
-9. **Condition OR has precedence over AND** -- `A AND B OR C` != what you'd expect
-10. **Non-auto properties don't restore from master on save/load** -- they stay blank
-11. **PreWEAPON/PreSHIELD skeleton nodes cause CTD in VR** -- must be removed
-12. **ONAM required for ESM temp record overrides** -- missing ONAM = game silently ignores overrides
-13. **SetVehicle causes HMD desync in VR** -- avoid entirely
-14. **GoToState("") in OnUnload -> Self=None crash** -- move to OnLoad instead
-15. **Navmesh creation is CK-only** -- xEdit can only delete, never recreate
+### Top gotchas (see KNOWLEDGEBASE for detail)
 
-## Safety Rules
+RemoveSpell vs DispelSpell; spell effect casting types; fragile VMAD; PlayIdle fails in VR; Wait() under 100ms unreliable; ESL FormID range; loose files override BSA; Condition OR > AND; non-auto properties blank on load; PreWEAPON/PreSHIELD CTD in VR; ONAM for ESM temps; SetVehicle HMD desync; GoToState("") in OnUnload; navmesh CK-only.
 
-Hooks in `.claude/settings.json` enforce these automatically:
+## Safety rules
 
-### Hard blocked (cannot proceed)
-- Deleting the game installation directory or config directory
-- Deleting Bethesda registry keys
-- Directly writing to ESP/ESM/ESL/BSA/BA2 files (use xelib or modding tools)
+Hooks in `.claude/settings.json` may enforce these.
 
-### Requires user confirmation
-- **Any edit to ANY file** in the game directory or config directory (catch-all)
-- Papyrus scripts (`.psc`, `.pex`)
-- Skyrim INI files (Skyrim.ini, SkyrimVR.ini, SkyrimPrefs.ini)
-- SKSE plugin configs (`Data/SKSE/Plugins/*.ini`)
-- Load order files (loadorder.txt, plugins.txt)
-- Any `rm`, `mv`, `cp`, redirect, or `sed -i` touching game/config directories
-- Any bash command referencing plugin/archive files
+### Hard blocked
 
-### General rules
-- **Always review changes before applying** -- this is a delicate install
-- Never modify ESP/ESM files directly -- use xelib programmatically or Spriggit
-- User is knowledgeable about Skyrim modding and INI settings
+- Deleting game/config install dirs or Bethesda registry keys
+- Direct writes to ESP/ESM/ESL/BSA/BA2 (use xelib / Spriggit)
 
-### Safety improvement loop
-After every session, near-miss, or unexpected outcome, evaluate whether a new hook, expanded protection, or knowledgebase entry could have prevented or caught the issue. Propose new hooks when a pattern of risk emerges -- not reactively after damage, but proactively when you notice a gap. Document proposed hooks in the "Hook Candidates" section of `KNOWLEDGEBASE.md` even if not immediately implemented.
+### Requires confirmation
 
-### Audit trail
-- Every file edit is auto-backed up to `.claude/backups/` with timestamp
-- An audit log at `.claude/backups/AUDIT_LOG.txt` records every file touched, when, and by which tool
+- Edits in game/config directories; `.psc`/`.pex`; Skyrim INIs; SKSE plugin INIs; load-order files; destructive shell on those trees
 
-## Confidence Levels (Mandatory)
+### General
 
-**Before proposing ANY change** to game files, configs, scripts, or ESP records, you MUST:
+- Review diffs before applying; user knows modding/INI; propose hook/KB gaps when risk patterns appear
+- Audit trail may live under `.claude/backups/`
 
-1. **State a confidence level** (0-100%) for each proposed change
-2. **List assumptions** that the confidence level depends on
-3. **Investigate before acting**: Check the knowledgebase, read relevant source files, and web-search for Skyrim/VR-specific quirks before committing to an approach. Skyrim has many built-in bugs and version-specific differences -- things frequently do NOT work as expected.
-4. **Target >= 90% confidence** before touching anything. If below 90%, document what's uncertain and what additional research would raise it.
-5. **Never assume Skyrim SE behavior = Skyrim VR behavior.** Always verify VR-specific differences.
+## Confidence (mandatory before game/script/ESP changes)
 
-### Confidence scale
-| Range | Meaning | Action |
-|-------|---------|--------|
-| 95-100% | Verified via testing, docs, or authoritative source | Proceed with user confirmation |
-| 80-94% | Strong evidence but not fully verified | Proceed with caveats noted |
-| 60-79% | Reasonable assumption, some unknowns | Research more before proceeding |
-| < 60% | Speculative | Do NOT proceed -- investigate first |
+1. State confidence 0–100% and assumptions
+2. Investigate: KNOWLEDGEBASE, sources, web for SE/VR quirks
+3. Target ≥ 90%; if lower, document gaps
+4. Never assume SE = VR
 
-### Investigation checklist (before any change)
-- [ ] Consulted `KNOWLEDGEBASE.md` for known quirks
-- [ ] Read the actual source files involved
-- [ ] Web-searched for known issues with this approach
-- [ ] Considered rollback path if the change breaks something
-- [ ] Evaluated whether this task reveals a gap in current hook coverage
+| Range | Action |
+|-------|--------|
+| 95–100% | Proceed with confirmation |
+| 80–94% | Proceed with caveats |
+| 60–79% | Research more |
+| < 60% | Do not proceed |
+
+Checklist: KB → sources → web → rollback → hook-gap check.

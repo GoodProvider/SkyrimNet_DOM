@@ -6,5 +6,5 @@
 - Tightened `Be_FlatteredSexy` eligibility (`required: true`); `Be_Refused` uses `rejector`
 - Hardened null checks for punishment reasons, event registration, and masturbate stop/threads
 - Animation-end cleanup now routes through `GetActorsFinishedWithScene` (incl. SexLab clear-animating)
-- Moved author docs to `guides/`; README/AGENTS updated
+- Moved author docs to `docs/` (players / authors / developers / reference); README/AGENTS/llms updated
 - Release zip includes full `SKSE/` again (0.0.3 was scripts-only)

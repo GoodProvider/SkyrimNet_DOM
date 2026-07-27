@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  release-checkpoint.xml — cold-start context for release documentation of SkyrimNet_DOM.
+
+  Purpose: feed this file together with release-guide.xml to a fresh agent so it can
+  continue release-doc alignment without rediscovering the ground rules.
+
+  Design: durable release-doc state only. Per-change detail lives in CHANGELOG.md.
+-->
+<checkpoint>
+  <metadata>
+    <project>SkyrimNet_DOM</project>
+    <summary>Bridge mod between SkyrimNet (LLM) and Diary of Mine (with SkyrimNet_SexLab).</summary>
+    <repository_root>c:\Skyrim\dev\mods\SkyrimNet_DOM</repository_root>
+    <updated>2026-07-27</updated>
+    <base_tag>0.0.2</base_tag>
+    <next_version>0.0.4</next_version>
+    <version_status>Makefile / fomod already report 0.0.4; versions/SkyrimNet_DOM 0.0.4.zip exists; git tags only through 0.0.2 (0.0.4 untagged)</version_status>
+    <related_artifacts>
+      <artifact role="release rules / persona">release-guide.xml</artifact>
+      <artifact role="agent router">llms.txt</artifact>
+      <artifact role="changelog since last tag">CHANGELOG.md</artifact>
+      <artifact role="end-user front door">README.md</artifact>
+      <artifact role="players">docs/players/overview.md</artifact>
+      <artifact role="action authoring">docs/authors/actions.md</artifact>
+      <artifact role="prompt authoring">docs/authors/prompts.md</artifact>
+      <artifact role="developer guide">docs/developers/papyrus.md</artifact>
+      <artifact role="contracts">docs/reference/</artifact>
+      <artifact role="quirks">KNOWLEDGEBASE.md</artifact>
+    </related_artifacts>
+  </metadata>
+
+  <doc_files>
+    <file>README.md</file>
+    <file>llms.txt</file>
+    <file>CHANGELOG.md</file>
+    <file>CHANGELOG-user.md</file>
+    <file>KNOWLEDGEBASE.md</file>
+    <file>AGENTS.md</file>
+    <file>docs/players/overview.md</file>
+    <file>docs/players/requirements.md</file>
+    <file>docs/authors/actions.md</file>
+    <file>docs/authors/prompts.md</file>
+    <file>docs/authors/events.md</file>
+    <file>docs/authors/punishment.md</file>
+    <file>docs/authors/content.md</file>
+    <file>docs/developers/papyrus.md</file>
+    <file>docs/reference/papyrus-rules.md</file>
+    <file>docs/reference/protocol-tokens.md</file>
+    <file>docs/reference/json-keys.md</file>
+    <file>release-checkpoint.xml</file>
+    <file>release-guide.xml</file>
+  </doc_files>
+
+  <status>
+    <note>2026-07-27: docs migrated guides/ → docs/ (players, authors, developers, reference); llms.txt and release-checkpoint added; AGENTS thinned; KNOWLEDGEBASE stub created. documentation-guide.xml not kept in this repo.</note>
+    <note>Open: commit remaining code + docs if desired; git tag 0.0.4 when ready to ship (zip already present).</note>
+  </status>
+
+  <conventions>
+    <convention>External JSON keys: bare lowercase via ObjectToLowerCaseKeyJson. Canonical: docs/reference/json-keys.md</convention>
+    <convention>Protocol values: underscore-wrapped (_pain_, _pleasure_, _gagged_, _kissing_). Canonical: docs/reference/protocol-tokens.md</convention>
+    <convention>Actor lock StorageUtil key: skyrimnet_sexlab_scene_actor_lock.</convention>
+    <convention>Two-person consensual sex: DOMSlave_Sex_Two_Fucking (penis, empty setting_name) vs DOMSlave_Sex_Two_Giving (no_penis).</convention>
+  </conventions>
+</checkpoint>

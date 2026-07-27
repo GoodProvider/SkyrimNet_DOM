@@ -2,12 +2,12 @@
 
 End-to-end mapping from LLM/YAML reason strings to Diary of Mine punishment indexes.
 
-See also: [Actions](Actions.md) · [Prompts](Prompts.md) · [Code](Code.md)
+See also: [actions.md](actions.md) · [prompts.md](prompts.md) · [../developers/papyrus.md](../developers/papyrus.md)
 
 ## Pipeline
 
-1. **DOM indexes** — `Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/PunishmentReasons.json` loaded at Setup into `punishment_to_index` ([`SkyrimNet_DOM_Main.psc`](../Scripts/Source/SkyrimNet_DOM_Main.psc)).
-2. **SkyrimNet map** — [`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`](../SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json) registers each `reason` (and each `alias`) → `index` + narration `description`.
+1. **DOM indexes** — `Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/PunishmentReasons.json` loaded at Setup into `punishment_to_index` ([`SkyrimNet_DOM_Main.psc`](../../Scripts/Source/SkyrimNet_DOM_Main.psc)).
+2. **SkyrimNet map** — [`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`](../../SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json) registers each `reason` (and each `alias`) → `index` + narration `description`.
 3. **YAML / Papyrus** — refuse / punish-other / some scene fails call `SkyrimNet_DOM_Actions.AddPunishmentReason` → `SkyrimNet_DOM_API.AddPunishmentReason`.
 4. **DOM** — `slave.mind.AddNextPunishmentReason(index)`.
 5. **SkyrimNet** — `RegisterEvent("Reason to Punish", msg, slave, superior)` (not Direct Narration).
@@ -15,6 +15,8 @@ See also: [Actions](Actions.md) · [Prompts](Prompts.md) · [Code](Code.md)
 Unknown reason tokens resolve to the default (`"no reason"` / index 0). Check the Papyrus log for `unknown reason token`.
 
 ## JSON entry shape
+
+From [`punishment_reason.json`](../../SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json) (full file is source of truth):
 
 ```json
 {
@@ -36,7 +38,7 @@ Empty/missing description falls back to a generic “refused to obey … command
 
 ## Helper prompt
 
-[`dom_punishment_reason.prompt`](../SKSE/Plugins/SkyrimNet/prompts/helpers/dom_punishment_reason.prompt) is a pipe-separated allowlist for the LLM. Keep it in sync when you add or rename reasons the model must choose.
+[`dom_punishment_reason.prompt`](../../SKSE/Plugins/SkyrimNet/prompts/helpers/dom_punishment_reason.prompt) is a pipe-separated allowlist for the LLM. Keep it in sync when you add or rename reasons the model must choose.
 
 ## YAML entry points
 
@@ -46,7 +48,7 @@ Empty/missing description falls back to a generic “refused to obey … command
 | `DOMSlave_PunishementOther.yaml` | Free-form / other reasons |
 | Scene helpers | May inject fixed reasons (e.g. `didnt obey`, `didnt listen`) |
 
-Parameter names must match Papyrus (`reason`, `rejector`, `superior`). Stay within the [8-parameter YAML limit](Actions.md).
+Parameter names must match Papyrus (`reason`, `rejector`, `superior`). Stay within the [8-parameter YAML limit](actions.md).
 
 ## Checklist: add a reason
 

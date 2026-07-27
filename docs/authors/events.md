@@ -1,12 +1,12 @@
 # DOM events → SkyrimNet
 
-How Diary of Mine activity reaches the LLM: Direct Narration, aged notifications, and SkyrimNet events. Source: [`SkyrimNet_DOM_Events.psc`](../Scripts/Source/SkyrimNet_DOM_Events.psc).
+How Diary of Mine activity reaches the LLM: Direct Narration, aged notifications, and SkyrimNet events. Source: [`SkyrimNet_DOM_Events.psc`](../../Scripts/Source/SkyrimNet_DOM_Events.psc).
 
-See also: [README](../README.md) · [Code](Code.md) · [Prompts](Prompts.md)
+See also: [../developers/papyrus.md](../developers/papyrus.md) · [prompts.md](prompts.md) · [punishment.md](punishment.md)
 
 ## Why chat can be quiet
 
-DOM emits far more activity than we forward as Direct Narration. Much of it lands in history, short-lived events, or a per-actor **notification ring buffer** that bio prompts age into minutes/hours/days. Occasional manual Direct Narration still helps frame the story you want (see README Notes).
+DOM emits far more activity than we forward as Direct Narration. Much of it lands in history, short-lived events, or a per-actor **notification ring buffer** that bio prompts age into minutes/hours/days. Occasional manual Direct Narration still helps frame the story you want (see [../players/overview.md](../players/overview.md)).
 
 ## Delivery paths
 
@@ -17,7 +17,7 @@ DOM emits far more activity than we forward as Direct Narration. Much of it land
 | `RegisterEvent` | Structured facts (e.g. lost virginity, reason to punish) | SkyrimNet event history (not necessarily DN) |
 | `RegisterShortLivedEvent` | Ephemeral context | TTL’d event; expires from short-lived store |
 
-`AddPunishmentReason` (API) uses `RegisterEvent("Reason to Punish", …)` — see [Punishment](Punishment.md).
+`AddPunishmentReason` (API) uses `RegisterEvent("Reason to Punish", …)` — see [punishment.md](punishment.md).
 
 ## SaveActorInfo (paused bio JSON)
 
@@ -27,7 +27,7 @@ Every DN / optional-DN path calls `SaveActorInfo(slave)`, which writes:
 Data/SKSE/Plugins/SkyrimNet_DOM/actors/<DisplayName>.json
 ```
 
-That file is what prompts use when time is paused (`read_json("SkyrimNet_DOM/actors/<name>.json")`). Live play prefers the `dom_get_actor_info` decorator instead. See [Prompts](Prompts.md).
+That file is what prompts use when time is paused (`read_json("SkyrimNet_DOM/actors/<name>.json")`). Live play prefers the `dom_get_actor_info` decorator instead. See [prompts.md](prompts.md). Keys: [../reference/json-keys.md](../reference/json-keys.md).
 
 ## What is registered today
 
@@ -47,7 +47,7 @@ Orgasm text in `DOMOnNotificationSent` is routed to `SkyrimNet_SexLab_Handler_DO
 
 ## SexLab hooks
 
-`HookAnimationStart` / `HookAnimationEnd` keep scene state in sync with SkyrimNet_SexLab. Scene **starts** from YAML go through [Actions](Actions.md) → `SkyrimNet_DOM_Actions` → SexLab scene helpers, not through these ModEvents.
+`HookAnimationStart` / `HookAnimationEnd` keep scene state in sync with SkyrimNet_SexLab. Scene **starts** from YAML go through [actions.md](actions.md) → `SkyrimNet_DOM_Actions` → SexLab scene helpers, not through these ModEvents.
 
 ## Tips
 
