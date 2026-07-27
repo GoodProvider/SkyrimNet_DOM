@@ -1,6 +1,6 @@
 customCategory: domslave_sexual_activities
 name: DOMSLAVE_Sexual_Activities
-description: 'PARAMS: {"superior":"Actor", "target":"Actor", "style":"forceful|normal|gentle", "direction":"giving|getting|fucking a|fucked in", "method":"ass|pussy|mouth|masturbation|handjob|boobjob|thighjob|fisting|dildo|fingering|footjob", "participate":"Actor (three only)", "intent":"who, why, and how"} - [style] [direction] [method] sexual activities'
+description: 'PARAMS: {"superior":"Actor", "target":"Actor", "style":"forceful|normal|gentle (two only)", "direction":"giving|getting|fucking|fucked in", "method":"pussy|mouth|ass|oral|handjob|boobjob|thighjob|fisting|dildo|fingering|footjob|masturbation", "participate":"Actor (three only)", "intent":"who, why, and how"} - [direction] [method] sexual activities'
 enabled: true
 eligibilityRules:
   - conditions:

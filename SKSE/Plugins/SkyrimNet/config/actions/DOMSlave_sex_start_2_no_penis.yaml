@@ -1,6 +1,7 @@
 customCategory: domslave_sexual_activities
-name: DOMSlave_Sex_Two
-description: "[style] [direction] [method] with [Target]"
+name: DOMSlave_Sex_Two_Giving
+label: by mouth/hand/etc
+description: "Consensual [style] [direction] [method] with [Target]"
 questEditorId: SkyrimNet_DOM
 scriptName: SkyrimNet_DOM_Actions
 executionFunctionName: StartScene_Consensual_Two
@@ -23,13 +24,13 @@ parameterMapping:
     description: forceful|normal|gentle
   - type: dynamic
     name: method
-    description: ass|pussy|mouth|masturbation|handjob|boobjob|thighjob|fisting|dildo|fingering|footjob
+    description: oral|handjob|boobjob|thighjob|fisting|dildo|fingering|footjob
   - type: dynamic
     name: direction
-    description: giving|getting|fucking a|fucked in
+    description: getting|giving
   - type: static
     name: setting_name
-    value: ""
+    value: "no_penis"
 eligibilityRules:
   - conditions:
       - decoratorName: get_faction_rank

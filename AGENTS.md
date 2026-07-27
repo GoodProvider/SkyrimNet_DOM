@@ -11,7 +11,9 @@ A Skyrim mode that acts as a bridge between SkyrimNet and SexLab Framework.
 - **Repository root**: `c:\Skyrim\dev\mods\SkyrimNet_SexLab`
 - **Project Scripts (source)**: `Scripts/Source`
 - **Compiled Scripts output**: `Scripts` (project `Output`)
-- **Papyrus Headers**: `Headers` 
+- **Papyrus Headers**: `Headers`
+- **Guides**: `guides/` — [Actions](guides/Actions.md), [Prompts](guides/Prompts.md), [Events](guides/Events.md), [Punishment](guides/Punishment.md), [Content](guides/Content.md), [Code](guides/Code.md)
+- **SkyrimNet_SexLab docs**: [README](../SkyrimNet_SexLab/README.md) and guides — [Actions](../SkyrimNet_SexLab/guides/Actions.md), [Prompts](../SkyrimNet_SexLab/guides/Prompts.md), [Animations](../SkyrimNet_SexLab/guides/Animations.md), [Code](../SkyrimNet_SexLab/guides/Code.md)
 
 These are the authoritative locations used by the Papyrus project file `skyrimse.ppj` for imports and compilation.
 
@@ -28,6 +30,19 @@ if a == None
 ```
   
    - correct `String[] a = None; If a 
+## Commit Messages
+the first 72 character of a git must summaries the commit.
+```
+Update docs and adjust YAML eligibility rules:
+- Removed obsolete documentation files (Actions.md, Code.md, 
+  Prompts.md).
+- Updated AGENTS.md and README.md references to reflect the 
+  new guides structure.
+- Replaced `skyrimnet_sexlab_actor_lock` with 
+  `skyrimnet_sexlab_scene_actor_lock` in YAML action files.
+- Enhanced descriptions in punishment YAML files for clarity 
+  and consistency.
+```
 
 ## String case and external consumers
 - Skyrim is case-insensitive for string identity. It uses the **first casing** of a given string that appears in the load order; later sources that differ only by case reuse that pooled form.

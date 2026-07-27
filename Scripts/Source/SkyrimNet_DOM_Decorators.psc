@@ -3,10 +3,10 @@ Scriptname SkyrimNet_DOM_Decorators
 ; DOM Decorations  
 ;------------------------------------
 Function Trace(String func, String msg, Bool notification = false) global
-    SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Decorations", func, msg, notification)
+    SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_Decorators", func, msg, notification)
 EndFunction
 DOM_Actor Function GetSlave(String func, Actor akActor) global
-    return SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Decorations",func+".GetSlave", akActor,false,false)
+    return SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Decorators",func+".GetSlave", akActor,false,false)
 EndFunction
 string Function TraceReturn(String func, String msg, Bool Notification = false) global 
     Trace(func, msg, Notification) 
@@ -45,7 +45,7 @@ String Function Get_Actor_Info(Actor akActor) global
 
     SkyrimNet_DOM_Events events = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Events
     if events == None
-        Trace("Get_DOM_Slave_INfo","events is None")
+        Trace("Get_Actor_Info","events is None")
         return not_slave_json
     endif
 
@@ -53,7 +53,7 @@ String Function Get_Actor_Info(Actor akActor) global
     DOM_API api = DOM as DOM_API
     DOM_Core DOM01 = DOM as DOM_Core
     if api == None
-        Trace("Get_DOM_Slave_INfo","DOM_API is None")
+        Trace("Get_Actor_Info","DOM_API is None")
         return not_slave_json
     endif
     if !api.IsDOMSlave(akActor)

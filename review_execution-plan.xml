@@ -2,33 +2,41 @@
 <review_execution-plan>
   <meta>
     <title>SkyrimNet_DOM Review Execution Plan</title>
-    <pass>7</pass>
+    <pass>8</pass>
     <audience>AI agent</audience>
     <status>applied</status>
     <executed-note>
-      Pass 7 applied. User: Sex_One/Two/Three; remove third; re-enable mood;
-      Undress→UndressDress_Execute + PAH SetShouldBeNaked; Undress YAML description "undress".
+      Pass 8 applied. User: Sex_Two Fucking/Giving per SexLab sex2;
+      AnimationEnd → GetActorsFinishedWithScene; Dress/Undress no scene lock.
     </executed-note>
     <instruction>
-      Pass 7 complete. Do not modify Diary Of Mine scripts. Recompile Actions + Events.
+      Pass 8 complete. Do not modify Diary Of Mine scripts.
+      Recompile Events, API, Actions, Decorators.
     </instruction>
   </meta>
 
   <steps>
-    <step id="C1" actionable="true">Lock key skyrimnet_sexlab_scene_actor_lock</step>
-    <step id="C2" actionable="true">DOMSlave_Sex_One / Sex_Two / Sex_Three</step>
-    <step id="C3" actionable="true">Remove Actor third; Trace Consensual_Three</step>
-    <step id="I1" actionable="true">Nonconsensual_Two target/victim guards</step>
-    <step id="I2" actionable="true">sex_ category PARAMS</step>
-    <step id="I3" actionable="true">Register DOMOnMoodChange</step>
-    <step id="I4" actionable="true">Hug return</step>
-    <step id="M1" actionable="true">0305 grammar</step>
-    <step id="M2" actionable="true">UndressDress_Execute + Undress YAML</step>
-    <step id="M3" actionable="true">Trace labels (with C3)</step>
+    <step id="C1" actionable="true">
+      Rename sex_start_2_penis → DOMSlave_Sex_Two_Fucking (pussy|mouth|ass, fucking|fucked in);
+      sex_start_2_no_penis → DOMSlave_Sex_Two_Giving (giving methods, getting|giving, setting_name no_penis);
+      labels/descriptions; update DOMSlave_sex_.yaml PARAMS if needed.
+    </step>
+    <step id="I1" actionable="true">
+      SexLab_AnimationEnd: call GetActorsFinishedWithScene(Thread); restore DisableOrgasm;
+      collapse inline faction-only loop.
+    </step>
+    <step id="I2" actionable="true">AddPunishmentReason null-guard slave/mind/slaveActor</step>
+    <step id="I3" actionable="true">Be_FlatteredSexy required: true</step>
+    <step id="I4" actionable="false">Dress/Undress eligibility unchanged (wontfix)</step>
+    <step id="I5" actionable="true">GetThreads: if akSlave &amp;&amp; !IsBusy(akSlave)</step>
+    <step id="I6" actionable="true">Be_Refused name Speaker → rejector</step>
+    <step id="M1" actionable="true">StopScene_Masturbate guard d_keys</step>
+    <step id="M2" actionable="true">FightForMe_ Ordred → Ordered</step>
+    <step id="M3" actionable="true">Decorators Trace label typos</step>
   </steps>
 
   <post-apply>
-    <item>Recompile SkyrimNet_DOM_Actions.psc and SkyrimNet_DOM_Events.psc</item>
+    <item>Recompile SkyrimNet_DOM_Events.psc, SkyrimNet_DOM_API.psc, SkyrimNet_DOM_Actions.psc, SkyrimNet_DOM_Decorators.psc</item>
     <item>Checkpoint status applied</item>
   </post-apply>
 </review_execution-plan>

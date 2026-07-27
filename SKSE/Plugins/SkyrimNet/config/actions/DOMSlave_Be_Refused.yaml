@@ -9,7 +9,7 @@ parameterMapping:
     name: reason 
     value: didnt listen
   - type: speaker
-    name: Speaker
+    name: rejector
     description: Person who is refusing to listen
   - type: dynamic 
     name: superior

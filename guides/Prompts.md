@@ -2,7 +2,7 @@
 
 Users are expected to tweak DOM prompt files for bio context and action-selection instructions.
 
-See also: [README](README.md) · [Actions](Actions.md) · [Code](Code.md)
+See also: [README](../README.md) · [Actions](Actions.md) · [Code](Code.md) · [Punishment](Punishment.md) · [Events](Events.md)
 
 ## Trees
 
@@ -24,10 +24,12 @@ Typical flow:
 
 1. Check `DOMPlayerSlaveFaction`
 2. If live (not paused): `dom_get_actor_info(actorUUID)` (Papyrus decorator)
-3. Else / fallback: `read_json("SkyrimNet_DOM/actors/<name>.json")`
-4. Gate output on `dom_actor._loaded`
+3. Else / fallback: `read_json("SkyrimNet_DOM/actors/<name>.json")` (written by Events `SaveActorInfo` on DN — see [Events](Events.md))
+4. Gate output on `dom_actor.loaded`
 
 Do **not** re-`read_json` into `dom_actor` after it is already loaded — that clobbers Papyrus data (this bit `0413` before).
+
+Decorator JSON uses **bare lowercase** keys (`loaded`, `arousal_factor`, `is_slave`, …) via `ObjectToLowerCaseKeyJson`. Prefer fields already present on `dom_actor` over inventing new names.
 
 ### Render gates
 
@@ -41,8 +43,8 @@ Do not dump internal-only state into external dialogue modes.
 ### Adding a bio slice
 
 1. Pick a numeric prefix for sort order relative to existing files
-2. Gate on `dom_actor._loaded` (and faction / mode as needed)
-3. Read fields already on `dom_actor` — prefer underscore keys (`_arousal_factor`, `_is_slave`, …)
+2. Gate on `dom_actor.loaded` (and faction / mode as needed)
+3. Read fields already on `dom_actor` — bare lowercase keys (`arousal_factor`, `is_slave`, …)
 4. Keep one job per file (appearance vs bondages vs skills vs notifications)
 
 Aged notifications live in `7200_dom_notifications.prompt` (minutes / hours / days).
@@ -61,7 +63,7 @@ Because each file is isolated:
 - `helpers/dom_punishment_reason.prompt` — allowed punishment reason strings for the LLM (keep in sync with `punishment_reason.json`)
 - Sex-start helpers — used by older/legacy action description templates
 
-When you add a new punish reason to JSON, update the helper list too.
+When you add a new punish reason to JSON, update the helper list too — full checklist: [Punishment](Punishment.md).
 
 ## SexLab coexistence
 
@@ -70,7 +72,7 @@ Some prompts peek at SexLab state via:
 - Globals / decorators from SkyrimNet_SexLab
 - `read_json("SkyrimNet_SexLab/threads.json")` when time is paused
 
-Do not invent bare JSON keys for data Skyrim emits. Keys consumed outside the game should start with `_` (e.g. `_actors`, `_uuid`) so they stay unique under Skyrim’s case-insensitive string pool.
+Do not invent ad-hoc JSON keys for data Skyrim emits. Keys consumed outside the game should be **bare lowercase** (e.g. `actors`, `uuid`). Leading `_` is for protocol **values** (e.g. `_gagged_`), not keys — see AGENTS.md.
 
 ## Protocol tokens
 

@@ -23,4 +23,4 @@ eligibilityRules:
         comparisonOperator: ==
         expectedValue: 1
     logicalOperator: AND
-    required: false
+    required: true

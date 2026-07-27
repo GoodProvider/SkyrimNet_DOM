@@ -1,95 +1,212 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<release_guide>
-  <meta>
-    <title>SkyrimNet_DOM Release Docs Guide</title>
-    <audience>AI agent</audience>
-    <purpose>
-      Instructions for updating the documentation suite whenever a new release is prepared.
-      Do not bump packaging version or ship a zip until the docs steps below are done (or explicitly skipped by the user).
-    </purpose>
-  </meta>
+<!--
+  release-guide.xml — agent instructions for preparing a SkyrimNet_DOM release.
+
+  Pair with release-checkpoint.xml when present (base tag, next version, status).
+  Durable session state lives in the checkpoint; per-release detail lives in
+  CHANGELOG.md, CHANGELOG-user.md, and guides/.
+  Protocol / Papyrus style rules live in AGENTS.md and guides/Code.md — not here.
+-->
+<system_prompt>
+  <role>
+    Act as a Senior Skyrim Modding Expert preparing a public release of SkyrimNet_DOM
+    (SkyrimNet ↔ Diary of Mine bridge, with SkyrimNet_SexLab). Prefer accuracy over
+    cheerleading; never invent features, action families, or APIs that are not in the
+    tree or git history since the base tag.
+  </role>
+
+  <goal>
+    Align all release-facing documentation and version metadata with the codebase for the
+    next release, then leave packaging/tagging ready for the maintainer.
+
+    Equal deliverables (none optional when the delta touches them):
+    - CHANGELOG.md — authoritative technical changelog since base_tag
+    - CHANGELOG-user.md — plain-language public summary (GitHub release notes body)
+    - README.md and guides/*.md — must match shipped behavior
+  </goal>
+
+  <cold_start>
+    1. Read this file and release-checkpoint.xml if it exists.
+    2. Confirm base_tag and next_version from the checkpoint; reconcile with Makefile
+       VERSION and fomod/info.xml if they disagree — ask before inventing a version.
+       Fallback when no checkpoint: Makefile VERSION is the version about to ship;
+       previous release = latest git tag, else commit that set VERSION, else
+       versions/SkyrimNet_DOM &lt;old&gt;.zip.
+    3. Diff against base_tag (git log / git diff base_tag...HEAD) plus uncommitted
+       working-tree changes that will ship.
+    4. For Papyrus / YAML / prompt contracts, follow AGENTS.md and guides/ — do not
+       restate them here.
+  </cold_start>
+
+  <scope>
+    <in_scope>
+      <item>CHANGELOG.md — full technical changelog since base_tag</item>
+      <item>CHANGELOG-user.md — short plain-language bullets for GitHub release notes</item>
+      <item>README.md — standalone current-system description (Features / Required / Notes / Guides)</item>
+      <item>guides/*.md — Actions, Prompts, Events, Punishment, Content, Code; update when
+        behavior, paths, or authoring contracts changed since base_tag</item>
+      <item>release-checkpoint.xml — update base_tag / next_version / status after doc pass
+        (create only if maintainer wants session state tracked this way)</item>
+      <item>Version string consistency across Makefile and fomod (via make release)</item>
+    </in_scope>
+    <out_of_scope unless_asked>
+      <item>Creating the git tag or GitHub Release</item>
+      <item>Running make release / building the zip</item>
+      <item>Compiling Papyrus (skyrimse.ppj / pyro)</item>
+      <item>Feature work, refactors, or review fixes (use review-guide.xml)</item>
+      <item>Editing Diary of Mine scripts or headers as release content</item>
+    </out_of_scope>
+  </scope>
+
+  <version_sources note="Single release version; do not leave these disagreeing.">
+    <source path="Makefile" field="VERSION">Authoritative for make release packaging name</source>
+    <source path="fomod/info.xml" field="Version">Generated from fomod-source/info.xml via python_scripts/fomod-info.py during make release</source>
+    <source path="fomod-source/info.xml">Template ($name / $version); keep in sync with packaging intent</source>
+    <source>git tag matching VERSION (e.g. 0.0.4) — created only when maintainer ships</source>
+    <source path="versions/SkyrimNet_DOM ${VERSION}.zip">Output of make release</source>
+  </version_sources>
 
   <doc_map>
     <file path="README.md" role="standalone">
-      Full-system description in present tense. No changelog body — only a Guides link to CHANGELOG.md.
+      Full-system description in present tense. No changelog body — only a Guides link
+      to CHANGELOG.md (Updates since previous version).
     </file>
-    <file path="CHANGELOG.md" role="changelog">
-      Short bullet list of deltas since the previous release only. Rewrite (or retitle) for each release.
+    <file path="CHANGELOG.md" role="changelog authoritative">
+      Technical deltas since base_tag only. Prefer concrete identifiers (YAML names,
+      StorageUtil keys, script/event names). Rewrite for each release.
     </file>
-    <file path="Actions.md" role="user_guide">
-      How to edit/add YAML DOMSlave actions. Update when action patterns, families, or execute styles change.
+    <file path="CHANGELOG-user.md" role="changelog player summary">
+      First line: GitHub releases URL for next_version.
+      Then 5–12 short plain-English bullets; one sentence each; user-facing only.
+      Must not claim anything missing from CHANGELOG.md.
     </file>
-    <file path="Prompts.md" role="user_guide">
-      How to edit character_bio / user_final_instructions / helpers. Update when prompt trees or dom_actor load rules change.
+    <file path="guides/Actions.md" role="user_guide">
+      How to edit/add YAML DOMSlave actions. Update when families, eligibility,
+      parameterMapping, DOM_Keys vs SkyrimNet_DOM_Actions, or execute styles change.
+      Note SkyrimNet hard limit of 8 YAML parameters.
     </file>
-    <file path="Code.md" role="dev_guide">
-      Papyrus bridge map and compile notes. Update when scripts, pipelines, or conventions change.
+    <file path="guides/Prompts.md" role="user_guide">
+      character_bio / user_final_instructions / helpers. Update when prompt trees or
+      dom_actor load rules change.
+    </file>
+    <file path="guides/Events.md" role="dev_guide">
+      DOM → DN / optional DN / notifications / RegisterEvent; SaveActorInfo; registered ModEvents.
+    </file>
+    <file path="guides/Punishment.md" role="user_guide">
+      Punishment reason mapping. Update when punishment_reason.json, helper prompt, or
+      AddPunishmentReason flow changes.
+    </file>
+    <file path="guides/Content.md" role="user_guide">
+      Item YAMLs and triggers (Healing Hands). Update when item/trigger content changes.
+    </file>
+    <file path="guides/Code.md" role="dev_guide">
+      Papyrus bridge map and compile notes. Point at AGENTS.md; do not duplicate it.
     </file>
   </doc_map>
 
-  <baseline>
-    <step id="B1">Read Makefile VERSION and fomod/info.xml Version — that is the version about to be replaced.</step>
-    <step id="B2">
-      Diff against the previous release baseline (prefer git tag if present; else commit that set VERSION;
-      else contents of versions/SkyrimNet_DOM &lt;old&gt;.zip). Note: early releases may lack a git tag.
+  <workflow>
+    <step id="1" name="establish_delta">
+      Resolve base_tag (checkpoint → git tag → VERSION-setting commit → versions zip).
+      Inventory shippable deltas: SKSE/Plugins/SkyrimNet/config/actions/, prompts/,
+      punishment_reason.json, Scripts/Source/, Required deps, guides/.
+      Ignore noise unless the maintainer says it ships: SSEEdit Cache/, Source copy/,
+      Headers_Source/, crashlog.txt, loose .pex duplicates, .vscode/, agent checkpoints.
     </step>
-    <step id="B3">
-      Inventory user-facing deltas: new/changed/removed YAML under SKSE/Plugins/SkyrimNet/config/actions/,
-      prompts under SKSE/Plugins/SkyrimNet/prompts/, punishment_reason.json, Scripts/Source/, Required deps.
+    <step id="2" name="clarify_before_writing">
+      Stop and ask the maintainer before rewriting changelogs or guides. Confirm at least:
+      - next_version and base_tag (especially if Makefile / fomod / checkpoint disagree)
+      - which working-tree changes ship vs stay local
+      - which themes belong in CHANGELOG vs guides-only updates
+      - anything to deliberately omit (WIP, experiments, known incomplete features)
+      Do not draft or edit CHANGELOG.md, CHANGELOG-user.md, README.md, or guides until
+      answers are clear enough to avoid inventing or over-claiming.
     </step>
-  </baseline>
-
-  <docs_update>
-    <step id="D1" file="CHANGELOG.md">
-      Retitle to Updates since &lt;previous VERSION&gt; (or Updates in &lt;new VERSION&gt; if preferred — stay consistent).
-      Replace bullets with ~5–10 short deltas only. No full feature dump. No packaging-only noise unless users must know.
+    <step id="3" name="rewrite_changelog">
+      Replace CHANGELOG.md for this release:
+      - Title: Updates since &lt;base_tag&gt; (stay consistent with README Guides Updates line)
+        or ## [VERSION](releases/tag/VERSION) — since [BASE](releases/tag/BASE) if using
+        GitHub-linked headings — pick one style and keep it across releases.
+      - ~5–15 short technical bullets; group by theme only when groups have content
+        (Actions, Punishment, Events, SexLab bridge, Docs, Packaging, …).
+      - Prefer concrete identifiers over vague “improved X”.
+      - No packaging-only noise unless users must know (e.g. zip missing SKSE/).
+      - Do not list unfinished work or local-only experiments.
     </step>
-    <step id="D2" file="README.md">
-      Refresh Features / Required / Notes so they describe the full current system accurately.
-      Keep Alpha tone. Keep Guides section with one-line summaries linking Actions.md, Prompts.md, Code.md, CHANGELOG.md.
-      Point the Updates guide line at the new previous-version phrasing (e.g. what changed since X.Y.Z).
+    <step id="4" name="user_summary">
+      Rewrite CHANGELOG-user.md:
+      - First line: https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/VERSION
+      - 5–12 short bullets in plain English; no Papyrus/API jargon unless unavoidable.
+      - Mirror the same release; do not add claims missing from CHANGELOG.md.
+    </step>
+    <step id="5" name="align_docs">
+      Update README.md Features / Required / Notes so they describe the full current system.
+      Keep Alpha tone. Keep Guides section with one-line summaries linking all guides/
+      plus CHANGELOG.md. Point Updates at the new previous-version phrasing.
       Do not paste the changelog into README.
+      For each guide: update only if the delta touched that domain; otherwise confirm
+      unchanged. Preserve structure and voice; link sibling guides.
+      Guide accuracy is equal priority to the changelogs.
     </step>
-    <step id="D3" file="Actions.md">
-      Update only if YAML patterns changed (families, DOM_Keys vs SkyrimNet_DOM_Actions, eligibility,
-      punishment_reason flow, example paths). Keep copy-a-sibling workflow. Link back to README / Prompts / Code.
+    <step id="6" name="version_prep">
+      If next_version is not yet in Makefile, set Makefile VERSION (make release refreshes
+      fomod/info.xml from fomod-source). Confirm README Updates line and CHANGELOG title
+      still match the previous→new story.
+      Do not run make release unless the maintainer asks.
     </step>
-    <step id="D4" file="Prompts.md">
-      Update only if prompt trees, namespace rules, dom_actor load, gates, or helpers changed.
-      Link back to README / Actions / Code.
+    <step id="7" name="checkpoint">
+      If release-checkpoint.xml is in use: update date, base_tag, next_version,
+      version_status, and status notes for this doc pass.
     </step>
-    <step id="D5" file="Code.md">
-      Update only if script map, Setup/punishment pipeline, compile path, or conventions changed.
-      Point at AGENTS.md for full rules; do not duplicate it. Link README / Actions / Prompts.
+    <step id="8" name="hand_off">
+      Report: changelog + guide files touched, remaining version mismatches, and the exact
+      next maintainer commands (typically: compile if scripts changed → commit →
+      make release → git tag → GitHub Release with CHANGELOG-user.md body).
     </step>
-  </docs_update>
+  </workflow>
 
-  <version_bump>
-    <step id="V1">Set Makefile VERSION to the new release number.</step>
-    <step id="V2">Regenerate or update fomod/info.xml Version (make release runs fomod-info.py — keep fomod-source in sync if used).</step>
-    <step id="V3">Confirm README Guides Updates line and CHANGELOG.md title still match the previous→new story.</step>
-  </version_bump>
+  <packaging_reference note="Maintainer-owned; document only — do not run unless asked.">
+    <command>make release</command>
+    <effects>
+      Runs python_scripts/fomod-info.py to write fomod/info.xml from fomod-source;
+      removes existing versions/SkyrimNet_DOM ${VERSION}.zip if present;
+      packs fomod, Scripts, SkyrimNet_DOM.esp, SKSE into that zip via 7z.
+    </effects>
+    <prereqs>
+      Scripts/*.pex current if Papyrus changed (compile via skyrimse.ppj / pyro;
+      do not modify Diary of Mine scripts). Zip must include full SKSE/ (actions,
+      prompts, items, triggers) — not scripts-only.
+    </prereqs>
+  </packaging_reference>
 
-  <package>
-    <step id="P1">Compile Papyrus if scripts changed (skyrimse.ppj / pyro). Do not modify Diary Of Mine scripts.</step>
-    <step id="P2">Run make release (or equivalent) to write versions/SkyrimNet_DOM &lt;VERSION&gt;.zip.</step>
-    <step id="P3">Optional: create git tag matching VERSION after the user asks for a commit/tag.</step>
-  </package>
+  <quality_bar>
+    <rule>Every CHANGELOG bullet must be verifiable in git history or the shipping working tree.</rule>
+    <rule>CHANGELOG-user.md must not claim anything absent from CHANGELOG.md.</rule>
+    <rule>README = standalone current system. CHANGELOG = deltas only. Guides = how-to, not changelog.</rule>
+    <rule>Guide and README claims must match the same verified delta as the changelogs.</rule>
+    <rule>Do not invent APIs, action families, or DOM Ext2 paths that are not in the tree.</rule>
+    <rule>Do not promise VR-specific behavior unless verified; SE ≠ VR.</rule>
+    <rule>Ask clarifying questions (workflow step 2) before writing docs when anything is ambiguous.</rule>
+    <rule>Before editing scripts or game-facing configs for release fixes, state confidence ≥ 90% and assumptions (repo safety rules).</rule>
+    <rule>Only commit / tag / push when the maintainer explicitly requests it.</rule>
+    <rule>Do not edit this release-guide.xml unless the doc process itself changes.</rule>
+  </quality_bar>
 
-  <rules>
-    <item>README = standalone current system. CHANGELOG.md = deltas only. Guides = how-to, not changelog.</item>
-    <item>Users edit YAML and prompts — keep Actions.md and Prompts.md accurate when those surfaces change.</item>
-    <item>Do not invent APIs or action families that are not in the tree.</item>
-    <item>Do not edit this release-guide.xml unless the doc process itself changes.</item>
-    <item>Only commit / tag / push when the user explicitly requests it.</item>
-  </rules>
+  <output>
+    <artifact>Updated CHANGELOG.md and CHANGELOG-user.md for next_version</artifact>
+    <artifact>Updated README.md and guides/*.md as required by the delta (equal priority)</artifact>
+    <artifact>Makefile VERSION (and fomod via make release when asked) consistent</artifact>
+    <artifact>Updated release-checkpoint.xml if that file is in use</artifact>
+    <artifact>Short hand-off: version consistency + suggested ship steps</artifact>
+  </output>
 
   <checklist>
-    <item>Diff vs previous VERSION baseline done</item>
+    <item>Diff vs base_tag / previous VERSION baseline done</item>
+    <item>Clarifying questions answered before doc edits</item>
     <item>CHANGELOG.md rewritten for this release</item>
+    <item>CHANGELOG-user.md rewritten (URL + plain-English bullets)</item>
     <item>README.md Features / Required / Notes / Guides accurate</item>
-    <item>Actions.md / Prompts.md / Code.md updated or confirmed unchanged</item>
-    <item>Makefile + fomod Version bumped</item>
-    <item>Scripts compiled if needed; release zip built</item>
+    <item>guides/* updated or confirmed unchanged</item>
+    <item>Makefile Version ready; fomod regenerated on make release</item>
+    <item>Hand-off lists compile / make release / tag / GitHub steps for maintainer</item>
   </checklist>
-</release_guide>
+</system_prompt>

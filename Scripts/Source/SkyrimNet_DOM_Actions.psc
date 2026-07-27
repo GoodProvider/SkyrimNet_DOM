@@ -71,6 +71,10 @@ Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool
         Trace("StopScene_Masturbate", "Failed to get SkyrimNet_DOM_Main")
         return 
     endif 
+    if !main.d_keys
+        Trace("StopScene_Masturbate", "main.d_keys is None")
+        return
+    endif
     main.d_keys.DOMDoStandStill(speaker)
 
 EndFunction 
@@ -108,7 +112,8 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
     actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
-Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target, Actor victim, String style="", string method="", String direction="", String setting_name="")
+; style omitted from quest signature (ExecuteQuestFunction max 8 args); always pass "" to SexLab
+Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target, Actor victim, string method="", String direction="", String setting_name="")
     if !target || target == speaker
         target = superior
     endif
@@ -123,16 +128,17 @@ Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superi
     String superior_name = GetDisplayname(superior)
     String target_name = GetDisplayname(target)
     String victim_name = GetDisplayname(victim)
-    Trace("StartScene_Nonconsensual_Two","intent:"+intent+" speaker:"+speaker_name+" target:"+target_name+" victim:"+victim_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name)
+    Trace("StartScene_Nonconsensual_Two","intent:"+intent+" speaker:"+speaker_name+" target:"+target_name+" victim:"+victim_name+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name)
     if actions == None
         Trace("StartScene_Nonconsensual_Two", "actions is None, aborting")
         return
     endif
-    RegisterObeyCommand(speaker, superior, style+" "+direction+" "+method)
-    actions.StartScene_Nonconsensual_Two(intent, speaker, target, victim, style=style, method=method, direction=direction, setting_name=setting_name) 
+    RegisterObeyCommand(speaker, superior, direction+" "+method)
+    actions.StartScene_Nonconsensual_Two(intent, speaker, target, victim, style="", method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
-Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superior, Actor target, string style="", string method="", String direction="", String setting_name="", Actor participate)
+; style omitted from quest signature (ExecuteQuestFunction max 8 args); always pass "" to SexLab
+Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superior, Actor target, string method="", String direction="", String setting_name="", Actor participate)
     String speaker_name = GetDisplayname(speaker)
     String target_name = GetDisplayname(target)
     String superior_name = GetDisplayname(superior)
@@ -143,13 +149,16 @@ Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superio
         Trace("StartScene_Consensual_Three","target and superior are None, aborting")
         return
     endif
-    Trace("StartScene_Consensual_Three","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" style: "+style+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name+" participate:"+GetDisplayname(participate))
+    if participate == None || participate == speaker || participate == target 
+        participate = superior
+    endif
+    Trace("StartScene_Consensual_Three","intent:"+intent+" speaker:"+speaker_name+" + "+target_name+" direction: "+direction+" intent: "+intent+" method:"+method+" setting_name:"+setting_name+" participate:"+GetDisplayname(participate))
     if actions == None
         Trace("StartScene_Consensual_Three", "actions is None, aborting")
         return
     endif
-    RegisterObeyCommand(speaker, superior, style+" "+direction+" "+method+" with "+target_name)
-    actions.StartScene_Consensual_Three(intent, speaker, target, style, method, direction, setting_name, participate) 
+    RegisterObeyCommand(speaker, superior, direction+" "+method+" with "+target_name)
+    actions.StartScene_Consensual_Three(intent, speaker, target, style="", method=method, direction=direction, setting_name=setting_name, participate=participate) 
 EndFunction
 ;------------------------------------
 ;  Refused Functions 

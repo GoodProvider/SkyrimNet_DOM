@@ -2,53 +2,58 @@
 <review_checkpoint>
   <meta>
     <title>SkyrimNet_DOM Review Checkpoint</title>
-    <pass>7</pass>
+    <pass>8</pass>
     <status>applied</status>
     <location>Repo root next to review-guide.xml</location>
     <companion>review_execution-plan.xml + review_summary.md</companion>
     <line-number-note>Line numbers include commented lines, counted from 1.</line-number-note>
     <note>
-      Pass 7 applied per user answers:
-      Q1 Sex_One/Two/Three; Q2 remove third; Q3 re-enable mood; Q4 Undress→UndressDress_Execute
-      (no "commanded by [Superior]" in Undress YAML; PAH SetShouldBeNaked).
-      Also C1 lock key, I1 Nonconsensual guards, I2 category PARAMS, I4 hug return, M1 grammar.
+      Pass 8 applied per user answers:
+      Q1 Sex_Two model on SexLab sex2 Fucking/Giving;
+      Q2 wire AnimationEnd → GetActorsFinishedWithScene (faction cleanup via OnSexEnd);
+      Dress/Undress scene lock wontfix (fast actions).
     </note>
   </meta>
 
   <answers>
-    <answer id="Q1">DOMSlave_Sex_One / Sex_Two / Sex_Three</answer>
-    <answer id="Q2">Remove Actor third; YAML matches .psc</answer>
-    <answer id="Q3">Re-enable DOMOnMoodChange</answer>
-    <answer id="Q4">Wire Undress to UndressDress_Execute + PAH; description without commanded-by Superior</answer>
+    <answer id="Q1">Sex_Two_Fucking / Sex_Two_Giving modeled on SexLab_Start_Fucking / SexLab_Start_Giving</answer>
+    <answer id="Q2">Wire GetActorsFinishedWithScene from SexLab_AnimationEnd</answer>
+    <answer id="Q3">Dress/Undress: no SexLabAnimatingFaction / scene lock (wontfix)</answer>
   </answers>
 
   <findings>
     <finding id="C1" severity="critical" status="fixed">
-      Lock key → skyrimnet_sexlab_scene_actor_lock in sex/punish/Be_/Pose_/FightForMe_ YAMLs + Actions.md.
-    </finding>
-    <finding id="C2" severity="critical" status="fixed">
-      Names: DOMSlave_Sex_One (masturbate), Sex_Two (start_2), Sex_Three (start_3).
-    </finding>
-    <finding id="C3" severity="critical" status="fixed">
-      Removed Actor third from StartScene_Consensual_Three; Trace labels fixed.
+      Unique names DOMSlave_Sex_Two_Fucking / DOMSlave_Sex_Two_Giving; methods/directions aligned to SexLab sex2; no_penis setting kept on Giving.
     </finding>
     <finding id="I1" severity="important" status="fixed">
-      Nonconsensual_Two: target/victim remap + abort.
+      SexLab_AnimationEnd calls GetActorsFinishedWithScene + DisableOrgasm restore.
     </finding>
     <finding id="I2" severity="important" status="fixed">
-      DOMSlave_sex_.yaml PARAMS aligned to style/direction/method/target/participate.
+      AddPunishmentReason guards slave / slave.mind / slaveActor.
     </finding>
     <finding id="I3" severity="important" status="fixed">
-      RegisterForModEvent DOMOnMoodChange re-enabled.
+      Be_FlatteredSexy required: true.
     </finding>
-    <finding id="I4" severity="important" status="fixed">
-      Hug path: return None → return.
+    <finding id="I4" severity="important" status="wontfix">
+      Dress/Undress leave eligibility unchanged (fast; faction cleanup is I1).
     </finding>
-    <finding id="M1" severity="minor" status="fixed">0305 grammar fixed</finding>
+    <finding id="I5" severity="important" status="fixed">
+      GetThreads checks akSlave before IsBusy.
+    </finding>
+    <finding id="I6" severity="important" status="fixed">
+      Be_Refused Speaker → rejector.
+    </finding>
+    <finding id="M1" severity="minor" status="fixed">
+      StopScene_Masturbate guards main.d_keys.
+    </finding>
     <finding id="M2" severity="minor" status="fixed">
-      Undress → UndressDress_Execute(speaker, superior) → SetShouldBeNaked; old JSON UndressDress removed;
-      YAML description "undress" (no commanded by Superior).
+      FightForMe_ Ordred → Ordered.
     </finding>
-    <finding id="M3" severity="minor" status="fixed">Consensual_Three Trace labels</finding>
+    <finding id="M3" severity="minor" status="fixed">
+      Decorators Trace labels SkyrimNet_DOM_Decorators / Get_Actor_Info.
+    </finding>
+    <finding id="I5b" severity="important" status="fixed">
+      Register_Events guards player / main / main.d_core before SetSendExternalEvents (Pass 8 follow-up).
+    </finding>
   </findings>
 </review_checkpoint>

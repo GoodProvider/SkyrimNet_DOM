@@ -61,6 +61,10 @@ Function AddPunishmentReason(String file, String func, Actor superior, Actor sla
         Trace("AddPunishmentReason", "SkyrimNet_DOM_Main is None, aborting")
         return
     endif
+    if !slave || !slave.mind || !slaveActor
+        Trace("AddPunishmentReason", "slave, slave.mind, or slaveActor is None, aborting")
+        return
+    endif
 
     ; DOM_Util d_util = Game.GetFormFromFile(0x00000D61, "DiaryOfMine.esm") as DOM_UTIL
     int index = main.Get_Punishment_To_Index(reason_name) 
@@ -107,9 +111,8 @@ int Function GetThreads() global
         DOM_Actor slave = slaveManager.GetActorByIndex(i)
         if slave != None && slave.is_behaviour_masturbate && slave.behaviour == "masturbate" 
             Actor akSlave = slave.GetActorRef()
-            if !scene_manager.IsBusy(slave.GetActorRef())
-                if akSlave != None
-                    int thread = JMap.object()
+            if akSlave && !scene_manager.IsBusy(akSlave)
+                int thread = JMap.object()
 
                     int actor_obj = JMap.object()
                     JMap.setStr(actor_obj, "name", akSlave.GetDisplayName())
@@ -131,7 +134,6 @@ int Function GetThreads() global
 
                     JMap.setStr(thread, "description", akSlave.GetDisplayName()+" is masturbating")
                     JArray.addObj(threads, thread)
-                endif
             endif 
         endif
         i += 1
@@ -158,32 +160,32 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
     actions.StartScene_Consensual_Two(intent, speaker, superior, target, style=style, method=method, direction=direction, setting_name=setting_name)
 EndFunction
 
-Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target=None, Actor victim,string style="", string method="", String direction="", String setting_name="") global
+Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superior, Actor target=None, Actor victim, string method="", String direction="", String setting_name="") global
     SkyrimNet_DOM_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Actions
     if actions == None
         Trace("StartScene_Nonconsensual_Two","SkyrimNet_DOM_Actions is None")
         return
     endif   
-    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, victim, style=style, method=method, direction=direction, setting_name=setting_name)
+    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, victim, method=method, direction=direction, setting_name=setting_name)
 EndFunction
 
 
-Function StartScene_Nonconsensual_Two_SpeakerVictim(String intent, Actor speaker, Actor superior, Actor target, string style="", string method="", String direction="", String setting_name="") global
+Function StartScene_Nonconsensual_Two_SpeakerVictim(String intent, Actor speaker, Actor superior, Actor target, string method="", String direction="", String setting_name="") global
     Actor victim = speaker
     SkyrimNet_DOM_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Actions
     if actions == None
         Trace("StartScene_Nonconsensual_Two","SkyrimNet_DOM_Actions is None")
         return
     endif   
-    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, victim, style=style, method=method, direction=direction, setting_name=setting_name)
+    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, victim, method=method, direction=direction, setting_name=setting_name)
 EndFunction
 
-Function StartScene_Nonconsensual_Two_TargetVictim(String intent, Actor speaker, Actor superior, Actor target, string style="", string method="", String direction="", String setting_name="") global
+Function StartScene_Nonconsensual_Two_TargetVictim(String intent, Actor speaker, Actor superior, Actor target, string method="", String direction="", String setting_name="") global
     Actor victim = target
     SkyrimNet_DOM_Actions actions = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Actions
     if actions == None
         Trace("StartScene_Nonconsensual_Two","SkyrimNet_DOM_Actions is None")
         return
     endif   
-    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, victim, style=style, method=method, direction=direction, setting_name=setting_name)
+    actions.StartScene_Nonconsensual_Two(intent, speaker, superior, target, victim, method=method, direction=direction, setting_name=setting_name)
 EndFunction

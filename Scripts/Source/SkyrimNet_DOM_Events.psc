@@ -105,9 +105,17 @@ Function Register_Events(Quest DOM01)
     main = (self as Quest) as SkyrimNet_DOM_Main
     sexlab_main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
     player = Game.GetPlayer()
+    if !player
+        Trace("Register_Events", "player is None, aborting")
+        return
+    endif
     player_name = player.GetDisplayName()
     timeLastEvent = Utility.GetCurrentRealTime()
 
+    if !main || !main.d_core
+        Trace("Register_Events", "main or main.d_core is None, aborting")
+        return
+    endif
     Trace("Register_Events", "main.d_core: "+main.d_core+" main.d_api:"+main.d_api+" main.d_sexlab:"+main.d_sexlab) 
     main.d_core.SetSendExternalEvents(true)
     main.d_core.SetSendExternalEventsExt(true)
@@ -923,15 +931,12 @@ Event SexLab_AnimationEnd(int ThreadID, bool HasPlayer)
         Trace("SexLab_AnimationEnd", "actors is None for ThreadID: "+ThreadID)
         return
     endif
-    int i = actors.length - 1   
-    while  0 <= i
-        DOM_Actor domActor = main.d_api.GetDomActor(actors[i])
-        if domActor != None 
-            actors[i].RemoveFromFaction(main.d_sexlab.DOMAnimatingFaction)
-            Thread.DisableOrgasm(actors[i], false)
-        endif 
+    GetActorsFinishedWithScene(Thread)
+    int i = actors.length - 1
+    while 0 <= i
+        Thread.DisableOrgasm(actors[i], false)
         i -= 1
-    endwhile 
+    endwhile
 EndEvent
 
 Function GetActorsReadyForScene(sslThreadModel thread)
