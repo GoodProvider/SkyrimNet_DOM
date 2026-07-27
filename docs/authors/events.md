@@ -31,13 +31,13 @@ That file is what prompts use when time is paused (`read_json("SkyrimNet_DOM/act
 
 ## What is registered today
 
-On Setup, Events enables DOM external Ext / Ext1 and registers a **subset** of ModEvents, plus SexLab anim hooks:
+On Setup, Events enables DOM external Ext / Ext1 / **Ext3** and registers a **subset** of ModEvents, plus SexLab anim hooks:
 
-**Live (examples):** `DOMOnCallForHelp`, `DOMOnKinkDiscovered`, `DOMOnLostVirginity`, `DOMOnRunaway`, `DOMOnMoodChange`, `DOMOnBehaviourChange`, `DOMOnNotificationSent`, `HookAnimationStart` / `HookAnimationEnd`.
+**Live (examples):** `DOMOnCallForHelp`, `DOMOnKinkDiscovered`, `DOMOnLostVirginity`, `DOMOnRunaway`, `DOMOnMoodChange`, `DOMOnBehaviourChange`, `DOMOnNotificationSent` (needs Ext3), `HookAnimationStart` / `HookAnimationEnd`.
 
 **Not enabled:** `SetSendExternalEventsExt2` is commented out. Many Ext2 handlers (`DOMOnPraised`, `DOMOnPunished`, inspections, comfort, etc.) exist in the script but are not registered — do not assume every DOM Ext2 path fires here.
 
-Orgasm text in `DOMOnNotificationSent` is routed to `SkyrimNet_SexLab_Handler_DOM` when present, then returns (no DN from that branch).
+**Orgasm feed:** Prefer `DOMOnNotificationSent` over `DOMOnOrgasm` (notifications arrive faster in testing). `DOMOnOrgasm` stays unregistered to avoid double-calling `DOMSlave_Orgasmed`. Orgasm text in notifications (e.g. Dom “brain melts”) is routed to `SkyrimNet_SexLab_Handler_DOM` when present, then returns (no DN from that Events branch — Handler / OrgasmCustom owns DN). Without Ext3, melt HUD still shows but ModEvent never fires → SexLab Combined can deny Dom slaves or narrate Bob-only while Dom melt fired.
 
 ## Notification ring buffer
 
@@ -52,5 +52,5 @@ Orgasm text in `DOMOnNotificationSent` is routed to `SkyrimNet_SexLab_Handler_DO
 ## Tips
 
 - Prefer changing handlers or DN text in `SkyrimNet_DOM_Events` over editing Diary of Mine.
-- If something “never shows up,” check whether its ModEvent is registered and whether it uses optional DN vs `RegisterEvent` only.
+- If something “never shows up,” check whether its ModEvent is registered, whether the matching Ext toggle is on (Ext3 for notifications), and whether it uses optional DN vs `RegisterEvent` only.
 - Re-enable Ext2 only deliberately — DOM is spammy; optional DN + notifications exist to absorb volume.

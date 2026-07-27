@@ -171,7 +171,9 @@ Function Register_Events(Quest DOM01)
     ; RegisterForModEvent("DOMOnRecruited", "OnRecruited")
     ;RegisterForModEvent("DOMOnReleased", "OnReleased")
 
-    ;main.d_core.SetSendExternalEventsExt3(true)
+    ; Ext3 required for DOMOnNotificationSent (melt/orgasm text → Handler_DOM).
+    ; Prefer notifications over DOMOnOrgasm (faster in testing); keep OnOrgasm unregistered to avoid double-fire.
+    main.d_core.SetSendExternalEventsExt3(true)
     ; ----------------------------------
     ; Set SexLab events
     ; ----------------------------------
