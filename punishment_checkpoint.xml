@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<punishment_checkpoint>
+  <meta>
+    <title>Punishment Reason System — Execution Checkpoint</title>
+    <status>planned-not-started</status>
+    <created>2026-07-17</created>
+    <plan_file>c:\Users\bhuff\.cursor\plans\punishment_reason_sync_f607d8b1.plan.md</plan_file>
+    <z_plan>z-plan.md</z_plan>
+    <instruction>Execute this checkpoint in a new chat. Read the plan file and this checkpoint together. Diary Of Mine Scripts/Source is immutable — align SkyrimNet_DOM only.</instruction>
+    <confidence>94</confidence>
+  </meta>
+
+  <scope>
+    <immutable>
+      <path>C:\Skyrim\dev\mods\PAH Diary Of Mine\Scripts\Source</path>
+      <note>Do not modify DOM source. DOM JSON under StorageUtilData is read-only reference for generation.</note>
+    </immutable>
+    <primary_source>
+      <path>C:\Skyrim\dev\mods\PAH Diary Of Mine\SKSE\Plugins\StorageUtilData\Diary Of Mine\PunishmentReasons.json</path>
+      <runtime_path>Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/PunishmentReasons.json</runtime_path>
+      <structure>punishmentsList.PunishNNN.reason (index = key position, Punish000=0)</structure>
+    </primary_source>
+    <backup_source>
+      <path>SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json</path>
+      <runtime_path>Data/SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json</runtime_path>
+      <note>Full mirror of all DOM reasons (36 entries, indices 0-34 and 40) plus aliases and descriptions. Not renamed to punishment_reasons.json.</note>
+    </backup_source>
+    <not_in_scope>
+      <path>C:\Skyrim\dev\mods\PAH Diary Of Mine\SKSE\Plugins\StorageUtilData\Diary Of Mine\PunishmentTypes.json</path>
+      <note>Punishment methods (whip, spank, choke) — separate from punishment reasons.</note>
+    </not_in_scope>
+    <files_to_change>
+      <path>SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json</path>
+      <path>Scripts/Source/SkyrimNet_DOM_Main.psc</path>
+      <path>Scripts/Source/SkyrimNet_DOM_Actions.psc</path>
+      <path>python_scripts/punishment_reason_extract.py</path>
+      <path>SKSE/Plugins/SkyrimNet/prompts/helpers/dom_punishment_reason.prompt</path>
+      <path>SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_PunishementOther.yaml</path>
+      <path>SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_PunishmentRefused.yaml</path>
+    </files_to_change>
+    <files_no_change>
+      <path>Scripts/Source/SkyrimNet_DOM_Decorators.psc</path>
+      <path>Scripts/Source/SkyrimNet_DOM_API.psc</path>
+      <note>API needs no signature change; default handled in Main.Get_Punishment_To_Index</note>
+    </files_no_change>
+  </scope>
+
+  <architecture>
+    <summary>DOM-first load with alias overlay; punishment_reason.json is full backup for fallback.</summary>
+    <flow>
+      <step order="1">Load_Punishment_From_DOM(PunishmentReasons.json) — returns bool</step>
+      <step order="2" if="dom_ok">Load_Punishment_Aliases(punishment_reason.json) — merge aliases + descriptions only</step>
+      <step order="2" if="not dom_ok">Load_Punishment_Fallback(punishment_reason.json) — sole source; Trace warning</step>
+      <step order="3">Resolve punishment_default_index from constant PUNISHMENT_DEFAULT_REASON lookup</step>
+    </flow>
+    <parse_failure_gate>
+      <condition>MiscUtil.FileExists false for DOM path</condition>
+      <condition>JValue.readFromFile returns 0 or invalid</condition>
+      <condition>punishmentsList key missing or empty</condition>
+      <condition>Zero PunishNNN entries loaded</condition>
+    </parse_failure_gate>
+  </architecture>
+
+  <json_format>
+    <entry_model>
+      <field name="reason">Canonical .reason from DOM PunishNNN</field>
+      <field name="aliases">Extra strings + reason_male; [] if none</field>
+      <field name="index">DOM index (Punish019 → 19)</field>
+      <field name="description">SkyrimNet narration fragment for reason and all aliases</field>
+    </entry_model>
+    <example>
+      <![CDATA[
+{
+  "reason": "didnt masturbate",
+  "aliases": ["didn't masturbate", "didnt_masturbate"],
+  "index": 19,
+  "description": "failed to perform for when told to masturbate"
+}
+      ]]>
+    </example>
+    <coverage>All 36 real DOM reasons (indices 0-34, 40). Skip placeholder 35-39 (undefined035-undefined039).</coverage>
+    <sorting>Entries ordered by script-comment frequency per z-plan.md</sorting>
+  </json_format>
+
+  <default_reason>
+    <constant>PUNISHMENT_DEFAULT_REASON = "being a bad slave"</constant>
+    <rule>Never hardcode index. At end of load, punishment_default_index = JMap.getInt(punishment_to_index, PUNISHMENT_DEFAULT_REASON, 0)</rule>
+    <lookup>Resolve from whichever source loaded: DOM PunishmentReasons.json or punishment_reason.json fallback</lookup>
+    <on_unknown>Get_Punishment_To_Index returns punishment_default_index; Trace warning with unknown string</on_unknown>
+    <on_missing_default>Trace ERROR if default string not found after load (should not happen with complete backup)</on_missing_default>
+    <description_fallback>Get_Punishment_To_Description for unknown reason returns description for PUNISHMENT_DEFAULT_REASON if available</description_fallback>
+  </default_reason>
+
+  <known_bugs>
+    <bug id="B1" file="Scripts/Source/SkyrimNet_DOM_Main.psc" line="118">
+      Load_Punishment_to_description reads [n].reason but current punishment_reason.json uses actionName — descriptions never load.
+    </bug>
+    <bug id="B2" file="Scripts/Source/SkyrimNet_DOM_Actions.psc" line="132">
+      Hardcoded alias remaps (having a forbidden orgasm, refusing to walk on all fours, etc.) — move to punishment_reason.json aliases.
+    </bug>
+    <bug id="B3" file="SKSE/Plugins/SkyrimNet/prompts/helpers/dom_punishment_reason.prompt">
+      Helper tokens drift from canonical DOM names (forbidden orgasming, refusing to walking on four).
+    </bug>
+    <bug id="B4" file="SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_PunishmentRefused.yaml">
+      refusing to masturbate must map to index 20 (refusing to masturbate), not 19 (didnt masturbate).
+    </bug>
+  </known_bugs>
+
+  <dom_reason_index_table>
+    <entry index="0" reason="no reason"/>
+    <entry index="1" reason="begging to stop"/>
+    <entry index="2" reason="covering self"/>
+    <entry index="3" reason="cowering"/>
+    <entry index="4" reason="crying"/>
+    <entry index="5" reason="talking"/>
+    <entry index="6" reason="yelling"/>
+    <entry index="7" reason="struggling"/>
+    <entry index="8" reason="posture correction"/>
+    <entry index="9" reason="being a bad slave" note="PUNISHMENT_DEFAULT_REASON"/>
+    <entry index="10" reason="being a bad maid" aliases="being a bad servant"/>
+    <entry index="11" reason="being jealous"/>
+    <entry index="12" reason="being angry"/>
+    <entry index="13" reason="being disrespectful"/>
+    <entry index="14" reason="didnt fight" aliases="didnt_fight"/>
+    <entry index="15" reason="didnt pose" aliases="didnt_pose"/>
+    <entry index="16" reason="didnt wait" aliases="didnt_wait"/>
+    <entry index="17" reason="didnt listen"/>
+    <entry index="18" reason="didnt obey" aliases="refused obey"/>
+    <entry index="19" reason="didnt masturbate" aliases="didnt_masturbate, didn't masturbate, refused to masturbate"/>
+    <entry index="20" reason="refusing to masturbate"/>
+    <entry index="21" reason="refusing to have sex" aliases="no_sex"/>
+    <entry index="22" reason="refusing to strip"/>
+    <entry index="23" reason="not stripping well enough"/>
+    <entry index="24" reason="breaking restraints"/>
+    <entry index="25" reason="running away" aliases="running_away"/>
+    <entry index="26" reason="moaning"/>
+    <entry index="27" reason="orgasming" aliases="having a forbidden orgasm"/>
+    <entry index="28" reason="refusing to shower"/>
+    <entry index="29" reason="being dirty"/>
+    <entry index="30" reason="being a bad worker"/>
+    <entry index="31" reason="being too slow"/>
+    <entry index="32" reason="not walking on four" aliases="refusing to walk on all fours"/>
+    <entry index="33" reason="refusing to give a bath"/>
+    <entry index="34" reason="being a bad whore"/>
+    <entry index="40" reason="being a bad slaver"/>
+  </dom_reason_index_table>
+
+  <code_changes>
+    <file path="Scripts/Source/SkyrimNet_DOM_Main.psc">
+      <action>Replace Setup() dual-load with gated DOM-first flow</action>
+      <action>Refactor Load_Punishment_To_Index → Load_Punishment_From_DOM (returns bool)</action>
+      <action>Add Load_Punishment_Aliases(fname)</action>
+      <action>Add Load_Punishment_Fallback(fname)</action>
+      <action>Add PUNISHMENT_DEFAULT_REASON constant and punishment_default_index resolution after load</action>
+      <action>Update Get_Punishment_To_Index — unknown → default index via string lookup</action>
+      <action>Update Get_Punishment_To_Description — unknown → default reason description</action>
+      <keep>Get_Punishment_To_Index and Get_Punishment_To_Description public signatures unchanged</keep>
+    </file>
+    <file path="Scripts/Source/SkyrimNet_DOM_Actions.psc">
+      <action>Remove hardcoded alias remaps in AddPunishmentReason (lines ~132-139)</action>
+    </file>
+    <file path="SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json">
+      <action>Rebuild as full 36-entry array with reason, aliases, index, description</action>
+      <action>Generate from PunishmentReasons.json via python_scripts/punishment_reason_extract.py</action>
+    </file>
+    <file path="python_scripts/punishment_reason_extract.py">
+      <action>Create: read DOM JSON, scan Scripts/Source for alias candidates, generate/validate punishment_reason.json</action>
+    </file>
+    <file path="SKSE/Plugins/SkyrimNet/prompts/helpers/dom_punishment_reason.prompt">
+      <action>Replace pipe-list with canonical DOM .reason names</action>
+    </file>
+    <file path="SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_PunishementOther.yaml">
+      <action>Align reason pipe-list to DOM canonical names</action>
+    </file>
+    <file path="SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_PunishmentRefused.yaml">
+      <action>Ensure refusing to masturbate maps to index 20</action>
+    </file>
+  </code_changes>
+
+  <todos>
+    <todo id="extract-dom-reasons" status="pending">Write/run python_scripts/punishment_reason_extract.py — generate/validate punishment_reason.json from PunishmentReasons.json; scan Scripts/Source for alias candidates</todo>
+    <todo id="rebuild-json" status="pending">Rebuild punishment_reason.json as full DOM mirror (every PunishNNN index 0-34, 40) with {reason, aliases, index, description} per entry</todo>
+    <todo id="update-main-loader" status="pending">Update SkyrimNet_DOM_Main.psc: DOM-first load with parse gate; alias merge or full fallback from punishment_reason.json</todo>
+    <todo id="sync-downstream" status="pending">Remove Actions alias remaps; sync dom_punishment_reason.prompt and punishment YAML token lists to canonical DOM names</todo>
+    <todo id="validate-compile" status="pending">Run validation script (alias index matches DOM) and Caprica compile on changed .psc files</todo>
+  </todos>
+
+  <validation>
+    <step>punishment_reason_extract.py validates 36 entries, reason matches DOM at index, no duplicate aliases</step>
+    <step>Caprica compile Scripts/Source/SkyrimNet_DOM_Main.psc and SkyrimNet_DOM_Actions.psc</step>
+    <step>Verify Setup loads DOM when present; falls back when DOM path missing</step>
+    <step>Verify unknown reason string resolves to being a bad slave index via lookup not hardcode</step>
+  </validation>
+
+  <assumptions>
+    <item>description field retained for AddPunishmentReason narration</item>
+    <item>reason_male from DOM stored in aliases[] on matching punishment_reason.json entry</item>
+    <item>DOM punishment indices stable (0-40 scheme in current DOM release)</item>
+    <item>Index 0 (no reason) included in backup file but not exposed in SkyrimNet action surface</item>
+  </assumptions>
+</punishment_checkpoint>

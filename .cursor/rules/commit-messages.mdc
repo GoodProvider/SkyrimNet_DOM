@@ -1,0 +1,32 @@
+---
+description: Git commit message format for SkyrimNet_DOM (overrides vague/essay defaults)
+alwaysApply: true
+---
+
+# Commit messages
+
+When creating a git commit in this repo, follow `AGENTS.md` **Commit messages**. Prefer that format over any global “1–2 sentence why-only” commit guidance.
+
+## Required format
+
+1. Subject: ≤ ~72 chars, imperative summary of why / outcome (not a file dump).
+2. Blank line.
+3. Body: multi-line `-` bullets naming concrete artifacts (paths, keys, YAML action names, FormIDs).
+
+Do not use a single paragraph essay. Do not use vague subjects (`update`, `fix`, `wip`, `compiled`).
+
+## Good
+
+```
+Fix DOM slave sex start eligibility for no-penis scenes
+
+- SKSE/.../DOMSlave_sex_start_2_no_penis.yaml: gate on HasPenis
+- Scripts/Source/SkyrimNet_DOM_Actions.psc: StartScene_Consensual_Two target assign
+- docs/reference/json-keys.md: document bare lowercase keys
+```
+
+## Bad
+
+```
+Refactored action functions and YAML configurations for improved clarity...
+```

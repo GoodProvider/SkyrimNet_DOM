@@ -1,0 +1,35 @@
+String Function GetRecentPunishments() global
+    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x5900, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+    if main == None
+        Debug.Notification("[DOM_SkyrimNet] GetRecentPunishments: main is None")
+        Debug.Trace("[DOM_SkyrimNet] GetRecentPunishments: main is None")
+        return ""
+    endif
+    int punishments = main.recent_punishments
+    int i = 0 
+    float now = Utility.GetCurrentGameTime()
+    float window = now - ((10*20)/1440.0) ; 2 minute in the real time; 20:1 game to real time
+    int count = JArray.count(punishments)
+    String msg = ""
+    if count > 0
+        while i < count 
+            int time_type = JArray.getObj(punishments,i)
+            float delta = now - JArray.getFlt(time_type,0)
+            float min = delta * (1440.0/20) ; convert to minutes then 20:1 game to real time
+            int minutes = min as int
+            int seconds = ((min-minutes) * 60) as int
+            Debug.Notification("[DOM_SkyrimNet] GetRecentPunishments: "+JArray.getStr(time_type,1)+" "+minutes+" mins "+seconds+" secs ago.")
+            if delta < window
+                String type = JArray.getStr(time_type,1)
+                Debug.TraceAndBox("[DOM_SkyrimNet] GetRecentPunishments: removing "+type+" "+minutes+" mins "+seconds+" secs ago.")
+                JArray.eraseIndex(punishments,i)
+                count -= 1
+            else
+                String type = JArray.getStr(time_type,1)
+                msg += "- "+type+" ("+minutes+" min "+seconds+" sec ago)\n"
+                i += 1
+            endif 
+        endwhile
+    endif 
+    return msg  
+EndFunction
