@@ -13,9 +13,9 @@
     <summary>Bridge mod between SkyrimNet (LLM) and Diary of Mine (with SkyrimNet_SexLab).</summary>
     <repository_root>c:\Skyrim\dev\mods\SkyrimNet_DOM</repository_root>
     <updated>2026-07-27</updated>
-    <base_tag>0.0.2</base_tag>
-    <next_version>0.0.4</next_version>
-    <version_status>Makefile / fomod already report 0.0.4; versions/SkyrimNet_DOM 0.0.4.zip exists; git tags only through 0.0.2 (0.0.4 untagged)</version_status>
+    <base_tag>0.0.3</base_tag>
+    <next_version>0.0.5</next_version>
+    <version_status>Makefile VERSION=0.0.5; fomod/info.xml still 0.0.4 until make release; git tags only through 0.0.2 (0.0.3 is zip-only, untagged); versions/SkyrimNet_DOM 0.0.4.zip exists but is stale vs Ext3 HEAD — need versions/SkyrimNet_DOM 0.0.5.zip</version_status>
     <related_artifacts>
       <artifact role="release rules / persona">release-guide.xml</artifact>
       <artifact role="agent router">llms.txt</artifact>
@@ -54,7 +54,7 @@
 
   <status>
     <note>2026-07-27: docs migrated guides/ → docs/ (players, authors, developers, reference); llms.txt and release-checkpoint added; AGENTS thinned; KNOWLEDGEBASE stub created. documentation-guide.xml not kept in this repo.</note>
-    <note>Open: commit remaining code + docs if desired; git tag 0.0.4 when ready to ship (zip already present).</note>
+    <note>2026-07-27: release-doc pass for 0.0.5 complete (CHANGELOG* retargeted since 0.0.3; Makefile 0.0.5; docs spot-check OK). Open: commit when asked → make release → git tag 0.0.5 → GitHub Release.</note>
   </status>
 
   <conventions>

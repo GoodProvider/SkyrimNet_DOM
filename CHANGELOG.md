@@ -1,4 +1,4 @@
-# Updates since 0.0.3
+# Updates since 0.0.3 (0.0.5)
 
 - Enabled `SetSendExternalEventsExt3(true)` so Dom melt/orgasm notifications reach `OnNotificationSent` → SexLab Handler DN (Ext3 was off; HUD melt showed while DN denied Dom slaves / Bob-only)
 - Split two-person consensual sex into `DOMSlave_Sex_Two_Fucking` (penis) and `DOMSlave_Sex_Two_Giving` (`no_penis`); removed monolithic `DOMSlave_sex_start_2`

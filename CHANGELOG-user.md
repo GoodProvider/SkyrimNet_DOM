@@ -1,4 +1,4 @@
-https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.0.4
+https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.0.5
 
 - Dom slave orgasms (melt notifications) now reach SkyrimNet Direct Narration again; Ext3 notification events were not being enabled.
 - Two-person consensual sex is now two actions: fucking (penis) and giving (`no_penis`); the old combined two-person start action is gone.
