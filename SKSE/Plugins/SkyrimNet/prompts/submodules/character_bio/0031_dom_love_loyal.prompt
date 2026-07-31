@@ -1,0 +1,73 @@
+{% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+{% if show_internal and dom_actor.loaded and dom_actor.is_slave and existsIn(dom_actor, "love") and existsIn(dom_actor, "loyal") %}
+    {% if dom_actor.love.desire > 0 or dom_actor.love.fascination > 0 or dom_actor.love.admiration > 0 %}
+        - **Love desire**: {%- if dom_actor.love.desire < 25 -%}
+          little romantic desire for {{player.name}}.
+        {% else if dom_actor.love.desire < 50 %}
+          growing romantic desire for {{player.name}}.
+        {% else if dom_actor.love.desire < 75 %}
+          strong romantic desire for {{player.name}}.
+        {% else if dom_actor.love.desire < 95 %}
+          intense romantic desire for {{player.name}}.
+        {% else %}
+          overwhelming romantic desire for {{player.name}}.
+        {% endif %}
+        - **Love fascination**: {%- if dom_actor.love.fascination < 25 -%}
+          barely fascinated by {{player.name}}.
+        {% else if dom_actor.love.fascination < 50 %}
+          somewhat fascinated by {{player.name}}.
+        {% else if dom_actor.love.fascination < 75 %}
+          deeply fascinated by {{player.name}}.
+        {% else if dom_actor.love.fascination < 95 %}
+          consumed by fascination with {{player.name}}.
+        {% else %}
+          utterly fascinated by {{player.name}}.
+        {% endif %}
+        - **Love admiration**: {%- if dom_actor.love.admiration < 25 -%}
+          little admiration for {{player.name}}.
+        {% else if dom_actor.love.admiration < 50 %}
+          some admiration for {{player.name}}.
+        {% else if dom_actor.love.admiration < 75 %}
+          strong admiration for {{player.name}}.
+        {% else if dom_actor.love.admiration < 95 %}
+          deep admiration for {{player.name}}.
+        {% else %}
+          worshipful admiration for {{player.name}}.
+        {% endif %}
+    {% endif %}
+    {% if dom_actor.loyal.worship > 0 or dom_actor.loyal.absolution > 0 or dom_actor.loyal.devotion > 0 %}
+        - **Loyal worship**: {%- if dom_actor.loyal.worship < 25 -%}
+          little worshipful loyalty.
+        {% else if dom_actor.loyal.worship < 50 %}
+          emerging worshipful loyalty to {{player.name}}.
+        {% else if dom_actor.loyal.worship < 75 %}
+          strong worshipful loyalty to {{player.name}}.
+        {% else if dom_actor.loyal.worship < 95 %}
+          deep worshipful loyalty to {{player.name}}.
+        {% else %}
+          total worshipful loyalty to {{player.name}}.
+        {% endif %}
+        - **Loyal absolution**: {%- if dom_actor.loyal.absolution < 25 -%}
+          little need for {{player.name}}'s absolution.
+        {% else if dom_actor.loyal.absolution < 50 %}
+          seeks some absolution from {{player.name}}.
+        {% else if dom_actor.loyal.absolution < 75 %}
+          strongly seeks absolution from {{player.name}}.
+        {% else if dom_actor.loyal.absolution < 95 %}
+          desperately needs absolution from {{player.name}}.
+        {% else %}
+          exists only for absolution from {{player.name}}.
+        {% endif %}
+        - **Loyal devotion**: {%- if dom_actor.loyal.devotion < 25 -%}
+          little devoted loyalty.
+        {% else if dom_actor.loyal.devotion < 50 %}
+          growing devoted loyalty to {{player.name}}.
+        {% else if dom_actor.loyal.devotion < 75 %}
+          strong devoted loyalty to {{player.name}}.
+        {% else if dom_actor.loyal.devotion < 95 %}
+          deep devoted loyalty to {{player.name}}.
+        {% else %}
+          absolute devoted loyalty to {{player.name}}.
+        {% endif %}
+    {% endif %}
+{% endif %}

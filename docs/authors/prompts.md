@@ -16,20 +16,30 @@ SkyrimNet_DOM also works alongside SkyrimNet_SexLab prompts under that mod’s `
 
 ## character_bio (shared namespace)
 
-`0006_dom_variables.prompt` loads `dom_actor` for later bio slices. Later files (`0015`, `0305`, `0410`, `0413`, `0515`, `7200`, …) assume those variables exist.
+`0006_dom_variables.prompt` loads `dom_actor` for later bio slices. Later files (`0015`–`0031`, `0305`, `0410`, `0413`, `0515`, `7200`, …) assume those variables exist.
 
 ### DOM actor load pattern
 
 Typical flow:
 
-1. Check `DOMPlayerSlaveFaction`
+1. Check `DOMActorFaction` (any DOM actor: slave, slaver, or other)
 2. If live (not paused): `dom_get_actor_info(actorUUID)` (Papyrus decorator)
 3. Else / fallback: `read_json("SkyrimNet_DOM/actors/<name>.json")` (written by Events `SaveActorInfo` on DN — see [events.md](events.md))
 4. Gate output on `dom_actor.loaded`
 
 Do **not** re-`read_json` into `dom_actor` after it is already loaded — that clobbers Papyrus data (this bit `0413` before).
 
-Decorator JSON uses **bare lowercase** keys (`loaded`, `arousal_factor`, `is_slave`, …) via `ObjectToLowerCaseKeyJson`. Prefer fields already present on `dom_actor` over inventing new names. Contract: [../reference/json-keys.md](../reference/json-keys.md).
+Decorator JSON uses **bare lowercase** keys via `ObjectToLowerCaseKeyJson`. Payload is three exclusive buckets — see [../reference/json-keys.md](../reference/json-keys.md):
+
+| Bucket | Gate in prompts | Examples |
+|--------|-----------------|----------|
+| **thin** | `dom_actor.loaded` | role flags, history, fetishes, gear, arousal, virgin, notifications |
+| **slaver** | `dom_faction == "slaver"` | title, trainees, skills, career, camp, love interest |
+| **slave** | `dom_actor.is_slave` | owner, training, punishment, orders, experience, love/loyal, promise |
+
+**Presentation rule:** 0–100 scales → qualitative sentences (see `0515`, `0016`, `0031`). Counters (`trauma_days`, `career.*`, `experience.*`, `trainee_count`) stay numeric. Fixed ranks (`history_rank`, `family_history_rank`, virgin, promise) → one short sentence each.
+
+Paused JSON may lack newer keys until the next DN/`SaveActorInfo` refresh — use `existsIn` when reading optional fields.
 
 ### Render gates
 
@@ -43,15 +53,24 @@ Do not dump internal-only state into external dialogue modes.
 ### Adding a bio slice
 
 1. Pick a numeric prefix for sort order relative to existing files
-2. Gate on `dom_actor.loaded` (and faction / mode as needed)
-3. Read fields already on `dom_actor` — bare lowercase keys (`arousal_factor`, `is_slave`, …)
+2. Gate on the matching bucket (`loaded` / `dom_faction == "slaver"` / `is_slave`)
+3. Read fields already on `dom_actor` — bare lowercase keys
 4. Keep one job per file (appearance vs bondages vs skills vs notifications)
 
-Aged notifications live in `7200_dom_notifications.prompt` (minutes / hours / days).
+| Prefix | File | Role |
+|--------|------|------|
+| 0006 | variables | load `dom_actor` |
+| 0015 | characteristics | status, fetishes, history |
+| 0016 | slaver | trainees, skills sentences, career |
+| 0017 | orders | slave standing orders |
+| 0018 | promise / virgin | slave promise; virgin for all loaded |
+| 0030 | experience | slave counters + trauma_days + family history |
+| 0031 | love / loyal | slave syndrome sentence bands |
+| 7200 | notifications | `## Slavery Events` |
 
 ## user_final_instructions
 
-`0551_dom_instructions.prompt` biases action selection (prefer DOMSlave actions, gag/obedience context, whip/masturbate/rape framing, etc.).
+`0551_dom_instructions.prompt` biases action selection for **slaves** (`DOMPlayerSlaveFaction` / `is_slave`). Prefer DOMSlave actions, gag/obedience context, etc.
 
 Because each file is isolated:
 

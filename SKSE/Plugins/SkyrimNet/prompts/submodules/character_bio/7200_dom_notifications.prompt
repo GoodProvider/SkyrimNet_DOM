@@ -1,6 +1,6 @@
 {% if existsIn(dom_actor, "notifications") and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
     {% if dom_actor.loaded and length(dom_actor.notifications) > 0 %}
-        ## Slave Events
+        ## Slavery Events
         {% for notification in dom_actor.notifications %}
             {% if notification.message != "" %} 
               {% if notification.minutes <= 59 %}

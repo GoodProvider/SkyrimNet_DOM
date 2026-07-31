@@ -1,11 +1,11 @@
 {% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
 {% set show_external_only = (render_mode == "dialogue_target") %}
 {% if show_external_only or show_internal %} 
-    {% set dom_is_slave_faction = is_in_faction(actorUUID, "DOMPlayerSlaveFaction") %}
+    {% set dom_is_actor_faction = is_in_faction(actorUUID, "DOMActorFaction") %}
     {% set dom_actor.loaded = false %} 
     {% set dom_actor.source = "none" %}
     {% set dom_actor_fname = "SkyrimNet_DOM/actors/"+actor_name+".json" %}
-    {% if dom_is_slave_faction %} 
+    {% if dom_is_actor_faction %} 
         {% if not isTimePaused %} 
             {% set dom_actor = dom_get_actor_info(actorUUID) %}
         {% endif %} 
@@ -15,7 +15,7 @@
             {% set dom_actor.source = "file" %}
         {% endif %}
     {% endif %}
-    {% if dom_actor.loaded %}  
+    {% if dom_actor.loaded and existsIn(dom_actor, "arousal_factor") %}  
         {% if dom_actor.arousal_factor <= 30 %}
             {% set arousal_state = "not_aroused" %}
         {% else %}
