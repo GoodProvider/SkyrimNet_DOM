@@ -271,18 +271,18 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
     endif 
 
     Actor slave = akRef as Actor 
-    if slave == player
-        Trace("OnNotificationSent", "player notification, skipping: "+description)
-        return
-    endif
-    if slave == None 
-        Trace("OnNotificationSent","akRef is not an Actor, skipping: "+description)
-        return
-    endif
-    if !SkyrimNet_DOM_API.IsDOMSlave(slave)
-        Trace("OnNotificationSent", GetDisplayName(slave)+" is not a DOM actor, skipping: "+description)
-        return
-    endif
+    ;if slave == player
+        ;;Trace("OnNotificationSent", "player notification, skipping: "+description)
+        ;return
+    ;endif
+    ;if slave == None 
+        ;Trace("OnNotificationSent","akRef is not an Actor, skipping: "+description)
+        ;return
+    ;endif
+    ;if !SkyrimNet_DOM_API.IsDOMSlave(slave)
+        ;Trace("OnNotificationSent", GetDisplayName(slave)+" is not a DOM actor, skipping: "+description)
+        ;return
+    ;endif
 
     int i = StringUtil.Find(description, "orgasm")
     String slave_name = slave.GetDisplayName()
@@ -311,42 +311,71 @@ EndEvent
 Function AddNotification(String description, Actor slave)
     String uuid = slave.GetFormID() as String
     int notifications = JMap.getObj(actor_to_notifications, uuid)
-    if notifications == 0 
-        notifications = JArray.objectWithSize(notifications_size) 
+    int i = 0
+    if notifications == 0
+        notifications = JArray.objectWithSize(notifications_size)
         JValue.retain(notifications)
-        JMap.setObj(actor_to_notifications, uuid, notifications) 
+        JMap.setObj(actor_to_notifications, uuid, notifications)
         JMap.setInt(actor_to_notifications_next, uuid, 0)
-        int i = 0 
-        while i < notifications_size 
-            int noteInit = JMap.object() 
-            JMap.setStr(noteInit, "message", "") 
+        i = 0
+        while i < notifications_size
+            int noteInit = JMap.object()
+            JMap.setStr(noteInit, "message", "")
             JMap.setFlt(noteInit, "timestamp", 0.0)
             JMap.setInt(noteInit, "minutes", 0)
             JMap.setInt(noteInit, "hours", 0)
             JMap.setInt(noteInit, "days", 0)
-            JValue.retain(noteInit) 
-            JArray.setObj(notifications, i, noteInit) 
+            JValue.retain(noteInit)
+            JArray.setObj(notifications, i, noteInit)
             i += 1
-        endwhile 
-    endif 
+        endwhile
+    endif
 
     int next = JMap.getInt(actor_to_notifications_next, uuid, 0)
-    int last = next - 1 
-    if last < 0 
+    int last = next - 1
+    if last < 0
         last = notifications_size - 1
-    endif 
-    int note_last = JArray.getObj(notifications, last)
-    String message_last = JMap.getStr(note_last, "message", "")
-    if message_last != description
-        Float rawDaysPassed = Utility.GetCurrentGameTime()
+    endif
+
+    Float rawDaysPassed = Utility.GetCurrentGameTime()
+    int found = -1
+    i = 0
+    while i < notifications_size
+        int noteScan = JArray.getObj(notifications, i)
+        Float ts = JMap.getFlt(noteScan, "timestamp", 0.0)
+        if ts != 0.0 && JMap.getStr(noteScan, "message", "") == description
+            found = i
+            i = notifications_size
+        else
+            i += 1
+        endif
+    endwhile
+
+    if found >= 0
+        int noteFound = JArray.getObj(notifications, found)
+        JMap.setFlt(noteFound, "timestamp", rawDaysPassed)
+        if found != last
+            ; Rotate object refs along the live arc from found toward last
+            int dst = found
+            while dst != last
+                int src = dst + 1
+                if src >= notifications_size
+                    src = 0
+                endif
+                JArray.setObj(notifications, dst, JArray.getObj(notifications, src))
+                dst = src
+            endwhile
+            JArray.setObj(notifications, last, noteFound)
+        endif
+    else
         int note = JArray.getObj(notifications, next)
         JMap.setStr(note, "message", description)
         JMap.setFlt(note, "timestamp", rawDaysPassed)
 
-        next += 1 
-        if next >= notifications_size 
+        next += 1
+        if next >= notifications_size
             next = 0
-        endif 
+        endif
         JMap.setInt(actor_to_notifications_next, uuid, next)
     endif
 

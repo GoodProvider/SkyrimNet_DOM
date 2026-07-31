@@ -41,7 +41,7 @@ On Setup, Events enables DOM external Ext / Ext1 / **Ext3** and registers a **su
 
 ## Notification ring buffer
 
-`AddNotification` keeps up to **20** recent messages per actor (JMap keyed by FormID), with game-time stamps. Duplicates of the last message are skipped. Bio slice `7200_dom_notifications.prompt` ages these into human-readable windows.
+`AddNotification` keeps up to **20** recent messages per actor (JMap keyed by FormID), with game-time stamps. A duplicate anywhere in the ring refreshes its timestamp and moves to newest. Bio slice `7200_dom_notifications.prompt` ages these into human-readable windows.
 
 `OnNotificationSent` skips some noise (`OnNotifcationSkip`), skips the player, and requires a DOM slave. Freshly-captured text may be rewritten to include a capture beat before optional DN.
 
