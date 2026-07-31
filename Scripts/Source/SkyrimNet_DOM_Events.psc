@@ -308,8 +308,36 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
     Trace("OnNotificationSent", slave_name+" notificationType: '" + notificationType + "'' is_player_slave: " + is_player_slave + " description: '" + desc_original + " -> " + description)
 EndEvent
 
-Function AddNotification(String description, Actor slave)
-    String uuid = slave.GetFormID() as String
+Function AddNotification(String description, Actor Subject)
+    AddNotificationActor(description, Subject)
+
+    if main == None || main.d_core == None
+        return
+    endif
+    DOM_SlaveManager slaveManager = main.d_core.DOM02
+    if slaveManager == None
+        return
+    endif
+
+    int n = slaveManager.GetActorCount()
+    int i = 0
+    while i < n
+        DOM_Actor domActor = slaveManager.GetActorByIndex(i)
+        if domActor != None
+            Actor other = domActor.GetActorRef()
+            if other != None && other != Subject
+                String otherName = other.GetDisplayName()
+                if otherName != "" && StringUtil.Find(description, otherName) >= 0
+                    AddNotificationActor(description, other)
+                endif
+            endif
+        endif
+        i += 1
+    endwhile
+EndFunction
+
+Function AddNotificationActor(String description, Actor akActor)
+    String uuid = akActor.GetFormID() as String
     int notifications = JMap.getObj(actor_to_notifications, uuid)
     int i = 0
     if notifications == 0
@@ -379,7 +407,7 @@ Function AddNotification(String description, Actor slave)
         JMap.setInt(actor_to_notifications_next, uuid, next)
     endif
 
-    Trace("AddNotification", GetDisplayName(slave)+" description: '" + description)
+    Trace("AddNotification", GetDisplayName(akActor)+" description: '" + description)
 EndFunction
 
 bool Function OnNotifcationSkip(String description)
@@ -400,8 +428,8 @@ Function UpdateNotificationAge(int note, Float timestamp)
     JMap.setInt(note, "days", minutes / 1440)
 EndFunction
 
-int Function GetNotifications(Actor slave)
-    String uuid = slave.GetFormID() as String 
+int Function GetNotifications(Actor akActor)
+    String uuid = akActor.GetFormID() as String 
     int notifications = JMap.getObj(actor_to_notifications, uuid)
     if notifications == 0
         return 0
