@@ -411,11 +411,54 @@ Function AddNotificationActor(String description, Actor akActor)
 EndFunction
 
 bool Function OnNotifcationSkip(String description)
-    if StringUtil.Find(description, "was just captured") >= 0 
-        return true 
-    endif 
+    ; Less-specific status lines that duplicate named DOM action notifications.
+    if StringUtil.Find(description, "was just captured") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "will train slaves in the sexual arts") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "will train slaves in orgies") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "will punish trainees") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "undergoing sex training.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "training another slave.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "participating in orgy training.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "following a slave trainer.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "is following.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "obediently following.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "fetching a slave for sexual training.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "fetching another slave trainee.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "fetching trainees for an orgy.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "punishing another slave trainee.") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "punished another slave.") >= 0
+        return true
+    endif
     return false
-EndFunction 
+EndFunction
 
 Function UpdateNotificationAge(int note, Float timestamp)
     Float deltaDays = Utility.GetCurrentGameTime() - timestamp
@@ -530,9 +573,9 @@ Event OnBehaviourChange(Form akRef, String type)
     endif 
     String name_msg = Actor_name(slave)+" "+msg
     Trace("OnBehaviourChange",current+"->"+type+" "+name_msg)
-    if msg != ""
+    if msg != "" && !OnNotifcationSkip(name_msg)
         DirectNarration_Optional(type, name_msg, slave, true)
-    endif 
+    endif
     StorageUtil.SetStringValue(akRef, behaviour_current_key, type)
 EndEvent 
 

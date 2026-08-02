@@ -52,6 +52,7 @@ Tools under game `tools/`: Champollion, Caprica, XEditLib, Spriggit (see notes i
 Format (required for agent-generated commits):
 
 1. Subject: ≤ ~72 chars, imperative summary of *why* / outcome (not a file dump).
+    - focus on the goal of the change, not wht the change did
 2. Blank line.
 3. Body: multi-line `-` bullets naming concrete artifacts (paths, keys, YAML action names, FormIDs).
 
