@@ -1,4 +1,6 @@
-# (Alpha) SkyrimNet_DOM
+# SkyrimNet_DOM
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/goodprovider) 
 
 Basic SkyrimNet support for Diary of Mine.
 
