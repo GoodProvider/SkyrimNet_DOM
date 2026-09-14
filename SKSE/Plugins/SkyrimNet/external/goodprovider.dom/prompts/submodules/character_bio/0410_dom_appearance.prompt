@@ -1,0 +1,16 @@
+{% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+{% set show_external_only = (render_mode == "dialogue_target") %}
+{% if (show_external_only or show_internal) and dom_actor.loaded %}  
+        {% if dom_actor.has_tears %}
+        - {{dom_actor.name}}'s face is wet with tears.
+        {% endif %}
+        {% if dom_actor.has_mark %}
+        - {{dom_actor.name}} has a brand scarred into their skin.
+        {% endif %}
+        {% if dom_actor.is_aroused_for > 0 %} 
+        - {{dom_actor.name}}'s cheeks are warm bright red in shameful arousal for all to see.
+        {% endif %} 
+        {% if dom_actor.is_enraptured_for > 0 %} 
+        - {{dom_actor.name}}'s mind and body is in a state of rapture, heightened sexual sensitivity, with mouth half open and drool dripping. 
+        {% endif %} 
+{% endif %}

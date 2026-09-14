@@ -1,0 +1,45 @@
+{% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+{% if show_internal and dom_actor.loaded and dom_actor.is_slave %}
+    {% if dom_actor.is_in_love %} 
+        - {{dom_actor.name}} is in love with {{player.name}}
+    {% else if dom_actor.is_devoted %} 
+        - {{dom_actor.name}} is devoted to {{player.name}} 
+    {% endif %} 
+    - Orgasms are emotionally powerful and important. They always leave a powerful emotional memory. 
+    {% if dom_actor.training_mind.submission >= 30 %} 
+        {% if dom_actor.training_mind.submission < 60 %} 
+            - {{dom_actor.name}} is beginning to wonder if obeying sexual orders might be better than the alternative. 
+        {% else if dom_actor.training_mind.submission < 90 %} 
+            - {{dom_actor.name}} thinks obeying sexual orders might be better than the alternative. 
+        {% else %}
+            - {{dom_actor.name}} knows obeying sexual orders is better than the alternative. 
+        {% endif %}
+    {% endif %} 
+    {% if dom_actor.training_mind.humiliation >= 30 %} 
+        {% if dom_actor.training_mind.humiliation < 60 %} 
+            - {{dom_actor.name}} is beginning to wonder if obeying a humiliating order might be better than the alternative. 
+        {% else if dom_actor.training_mind.humiliation < 90 %} 
+            - {{dom_actor.name}} thinks obeying a humiliating order might be better than the alternative. 
+        {% else %}
+            - {{dom_actor.name}} knows obeying a humiliating order is better than the alternative. 
+        {% endif %}
+    {% endif %} 
+    {% if dom_actor.training_mind.fear < 30 %} 
+        - {{dom_actor.name}} does not fear {{dom_actor.owner}}!
+    {% else if dom_actor.training_mind.fear < 60 %} 
+        - {{dom_actor.name}} is a little afraid of {{dom_actor.owner}}.
+    {% else if dom_actor.training_mind.fear < 90 %} 
+        - {{dom_actor.name}} is afraid of {{dom_actor.owner}}.
+    {% else %}
+        - {{dom_actor.name}} terrified of {{dom_actor.owner}}!
+    {% endif %}
+    {% if dom_actor.training_mind.respect >= 30 %} 
+        {% if dom_actor.training_mind.respect < 60 %} 
+            - {{dom_actor.name}} isn't certain they have worth. They are terrified that {{dom_actor.owner}} might be right. 
+        {% else if dom_actor.training_mind.respect < 90 %} 
+            - {{dom_actor.name}} has begun to believe that they lack inherent value, maybe only in submission to others can they find meaning and identity.
+        {% else %}
+            - {{dom_actor.name}} has fully internalized the idea that they are "worthless". Only through {{dom_actor.owner}} is there identity and value. 
+        {% endif %}
+    {% endif %} 
+{% endif %}

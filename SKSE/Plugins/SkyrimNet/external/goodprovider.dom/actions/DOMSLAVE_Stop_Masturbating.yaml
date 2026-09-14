@@ -1,0 +1,11 @@
+customCategory: domslave_stop_masturbating
+name: DOMSLAVE_Stop_Masturbating
+description: 'PARAMS: {"intent":"Speakers intent with whom (if any), why, and how in third person"} - stop masturbating'
+eligibilityRules:
+  - conditions:
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - DOMActionMasturbating
+        comparisonOperator: ==
+        expectedValue: true

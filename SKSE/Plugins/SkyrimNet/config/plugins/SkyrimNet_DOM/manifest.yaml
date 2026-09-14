@@ -1,0 +1,32 @@
+plugin:
+  name: "SkyrimNet_DOM"
+  version: "0.0.6"
+  description: "Diary of Mine-SkyrimNet integration"
+  icon: "⛓️"
+
+schema:
+  fields:
+    - name: "Enable Ext2 events"
+      path: "dom.events.ext2"
+      type: "bool"
+      description: "Forwards DOM Ext2 ModEvents (praise, punish, inspect, comfort, and similar) to SkyrimNet. Off by default to avoid LLM spam."
+      defaultValue: false
+      category: "Events"
+
+    - name: "Notification ring size"
+      path: "dom.events.notification_ring"
+      type: "int"
+      description: "Per-actor aged-notification ring buffer size. New rings use this size; existing rings keep theirs until you load a save."
+      min: 5
+      max: 50
+      defaultValue: 20
+      category: "Events"
+
+    - name: "Short-lived event TTL (ms)"
+      path: "dom.events.short_lived_ttl"
+      type: "int"
+      description: "Milliseconds that short-lived SkyrimNet events (obey, runaway, bag, call for help) stay in the short-lived store."
+      min: 1000
+      max: 600000
+      defaultValue: 100000
+      category: "Events"

@@ -1,0 +1,42 @@
+customCategory: domslave_sexual_activities
+name: DOMSLAVE_Sexual_Activities
+description: 'PARAMS: {"superior":"Actor", "target":"Actor", "style":"forceful|normal|gentle (two only)", "direction":"giving|getting|fucking|fucked in", "method":"pussy|mouth|ass|oral|handjob|boobjob|thighjob|fisting|dildo|fingering|footjob|masturbation", "participate":"Actor (three only)", "intent":"who, why, and how"} - [direction] [method] sexual activities'
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - OStimActorCountFaction
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: papyrus_util
+        arguments:
+          - "HasIntValue"
+          - currentActor
+          - "skyrimnet_sexlab_scene_actor_lock"
+        comparisonOperator: ==
+        expectedValue: false

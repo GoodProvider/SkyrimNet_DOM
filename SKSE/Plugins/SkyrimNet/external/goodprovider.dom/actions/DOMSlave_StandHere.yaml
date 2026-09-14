@@ -1,0 +1,52 @@
+name: DOMSlave_StandHere
+description: Stop and wait in place when ordered to stand still, stay put, or hold position.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoStandStill
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The NPC being told to stand still / wait here
+enabled: true
+defaultPriority: 7
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - OStimExcitementFaction
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionTied
+        comparisonOperator: <
+        expectedValue: 0
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true
+eventString: "{{ actor.name }} stops moving and holds position"
+isShortLived: true

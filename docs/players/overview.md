@@ -4,22 +4,28 @@
 
 Requirements: [requirements.md](requirements.md). Authoring: [../authors/actions.md](../authors/actions.md). Changelog: [../../CHANGELOG.md](../../CHANGELOG.md).
 
+LLM actions and prompts ship as SkyrimNet plugin `goodprovider.dom` (External on the Plugins page). Requires SkyrimNet 0.25.0+. Tune Ext2 / notification ring / short-lived TTL in the SkyrimNet dashboard (`dom.events.*`), not an in-game MCM.
+
 ## What it does
 
 - Converts most DOM activity into Direct Narration or SkyrimNet events
-  - DOM does not expose everything as events; not every Ext2 path is registered — see [../authors/events.md](../authors/events.md)
-- SkyrimNet YAML actions for common slave orders (`SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_*.yaml`)
+  - DOM does not expose everything as events; Ext2 is off unless you enable it — see [../authors/events.md](../authors/events.md)
+- SkyrimNet YAML actions for common slave orders (`SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/`)
   - Social (`Be_`): flatter, insult, praise-tell, promises, scold, refuse
   - `Act*` (silent / respectful / maid), Poses, FightForMe, chores/entertain, movement/posture, drink
   - Dress / Undress
   - Sex (2P penis / no_penis, 3P) / masturbate / stop-masturbate / refuse (via SkyrimNet_SexLab scene helpers)
   - Punish (+ refused / other → punishment reasons)
-- Character bio prompts for DOM slaves (appearance, bondages, skills, aged notifications, and more)
+- Character bio prompts for DOM actors (slaves, slavers, and others — appearance, bondages, skills, aged notifications, and more)
 - Punishment reason mapping (`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`)
-- Item descriptions for DOM ropes
+- Item descriptions for DOM ropes (`config/items/`)
 - Healing Hands trigger — cleanup / comfort Direct Narration when healing is cast
 
 ## Notes / FAQ
+
+### Actions or prompts missing after updating SkyrimNet
+
+Confirm SkyrimNet is 0.25.0 or later, then check **Plugins > Installed Plugins** for `goodprovider.dom` with an **External** badge. Files left in the old `prompts/` or `config/actions/` folders are ignored. **Plugins > Import Old Content** is for personal tweaks, not this mod — an imported copy hides later updates.
 
 ### DOM arousal
 

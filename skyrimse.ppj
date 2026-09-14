@@ -17,6 +17,7 @@
     </Variables>
     <Imports>
         <Import>@ModsFolder\SKSE64\Scripts\Source</Import>
+        <Import>@ModsFolder\SkyrimNet_DOM\Headers_Source</Import>
         <Import>@ModsFolder\SkyrimNet_DOM\Headers_Source\DOM</Import>
         <Import>@ModsFolder\SkyrimNet_DOM\Headers_Source\OStim</Import>
         <Import>@ModsFolder\SkyrimNet_DOM\Headers_Source\Devious Devices</Import>
@@ -30,7 +31,7 @@
             <Import>@ModsFolder\SexLabFrameworkAE_v166b\scripts\Source</Import>
                 <Import>@ModsFolder\MfgFix\Source\Scripts</Import>
                 <Import>@ModsFolder\FNIS Behavior SE 7_6\source\scripts</Import>
-                <Import>@ModsFolder\RaceMenu\scripts\source</Import>
+                <!-- RaceMenu\scripts\source is not installed in this mods tree; pyro fails if the path is missing. -->
                 <Import>@ModsFolder\FNIS Creature Pack SE\scripts\source</Import>
             <Import>@ModsFolder\Papyrus MessageBox - SKSE NG\Scripts\Source</Import>
             <Import>@ModsFolder\SkyUI\scripts\Source</Import>

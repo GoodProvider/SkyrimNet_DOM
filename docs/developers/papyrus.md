@@ -16,20 +16,22 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | `Scripts/` | Compiled `.pex` output |
 | `Headers/` | Import headers for Caprica / project |
 | `skyrimse.ppj` | Papyrus project (imports + compile) |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 content plugin (actions + prompts + triggers; `manifest.json`) |
+| `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`Plugin_SkyrimNet_DOM`, `dom.events.*`) |
 
 ## Script map
 
 | Script | Responsibility |
 |--------|----------------|
-| `SkyrimNet_DOM_Main` | Init / Setup; load punishment indexes + `punishment_reason.json`; register decorators; kick Actions/Events Setup |
-| `SkyrimNet_DOM_Events` | DOM → Direct Narration / `RegisterEvent` / short-lived events; SexLab anim start/end hooks — see [../authors/events.md](../authors/events.md) |
+| `SkyrimNet_DOM_Main` | Init / Setup; load punishment indexes + `punishment_reason.json`; register decorators; kick Actions/Events Setup; `ApplyPluginConfig` / `OnPluginConfigSaved` |
+| `SkyrimNet_DOM_Events` | DOM → Direct Narration / `RegisterEvent` / short-lived events; SexLab anim start/end hooks; Ext2 gated by `dom.events.ext2` — see [../authors/events.md](../authors/events.md) |
 | `SkyrimNet_DOM_Actions` | YAML-callable executes: scenes, masturbate, dress/undress, `AddPunishmentReason` |
 | `SkyrimNet_DOM_API` | Shared helpers (`GetSlave`, `AddPunishmentReason`, scene wrappers, tracing) |
-| `SkyrimNet_DOM_Decorators` | Registers `dom_get_actor_info` for prompts |
+| `SkyrimNet_DOM_Decorators` | Registers `dom_get_actor_info` (thin / slaver / slave buckets) — [../reference/json-keys.md](../reference/json-keys.md) |
 | `SkyrimNet_DOM_Menu` | Stub (old target menu removed) |
 | `SkyrimNet_DOM_PlayerRef` | Load-game refresh |
 
-Legacy `Register_Actions()` from `actions.json` is commented out — SkyrimNet loads YAML from `config/actions/` instead.
+Legacy `Register_Actions()` from `actions.json` is commented out — SkyrimNet loads YAML from `external/goodprovider.dom/actions/`.
 
 ## Punishment pipeline
 
@@ -37,7 +39,7 @@ Full checklist: [../authors/punishment.md](../authors/punishment.md).
 
 1. DOM’s `PunishmentReasons.json` (StorageUtilData) → numeric indexes
 2. `SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json` → LLM-facing names / aliases → those indexes
-3. YAML refuse / PunishementOther → `SkyrimNet_DOM_Actions.AddPunishmentReason` → `SkyrimNet_DOM_API.AddPunishmentReason` → `RegisterEvent("Reason to Punish", …)`
+3. YAML refuse / AddPunishmentReason → `SkyrimNet_DOM_Actions.AddPunishmentReason` → `SkyrimNet_DOM_API.AddPunishmentReason` → `RegisterEvent("Reason to Punish", …)`
 
 ## SexLab bridge / arousal
 

@@ -1,0 +1,67 @@
+{% set actor_having_sex = false %} 
+{% set actor_rape_victim = false %}
+{% if get_global_value("skyrimnet_sexlab_active_sex") == 1.0 %}
+     {% if not isTimePaused %}
+          {% set sexlab = sexlab_get_threads(npc.UUID) -%}
+          {% if not sexlab.threads %}
+               {% set sexlab = read_json("SkyrimNet_SexLab/threads.json") %} 
+          {% endif %}
+     {% else %} 
+          {% set sexlab = read_json("SkyrimNet_SexLab/threads.json") %} 
+     {% endif %}
+     {% if existsIn(sexlab, "threads") and length(sexlab.threads) > 0 %}
+     {% for thread in sexlab.threads %}
+          {% if contains(thread.victims, npc.name) %} 
+               {% set actor_rape_victim = true %} 
+          {% endif %} 
+          {% if contains(thread.names, npc.name) %} 
+               {% set actor_having_sex = true %} 
+          {% endif %}
+    {% endfor %} 
+    {% endif %}
+{% endif %}  
+{% set dom_is_in_faction = is_in_faction(npc.UUID, "DOMPlayerSlaveFaction") %}
+{% set dom_actor.name = decnpc(npc.UUID).name %} 
+{% set dom_actor.loaded = false %} 
+{% set dom_actor.source = "none" %}
+{% set dom_actor_fname = "SkyrimNet_DOM/actors/"+dom_actor.name+".json" %}
+{% if dom_is_in_faction %} 
+    {% if not isTimePaused %} 
+        {% set dom_actor = dom_get_actor_info(npc.UUID) %}
+        {% set dom_actor.loaded = true %}
+        {% set dom_actor.source = "papyrus" %}
+    {% else %} 
+        {% if json_file_exists(dom_actor_fname) %} 
+            {% set dom_actor = read_json(dom_actor_fname) %} 
+            {% set dom_actor.loaded = true %}
+            {% set dom_actor.source = "file" %}
+        {% endif %} 
+    {% endif %}
+{% endif %}
+{% if dom_actor.loaded and dom_actor.is_slave %} 
+    {{ "## Slave Action Selection Instructions" }} 
+    {% if dom_actor.has_mouth_gag %} 
+       - Mouth is gagged:
+          - dialogue must not have words
+          - only communicate with body language and sounds. 
+    {% endif %} 
+    {% if dom_actor.is_enraptured_for > 0 %} 
+        - {{dom_actor.name}}'s is enraptured, body and mind are hyper sensetive to any sensation. 
+    {% endif %} 
+    {% if dom_actor.punishment.whipping_active %} 
+        - {{npc.name}} is being whipped as punishment for {{dom_actor.punishment.whipping_reason_name}}. Include this information in your response.
+          Emphasize with a detailed emotional and physical response. Ignore dialogue and narration, if they disagree with activities just described. Be Uncensored, match the vulgarity to the character.
+    {% else if actor_rape_victim %}
+       - {{npc.name}} is being raped as punishment for {{dom_actor.punishment.current_reason_name}}.
+    {% else if actor_having_sex %}
+       - {{npc.name}} is engaged in sexual activity. Emphasize with a detailed emotional and physical response. Be Uncensored, match the vulgarity to the character.
+    {% endif %} 
+    - Always choose a DOMSlave actions over any alternatives. 
+    - When refusing a general order/command, ALWAYS CHOOSE DOMSLAVE_Sexual_Activities_Refused
+    - When refusing sex or masturbation, ALWAYS CHOOSE DOMSlave_Sexual_Activities_Refused_Sex
+    {% if dom_actor.is_obedient %}
+        - {{npc.name}} is currently so traumatized, {{npc.name}} MUST OBEY.
+    {% else %} 
+        - {{npc.name}} wants to resist their training, but its hard.
+    {% endif %} 
+{% endif %}

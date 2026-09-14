@@ -1,0 +1,42 @@
+customCategory: SkyDOM_FightForMe
+name: DOMSlave_DontFightForMe
+description: Never fight in any circumstance. Do not engage in combat, do not attack anyone, do not defend yourself or 
+  {{ player.name }}. Remain completely pacifist.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoActionActor
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that will be commanded to never fight
+  - type: static
+    value: DontFightForMe
+    name: the_event
+    description: The action name for don't fight command
+  - type: static
+    value: ''
+    name: type
+    description: Action type parameter (empty for don't fight)
+  - type: static
+    value: false
+    name: the_flag
+    description: Boolean flag parameter (false for don't fight)
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+    logicalOperator: AND
+    required: true
+
+eventString: "{{ actor.name }} agrees to never fight"

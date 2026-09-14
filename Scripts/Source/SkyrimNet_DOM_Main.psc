@@ -19,6 +19,12 @@ int punishment_default_index = 0
 ; Optional DD support
 Quest Property devices_group = None AUTO
 
+; Plugin_SkyrimNet_DOM dashboard settings (config/plugins/SkyrimNet_DOM/manifest.yaml)
+String PLUGIN_CONFIG = "Plugin_SkyrimNet_DOM"
+bool Property ext2_enabled = false Auto
+int Property notification_ring = 20 Auto
+int Property short_lived_ttl = 100000 Auto
+
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
     Setup() 
@@ -76,8 +82,44 @@ Function Setup()
         devices_group = Game.GetFormFromFile(0x800, "SkyrimNetUDNG.esp") as Quest
     else 
         devices_group = None 
-    endif   
+    endif
+
+    UnRegisterForModEvent("SkyrimNet_OnPluginConfigSaved")
+    RegisterForModEvent("SkyrimNet_OnPluginConfigSaved", "OnPluginConfigSaved")
+    ApplyPluginConfig()
 EndFunction
+
+Function ApplyPluginConfig()
+    ext2_enabled = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.ext2", false)
+
+    int ring = SkyrimNetApi.GetConfigInt(PLUGIN_CONFIG, "dom.events.notification_ring", 20)
+    if ring < 5
+        ring = 5
+    elseif ring > 50
+        ring = 50
+    endif
+    notification_ring = ring
+
+    int ttl = SkyrimNetApi.GetConfigInt(PLUGIN_CONFIG, "dom.events.short_lived_ttl", 100000)
+    if ttl < 1000
+        ttl = 1000
+    elseif ttl > 600000
+        ttl = 600000
+    endif
+    short_lived_ttl = ttl
+
+    SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
+    if events
+        events.notifications_size = notification_ring
+        events.ApplyExt2Events()
+    endif
+    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl)
+EndFunction
+
+Event OnPluginConfigSaved(string eventName, string strArg, float numArg, Form sender)
+    Trace("OnPluginConfigSaved", "--- reloading plugin config")
+    ApplyPluginConfig()
+EndEvent
 
 Function Load_Punishment_To_Index(String fname) 
     if punishment_to_index != 0 

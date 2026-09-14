@@ -6,6 +6,7 @@ import SkyrimNet_DOM_API
 import SkyrimNet_SexLab_Utilities
 
 Idle Property pa_HugA Auto  ; IDLE:000F4699
+SkyrimNet_DOM_Main Property dom_main Auto
 
 ;------------------------------------
 ; Shared Functions 
@@ -18,6 +19,7 @@ DOM_Actor Function Get_Slave(String func, Actor slaveActor,bool error_non_dom_ac
 EndFunction
 
 Function Setup() 
+    dom_main = (self as Quest) as SkyrimNet_DOM_Main
     Quest q = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Scene_Manager
     if q == None 
         Trace("Setup","Failed to get SkyrimNet_SexLab_Scene_Manager")
@@ -32,7 +34,11 @@ Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
     String speaker_name = GetDisplayname(speaker)
     String superior_name = GetDisplayname(superior)
     String msg = speaker_name+" obeys "+superior_name+" and does "+action_desc
-    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", 100000, speaker, superior)
+    int ttl = 100000
+    if dom_main
+        ttl = dom_main.short_lived_ttl
+    endif
+    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, speaker, superior)
 EndFunction
 
 ;------------------------------------
@@ -54,7 +60,8 @@ Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, Str
         endif 
     else
         slave.MasturbateHarder(superior) 
-    endif 
+    endif
+    SaveThreadsJson()
 EndFunction 
 Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool allowed=false)
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Stop", speaker, True) 
@@ -66,17 +73,31 @@ Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool
         SkyrimNet_DOM_API.AddPunishmentReason("SkyrimNet_DOM_Actions", "StopScene_Masturbate", superior, speaker, slave, "didnt obey")
     endif 
 
-    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
-    if main == None 
+    if !dom_main
         Trace("StopScene_Masturbate", "Failed to get SkyrimNet_DOM_Main")
         return 
     endif 
-    if !main.d_keys
-        Trace("StopScene_Masturbate", "main.d_keys is None")
+    if !dom_main.d_keys
+        Trace("StopScene_Masturbate", "dom_main.d_keys is None")
         return
     endif
-    main.d_keys.DOMDoStandStill(speaker)
+    dom_main.d_keys.DOMDoStandStill(speaker)
+    SaveThreadsJson()
+EndFunction
 
+; Dump after masturbate start/stop so paused 0050 does not keep the previous threads.json.
+Function SaveThreadsJson()
+    SkyrimNet_SexLab_Scene_Manager sm = manager
+    if sm == None
+        sm = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Scene_Manager
+        manager = sm
+    endif
+    if sm == None
+        Trace("SaveThreadsJson", "SkyrimNet_SexLab_Scene_Manager is None")
+        return
+    endif
+    sm.SaveThreadsJson()
+    Trace("SaveThreadsJson", "--- dumped threads.json")
 EndFunction 
 
 

@@ -12,7 +12,7 @@ Basic SkyrimNet support for Diary of Mine.
 
 ## Quick start
 
-1. Install requirements ([docs/players/requirements.md](docs/players/requirements.md)).
+1. Install requirements ([docs/players/requirements.md](docs/players/requirements.md)). SkyrimNet **0.25.0+**.
 2. Enable SkyrimNet narration; keep Diary of Mine + SkyrimNet_SexLab loaded.
 3. See player notes for arousal, spam, and obedience quirks ([docs/players/overview.md](docs/players/overview.md)).
 
@@ -20,7 +20,7 @@ Basic SkyrimNet support for Diary of Mine.
 
 | Task | Doc |
 |------|-----|
-| New / edit `DOMSlave_*.yaml` | [docs/authors/actions.md](docs/authors/actions.md) |
+| New / edit YAML actions | [docs/authors/actions.md](docs/authors/actions.md) |
 | Prompts / `dom_actor` | [docs/authors/prompts.md](docs/authors/prompts.md), [docs/reference/json-keys.md](docs/reference/json-keys.md) |
 | Punishment reasons | [docs/authors/punishment.md](docs/authors/punishment.md) |
 | Events / DN | [docs/authors/events.md](docs/authors/events.md) |

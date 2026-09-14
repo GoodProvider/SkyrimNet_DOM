@@ -1,6 +1,6 @@
 # SkyrimNet_DOM
 
-> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items/triggers.
+> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items/triggers. LLM content ships as `goodprovider.dom`.
 
 ## Read by job
 
@@ -19,7 +19,7 @@
 
 ## Optional examples (in-tree)
 
-- Action YAML: SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_sex_start_2_penis.yaml
+- Action YAML: SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_Sex_Two_Fucking.yaml
 - Punishment map: SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json
 - Item YAML: SKSE/Plugins/SkyrimNet/config/items/diaryofmine_EB8659.yaml
 

@@ -38,14 +38,14 @@ Empty/missing description falls back to a generic “refused to obey … command
 
 ## Helper prompt
 
-[`dom_punishment_reason.prompt`](../../SKSE/Plugins/SkyrimNet/prompts/helpers/dom_punishment_reason.prompt) is a pipe-separated allowlist for the LLM. Keep it in sync when you add or rename reasons the model must choose.
+[`dom_punishment_reason.prompt`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/prompts/helpers/dom_punishment_reason.prompt) is a pipe-separated allowlist for the LLM. Keep it in sync when you add or rename reasons the model must choose.
 
 ## YAML entry points
 
 | Action | Role |
 |--------|------|
-| `DOMSlave_PunishmentRefused.yaml` / sex refused | Passes `reason` into `AddPunishmentReason` |
-| `DOMSlave_PunishementOther.yaml` | Free-form / other reasons |
+| `DOMSlave_Refused.yaml` / sex refused | Passes `reason` into `AddPunishmentReason` |
+| `DOMSlave_AddPunishmentReason.yaml` | Free-form / other reasons |
 | Scene helpers | May inject fixed reasons (e.g. `didnt obey`, `didnt listen`) |
 
 Parameter names must match Papyrus (`reason`, `rejector`, `superior`). Stay within the [8-parameter YAML limit](actions.md).

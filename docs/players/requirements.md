@@ -3,7 +3,7 @@
 ## Required
 
 - Diary of Mine (`DiaryOfMine.esm`)
-- SkyrimNet
+- SkyrimNet **0.25.0+** (Beta 25). This mod ships LLM content as plugin `goodprovider.dom` under `Data/SKSE/Plugins/SkyrimNet/external/`. Older SkyrimNet builds that only read `prompts/` and `config/actions/` will not load those files.
 - SkyrimNet_SexLab
 
 ## Optional

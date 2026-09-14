@@ -1,0 +1,42 @@
+customCategory: SkyDOM_FightForMe
+name: DOMSlave_FightForMe
+description: Be ready to fight for {{ player.name }} when they are attacked. This makes you a combat companion who will 
+  defend {{ player.name }} in battle.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoActionActor
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that will be commanded to fight for you
+  - type: static
+    value: FightForMe
+    name: the_event
+    description: The action name for fight command
+  - type: static
+    value: ''
+    name: type
+    description: Action type parameter (empty for fight)
+  - type: static
+    value: false
+    name: the_flag
+    description: Boolean flag parameter (false for fight)
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+    logicalOperator: AND
+    required: true
+
+eventString: "{{ actor.name }} agrees to fight for {{ player.name }}"

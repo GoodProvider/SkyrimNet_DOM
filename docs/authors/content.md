@@ -36,17 +36,17 @@ If you write more Diary of Mine item descriptions, please share them.
 
 ## Triggers
 
-Path:
+Path (Beta 25 content plugin):
 
 ```
-SKSE/Plugins/SkyrimNet/config/triggers/
+SKSE/Plugins/SkyrimNet/external/goodprovider.dom/triggers/
 ```
 
-**Healing Hands** ([`Healing Hands.yaml`](../../SKSE/Plugins/SkyrimNet/config/triggers/Healing%20Hands.yaml)) — comfort / blood-cleanup narrative hook:
+**Healing Hands** ([`Healing_Hands.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/triggers/Healing_Hands.yaml), `name: Healing_Hands`) — comfort / blood-cleanup narrative hook:
 
 - Fires on `hit` when `weapon_id` equals Healing Hands (316402).
 - Response type `direct_narration` with warm “healed / grateful” copy.
-- Audience `target`; short cooldown.
+- Audience `target`; short cooldown (`cooldownSeconds: 5` in the trigger file).
 
 This is SkyrimNet config, not Papyrus in this mod. Use it when play calls for cleaning up welts before comfort dialogue (see [../players/overview.md](../players/overview.md)).
 

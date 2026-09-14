@@ -6,13 +6,18 @@ See also: [prompts.md](prompts.md) · [punishment.md](punishment.md) · [events.
 
 ## Where
 
-Authoritative actions live here:
+SkyrimNet Beta 25+ reads this mod's LLM content from the **external plugin** folder. Folder name must equal `manifest.json` `id`.
 
-```
-SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_*.yaml
-```
+| Path | Role |
+|------|------|
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Plugin root (`manifest.json`) |
+| `…/actions/` | Action YAML (filename stem must equal in-file `name`) |
+| `…/prompts/` | Bio / helper / user_final_instructions prompts |
+| `…/triggers/` | Healing Hands trigger |
 
 Do **not** use `SKSE/Plugins/SkyrimNet_DOM/actions.json` — that file is legacy and is no longer registered.
+
+Settings schema (dashboard, not LLM files) lives at `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/manifest.yaml`.
 
 ## Copy a sibling
 
@@ -21,21 +26,21 @@ Start from an existing file in the same family:
 | Family | Examples | Typical executor |
 |--------|----------|------------------|
 | `Be_` | flatter, insult, praise-tell, promises, scold, refuse | `DOM_Keys` / `DOMDoActionActor` |
-| `Act*` | `ActSilent`, `ActRespectful`, `ActMyMaid` | `DOM_Keys` |
+| `Act*` | `ActSilent`, `ActRespectful`, `BeMyMaid` | `DOM_Keys` |
 | `Pose_` | display, dance, chair, presentations | `DOM_Keys` |
 | FightForMe / chores / movement / drink | Follow, Kneel, DoFlowers, DrinkAlcohol | `DOM_Keys` |
 | Dress / Undress | `DOMSlave_Dress.yaml`, `DOMSlave_Undress.yaml` | `SkyrimNet_DOM_Actions` |
 | `sex_` / masturbate / stop-masturbate | 2P penis / no_penis, 3P, refuse, harder, stop allowed/disallowed | `SkyrimNet_DOM_Actions` |
 | `punish_` | spanking, whipping/oral, refused, other | `SkyrimNet_DOM_Actions` |
 
-Category parents (e.g. `DOMSlave_Be_.yaml`, `DOMSlave_Pose_.yaml`) group related actions — keep `customCategory` aligned with siblings.
+Category parents (e.g. `SkyDOM_Be_Told.yaml`, `SkyDOM_Pose.yaml`) group related actions — keep `customCategory` aligned with siblings. The YAML filename must equal the in-file `name` (case-insensitive).
 
 Two-person consensual sex is split into siblings (copy the matching one):
 
 | File | Action name | `setting_name` | Notes |
 |------|-------------|----------------|-------|
-| `DOMSlave_sex_start_2_penis.yaml` | `DOMSlave_Sex_Two_Fucking` | `""` | Maps `style`; methods `pussy\|mouth\|ass` |
-| `DOMSlave_sex_start_2_no_penis.yaml` | `DOMSlave_Sex_Two_Giving` | `"no_penis"` | Maps `style`; oral/handjob-style methods |
+| `DOMSlave_Sex_Two_Fucking.yaml` | `DOMSlave_Sex_Two_Fucking` | `""` | Maps `style`; methods `pussy\|mouth\|ass` |
+| `DOMSlave_Sex_Two_Giving.yaml` | `DOMSlave_Sex_Two_Giving` | `"no_penis"` | Maps `style`; oral/handjob-style methods |
 
 There is no monolithic `DOMSlave_sex_start_2.yaml`.
 
@@ -62,7 +67,7 @@ SkyrimNet has a **hard limit of 8 parameters** on action YAMLs (`parameterMappin
 
 ### 1. DOM_Keys (social / pose / chore)
 
-Calls Diary of Mine directly. Example: [`DOMSlave_Be_PraisedTell.yaml`](../../SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_Be_PraisedTell.yaml)
+Calls Diary of Mine directly. Example: [`DOMSlave_Be_PraisedTell.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_Be_PraisedTell.yaml)
 
 - `scriptName: DOM_Keys`
 - `executionFunctionName: DOMDoActionActor`
@@ -72,7 +77,7 @@ Copy a `Be_` or `Pose_` sibling and change the static event/type values to match
 
 ### 2. SkyrimNet_DOM_Actions (sex / punish / dress)
 
-Calls our bridge, which talks to DOM and/or SkyrimNet_SexLab. Example: [`DOMSlave_punish_spanking.yaml`](../../SKSE/Plugins/SkyrimNet/config/actions/DOMSlave_punish_spanking.yaml)
+Calls our bridge, which talks to DOM and/or SkyrimNet_SexLab. Example: [`DOMSlave_punish_spanking.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_punish_spanking.yaml)
 
 Common execute functions:
 
@@ -83,7 +88,7 @@ Common execute functions:
 
 **Parameter names in YAML must match the Papyrus function signature** (see [../developers/papyrus.md](../developers/papyrus.md)). Wrong names or counts fail at runtime. Stay within the **8-parameter** hard limit above.
 
-`StartScene_Consensual_Three` and `StartScene_Nonconsensual_Two` omit `style` from the quest mapping and always pass `style=""` into SexLab. Two-person consensual YAML (`sex_start_2_penis` / `sex_start_2_no_penis`) still maps `style` into `StartScene_Consensual_Two`.
+`StartScene_Consensual_Three` and `StartScene_Nonconsensual_Two` omit `style` from the quest mapping and always pass `style=""` into SexLab. Two-person consensual YAML (`DOMSlave_Sex_Two_Fucking` / `DOMSlave_Sex_Two_Giving`) still maps `style` into `StartScene_Consensual_Two`.
 
 Dress also uses Papyrus eligibility helpers:
 
@@ -109,7 +114,7 @@ Reuse conditions from a sibling. Slave vs non-slave is a **faction rank**, not a
 | Pattern | Typical check | Examples |
 |---------|---------------|----------|
 | Player slave | `get_faction_rank` `== 1` (or category parent `> 0`) | Follow, Dress, Pose, most `Be_` children |
-| Non-slave | `get_faction_rank` `== -1` | `DOMSlave_Follow_non_slave.yaml`, `DOMSlave_*_non_slave.yaml` |
+| Non-slave | `get_faction_rank` `== -1` | `DOMSlave_DOMFollowNonSlave.yaml`, other `*_non_slave` / patched siblings |
 
 Copy a `*_non_slave.yaml` sibling when the order should apply to non-slaves (often a different `scriptName` / SkyrimNet library execute).
 
@@ -126,7 +131,7 @@ Most movement / pose / sex / punish actions also require the speaker is free:
 | `DOMActionTied` rank `< 0` (where used) | Not DOM-tied for that action |
 | `papyrus_util` `HasIntValue` `skyrimnet_sexlab_scene_actor_lock` == false | Not locked by SkyrimNet_SexLab scene |
 
-Category parents (`DOMSlave_Be_.yaml`, `DOMSlave_Pose_.yaml`, `DOMSlave_sex_.yaml`, …) often define the shared lock stack — keep children aligned.
+Category parents (`SkyDOM_Be_Told.yaml`, `SkyDOM_Pose.yaml`, `DOMSLAVE_Sexual_Activities.yaml`, …) often define the shared lock stack — keep children aligned.
 
 Tighten rules for scene actions; keep social `Be_` rules lighter when appropriate.
 

@@ -104,15 +104,36 @@ int Function GetThreads() global
         return 0
     endif
 
-    int n = slaveManager.GetActorCount()
-    int i = 0
     int threads = JArray.object()
+    ; actorAliases is filled at ForceRefTo; GetActorCount/actorArray lag until UpdateActorArray.
+    if !slaveManager.actorAliases
+        Trace("GetThreads", "--- actorAliases empty")
+        return threads
+    endif
+    int n = slaveManager.GetMaxActorCount()
+    int i = 0
+    int skipped_no_actor = 0
+    int skipped_not_masturbating = 0
+    int skipped_busy = 0
     while i < n
-        DOM_Actor slave = slaveManager.GetActorByIndex(i)
-        if slave != None && slave.is_behaviour_masturbate && slave.behaviour == "masturbate" 
+        DOM_Actor slave = slaveManager.actorAliases[i] as DOM_Actor
+        if slave != None
             Actor akSlave = slave.GetActorRef()
-            if akSlave && !scene_manager.IsBusy(akSlave)
-                int thread = JMap.object()
+            if akSlave == None
+                skipped_no_actor += 1
+                Trace("GetThreads", "--- skip alias index:"+i+" no actor")
+            else
+                bool is_masturbating = slave.is_behaviour_masturbate || slave.behaviour == "masturbate"
+                if !is_masturbating && dom01.DOMActionMasturbating && akSlave.IsInFaction(dom01.DOMActionMasturbating)
+                    is_masturbating = true
+                endif
+                if !is_masturbating
+                    skipped_not_masturbating += 1
+                elseif scene_manager.IsBusy(akSlave)
+                    skipped_busy += 1
+                    Trace("GetThreads", "--- skip "+akSlave.GetDisplayName()+" busy")
+                else
+                    int thread = JMap.object()
 
                     int actor_obj = JMap.object()
                     JMap.setStr(actor_obj, "name", akSlave.GetDisplayName())
@@ -134,10 +155,13 @@ int Function GetThreads() global
 
                     JMap.setStr(thread, "description", akSlave.GetDisplayName()+" is masturbating")
                     JArray.addObj(threads, thread)
-            endif 
+                    Trace("GetThreads", "--- add "+akSlave.GetDisplayName()+" is masturbating")
+                endif
+            endif
         endif
         i += 1
     endwhile
+    Trace("GetThreads", "--- scanned:"+n+" threads:"+JArray.count(threads)+" skipped_no_actor:"+skipped_no_actor+" skipped_not_masturbating:"+skipped_not_masturbating+" skipped_busy:"+skipped_busy)
     return threads
 EndFunction
 

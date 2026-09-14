@@ -8,11 +8,11 @@ See also: [actions.md](actions.md) · [punishment.md](punishment.md) · [events.
 
 | Path | Namespace rule |
 |------|----------------|
-| `SKSE/Plugins/SkyrimNet/prompts/submodules/character_bio/` | **Shared namespace** across files. Numeric prefixes control order (`0006` runs before `0410`). |
-| `SKSE/Plugins/SkyrimNet/prompts/submodules/user_final_instructions/` | **Each file is its own namespace** — locals do not carry across files. |
-| `SKSE/Plugins/SkyrimNet/prompts/helpers/` | Shared helpers for actions/reasons (e.g. `dom_punishment_reason.prompt`, sex-start helpers). |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/prompts/submodules/character_bio/` | **Shared namespace** across files. Numeric prefixes control order (`0006` runs before `0410`). |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/prompts/submodules/user_final_instructions/` | **Each file is its own namespace** — locals do not carry across files. |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/prompts/helpers/` | Shared helpers for actions/reasons (e.g. `dom_punishment_reason.prompt`, sex-start helpers). |
 
-SkyrimNet_DOM also works alongside SkyrimNet_SexLab prompts under that mod’s `SKSE/Plugins/SkyrimNet/prompts` tree.
+SkyrimNet_DOM also works alongside SkyrimNet_SexLab prompts under that mod’s `SKSE/Plugins/SkyrimNet/external/goodprovider.sexlab/prompts` tree.
 
 ## character_bio (shared namespace)
 

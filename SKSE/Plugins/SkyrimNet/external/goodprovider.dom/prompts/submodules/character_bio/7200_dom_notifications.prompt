@@ -1,0 +1,16 @@
+{% if existsIn(dom_actor, "notifications") and (render_mode == "full" or render_mode == "thoughts" or render_mode == "transform") %}
+    {% if dom_actor.loaded and length(dom_actor.notifications) > 0 %}
+        ## Slavery Events
+        {% for notification in dom_actor.notifications %}
+            {% if notification.message != "" %} 
+              {% if notification.minutes <= 59 %}
+            {{notification.message}} ({{notification.minutes}} minutes ago)
+              {% else if notification.minutes <= 1439 %}
+            {{notification.message}} ({{notification.hours}} hours ago)
+              {% else %}
+            {{notification.message}} ({{notification.days}} days ago)
+              {% endif %}
+            {% endif %} 
+        {% endfor %}
+    {% endif %}
+{% endif %}

@@ -1,0 +1,26 @@
+customCategory: SkyDOM_Be
+name: DOMSlave_Be_InsultedDegrading
+description: Use when {{ npc.name }} is being insulted, degraded, or verbally abused by {{ player.name }} or another 
+  character in dialogue.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoInsult
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that is being insulted
+  - type: static
+    value: degrading
+    name: type
+    description: The insult type - "degrading"
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+    logicalOperator: AND
+    required: true

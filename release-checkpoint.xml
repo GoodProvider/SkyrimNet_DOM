@@ -12,10 +12,10 @@
     <project>SkyrimNet_DOM</project>
     <summary>Bridge mod between SkyrimNet (LLM) and Diary of Mine (with SkyrimNet_SexLab).</summary>
     <repository_root>c:\Skyrim\dev\mods\SkyrimNet_DOM</repository_root>
-    <updated>2026-07-27</updated>
-    <base_tag>0.0.3</base_tag>
-    <next_version>0.0.5</next_version>
-    <version_status>Makefile VERSION=0.0.5; fomod/info.xml still 0.0.4 until make release; git tags only through 0.0.2 (0.0.3 is zip-only, untagged); versions/SkyrimNet_DOM 0.0.4.zip exists but is stale vs Ext3 HEAD — need versions/SkyrimNet_DOM 0.0.5.zip</version_status>
+    <updated>2026-08-01</updated>
+    <base_tag>0.0.5</base_tag>
+    <next_version>0.0.6</next_version>
+    <version_status>Makefile VERSION=0.0.6; fomod/info.xml still 0.0.5 until make release; git tag 0.0.5 exists; need versions/SkyrimNet_DOM 0.0.6.zip and git tag 0.0.6</version_status>
     <related_artifacts>
       <artifact role="release rules / persona">release-guide.xml</artifact>
       <artifact role="agent router">llms.txt</artifact>
@@ -54,7 +54,9 @@
 
   <status>
     <note>2026-07-27: docs migrated guides/ → docs/ (players, authors, developers, reference); llms.txt and release-checkpoint added; AGENTS thinned; KNOWLEDGEBASE stub created. documentation-guide.xml not kept in this repo.</note>
-    <note>2026-07-27: release-doc pass for 0.0.5 complete (CHANGELOG* retargeted since 0.0.3; Makefile 0.0.5; docs spot-check OK). Open: commit when asked → make release → git tag 0.0.5 → GitHub Release.</note>
+    <note>2026-07-27: release-doc pass for 0.0.5 complete (CHANGELOG* retargeted since 0.0.3; Makefile 0.0.5; docs spot-check OK). Shipped: tag 0.0.5 + zip.</note>
+    <note>2026-08-01: release-doc pass for 0.0.6 complete (base_tag 0.0.5; committed delta only — decorator buckets, bio prompts, notification fan-out/skip). Open: commit when asked → make release → git tag 0.0.6 → GitHub Release.</note>
+    <note>2026-09-13: Beta 25 content plugin `goodprovider.dom` (external layer). Actions renamed to match in-file `name`. Trigger Healing_Hands. Settings schema at config/plugins/SkyrimNet_DOM. Item YAML stays at config/items. Papyrus GetConfig* on Plugin_SkyrimNet_DOM.</note>
   </status>
 
   <conventions>
@@ -62,5 +64,6 @@
     <convention>Protocol values: underscore-wrapped (_pain_, _pleasure_, _gagged_, _kissing_). Canonical: docs/reference/protocol-tokens.md</convention>
     <convention>Actor lock StorageUtil key: skyrimnet_sexlab_scene_actor_lock.</convention>
     <convention>Two-person consensual sex: DOMSlave_Sex_Two_Fucking (penis, empty setting_name) vs DOMSlave_Sex_Two_Giving (no_penis).</convention>
+    <convention>dom_get_actor_info buckets: thin (DOMActor) / slaver (dom_faction) / slave (is_slave). Bio load gate: DOMActorFaction.</convention>
   </conventions>
 </checkpoint>

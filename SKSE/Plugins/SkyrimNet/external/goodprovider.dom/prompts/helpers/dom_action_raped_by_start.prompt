@@ -1,0 +1,11 @@
+{% set speaker = decnpc(npc.UUID) -%}
+{% set nearby_npcs = append(get_nearby_npc_list(npc.UUID), player) -%}
+{% set assailants = [] -%}
+{% for assailant in nearby_npcs -%}
+    {% set actor = decnpc(assailant.UUID) -%}
+    {% if not actor.isChild and actor.UUID != speaker.UUID and not is_in_faction(actor.UUID, "SexLabAnimatingFaction") -%}
+        {% set assailants = append(assailants, actor.name) -%}
+    {% endif -%}
+{% endfor -%}
+{% set assailants_joined = join(assailants, ", ") -%}
+Slave {{ decnpc(npc.UUID).name }} starts to be punished with {style} {type} rape by {target}, Optional additional assailants: {{assailants_joined}}.

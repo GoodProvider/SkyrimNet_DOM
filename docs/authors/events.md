@@ -31,19 +31,21 @@ That file is what prompts use when time is paused (`read_json("SkyrimNet_DOM/act
 
 ## What is registered today
 
-On Setup, Events enables DOM external Ext / Ext1 / **Ext3** and registers a **subset** of ModEvents, plus SexLab anim hooks:
+On Setup, Events enables DOM external Ext / Ext1 / **Ext3** via **`DOM_API.SetSendExternalEvents*`** (`main.d_api` on quest `DOM01`) and registers a **subset** of ModEvents, plus SexLab anim hooks. Do not call those toggles on `DOM_Core` — they are not runtime methods there. Dashboard settings live at `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/manifest.yaml` (`dom.events.*`); Papyrus reads `Plugin_SkyrimNet_DOM` via `GetConfig*`.
 
 **Live (examples):** `DOMOnCallForHelp`, `DOMOnKinkDiscovered`, `DOMOnLostVirginity`, `DOMOnRunaway`, `DOMOnMoodChange`, `DOMOnBehaviourChange`, `DOMOnNotificationSent` (needs Ext3), `HookAnimationStart` / `HookAnimationEnd`.
 
-**Not enabled:** `SetSendExternalEventsExt2` is commented out. Many Ext2 handlers (`DOMOnPraised`, `DOMOnPunished`, inspections, comfort, etc.) exist in the script but are not registered — do not assume every DOM Ext2 path fires here.
+**Ext2 (off by default):** `dom.events.ext2` in the SkyrimNet dashboard. When on, `SetSendExternalEventsExt2(true)` and Ext2 handlers (`DOMOnPraised`, `DOMOnPunished`, inspections, comfort, etc.) register. Default off is spam control. `DOMOnSex` stays with SkyrimNet_SexLab.
 
-**Orgasm feed:** Prefer `DOMOnNotificationSent` over `DOMOnOrgasm` (notifications arrive faster in testing). `DOMOnOrgasm` stays unregistered to avoid double-calling `DOMSlave_Orgasmed`. Orgasm text in notifications (e.g. Dom “brain melts”) is routed to `SkyrimNet_SexLab_Handler_DOM` when present, then returns (no DN from that Events branch — Handler / OrgasmCustom owns DN). Without Ext3, melt HUD still shows but ModEvent never fires → SexLab Combined can deny Dom slaves or narrate Bob-only while Dom melt fired.
+**Orgasm feed:** Prefer `DOMOnNotificationSent` over `DOMOnOrgasm` (notifications arrive faster in testing). `DOMOnOrgasm` stays unregistered to avoid double-calling `DOMSlave_Orgasmed`. Only Dom melt/climax phrasing (`brain melts`, `mind melts`, `overwhelmed by orgasm`, `submerged by orgasm`, and not `your orgasm`) is routed to `SkyrimNet_SexLab_Handler_DOM`; that branch returns (no DN from Events — Handler / OrgasmCustom owns DN). Do **not** match bare `"orgasm"`: the player-climax tease (`squirms under your grasp as your orgasm submerges you`) is `OnNotifcationSkip` (no DN, no notification ring). Orgasm-control HUD is also not a climax. Without Ext3, melt HUD still shows but ModEvent never fires → SexLab Combined can deny Dom slaves or narrate Bob-only while Dom melt fired.
 
 ## Notification ring buffer
 
-`AddNotification` keeps up to **20** recent messages per actor (JMap keyed by FormID), with game-time stamps. A duplicate anywhere in the ring refreshes its timestamp and moves to newest. Bio slice `7200_dom_notifications.prompt` ages these into human-readable windows.
+`AddNotification` keeps a per-actor ring (JMap keyed by FormID), with game-time stamps. Size is `dom.events.notification_ring` (default **20**). New rings use the current size; existing rings keep theirs until you load a save. A duplicate anywhere in the ring refreshes its timestamp and moves to newest. It also fans out via `AddNotificationActor` to other DOM actors whose display name appears in the text. Bio slice `7200_dom_notifications.prompt` ages these into human-readable windows.
 
-`OnNotificationSent` skips some noise (`OnNotifcationSkip`), skips the player, and requires a DOM slave. Freshly-captured text may be rewritten to include a capture beat before optional DN.
+`OnNotificationSent` skips noise via `OnNotifcationSkip` (including generic trainer/trainee/follow/fetch lines and `"was just captured"`). Player / non-actor / non-slave early returns are currently commented out — delivery is wider than “DOM slave only.”
+
+**Capture / abduction:** `StartMood` “was just captured” is too late (end of Mind `AfterAssign` / `SetPersonality`). Events instead scans `DOM02.actorAliases` every 2s (`GetMaxActorCount`). `GetActorCount` / `actorArray` stay empty until `UpdateActorArray` after Mind `AfterAssign`. A new player-owned alias (`mind.is_player_slave`) gets required `DirectNarration` (`OnCaptureAssigned`) once per FormID. Existing aliases are seeded on load. Do not hang capture DN on `notificationType == "freshly captured"` — that type is also used for personality/training blurbs.
 
 ## SexLab hooks
 
@@ -52,5 +54,5 @@ On Setup, Events enables DOM external Ext / Ext1 / **Ext3** and registers a **su
 ## Tips
 
 - Prefer changing handlers or DN text in `SkyrimNet_DOM_Events` over editing Diary of Mine.
-- If something “never shows up,” check whether its ModEvent is registered, whether the matching Ext toggle is on (Ext3 for notifications), and whether it uses optional DN vs `RegisterEvent` only.
-- Re-enable Ext2 only deliberately — DOM is spammy; optional DN + notifications exist to absorb volume.
+- If something “never shows up,” check whether its ModEvent is registered, whether Ext toggles were set on `d_api` (not `d_core`), whether Ext3 is on for notifications, and whether it uses optional DN vs `RegisterEvent` only. Capture/abduction DN is `OnCaptureAssigned` (new `DOM02` alias), not `OnNotificationSent`.
+- Re-enable Ext2 only deliberately (dashboard **Enable Ext2 events**) — DOM is spammy; optional DN + notifications exist to absorb volume.

@@ -1,0 +1,42 @@
+customCategory: SkyDOM_Pose
+name: SkyDOM_Pose
+description:  'Start performing a [type] pose {"type":"on display (perfect posture)|human chair|tease pussy|present ass|present breasts|cute|dance", "intent":"who, why, and how"}'
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: '>'
+        expectedValue: 0
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - OStimActorCountFaction
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: papyrus_util
+        arguments:
+          - "HasIntValue"
+          - currentActor
+          - "skyrimnet_sexlab_scene_actor_lock"
+        comparisonOperator: ==
+        expectedValue: false

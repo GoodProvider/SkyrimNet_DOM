@@ -1,0 +1,30 @@
+customCategory: SkyDOM_Be
+name: DOMSlave_Be_PraisedTell
+description: Use when {{ npc.name }} is being encouraged, praised, or motivated by {{ player.name }} or another 
+  character in dialogue.
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: Praise_Tell_Execute
+parameterMapping:
+  - type: speaker
+    name: speaker
+    description: The person that is being praised
+  - type: dynamic
+    name: superior
+    description: Actor who is superior to the speaker
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true

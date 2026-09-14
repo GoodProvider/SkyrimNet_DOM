@@ -1,0 +1,39 @@
+customCategory: SkyDOM_Be
+name: DOMSlave_Be_PraisedGropeAss
+description: Use when {{ npc.name }} is being encouraged, praised, or motivated by {{ player.name }} or another 
+  character in dialogue.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoActionActor
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that is being praised
+  - type: static
+    value: Praise
+    name: the_event
+    description: The action name - "Praise"
+  - type: static
+    value: grope ass
+    name: type
+    description: The praise type - "grope ass"
+  - type: static
+    value: false
+    name: the_flag
+    description: Boolean flag parameter (false for praise)
+enabled: false
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+    logicalOperator: AND
+    required: true

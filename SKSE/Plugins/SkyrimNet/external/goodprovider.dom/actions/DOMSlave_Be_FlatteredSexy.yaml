@@ -1,0 +1,26 @@
+customCategory: SkyDOM_Be
+name: DOMSlave_Be_FlatteredSexy
+description: Use when {{ npc.name }} is being verbally flattered, complimented, or seduced by {{ player.name }} or 
+  another character in dialogue.
+questEditorId: DOM02Topic
+scriptName: DOM_Keys
+executionFunctionName: DOMDoFlatter
+parameterMapping:
+  - type: speaker
+    name: akTarget
+    description: The person that is being flattered
+  - type: static
+    value: sexy
+    name: type
+    description: The flatter type - "sexy"
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+    logicalOperator: AND
+    required: true

@@ -14,6 +14,8 @@ Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go throu
 | `Scripts/` | Compiled `.pex` |
 | `Headers/` | Papyrus headers |
 | `skyrimse.ppj` | Pyro project |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + triggers) |
+| `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`dom.events.*`) |
 
 Repo root: `c:\Skyrim\dev\mods\SkyrimNet_DOM`.
 
@@ -76,7 +78,7 @@ Bad:
 - **Knowledgebase:** consult [KNOWLEDGEBASE.md](KNOWLEDGEBASE.md) before changes; append new quirks after sessions.
 - **INI load order:** Skyrim.ini then SkyrimPrefs.ini (last wins).
 - **SE ≠ VR** — never assume parity.
-- **Prompts:** `character_bio` files share one namespace; each `user_final_instructions` file is its own namespace. DOM prompts coexist with SkyrimNet_SexLab under `SKSE/Plugins/SkyrimNet/prompts`.
+- **Prompts:** `character_bio` files share one namespace; each `user_final_instructions` file is its own namespace. DOM prompts coexist with SkyrimNet_SexLab under `SKSE/Plugins/SkyrimNet/external/{author}.{slug}/prompts`.
 
 ### Top gotchas (see KNOWLEDGEBASE for detail)
 

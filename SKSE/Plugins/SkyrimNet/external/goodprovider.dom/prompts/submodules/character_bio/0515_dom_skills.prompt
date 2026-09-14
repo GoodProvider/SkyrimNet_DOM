@@ -1,0 +1,37 @@
+{% set show_internal = (render_mode == "full" or render_mode == "thoughts" or render_mode == "thought" or render_mode == "transform" or render_mode == "book" or render_mode == "equipment") %}
+{% set show_external_only = (render_mode == "dialogue_target") %}
+{% if ((actor_having_sex and show_external_only) or show_internal) and dom_actor.loaded and dom_actor.is_slave %}
+   - **Vaginal skill**: {%- if dom_actor.training_sex.vaginal < 25 -%} 
+     is terrible. only good as a vaginal fuck tool. 
+   {% else if dom_actor.training_sex.vaginal < 50 %} 
+     Mastered the basics of giving pleasure to others and themselves with vaginal sex.
+   {% else if dom_actor.training_sex.vaginal < 75 %} 
+     Good at giving pleasure to others and themselves with vaginal sex.
+   {% else if dom_actor.training_sex.vaginal < 95 %} 
+     Very good at giving pleasure to others and themselves with vaginal sex.
+   {% else %} 
+     Mastered vaginal sex, able to gift others and find for themselves the greatest of vaginal sex pleasures. 
+   {% endif %}
+   - **Anal skill**: {%- if dom_actor.training_sex.anal < 25 -%} 
+    is terrble. Ass only good as a fuck tool.
+   {% else if dom_actor.training_sex.anal < 50 %} 
+     Mastered the basics of giving pleasure to others and themselves with anal sex.
+   {% else if dom_actor.training_sex.anal < 75 %} 
+     Good at giving pleasure to others and themselves with anal sex.
+   {% else if dom_actor.training_sex.anal < 95 %} 
+     Very good at giving pleasure to others and themselves with anal sex.
+   {% else %} 
+     Mastered anal sex, able to gift others and find for themselves the greatest of anal sex pleasures. 
+   {% endif %}
+   {% if dom_actor.training_sex.oral < 25 %} 
+     Terrible at oral sex. Mouth is only good as a fuck tool. 
+   {% else if dom_actor.training_sex.oral < 50 %} 
+     Mastered the basics of giving pleasure to others and themselves with oral sex.
+   {% else if dom_actor.training_sex.oral < 75 %} 
+     Good at giving pleasure to others and themselves with oral sex.
+   {% else if dom_actor.training_sex.oral < 95 %} 
+     Very good at giving pleasure to others and themselves with oral sex.
+   {% else %} 
+     Mastered oral sex, able to gift others and find for themselves the greatest of oral sex pleasures. 
+   {% endif %}
+{% endif %}

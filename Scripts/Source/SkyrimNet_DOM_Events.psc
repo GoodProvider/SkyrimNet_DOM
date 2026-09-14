@@ -20,9 +20,10 @@ String events_log = "Data/SKSE/Plugins/SkyrimNet_DOM/events-log.json"
 ; --------------------------
 ; Helper functions 
 ; --------------------------
-int notifications_size = 20 
+int Property notifications_size = 20 Auto
 int actor_to_notifications = 0 
 int actor_to_notifications_next = 0 
+int capture_narrated = 0 
 
 ; --------------------------
 ; Helper functions 
@@ -56,6 +57,10 @@ Function Setup(Quest DOM01)
     if actor_to_notifications_next == 0
         actor_to_notifications_next = JMap.object()
         JValue.retain(actor_to_notifications_next)
+    endif
+    if capture_narrated == 0
+        capture_narrated = JMap.object()
+        JValue.retain(capture_narrated)
     endif
     Register_Events(DOM01)
 EndFunction
@@ -112,13 +117,13 @@ Function Register_Events(Quest DOM01)
     player_name = player.GetDisplayName()
     timeLastEvent = Utility.GetCurrentRealTime()
 
-    if !main || !main.d_core
-        Trace("Register_Events", "main or main.d_core is None, aborting")
+    if !main || !main.d_core || !main.d_api
+        Trace("Register_Events", "main, d_core, or d_api is None, aborting")
         return
     endif
     Trace("Register_Events", "main.d_core: "+main.d_core+" main.d_api:"+main.d_api+" main.d_sexlab:"+main.d_sexlab) 
-    main.d_core.SetSendExternalEvents(true)
-    main.d_core.SetSendExternalEventsExt(true)
+    main.d_api.SetSendExternalEvents(true)
+    main.d_api.SetSendExternalEventsExt(true)
 
     ; ----------------------------------
     ; SetSendExternalEvents 
@@ -149,37 +154,132 @@ Function Register_Events(Quest DOM01)
     ;DOMOnTrainingStatChange(Form sender, string stat, float value)
 
     ; ----------------------------------
-    ; SetSendExternalEvents2
+    ; SetSendExternalEvents2 — gated by ApplyExt2Events / dom.events.ext2
     ; ----------------------------------
-    ; main.d_core.SetSendExternalEventsExt2(true)
-    ; RegisterForModEvent("DOMOnSex", "OnSex") handeled by SkyrimNet_SexLab
-    ;;RegisterForModEvent("DOMOnSex", "OnSex")
-    ;RegisterForModEvent("DOMOnPriceInspection", "OnPriceInspection")
-    ;RegisterForModEvent("DOMOnBodyInspection", "OnBodyInspection")
-    ;RegisterForModEvent("DOMOnKissed", "OnKissed")
-    ;RegisterForModEvent("DOMOnPraised", "OnPraised")
-    ;RegisterForModEvent("DOMOnPunished", "OnPunished")
-    ;RegisterForModEvent("DOMOnFlattered", "OnFlattered")
-    ;RegisterForModEvent("DOMOnInsulted", "OnInsulted")
-    ;RegisterForModEvent("DOMOnComforted", "OnComforted")
-    ;RegisterForModEvent("DOMOnPromised", "OnPromised")
-    ;RegisterForModEvent("DOMOnThreatened", "OnThreatened")
-    ;RegisterForModEvent("DOMOnUndress", "OnUndress")
-    ;RegisterForModEvent("DOMOnWashSelf", "OnWashSelf")
-    ;RegisterForModEvent("DOMOnBranded", "OnBranded")
-    ;RegisterForModEvent("DOMOnSalute", "OnSalute")
-    ; RegisterForModEvent("DOMOnRecruited", "OnRecruited")
-    ;RegisterForModEvent("DOMOnReleased", "OnReleased")
+    ; DOMOnSex is handled by SkyrimNet_SexLab; do not register it here.
 
     ; Ext3 required for DOMOnNotificationSent (melt/orgasm text → Handler_DOM).
     ; Prefer notifications over DOMOnOrgasm (faster in testing); keep OnOrgasm unregistered to avoid double-fire.
-    main.d_core.SetSendExternalEventsExt3(true)
+    ; Toggles live on DOM_API (same quest as DOM_Core); calling them on d_core is a compile-only stub and a runtime no-op.
+    main.d_api.SetSendExternalEventsExt3(true)
+    Trace("Register_Events", "ext/ext1/ext3 enabled via d_api")
     ; ----------------------------------
     ; Set SexLab events
     ; ----------------------------------
     RegisterForModEvent("HookAnimationStart", "SexLab_AnimationStart")
     RegisterForModEvent("HookAnimationEnd", "SexLab_AnimationEnd")
 
+    SeedCaptureNarrated()
+    UnregisterForUpdate()
+    RegisterForUpdate(2.0)
+    Trace("Register_Events", "capture alias scan every 2s")
+
+EndFunction
+
+Function SeedCaptureNarrated()
+    int n = ScanCaptureAliases(false)
+    Trace("SeedCaptureNarrated", "seeded existing aliases n="+n)
+EndFunction
+
+int Function ScanCaptureAliases(bool narrate)
+    if !main || !main.d_core
+        return 0
+    endif
+    DOM_SlaveManager slaveManager = main.d_core.DOM02
+    if slaveManager == None || capture_narrated == 0
+        return 0
+    endif
+    ; Walk actorAliases (filled at ForceRefTo). GetActorCount/actorArray update only after Mind AfterAssign.
+    int n = slaveManager.GetMaxActorCount()
+    int i = 0
+    int filled = 0
+    while i < n
+        DOM_Actor domActor = slaveManager.actorAliases[i] as DOM_Actor
+        if domActor && domActor.GetActorRef()
+            filled += 1
+            MarkCaptureNarrated(domActor, narrate)
+        endif
+        i += 1
+    endwhile
+    return filled
+EndFunction
+
+Function MarkCaptureNarrated(DOM_Actor domActor, bool narrate)
+    if domActor == None
+        return
+    endif
+    Actor slave = domActor.GetActorRef()
+    if slave == None || slave == player
+        return
+    endif
+    DOM_Mind mind = domActor.mind
+    if mind && !mind.is_player_slave
+        return
+    endif
+    String uuid = slave.GetFormID() as String
+    if JMap.getInt(capture_narrated, uuid, 0) != 0
+        return
+    endif
+    JMap.setInt(capture_narrated, uuid, 1)
+    if narrate
+        String slave_name = slave.GetDisplayName()
+        String msg = player_name+" grabs "+slave_name+" by the throat, throws "+slave_name+" to the ground, and enslaves "+slave_name+"."
+        Trace("OnCaptureAssigned", slave_name)
+        DirectNarration(msg, slave)
+    endif
+EndFunction
+
+Event OnUpdate()
+    ScanCaptureAliases(true)
+EndEvent
+
+Function ApplyExt2Events()
+    UnregisterForModEvent("DOMOnPriceInspection")
+    UnregisterForModEvent("DOMOnBodyInspection")
+    UnregisterForModEvent("DOMOnKissed")
+    UnregisterForModEvent("DOMOnPraised")
+    UnregisterForModEvent("DOMOnPunished")
+    UnregisterForModEvent("DOMOnFlattered")
+    UnregisterForModEvent("DOMOnInsulted")
+    UnregisterForModEvent("DOMOnComforted")
+    UnregisterForModEvent("DOMOnPromised")
+    UnregisterForModEvent("DOMOnThreatened")
+    UnregisterForModEvent("DOMOnUndress")
+    UnregisterForModEvent("DOMOnWashSelf")
+    UnregisterForModEvent("DOMOnBranded")
+    UnregisterForModEvent("DOMOnSalute")
+    UnregisterForModEvent("DOMOnRecruited")
+    UnregisterForModEvent("DOMOnReleased")
+
+    if !main || !main.d_api
+        Trace("ApplyExt2Events", "main or d_api is None, skipping")
+        return
+    endif
+
+    if !main.ext2_enabled
+        main.d_api.SetSendExternalEventsExt2(false)
+        Trace("ApplyExt2Events", "ext2 off")
+        return
+    endif
+
+    main.d_api.SetSendExternalEventsExt2(true)
+    RegisterForModEvent("DOMOnPriceInspection", "OnPriceInspection")
+    RegisterForModEvent("DOMOnBodyInspection", "OnBodyInspection")
+    RegisterForModEvent("DOMOnKissed", "OnKissed")
+    RegisterForModEvent("DOMOnPraised", "OnPraised")
+    RegisterForModEvent("DOMOnPunished", "OnPunished")
+    RegisterForModEvent("DOMOnFlattered", "OnFlattered")
+    RegisterForModEvent("DOMOnInsulted", "OnInsulted")
+    RegisterForModEvent("DOMOnComforted", "OnComforted")
+    RegisterForModEvent("DOMOnPromised", "OnPromised")
+    RegisterForModEvent("DOMOnThreatened", "OnThreatened")
+    RegisterForModEvent("DOMOnUndress", "OnUndress")
+    RegisterForModEvent("DOMOnWashSelf", "OnWashSelf")
+    RegisterForModEvent("DOMOnBranded", "OnBranded")
+    RegisterForModEvent("DOMOnSalute", "OnSalute")
+    RegisterForModEvent("DOMOnRecruited", "OnRecruited")
+    RegisterForModEvent("DOMOnReleased", "OnReleased")
+    Trace("ApplyExt2Events", "ext2 on")
 EndFunction 
 
 ;------------------------------------
@@ -200,11 +300,18 @@ Function RegisterEvent(String eventType, String description, Actor originatorAct
     SkyrimNetApi.RegisterEvent(eventType, description, originatorActor, targetActor)
 EndFunction 
 
-Function RegisterShort_AddName(String eventId, String eventType, Form akRef, String description, int ttl=100000)
+Function RegisterShort_AddName(String eventId, String eventType, Form akRef, String description, int ttl=-1)
     Actor slave = akRef as Actor 
     if slave == None
         Trace("RegisterShort_AddName","akRef is not an Actor, skipping")
         return
+    endif
+    if ttl < 0
+        if main
+            ttl = main.short_lived_ttl
+        else
+            ttl = 100000
+        endif
     endif
     description = slave.GetDisplayName()+" "+description 
     RegisterShortLivedEvent(eventId, eventType, description, "", ttl, slave, None)
@@ -265,17 +372,19 @@ EndEvent
 Event OnNotificationSent(Form akRef, String notificationType, bool is_player_slave, String description)
 
     String desc_original = description
-    if OnNotifcationSkip(description) 
-        Trace("OnNotificationSent", "skipping notification: "+description)
-        return 
-    endif 
+    Actor slave = akRef as Actor
+    String slave_name = Actor_name(slave)
 
-    Actor slave = akRef as Actor 
+    if OnNotifcationSkip(description)
+        Trace("OnNotificationSent", "skipping notification: "+description)
+        return
+    endif
+
     ;if slave == player
         ;;Trace("OnNotificationSent", "player notification, skipping: "+description)
         ;return
     ;endif
-    ;if slave == None 
+    ;if slave == None
         ;Trace("OnNotificationSent","akRef is not an Actor, skipping: "+description)
         ;return
     ;endif
@@ -284,29 +393,42 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
         ;return
     ;endif
 
-    int i = StringUtil.Find(description, "orgasm")
-    String slave_name = slave.GetDisplayName()
-    if i >= 0 
+    ; Melt/climax only — do not match bare "orgasm" (player-orgasm tease, orgasm-control HUD).
+    if IsDomMeltOrgasm(description)
+        Trace("OnNotificationSent", slave_name+" melt orgasm: "+description)
         if handler
             handler.DOMSlave_Orgasmed(slave, description)
         endif
-        return 
-    else 
-        ; replace you and your
-        description = ReplaceWord(description, "your", player_name+"'s")
-        description = ReplaceWord(description, "you", player_name)
-    endif 
-
-    String uuid = slave.GetFormID() as String
-    int notifications = JMap.getObj(actor_to_notifications, uuid)
-    ; ---------------- Capture -------------------
-    if notificationType == "freshly captured" && notifications == 0 
-        description = player_name+" grabs "+slave_name+" by the throat, throws "+slave_name+" to the ground, and enslaves "+slave_name+". "+description
+        return
     endif
+
+    ; replace you and your
+    description = ReplaceWord(description, "your", player_name+"'s")
+    description = ReplaceWord(description, "you", player_name)
 
     DirectNarration_Optional("notification", description, slave, optional=true)
     Trace("OnNotificationSent", slave_name+" notificationType: '" + notificationType + "'' is_player_slave: " + is_player_slave + " description: '" + desc_original + " -> " + description)
 EndEvent
+
+; Real Dom climax HUD: brain/mind melts. Not the "squirms as your orgasm" player-climax tease.
+bool Function IsDomMeltOrgasm(String description)
+    if StringUtil.Find(description, "your orgasm") >= 0
+        return false
+    endif
+    if StringUtil.Find(description, "brain melts") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "mind melts") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "overwhelmed by orgasm") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "submerged by orgasm") >= 0
+        return true
+    endif
+    return false
+EndFunction
 
 Function AddNotification(String description, Actor Subject)
     AddNotificationActor(description, Subject)
@@ -340,13 +462,14 @@ Function AddNotificationActor(String description, Actor akActor)
     String uuid = akActor.GetFormID() as String
     int notifications = JMap.getObj(actor_to_notifications, uuid)
     int i = 0
+    int ring_size = notifications_size
     if notifications == 0
-        notifications = JArray.objectWithSize(notifications_size)
+        notifications = JArray.objectWithSize(ring_size)
         JValue.retain(notifications)
         JMap.setObj(actor_to_notifications, uuid, notifications)
         JMap.setInt(actor_to_notifications_next, uuid, 0)
         i = 0
-        while i < notifications_size
+        while i < ring_size
             int noteInit = JMap.object()
             JMap.setStr(noteInit, "message", "")
             JMap.setFlt(noteInit, "timestamp", 0.0)
@@ -357,23 +480,25 @@ Function AddNotificationActor(String description, Actor akActor)
             JArray.setObj(notifications, i, noteInit)
             i += 1
         endwhile
+    else
+        ring_size = JArray.count(notifications)
     endif
 
     int next = JMap.getInt(actor_to_notifications_next, uuid, 0)
     int last = next - 1
     if last < 0
-        last = notifications_size - 1
+        last = ring_size - 1
     endif
 
     Float rawDaysPassed = Utility.GetCurrentGameTime()
     int found = -1
     i = 0
-    while i < notifications_size
+    while i < ring_size
         int noteScan = JArray.getObj(notifications, i)
         Float ts = JMap.getFlt(noteScan, "timestamp", 0.0)
         if ts != 0.0 && JMap.getStr(noteScan, "message", "") == description
             found = i
-            i = notifications_size
+            i = ring_size
         else
             i += 1
         endif
@@ -387,7 +512,7 @@ Function AddNotificationActor(String description, Actor akActor)
             int dst = found
             while dst != last
                 int src = dst + 1
-                if src >= notifications_size
+                if src >= ring_size
                     src = 0
                 endif
                 JArray.setObj(notifications, dst, JArray.getObj(notifications, src))
@@ -401,7 +526,7 @@ Function AddNotificationActor(String description, Actor akActor)
         JMap.setFlt(note, "timestamp", rawDaysPassed)
 
         next += 1
-        if next >= notifications_size
+        if next >= ring_size
             next = 0
         endif
         JMap.setInt(actor_to_notifications_next, uuid, next)
@@ -411,6 +536,14 @@ Function AddNotificationActor(String description, Actor akActor)
 EndFunction
 
 bool Function OnNotifcationSkip(String description)
+    ; Player-orgasm tease (DOM_Mind handleSexOrgasm / handleSeparateOrgasmEvent).
+    ; Not a slave climax — do not DN, ring, or feed Handler_DOM.
+    if StringUtil.Find(description, "squirms under your grasp") >= 0
+        return true
+    endif
+    if StringUtil.Find(description, "your orgasm submerges you") >= 0
+        return true
+    endif
     ; Less-specific status lines that duplicate named DOM action notifications.
     if StringUtil.Find(description, "was just captured") >= 0
         return true
@@ -477,10 +610,11 @@ int Function GetNotifications(Actor akActor)
     if notifications == 0
         return 0
     endif
+    int ring_size = JArray.count(notifications)
     Float currentDaysPassed = Utility.GetCurrentGameTime()
     int i = 0 
     int num_notes = 0
-    while i < notifications_size
+    while i < ring_size
         int note = JArray.getObj(notifications, i)
         Float timestamp = JMap.getFlt(note, "timestamp", 0.0)
         if timestamp != 0.0 && timestamp <= currentDaysPassed
@@ -498,15 +632,15 @@ int Function GetNotifications(Actor akActor)
     if num_notes == 0
         return 0
     endif
-    if num_notes == notifications_size
+    if num_notes == ring_size
         ; Full ring: return chronological order starting at write cursor (oldest)
-        int full_notes = JArray.objectWithSize(notifications_size)
+        int full_notes = JArray.objectWithSize(ring_size)
         int next_full = JMap.getInt(actor_to_notifications_next, uuid, 0)
         int k = 0
-        while k < notifications_size
+        while k < ring_size
             int idx = next_full + k
-            if idx >= notifications_size
-                idx -= notifications_size
+            if idx >= ring_size
+                idx -= ring_size
             endif
             JArray.setObj(full_notes, k, JArray.getObj(notifications, idx))
             k += 1
@@ -519,10 +653,10 @@ int Function GetNotifications(Actor akActor)
     int j = 0
     int next = JMap.getInt(actor_to_notifications_next, uuid, 0)
     i = 0 
-    while i < notifications_size
+    while i < ring_size
         int idx = next + i
-        if idx >= notifications_size
-            idx -= notifications_size
+        if idx >= ring_size
+            idx -= ring_size
         endif
         int note = JArray.getObj(notifications, idx)
         Float timestamp = JMap.getFlt(note, "timestamp", 0.0)

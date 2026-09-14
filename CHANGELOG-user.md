@@ -1,9 +1,8 @@
-https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.0.5 🏏
+https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.0.6
 
-- Dom slave orgasms (melt notifications) now reach SkyrimNet Direct Narration again; Ext3 notification events were not being enabled.
-- Two-person consensual sex is now two actions: fucking (penis) and giving (`no_penis`); the old combined two-person start action is gone.
-- Punish and three-person sex actions no longer take a `style` parameter (two-person sex still can).
-- Scene eligibility now uses the correct SexLab scene lock, so locked actors should not get those orders offered.
-- `Be_FlatteredSexy` is stricter about when it can fire; refuse flows map the refuser as `rejector`.
-- The release zip again includes full `SKSE/` content (actions, prompts, items, triggers)—not scripts-only.
-- Author how-tos live under `docs/` (players, authors, developers, reference).
+Requires SkyrimNet 0.25.0 (Beta 25) or later. LLM actions and prompts install as plugin `goodprovider.dom` (External on the Plugins page). Do not use Plugins > Import Old Content for this mod's files.
+
+- Character bios includes slavers and other DOM actors get the right context (trainees, skills, career, orders, experience, bonds, and so on).
+- Aged slavery notifications are smarter: repeating the same line bumps it to “recent,” and other DOM actors named in the text also get the note on their list.
+- Notification delivery is includes non-slave, while noisy generic trainer/trainee/follow status lines are filtered out.
+- Prompt and JSON key docs match the new bio data layout for authors.
