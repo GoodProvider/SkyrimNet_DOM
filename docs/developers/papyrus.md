@@ -47,6 +47,7 @@ Full checklist: [../authors/punishment.md](../authors/punishment.md).
 - Watch the [8-parameter](../authors/actions.md) limit (`style` dropped on some signatures).
 - DOM owns arousal; SLSO and other arousal mods do not drive DOM’s arousal factor ([../players/overview.md](../players/overview.md)).
 - Anim start/end + orgasm notification routing: [../authors/events.md](../authors/events.md).
+- Live masturbate threads: `GetThreads` walks `DOM02.actorAliases` / `GetMaxActorCount` (`GetActorCount` / `actorArray` lag until after Mind `AfterAssign`). `StartScene_masturbate` / `StopScene_Masturbate` call `SaveThreadsJson` so paused SexLab `0050` does not keep a stale dump.
 
 ## Paused actor JSON
 
