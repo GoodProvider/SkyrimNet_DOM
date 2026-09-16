@@ -6,6 +6,17 @@ Requirements: [requirements.md](requirements.md). Authoring: [../authors/actions
 
 LLM actions and prompts ship as SkyrimNet plugin `goodprovider.dom` (External on the Plugins page). Requires SkyrimNet 0.25.0+. Tune Ext2 / notification ring / short-lived TTL in the SkyrimNet dashboard (`dom.events.*`), not an in-game MCM.
 
+## In-game WebUI
+
+Open the SkyrimNet SexLab overlay hotkey (`\` by default), then set the ControlPanel **mode** pulldown to **SkyrimNet DOM**.
+
+- **Target** pulldown: nearby actors plus **All Slaves** (group orders; opens the Slaves roster).
+- **Views:** **Status** (focused actor stats + respectful/silent/fight/orgasm/task toggles) and **Slaves** (all owned aliases, not nearby-only). Click a roster row to focus that slave and open Status, even if they are far.
+- Left **TargetMenu:** pulldowns that can be used on the focused actor (order / abuse / training / restrain / clothes). Slave-only pulldowns are omitted for non-slaves. SexLab sex/scene rows are hidden in DOM mode; sex/punish live under training.
+- TargetMenu execute closes the overlay so DOM packages can run. Status/Slaves stay open while you flip flags.
+
+Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_SexLab’s overlay.
+
 ## What it does
 
 - Converts most DOM activity into Direct Narration or SkyrimNet events

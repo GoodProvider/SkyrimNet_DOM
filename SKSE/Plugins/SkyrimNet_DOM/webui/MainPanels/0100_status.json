@@ -1,0 +1,10 @@
+{
+  "type": "actor_detail",
+  "id": "status",
+  "label": "Status",
+  "plugin": "SkyrimNet_DOM.esp",
+  "questFormId": "0x800",
+  "scriptName": "SkyrimNet_DOM_Menu",
+  "openFunction": "TM_StatusPanelOpen",
+  "closeFunction": "TM_StatusPanelClose"
+}

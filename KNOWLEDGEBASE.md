@@ -15,6 +15,18 @@ For agent policy (safety, confidence), see [AGENTS.md](AGENTS.md). For protocol 
 | Ext3 required for NotificationSent | `DOMOnNotificationSent` is Ext3-gated in `DOM_SendEvt`. Events must call **`DOM_API.SetSendExternalEventsExt3(true)`** (`main.d_api`, same quest as `DOM_Core`). Calling the toggle on `d_core` compiles only if a header stub exists and is a runtime no-op (`Method SetSendExternalEvents* not found on dom_core`) — HUD still shows, SkyrimNet never gets the ModEvent. Prefer notifications over `DOMOnOrgasm` (faster; leave Orgasm unregistered to avoid double `DOMSlave_Orgasmed`). |
 | Actor lock key | Scene eligibility uses StorageUtil `skyrimnet_sexlab_scene_actor_lock` (shared with SkyrimNet_SexLab). |
 
+## WebUI ControlPanel mode (2026-09-15)
+
+DOM does not ship a PrismaUI view or SKSE DLL. Player commands go through SexLab’s overlay: mode **SkyrimNet DOM**, catalog `SKSE/Plugins/SkyrimNet_DOM/webui/`. Copy `ControlPanel/0200_skyrimnet_dom.json` into SexLab’s `webui/ControlPanel/` on install.
+
+- **Pause:** SexLab `Focus(..., pause=true)` blocks DOM packages and SexLab `StartThread`. TargetMenu `closeWebUI: true`. Status/Slaves stay open (`false`).
+- **Actor-type pulldown gates:** TargetMenu shows only pulldowns that can be used on the focused actor. Each pulldown root has `eligibilityRules` (`logicalOperator: OR`) against slave rank / slaver faction / `webui_focus_kind`. Order / training / restrain / clothes are omitted for NPC/player targets. Restrain / clothes are omitted for a slaver target. Nested pulldowns with zero remaining children are omitted by SexLab `ResolveOptionsArray`.
+- **All Slaves:** sentinel, not player-as-group. `Target_Current` is None; eligibility `webui_focus_kind`. Group leaves call `DOMAllOrderSlaves` / `DOMAllOrderSlavesAndSlavers` / `DOMAllOrderBags`. Do not call `DOMDo*Menu` / `ShowCall*` / `OpenMenu()`.
+- **Roster:** walk `DOM02.actorAliases` / `GetMaxActorCount` (same as GetThreads). Cap 43 rows (`truncated: true`). Row FormIDs may be signed ESL ints — SexLab JS/C++ coerce to uint32.
+- **Jail:** vanilla `DOMDoJail` opens `ShowJailMenu`. Status task jail calls `EnterJailTravel(1)` instead.
+- **Tie:** vanilla `DOMDoTieUpMenu` opens a wheel. v1 uses `DOMTiedUpByIndex(..., 0, false, false)` / group `TieUp`.
+- **Quest VMAD bind:** SexLab `ExecutePapyrusOption` / `DispatchPapyrusNoArg` use `FindBoundObject` on the quest. Catalog `scriptName` (`SkyrimNet_DOM_Menu` on `0x800`) must be attached in ESP VMAD. A compiled `Scripts/SkyrimNet_DOM_Menu.pex` is not enough — inventory/order clicks log `bound script 'SkyrimNet_DOM_Menu' not found` and Papyrus never runs. Add the script next to Main/Actions/Events on quest `SkyrimNet_DOM`; reload a save so the VM binds it.
+
 ## SkyrimNet Beta 25 content plugin (2026-09-13)
 
 Beta 25 does not read `prompts/`, `config/triggers/`, or `config/actions/`. LLM content ships as `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` (`manifest.json` `id` must equal the folder name). Prompt paths inside the plugin are unchanged (`prompts/helpers/…`, submodules). Action YAML filename (before `.yaml`) must equal the in-file `name` (case-insensitive); keep `name` casing. Trigger `Healing Hands` became `Healing_Hands`. Settings schema stays at `config/plugins/SkyrimNet_DOM/manifest.yaml` (`schema.fields` + `defaultValue`; `plugin.name` SkyrimNet_DOM, `dom.events.*` keys) — that is not a content-plugin folder. Papyrus reads `Plugin_SkyrimNet_DOM` via `GetConfig*`. Item YAML stays at `config/items/`. JSON under `SKSE/Plugins/SkyrimNet_DOM/` is unchanged. Do not ship into `library/`. Upstream: SkyrimNet `docs/modding/MIGRATING_TO_BETA25.md`.

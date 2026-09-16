@@ -1,0 +1,6 @@
+{
+  "defaultsParameters": {
+    "speaker": { "type": "Actor", "source": "playerActor" },
+    "target": { "type": "Actor", "source": "currentActor" }
+  }
+}
