@@ -1,8 +1,8 @@
 # DOM WebUI interaction contract
 
-Source of truth for SexLab ControlPanel mode **SkyrimNet DOM**. Catalog JSON and `SkyrimNet_DOM_Menu` `TM_*` must match this file. Diary of Mine sources are read-only.
+Source of truth for DOM rows and panels in the SexLab overlay. Catalog JSON and `SkyrimNet_DOM_Menu` `TM_*` must match this file. Diary of Mine sources are read-only.
 
-Player path: SexLab overlay hotkey (`\`) → ControlPanel mode **SkyrimNet DOM** → target pulldown (nearby + **All Slaves**) → left TargetMenu commands → right **Status** or **Slaves**.
+Player path: SexLab overlay hotkey (`\`) → target pulldown (nearby + **All Slaves**) → left TargetMenu (SexLab rows plus eligible DOM pulldowns) → views **Status** or **Slaves** (alongside Scene Menu / Animation / Log / Settings).
 
 Do **not** call any `DOM_Keys` function that `OpenMenu()` / `UIWheelMenu` / `Message.Show` (`DOMDo*Menu`, `ShowCall*`, `ShowDOM*`, `DOMAll*Menu`, `DOMWheelTraits` as a blocking wheel). Call leaves only.
 
@@ -12,10 +12,9 @@ Do **not** call any `DOM_Keys` function that `OpenMenu()` / `UIWheelMenu` / `Mes
 
 | Control | Role |
 |---------|------|
-| Mode pulldown | `sexlab` / `skyrimnet_dom` (and future JSON). Swap unloads the previous TargetMenu + main-panel set. |
-| Views pulldown | Per-mode MainPanels + **None**. DOM: **Status**, **Slaves**. Hide SexLab Scene Menu / Animation. Hide OStim framework row. Log/Settings stay SexLab-only (not shown in DOM). |
-| Target pulldown | Nearby actors as SexLab today, plus sentinel **All Slaves** (`id: all_slaves`, no FormID). Player stays a normal actor. Do **not** treat player focus as group. |
-| Crosshair | Still seeds the default actor on overlay open. First DOM-mode open with player selected may stay on the player; All Slaves is an explicit pick. |
+| Views pulldown | SexLab MainPanels plus DOM **Status** / **Slaves** when `SkyrimNet_DOM.esp` is loaded. **None** clears the right host. Non-`sexlab` `source` shows as a leading superscript on the view label (`DOM` Status). |
+| Target pulldown | Nearby actors as SexLab today, plus sentinel **All Slaves** (`id: all_slaves`, no FormID) from the Slaves MainPanel JSON. Player stays a normal actor. Do **not** treat player focus as group. |
+| Crosshair | Still seeds the default actor on overlay open. All Slaves is an explicit pick. |
 
 Selecting **All Slaves**:
 
@@ -81,18 +80,18 @@ Fleeing actors: wheels no-op (`DOMCore.IsFleeing`). Omit via combat/flee when a 
 
 ## TargetMenu (unified left column)
 
-One JSON file each under `SKSE/Plugins/SkyrimNet_DOM/webui/TargetMenu/Actor/options/`. **Status is not a row. Group is not a row.**
+One JSON file each under `SKSE/Plugins/SkyrimNet_SexLab/webui/TargetMenu/Actor/options/` (this repo overlays into SexLab’s Data path). Each root has `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"`. Non-`sexlab` sources render as a 50% badge in the upper left above the option. **Status is not a row. Group is not a row.**
 
 Speaker is always the player. Target is `currentActor`, or `None` for All Slaves.
 
 ### v1 rows
 
-#### `1100_order.json` — order
+#### `0800_dom_order.json` — order
 
 | Label | Who | Leaf | YAML twin | close |
 |-------|-----|------|-----------|-------|
 | Inventory | single slave / slaver | `DOMDoOpenInventory` | — | true |
-| Follow me | single slave / slaver, not on duty | `DOMDoFollowMe` | `DOMSlave_DOMFollowNonSlave` / follow family | true |
+| Follow | single slave / slaver, not on duty | Distance / Walk / Leash → `TM_DoFollow` | `DOMSlave_DOMFollowNonSlave` / follow family | true on leaves |
 | Follow all | All Slaves | `DOMAllOrderSlavesAndSlavers("Follow")` | — | true |
 | Stand still | single slave / slaver, not on duty | `DOMDoStandStill` | `DOMSlave_StandHere` | true |
 | Stand all | All Slaves | `DOMAllOrderSlavesAndSlavers("StandStill")` | — | true |
@@ -107,9 +106,9 @@ Speaker is always the player. Target is `currentActor`, or `None` for All Slaves
 | Pose (display) | single slave | `DOMDoDisplay` | `DOMSlave_Display` | true |
 | Pose all | All Slaves | `DOMAllOrderSlaves("Display")` | — | true |
 
-Follow distance / cuff / leash / walk-on-4 nested choosers: v1 ships Follow only; richer follow modes are v2.
+Follow always opens the full button panel (no vanilla two-step, no **Follow me**). Nested pulldowns: **Distance** (tight / close / near / long / far / very far — one chooser for walking or leashed follow; `SetFollowMode` clamps `>3` to 3), **Walk** (standing / walk on 4), **Leash** (`DOMDoLeash` 0–4 + Tie To 10–14; omitted unless `get_global_value` `DOM_HasLeash` `!= 0`). **Leash To** (actor picker) is omitted. Cuffing / uncuff live on **restrain**. Distance / walk / leash start follow if needed. Do not call `DOMDoFollowMe` once `behaviour == "follow_player"`. Do not call `DOMDoFollowMenu`.
 
-#### `1110_abuse.json` — abuse (slaver wheel: Speech)
+#### `0810_dom_abuse.json` — abuse (slaver wheel: Speech)
 
 | Label | Who | Leaf | YAML twin | close |
 |-------|-----|------|-----------|-------|
@@ -127,9 +126,9 @@ Follow distance / cuff / leash / walk-on-4 nested choosers: v1 ships Follow only
 
 Punish-reason chooser: v1 uses default / next queued reason. Full reason picker is v2. Do not call `DOMDoAbuseMenu`.
 
-#### `1120_training.json` — training (slaver wheel: Physical)
+#### `0820_dom_training.json` — training (slaver wheel: Physical)
 
-SexLab sex/punish/outfit rows are **hidden** in DOM mode, so sex lives here.
+SexLab sex/punish/outfit rows stay visible in the same TargetMenu. Training still has its own sex/rape leaves.
 
 | Label | Who | Leaf | YAML twin | close |
 |-------|-----|------|-----------|-------|
@@ -137,13 +136,13 @@ SexLab sex/punish/outfit rows are **hidden** in DOM mode, so sex lives here.
 | Attention all | All Slaves | `DOMAllOrderSlaves("Attention"|"Display"|"Salute"|"Kneel")` | — | true |
 | Masturbate | single slave, not on duty | `SkyrimNet_DOM_Actions.StartScene_masturbate` | masturbate YAML | true |
 | Masturbate all | All Slaves | `DOMAllOrderSlaves("Masturbate")` | — | true |
-| Sex | single slave / slaver | `StartScene_Consensual_Two` | `DOMSlave_Sex_Two_*` | true |
+| Sex | single slave / slaver | SexLab `panel: scene_start` → `SkyrimNet_SexLab_Actions.StartScene_Consensual_Two` | `DOMSlave_Sex_Two_*` | true on Start |
 | Rape | single slave | `StartScene_Nonconsensual_Two` | punish/rape YAML | true |
 | Inspect (front) | single slave | `DOMDoActionActor` inspect / `DOMSlave_InspectFront` | `DOMSlave_InspectFront` | true |
 
-Do **not** nest Clothes here (vanilla Training slot 0). Clothes pulldown owns that. Orgasm allow/deny lives on **Status**, not this row.
+Do **not** nest Clothes here (vanilla Training slot 0). Clothes pulldown owns that. Orgasm allow/deny lives on **Status**, not this row. Training **sex** opens SexLab’s Sex Parameter Panel to the right of the training pulldown. Rape stays an immediate leaf.
 
-#### `1130_restrain.json` — restrain (DOM furniture, not DD)
+#### `0830_dom_restrain.json` — restrain (DOM furniture, not DD)
 
 | Label | Who | Leaf | close |
 |-------|-----|------|-------|
@@ -151,10 +150,12 @@ Do **not** nest Clothes here (vanilla Training slot 0). Clothes pulldown owns th
 | Untie | single slave | `DOMDoUntie` | true |
 | Tie all (default) | All Slaves | `DOMAllOrderSlaves("TieUp")` | true |
 | Chains / post / cage (default index) | single slave | `DOMChains` / `DOMPost` / `DOMCage` via `*ByIndex(..., 0, false, false)` | true |
+| Cuffing | single slave | `TM_DoFollow` `cuff` 0–5 (`DOMDoWearCuffs`) | true |
+| Uncuff | single slave | `TM_DoFollow` `uncuff` | true |
 
 Furniture-variant and gag/blindfold choosers are v2. Do not call `DOMDoTieUpMenu` / `ShowDOM*`. Do not use SexLab `panel: bondage`.
 
-#### `1140_clothes.json` — clothes (DOM state, not SexLab outfit)
+#### `0840_dom_clothes.json` — clothes (DOM state, not SexLab outfit)
 
 | Label | Who | Leaf | YAML twin | close |
 |-------|-----|------|-----------|-------|
@@ -169,15 +170,15 @@ Furniture-variant and gag/blindfold choosers are v2. Do not call `DOMDoTieUpMenu
 
 ### v2 TargetMenu (not shipped)
 
-`management`, `trainees`, `services`; sack; richer punish-reason / furniture-variant / follow-mode choosers; personality/feelings edit widgets.
+`management`, `trainees`, `services`; sack; richer punish-reason / furniture-variant choosers; personality/feelings edit widgets.
 
 ---
 
 ## Main panels
 
-Install under `SKSE/Plugins/SkyrimNet_DOM/webui/MainPanels/`.
+Install under `SKSE/Plugins/SkyrimNet_SexLab/webui/MainPanels/` (this repo overlays into SexLab’s Data path). `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"` on each file.
 
-### Status — `0100_status.json` (`actor_detail`)
+### Status — `0300_dom_status.json` (`actor_detail`)
 
 Focused actor. Empty/wrong bucket must not happen: slave / trainer / slaver / NPC use the matching [json-keys.md](../docs/reference/json-keys.md) bucket from `Get_Actor_Info` / `FillSlaveFields`.
 
@@ -199,43 +200,28 @@ Papyrus: `TM_StatusPanelOpen` / `TM_StatusPanelClose` / `TM_StatusApply`.
 
 All Slaves: push a count summary (`owned`, `nearby`, `on_duty`, `restrained`) — no per-slave toggles.
 
-### Slaves — `0200_slaves.json` (`data_table`)
+### Slaves — `0400_dom_slaves.json` (`data_table`)
 
 All owned slaves via `DOM02.actorAliases` / `GetMaxActorCount()` (not `GetActorCount` / `actorArray` — those lag). Not nearby-only.
 
 v1 columns: Name, Trainer, Standing order, Duty/task, Respectful, Silent, Fight, Orgasm, Restrained/jailed, Next punishment.
 
-Cap at 43 rows (MCM page size). If more aliases exist, set `truncated: true`. Click row → FormID focus → Status.
+Cap at 43 rows (MCM page size). If more aliases exist, set `truncated: true`. Click row → FormID focus → Status (`rowClickMainPanel: status` on this file).
 
 Papyrus: `TM_SlavesPanelOpen` / `TM_SlavesPanelClose`.
 
----
-
-## ControlPanel registration
-
-Canonical file in this repo:
-
-`SKSE/Plugins/SkyrimNet_DOM/webui/ControlPanel/0200_skyrimnet_dom.json`
-
-FOMOD / install copies it to `Data/SKSE/Plugins/SkyrimNet_SexLab/webui/ControlPanel/`.
+Sentinels and roster-click live on this JSON (not a ControlPanel mode file):
 
 ```json
-{
-  "id": "skyrimnet_dom",
-  "label": "SkyrimNet DOM",
-  "requiresPlugin": "SkyrimNet_DOM.esp",
-  "catalogRoot": "SKSE/Plugins/SkyrimNet_DOM/webui",
-  "plugin": "SkyrimNet_DOM.esp",
-  "questFormId": "0x800",
-  "scriptName": "SkyrimNet_DOM_Menu",
-  "openFunction": "TM_ModeOpened",
-  "closeFunction": "TM_ModeClosed",
-  "hideFramework": true,
-  "sentinels": [{ "id": "all_slaves", "label": "All Slaves" }]
-}
+"rowClickMainPanel": "status",
+"sentinels": [{ "id": "all_slaves", "label": "All Slaves", "mainPanel": "slaves" }]
 ```
 
-Built-in SexLab mode: `id` `sexlab`, `label` `SkyrimNet SexLab`, implicit catalog = SexLab `webui/`.
+---
+
+## Overlay install path
+
+SexLab loads TargetMenu/MainPanels only from `Data/SKSE/Plugins/SkyrimNet_SexLab/webui/`. This repo authors DOM files there (MO2 overlay). SexLab git does not vendor them. There is no ControlPanel mode JSON and no `catalogRoot` swap.
 
 ---
 
@@ -245,15 +231,16 @@ Trace tag: `SkyrimNet_DOM_Menu` (not `SkyrimNet_DOM_Event`).
 
 | Function | Role |
 |----------|------|
-| `TM_ModeOpened` / `TM_ModeClosed` | Zero-arg |
+| `TM_ModeOpened` / `TM_ModeClosed` | Unused traces (ControlPanel modes removed) |
 | `TM_StatusPanelOpen` / `TM_StatusPanelClose` | Build `actor_detail` JSON; `WebUI_PushMainPanelData` |
 | `TM_SlavesPanelOpen` / `TM_SlavesPanelClose` | Walk aliases; `data_table` JSON |
 | `TM_StatusApply(speaker, target, control, value)` | respectful / silent / fight / orgasm / task / jail |
 | `TM_DoOrder(speaker, target, eventName, type, flag)` | `DOMDoActionActor`; `target == None` → `DOMAllOrderSlaves` / `DOMAllOrderSlavesAndSlavers` when `flag` says so |
-| `TM_DoFollow` / `TM_DoStand` / `TM_DoWait` / `TM_DoBag` / `TM_DoInventory` / `TM_DoUntie` | Named leaves (no string trampoline) |
+| `TM_DoFollow(speaker, target, kind, type)` | Follow: `distance` / `walk4` / `leash` / `unleash` (starts follow if needed). Restrain cuffs: `cuff` / `uncuff` (does **not** start follow). `walk4` `0` standing / `1` walk on 4. Never `DOMDoFollowMenu`. |
+| `TM_DoNamed` | Other named / group leaves |
 | `TM_DoFlatter` / `TM_DoInsult` / `TM_DoEntertain` | Typed leaves |
 | `TM_DoRestrain(speaker, target, kind, flag)` | `DOMTiedUpByIndex` / `DOMDoUntie` / group `TieUp` |
-| Sex / punish / dress | Existing `SkyrimNet_DOM_Actions` |
+| Sex | Training **sex** opens SexLab SceneStartPanel (`panel: scene_start`); Start dispatches `SkyrimNet_SexLab_Actions`. Rape / punish / dress stay on `SkyrimNet_DOM_Actions` |
 
 `RegisterObeyCommand` where YAML already narrates.
 
@@ -302,7 +289,7 @@ Out of v1 UI: sack menu, `moveKey` bone tooling, debug test-pose, diary as a pan
 
 - Edit Diary of Mine / PAH sources
 - Add a DOM SKSE DLL or second PrismaUI `CreateView`
-- YAML parser for ControlPanel
+- YAML parser for overlay catalogs
 - Duplicate SexLab DD bondage / leash / outfit StorageUtil
 - Claim VR parity
 - Commit unless asked

@@ -11,6 +11,7 @@
 | Author prompts | docs/authors/prompts.md + docs/reference/{json-keys,protocol-tokens}.md |
 | Author events / punishment / content | docs/authors/events.md, docs/authors/punishment.md, docs/authors/content.md |
 | Develop Papyrus | docs/developers/papyrus.md, docs/reference/papyrus-rules.md |
+| Player WebUI (SexLab overlay) | docs/players/overview.md, manifest/DOM.md |
 | Agent policy | AGENTS.md (safety, confidence, commits) |
 | Quirks | KNOWLEDGEBASE.md |
 | Release documentation | release-guide.xml, release-checkpoint.xml |

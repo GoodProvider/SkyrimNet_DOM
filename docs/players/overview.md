@@ -8,11 +8,11 @@ LLM actions and prompts ship as SkyrimNet plugin `goodprovider.dom` (External on
 
 ## In-game WebUI
 
-Open the SkyrimNet SexLab overlay hotkey (`\` by default), then set the ControlPanel **mode** pulldown to **SkyrimNet DOM**.
+Open the SkyrimNet SexLab overlay hotkey (`\` by default). There is no separate DOM mode.
 
 - **Target** pulldown: nearby actors plus **All Slaves** (group orders; opens the Slaves roster).
-- **Views:** **Status** (focused actor stats + respectful/silent/fight/orgasm/task toggles) and **Slaves** (all owned aliases, not nearby-only). Click a roster row to focus that slave and open Status, even if they are far.
-- Left **TargetMenu:** pulldowns that can be used on the focused actor (order / abuse / training / restrain / clothes). Slave-only pulldowns are omitted for non-slaves. SexLab sex/scene rows are hidden in DOM mode; sex/punish live under training.
+- **Views:** Scene Menu, Animation, **Status** (focused actor stats + respectful/silent/fight/orgasm/task toggles), **Slaves** (all owned aliases, not nearby-only), Log, Settings. Status and Slaves show a **DOM** superscript. Click a roster row to focus that slave and open Status, even if they are far.
+- Left **TargetMenu:** SexLab rows plus DOM pulldowns that can be used on the focused actor (order / abuse / training / restrain / clothes). DOM options show a **DOM** badge above the label. Slave-only pulldowns are omitted for non-slaves. **Order → Follow** opens Distance, Walk, and Leash (even if they are not already following). **Restrain** includes cuffing / uncuff. **Training → Sex** opens the SexLab Sex Parameter Panel. Rape stays an immediate training leaf.
 - TargetMenu execute closes the overlay so DOM packages can run. Status/Slaves stay open while you flip flags.
 
 Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_SexLab’s overlay.

@@ -16,6 +16,7 @@ Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go throu
 | `skyrimse.ppj` | Pyro project |
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + triggers) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`dom.events.*`) |
+| `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu (`0800_dom_*`) + Status/Slaves MainPanels |
 
 Repo root: `c:\Skyrim\dev\mods\SkyrimNet_DOM`.
 
@@ -33,6 +34,7 @@ Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_
 | Punishment | [docs/authors/punishment.md](docs/authors/punishment.md) |
 | Content | [docs/authors/content.md](docs/authors/content.md) |
 | Papyrus | [docs/developers/papyrus.md](docs/developers/papyrus.md) |
+| WebUI (SexLab overlay) | [manifest/DOM.md](manifest/DOM.md), [docs/players/overview.md](docs/players/overview.md) |
 | Release docs | [release-guide.xml](release-guide.xml) + [release-checkpoint.xml](release-checkpoint.xml) |
 
 ### Canonical contracts (do not restate elsewhere)
