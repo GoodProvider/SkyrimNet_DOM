@@ -18,7 +18,7 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | `skyrimse.ppj` | Papyrus project (imports + compile) |
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 content plugin (actions + prompts + triggers; `manifest.json`) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`Plugin_SkyrimNet_DOM`, `dom.events.*`) |
-| `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu Actor options (`0800_dom_*`) + Status/Slaves MainPanels (deploys into SexLab’s webui folder) |
+| `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu Actor options (`0800_dom_*` through `0880_dom_sack.json`) + Status/Slaves MainPanels (deploys into SexLab’s webui folder) |
 | `manifest/DOM.md` | WebUI interaction contract (TargetMenu leaves, panels, All Slaves) |
 
 ## Script map
@@ -30,7 +30,7 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | `SkyrimNet_DOM_Actions` | YAML-callable executes: scenes, masturbate, dress/undress, `AddPunishmentReason` |
 | `SkyrimNet_DOM_API` | Shared helpers (`GetSlave`, `AddPunishmentReason`, scene wrappers, tracing) |
 | `SkyrimNet_DOM_Decorators` | Registers `dom_get_actor_info` (thin / slaver / slave buckets) — [../reference/json-keys.md](../reference/json-keys.md) |
-| `SkyrimNet_DOM_Menu` | SexLab overlay dispatcher on quest `0x800`: Status/Slaves JSON (`WebUI_PushMainPanelData`), `TM_StatusApply`, `TM_DoNamed`/`TM_DoOrder`/`TM_DoFollow`/`TM_DoRestrain`. Training **sex** is SexLab `panel: scene_start`, not `TM_DoSex`. Trace tag `SkyrimNet_DOM_Menu`. Contract: [../../manifest/DOM.md](../../manifest/DOM.md). |
+| `SkyrimNet_DOM_Menu` | SexLab overlay dispatcher on quest `0x800`: Status/Slaves JSON (`WebUI_PushMainPanelData`), live punish/praise (`WebUI_PushCascadeChoices`), `TM_StatusApply`, `TM_DoNamed`/`TM_DoOrder`/`TM_DoFollow`/`TM_DoFollowApply`/`TM_DoWalkingApply`/`TM_DoRestrain`/`TM_DoMasturbate`/`TM_DoTrainer`/`TM_DoSack`. Training **sex** and **rape** are SexLab `panel: scene_start`. Order **follow** is `panel: fields` (Start). Order **walking** is `panel: fields` with `applyOnChange`. Abuse insult/flatter/threaten/promise/comfort use `TransformDialogue`. Punish is live `panel: fields` via `TM_PunishPanelOpen`. Every other `TM_*` leaf `OrderNarration`s except scene_start Start. Trace tag `SkyrimNet_DOM_Menu`. Contract: [../../manifest/DOM.md](../../manifest/DOM.md). |
 | `SkyrimNet_DOM_PlayerRef` | Load-game refresh |
 
 Legacy `Register_Actions()` from `actions.json` is commented out — SkyrimNet loads YAML from `external/goodprovider.dom/actions/`.
@@ -50,6 +50,7 @@ Full checklist: [../authors/punishment.md](../authors/punishment.md).
 - DOM owns arousal; SLSO and other arousal mods do not drive DOM’s arousal factor ([../players/overview.md](../players/overview.md)).
 - Anim start/end + orgasm notification routing: [../authors/events.md](../authors/events.md).
 - Live masturbate threads: `GetThreads` walks `DOM02.actorAliases` / `GetMaxActorCount` (`GetActorCount` / `actorArray` lag until after Mind `AfterAssign`). `StartScene_masturbate` / `StopScene_Masturbate` call `SaveThreadsJson` so paused SexLab `0050` does not keep a stale dump.
+- Overlay live lists: SexLab native `WebUI_PushCascadeChoices` + `index.html` `setCascadeChoices`. Rebuild the SexLab SKSE plugin if that native is missing; without it punish/praise stay empty after the opener click. Do not bake `punishment_reason.json` into overlay catalogs.
 
 ## Paused actor JSON
 
