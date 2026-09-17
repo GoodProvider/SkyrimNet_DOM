@@ -18,6 +18,8 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | `skyrimse.ppj` | Papyrus project (imports + compile) |
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 content plugin (actions + prompts + triggers; `manifest.json`) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`Plugin_SkyrimNet_DOM`, `dom.events.*`) |
+| `SKSE/Plugins/SkyrimNet_DOM/webui/` | ControlPanel registration + TargetMenu Actor options + Status/Slaves MainPanels |
+| `manifest/DOM.md` | WebUI interaction contract (TargetMenu leaves, panels, All Slaves) |
 
 ## Script map
 
@@ -28,7 +30,7 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | `SkyrimNet_DOM_Actions` | YAML-callable executes: scenes, masturbate, dress/undress, `AddPunishmentReason` |
 | `SkyrimNet_DOM_API` | Shared helpers (`GetSlave`, `AddPunishmentReason`, scene wrappers, tracing) |
 | `SkyrimNet_DOM_Decorators` | Registers `dom_get_actor_info` (thin / slaver / slave buckets) — [../reference/json-keys.md](../reference/json-keys.md) |
-| `SkyrimNet_DOM_Menu` | Stub (old target menu removed) |
+| `SkyrimNet_DOM_Menu` | SexLab overlay dispatcher on quest `0x800`: `TM_ModeOpened`/`Closed`, Status/Slaves JSON (`WebUI_PushMainPanelData`), `TM_StatusApply`, `TM_DoNamed`/`TM_DoOrder`/`TM_DoRestrain`, sex/punish/dress wrappers. Trace tag `SkyrimNet_DOM_Menu`. Contract: [../../manifest/DOM.md](../../manifest/DOM.md). |
 | `SkyrimNet_DOM_PlayerRef` | Load-game refresh |
 
 Legacy `Register_Actions()` from `actions.json` is commented out — SkyrimNet loads YAML from `external/goodprovider.dom/actions/`.
