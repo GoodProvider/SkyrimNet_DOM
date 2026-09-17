@@ -32,7 +32,7 @@ Row click on Slaves: `onMainPanelRow` → set `Target_Current` to that FormID (a
 | Surface | `closeWebUI` | Why |
 |---------|--------------|-----|
 | TargetMenu execute | `true` | `Focus(..., pause=true)` blocks SexLab `StartThread` and DOM packages |
-| Live punish/praise list openers | `false` | `TM_ListPunishReasons` / `TM_ListPraiseReasons` / `TM_ListPraiseTypes` keep overlay open |
+| Live punish/praise / furniture list openers | `false` | `TM_PunishPanelOpen` / `TM_ListPraiseReasons` / `TM_ListPraiseTypes` / `TM_ListRestrainVariants` keep overlay open |
 | Status / Slaves open, config toggles | `false` | Player can flip several flags. Mind-flag leaves apply immediately. Package work (task / jail / follow) runs when the overlay later hides |
 
 ---
@@ -120,10 +120,10 @@ No Follow/Walking/Wait leash panels. No Order untie (restrain owns bondage). Fol
 | Insult / Flatter / Threaten / Comfort / Promise | single (+ NPC insult/flatter/hug) | `TransformDialogue` then DOM leaf; **no** order DN | true |
 | * all | All Slaves | `DOMAllOrderSlaves` (order DN) | true |
 | Upkeeping | slave / slaver / NPC | bath / look / turn / come / **Follow actor** (`nearby_actors`) / drink / mark / brand | true |
-| Punish | single slave | `TM_PunishPanelOpen` → `panel: fields` (Start + live reason + live method) → `StartPunishing` | false then true on Start |
+| Punish | single slave | `TM_PunishPanelOpen` → `panel: fields` (Start + live reason + live method). Reason list always ends with **custom** (`opensText` text panel) and **no reason** → `StartPunishing` / index-0 | false then true on Start |
 | NPC extras | NPC | shower / bath me / bath you / hug / feed / walk on 4 | true |
 
-Punish reasons walk the same crying / angry / posture / `"being a bad slave"` fallbacks as `ShowDOMPunishmentMenu`. Punish methods come from `GetJSONNumberOfPunishmentTypes` / `GetJSONPunishmentTypeNameByIndex`. Praise types come from `GetJSONNumberOfPraisingTypes` / `GetJSONPraisingTypeNameByIndex`.
+Punish reasons walk the same crying / angry / posture / `"being a bad slave"` fallbacks as `ShowDOMPunishmentMenu`, then always append **custom** and **no reason**. Punish methods come from `GetJSONNumberOfPunishmentTypes` / `GetJSONPunishmentTypeNameByIndex`. Praise types come from `GetJSONNumberOfPraisingTypes` / `GetJSONPraisingTypeNameByIndex`.
 
 ### `0820_dom_training.json` — training
 
@@ -148,7 +148,7 @@ Do **not** nest Clothes here. Orgasm allow/deny lives on **Status**. Nested `sce
 | Tie | single slave | rope poses 0–6 + random (`DOMTiedUpByIndex`) | true |
 | Untie | single | `DOMDoUntie` | true |
 | Tie all | All Slaves | `DOMAllOrderSlaves("TieUp")` | true |
-| Chains / post / cage / cross / pillory / wheel | single slave | `TM_ListRestrainVariants` labels from `SKSE/Plugins/SkyrimNet_DOM/restrains/{kind}.json` (default `variant #`) + random → `*ByIndex` | false then true |
+| Chains / post / cage / cross / pillory / wheel | single slave | `TM_ListRestrainVariants` → `panel: fields` (Start + variant select from `restrains/{kind}.json` + random) → `*ByIndex` | false then true on Start |
 | Gag / plug | single slave | cloth / ball / ring / log; vaginal / anal plug | true |
 | Blindfold | single slave | leather–db (`GetBlindfold` 1–6) / remove / random | true |
 | Cuffing | single slave | `TM_DoRestrain` `cuff` 0–5 / `uncuff` (does **not** start follow) | true |
@@ -247,10 +247,10 @@ Trace tag: `SkyrimNet_DOM_Menu` (not `SkyrimNet_DOM_Event`).
 | `TM_DoWalkingApply(speaker, target, walkType)` | Walking type pick: `walking` / `four` / `knees` |
 | `TM_DoNamed` | Poses, kiss, clothes extras, NPC shower/bath/feed, group event names; insult/flatter/threaten/comfort use `SpeakAsPlayer` |
 | `TM_DoRestrain(speaker, target, kind, flag)` | tie / furniture `*ByIndex` / gag / plug / blindfold / cuff; group `DOMAllOrderSlaves` event strings |
-| `TM_ListRestrainVariants(speaker, target, kind)` | Live furniture names from `restrains/{kind}.json` |
+| `TM_ListRestrainVariants(speaker, target, kind)` | Live furniture names from `restrains/{kind}.json` as `panel: fields` variant select + Start → `TM_DoRestrain` |
 | `TM_DoMasturbate(speaker, target, kind)` | pose start / `harder` / `stop` |
-| `TM_PunishPanelOpen` / `TM_ListPraiseReasons` / `TM_ListPraiseTypes` | `WebUI_PushCascadeChoices` live lists / fields |
-| `TM_DoPunish(speaker, target, reason, type)` / `TM_DoPraise` | `StartPunishing` / `StartPraising` |
+| `TM_PunishPanelOpen` / `TM_ListPraiseReasons` / `TM_ListPraiseTypes` | `WebUI_PushCascadeChoices` live lists / fields; punish reasons always include **custom** (`opensText`) and **no reason** |
+| `TM_DoPunish(speaker, target, reason, type)` / `TM_DoPraise` | `StartPunishing` / `StartPraising`; **no reason** uses `StartPunishingByIndex(..., 0, …)` for pain |
 | `TM_DoTrainer` / `TM_ListSackOptions` / `TM_DoSack` | trainer hub / sack by slave bag state |
 | Sex / rape | Training and services `panel: scene_start` on `SkyrimNet_SexLab_Actions` (no extra order DN on Start) |
 

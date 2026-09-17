@@ -1539,13 +1539,43 @@ Function TM_DoPunish(Actor speaker, Actor target, String reason, String type)
         Trace("TM_DoPunish", "no DOM actor")
         return
     endif
-    if reason == ""
-        reason = "being a bad slave"
-    endif
     if type == ""
         type = "pain"
     endif
+    ; Bare sentinel must never reach StartPunishing (JS opens text panel).
+    if reason == "custom" || reason == ""
+        reason = "being a bad slave"
+    endif
+    DOM_Mind mind = slave.mind
+    if reason == "no reason"
+        ; GetAnyPunishmentReason("no reason") remaps index 0; force index 0.
+        if type == "pain" && mind
+            mind.StartPunishingByIndex(speaker, 0, type)
+        else
+            slave.StartPunishing(speaker, reason, type)
+            if mind
+                mind.whipping_reason = 0
+                mind.whipping_reason_name = "no reason"
+                mind.current_punishment_reason = 0
+                mind.current_punishment_reason_name = "no reason"
+            endif
+        endif
+        OrderNarration(speaker, target, "be punished for no reason")
+        return
+    endif
     slave.StartPunishing(speaker, reason, type)
+    ; Custom free-text: DOM may remap the index; keep the player string on the name fields.
+    if mind && reason != "no reason" && reason != "being a bad slave"
+        DOM_Core core = GetCore()
+        int known = 0
+        if core
+            known = core.GetJSONPunishmentReasonIndexByName(reason)
+        endif
+        if known <= 0
+            mind.whipping_reason_name = reason
+            mind.current_punishment_reason_name = reason
+        endif
+    endif
     OrderNarration(speaker, target, "be punished for "+reason)
 EndFunction
 
@@ -1618,6 +1648,11 @@ Function TM_PunishPanelOpen(Actor speaker, Actor target)
     if JArray.count(reasonOpts) <= 0
         AddReasonChoice(reasonOpts, "being a bad slave")
     endif
+    ; Always available: custom (opens text panel) + no reason (DOM index 0).
+    int customOpt = FieldOption("custom", "custom")
+    JMap.setInt(customOpt, "opensText", 1)
+    JArray.addObj(reasonOpts, customOpt)
+    AddReasonChoice(reasonOpts, "no reason")
     int methodOpts = JArray.object()
     int mn = 0
     if core
@@ -1635,6 +1670,9 @@ Function TM_PunishPanelOpen(Actor speaker, Actor target)
         JArray.addObj(methodOpts, FieldOption("pain", "pain"))
     endif
     String defReason = JMap.getStr(JArray.getObj(reasonOpts, 0), "value")
+    if defReason == "custom"
+        defReason = "no reason"
+    endif
     String defType = JMap.getStr(JArray.getObj(methodOpts, 0), "value")
     int reasonField = JMap.object()
     JMap.setStr(reasonField, "name", "reason")
@@ -1911,10 +1949,7 @@ Function TM_DoTrainer(Actor speaker, Actor target, String kind, String otherId)
 EndFunction
 
 Function TM_ListRestrainVariants(Actor speaker, Actor target, String kind)
-    int root = JMap.object()
-    JMap.setStr(root, "title", kind)
-    int options = JArray.object()
-    JMap.setObj(root, "options", options)
+    int variantOpts = JArray.object()
     int arr = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/restrains/"+kind+".json")
     int n = 0
     if arr
@@ -1927,26 +1962,49 @@ Function TM_ListRestrainVariants(Actor speaker, Actor target, String kind)
             if lab == ""
                 lab = "variant "+(i as String)
             endif
-            int opt = ChoicePapyrus(lab, "TM_DoRestrain", true)
-            ChoiceStatic(opt, "kind", kind)
-            ChoiceStatic(opt, "flag", i as String)
-            JArray.addObj(options, opt)
+            JArray.addObj(variantOpts, FieldOption(i as String, lab))
             i += 1
         endwhile
     else
         while i < 7
             String lab = "variant "+(i as String)
-            int opt = ChoicePapyrus(lab, "TM_DoRestrain", true)
-            ChoiceStatic(opt, "kind", kind)
-            ChoiceStatic(opt, "flag", i as String)
-            JArray.addObj(options, opt)
+            JArray.addObj(variantOpts, FieldOption(i as String, lab))
             i += 1
         endwhile
     endif
-    int rnd = ChoicePapyrus("random", "TM_DoRestrain", true)
-    ChoiceStatic(rnd, "kind", kind)
-    ChoiceStatic(rnd, "flag", "random")
-    JArray.addObj(options, rnd)
+    JArray.addObj(variantOpts, FieldOption("random", "random"))
+    String defFlag = JMap.getStr(JArray.getObj(variantOpts, 0), "value")
+    int flagField = JMap.object()
+    JMap.setStr(flagField, "name", "flag")
+    JMap.setStr(flagField, "label", kind)
+    JMap.setStr(flagField, "widget", "select")
+    JMap.setObj(flagField, "options", variantOpts)
+    int fields = JArray.object()
+    JArray.addObj(fields, flagField)
+    int defaults = JMap.object()
+    JMap.setStr(defaults, "flag", defFlag)
+    int maps = MappingST()
+    int mk = JMap.object()
+    JMap.setStr(mk, "type", "static")
+    JMap.setStr(mk, "name", "kind")
+    JMap.setStr(mk, "value", kind)
+    JArray.addObj(maps, mk)
+    int md = JMap.object()
+    JMap.setStr(md, "type", "dynamic")
+    JMap.setStr(md, "name", "flag")
+    JArray.addObj(maps, md)
+    int root = JMap.object()
+    JMap.setStr(root, "panel", "fields")
+    JMap.setStr(root, "label", kind)
+    JMap.setStr(root, "source", "dom")
+    JMap.setStr(root, "plugin", "SkyrimNet_DOM.esp")
+    JMap.setStr(root, "questFormId", "0x800")
+    JMap.setStr(root, "scriptName", "SkyrimNet_DOM_Menu")
+    JMap.setStr(root, "executionFunctionName", "TM_DoRestrain")
+    JMap.setInt(root, "closeWebUI", 1)
+    JMap.setObj(root, "parameterMapping", maps)
+    JMap.setObj(root, "panelFields", fields)
+    JMap.setObj(root, "panelDefaults", defaults)
     PushCascade(root)
 EndFunction
 
