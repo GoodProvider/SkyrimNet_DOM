@@ -112,7 +112,7 @@ Child wheels are nested TargetMenu nodes `{ "type": "pulldown", "layout": "butto
 
 No Follow/Walking/Wait leash panels. No Order untie (restrain owns bondage). Follow distance pick starts follow if needed then `SetFollowMode` (DOM clamps 0–3). Walking type pick applies gait immediately (does not `EnterFollowPlayer`). Wait is a single leaf. Never `DOMDoFollowMe` when `behaviour == "follow_player"`. Never `DOMDoFollowMenu`.
 
-### `0810_dom_abuse.json` — abuse
+### `0810_dom_abuse.json` — abuse (Actor)
 
 | Label | Who | Leaf | close |
 |-------|-----|------|-------|
@@ -128,6 +128,17 @@ No Follow/Walking/Wait leash panels. No Order untie (restrain owns bondage). Fol
 | NPC extras | NPC | shower / bath me / bath you / hug / feed / walk on 4 | true |
 
 Punish reasons walk the same crying / angry / posture / `"being a bad slave"` fallbacks as `ShowDOMPunishmentMenu`, then always append **custom** and **no reason**. Punish methods come from `GetJSONNumberOfPunishmentTypes` / `GetJSONPunishmentTypeNameByIndex`. Praise types come from `GetJSONNumberOfPraisingTypes` / `GetJSONPraisingTypeNameByIndex`.
+
+### `TargetMenu/Scene/options/0810_dom_abuse.json` — abuse (mid-scene)
+
+SexLab swaps Actor → Scene catalogs while focus is animating. Scene abuse is speech-only (no punish / upkeeping / comfort sex\|rape):
+
+| Label | Leaf | close |
+|-------|------|-------|
+| Praise | same live `TM_ListPraiseReasons` cascade | false then true |
+| Scold / Insult / Flatter / Threaten / Promise (+ * all) | same as Actor | true |
+| comfort care\|guilt\|threat\|insult | `SpeakAsPlayer` / `TM_DoNamed` | true |
+| comfort pain | `TM_ListComfortPainActions` → slap face / slap ass / twist nipple / slap breasts / custom → `TM_DoComfortByPain` (`*{speaker} comforts {target} by {painAction}*` TransformDialogue + `StartComfortingWith(..., "pain")`) | false then true |
 
 ### `0820_dom_training.json` — training
 

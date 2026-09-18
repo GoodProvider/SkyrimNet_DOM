@@ -2221,6 +2221,62 @@ Function TM_ListPraiseTypes(Actor speaker, Actor target, String reason)
     PushCascade(root)
 EndFunction
 
+; Scene abuse → comfort → pain: mid-scene gesture list (*narrative* TransformDialogue).
+Function TM_ListComfortPainActions(Actor speaker, Actor target)
+    if !target
+        target = FocusActor()
+    endif
+    if !target
+        Trace("TM_ListComfortPainActions", "no target")
+        return
+    endif
+    int root = JMap.object()
+    JMap.setStr(root, "title", "comfort by")
+    int options = JArray.object()
+    JMap.setObj(root, "options", options)
+    int     opt = ChoicePapyrus("slap face", "TM_DoComfortByPain", true)
+    ChoiceStatic(opt, "painAction", "slap face")
+    JArray.addObj(options, opt)
+    opt = ChoicePapyrus("slap ass", "TM_DoComfortByPain", true)
+    ChoiceStatic(opt, "painAction", "slap ass")
+    JArray.addObj(options, opt)
+    opt = ChoicePapyrus("twist nipple", "TM_DoComfortByPain", true)
+    ChoiceStatic(opt, "painAction", "twist nipple")
+    JArray.addObj(options, opt)
+    opt = ChoicePapyrus("slap breasts", "TM_DoComfortByPain", true)
+    ChoiceStatic(opt, "painAction", "slap breasts")
+    JArray.addObj(options, opt)
+    int customOpt = ChoicePapyrus("custom", "TM_DoComfortByPain", true)
+    ChoiceDynamic(customOpt, "painAction")
+    JMap.setInt(customOpt, "opensText", 1)
+    JArray.addObj(options, customOpt)
+    PushCascade(root)
+EndFunction
+
+Function TM_DoComfortByPain(Actor speaker, Actor target, String painAction)
+    if !target
+        target = FocusActor()
+    endif
+    if !target
+        Trace("TM_DoComfortByPain", "missing target")
+        return
+    endif
+    if painAction == ""
+        Trace("TM_DoComfortByPain", "empty painAction")
+        return
+    endif
+    if !speaker
+        speaker = Game.GetPlayer()
+    endif
+    String line = "*" + SpeakerName(speaker) + " comforts " + TargetName(target) + " by " + painAction + "*"
+    SkyrimNetApi.TransformDialogue(line)
+    Obey(speaker, target, line)
+    DOM_Actor slave = SlaveOf(target)
+    if slave
+        slave.StartComfortingWith(speaker, "pain")
+    endif
+EndFunction
+
 Function TM_DoDress(Actor speaker, Actor target)
     SkyrimNet_DOM_Actions act = GetActions()
     if !act || !target
