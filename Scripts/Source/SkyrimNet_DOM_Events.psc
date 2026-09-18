@@ -74,6 +74,10 @@ Function DirectNarration_Optional(String event_type, String msg, Actor slave, bo
     SaveActorInfo(slave)
     String slave_name = Actor_name(slave)
     Trace("DirectNarration_Optional", "event_type:"+event_type+" msg:"+msg+" slave:"+slave_name+" optional:"+optional)
+    if SkyrimNet_DOM_Obedience.ShouldSkipEventNarration(slave)
+        Trace("DirectNarration_Optional", "skip armed for "+slave_name)
+        return
+    endif
     if !SkyrimNet_SexLab_Utilities.DirectNarration_Optional(event_type, msg, slave, None, optional) 
         AddNotification(msg, slave)
     endif
@@ -375,7 +379,17 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
     Actor slave = akRef as Actor
     String slave_name = Actor_name(slave)
 
-    if OnNotifcationSkip(description)
+    ; Melt/climax only — do not match bare "orgasm" (player-orgasm tease, orgasm-control HUD).
+    ; Runs before the DomObedience skip window so a gated order cannot swallow melt.
+    if IsDomMeltOrgasm(description)
+        Trace("OnNotificationSent", slave_name+" melt orgasm: "+description)
+        if handler
+            handler.DOMSlave_Orgasmed(slave, description)
+        endif
+        return
+    endif
+
+    if OnNotifcationSkip(description, slave)
         Trace("OnNotificationSent", "skipping notification: "+description)
         return
     endif
@@ -392,15 +406,6 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
         ;Trace("OnNotificationSent", GetDisplayName(slave)+" is not a DOM actor, skipping: "+description)
         ;return
     ;endif
-
-    ; Melt/climax only — do not match bare "orgasm" (player-orgasm tease, orgasm-control HUD).
-    if IsDomMeltOrgasm(description)
-        Trace("OnNotificationSent", slave_name+" melt orgasm: "+description)
-        if handler
-            handler.DOMSlave_Orgasmed(slave, description)
-        endif
-        return
-    endif
 
     ; replace you and your
     description = ReplaceWord(description, "your", player_name+"'s")
@@ -535,7 +540,12 @@ Function AddNotificationActor(String description, Actor akActor)
     Trace("AddNotification", GetDisplayName(akActor)+" description: '" + description)
 EndFunction
 
-bool Function OnNotifcationSkip(String description)
+bool Function OnNotifcationSkip(String description, Actor slave=None)
+    ; DomObedience skip window: drop vanilla SendNotificationOrder / Ext2 order DN for this command.
+    ; SexLab StageStart DN is not on this path.
+    if SkyrimNet_DOM_Obedience.ShouldSkipEventNarration(slave)
+        return true
+    endif
     ; Player-orgasm tease (DOM_Mind handleSexOrgasm / handleSeparateOrgasmEvent).
     ; Not a slave climax — do not DN, ring, or feed Handler_DOM.
     if StringUtil.Find(description, "squirms under your grasp") >= 0
@@ -707,7 +717,7 @@ Event OnBehaviourChange(Form akRef, String type)
     endif 
     String name_msg = Actor_name(slave)+" "+msg
     Trace("OnBehaviourChange",current+"->"+type+" "+name_msg)
-    if msg != "" && !OnNotifcationSkip(name_msg)
+    if msg != "" && !OnNotifcationSkip(name_msg, slave)
         DirectNarration_Optional(type, name_msg, slave, true)
     endif
     StorageUtil.SetStringValue(akRef, behaviour_current_key, type)

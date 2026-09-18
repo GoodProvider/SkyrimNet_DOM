@@ -1,25 +1,29 @@
 name: DOMSlave_DrinkSkooma
 description: Drink skooma or other narcotics when {{ player.name }} orders you to. Use this when {{ player.name }} 
   commands you to drink skooma, offers you narcotics, or when you are ordered to consume narcotic substances.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoActionActor
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The NPC who will drink skooma
+    description: The slave being ordered
   - type: static
+    name: kind
+    value: drink
+  - type: static
+    name: actionDesc
+    value: drink skooma
+  - type: static
+    name: op
+    value: action
+  - type: static
+    name: arg
     value: DrinkThis
-    name: the_event
-    description: The action name for drink command
   - type: static
-    value: narcotic
-    name: type
-    description: The drink type - "narcotic" for skooma and narcotic substances
-  - type: static
-    value: false
-    name: the_flag
-    description: Boolean flag parameter (false for drink)
+    name: arg2
+    value: "narcotic"
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -55,4 +59,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} drinks skooma"

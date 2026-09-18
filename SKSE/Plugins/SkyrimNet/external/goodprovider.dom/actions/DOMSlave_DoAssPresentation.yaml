@@ -1,17 +1,29 @@
 customCategory: SkyDOM_Pose
 name: DOMSlave_DoAssPresentation
 description: Start presenting your ass.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoEntertain
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will present their ass
+    description: The slave being ordered
   - type: static
+    name: kind
     value: ass
-    name: type
-    description: The entertain type - "ass" for ass presentation
+  - type: static
+    name: actionDesc
+    value: present ass
+  - type: static
+    name: op
+    value: entertain
+  - type: static
+    name: arg
+    value: ass
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -47,4 +59,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} presents their ass"

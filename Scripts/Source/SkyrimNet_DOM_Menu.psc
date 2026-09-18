@@ -102,6 +102,111 @@ Function OrderNarration(Actor speaker, Actor target, String orderDesc)
     endif
 EndFunction
 
+; -1 ungated/no dll (caller OrderNarration), 0 refuse, 1/2 already narrated
+Int Function GateOrder(Actor speaker, Actor target, String kind, String actionDesc)
+    return SkyrimNet_DOM_Obedience.TryOrder(speaker, target, kind, actionDesc)
+EndFunction
+
+Function FinishOrder(Actor speaker, Actor target, String actionDesc, Int gateResult)
+    if gateResult < 0
+        OrderNarration(speaker, target, actionDesc)
+    endif
+EndFunction
+
+String Function NamedOrderKind(String fn)
+    if fn == "stand" || fn == "wait" || fn == "favor" || fn == "bag" || fn == "display"
+        return fn
+    endif
+    if fn == "kneel" || fn == "salute" || fn == "attention" || fn == "naked" || fn == "drink"
+        return fn
+    endif
+    if fn == "shower" || fn == "bath_me" || fn == "bath_you" || fn == "look" || fn == "turn" || fn == "come"
+        return fn
+    endif
+    if fn == "follow_actor" || fn == "noweapons" || fn == "weapons" || fn == "noarmor" || fn == "armor"
+        return fn
+    endif
+    return ""
+EndFunction
+
+String Function OrderEventKind(String eventName)
+    if eventName == "Follow"
+        return "follow"
+    elseif eventName == "StandStill" || eventName == "WaitHere"
+        return "stand"
+    elseif eventName == "Display"
+        return "display"
+    elseif eventName == "Kneel"
+        return "kneel"
+    elseif eventName == "Salute"
+        return "salute"
+    elseif eventName == "Attention"
+        return "attention"
+    elseif eventName == "Masturbate"
+        return "masturbate"
+    elseif eventName == "BeNaked" || eventName == "DontBeNaked"
+        return "naked"
+    elseif eventName == "BeRespectful"
+        return "respectful"
+    elseif eventName == "BeSilent"
+        return "silent"
+    elseif eventName == "FightForMe" || eventName == "DontFightForMe"
+        return "fight"
+    elseif eventName == "WalkOnFour"
+        return "walk4"
+    elseif eventName == "ComeHere"
+        return "come"
+    elseif eventName == "LookAtMe"
+        return "look"
+    elseif eventName == "DrinkThis"
+        return "drink"
+    elseif eventName == "InBag"
+        return "bag"
+    elseif eventName == "Work"
+        return "work"
+    elseif eventName == "NoOrgasm" || eventName == "FreeOrgasm"
+        return "orgasm"
+    endif
+    return ""
+EndFunction
+
+Function GateOrderGroup(Actor speaker, DOM_Keys keys, String kind, String actionDesc, String eventName, String type, Bool slavers)
+    if !keys
+        return
+    endif
+    if kind == "" || !SkyrimNet_DOM_Obedience.NativeReady()
+        if slavers
+            keys.DOMAllOrderSlavesAndSlavers(eventName, type, false)
+        else
+            keys.DOMAllOrderSlaves(eventName, type, false)
+        endif
+        OrderNarration(speaker, None, actionDesc)
+        return
+    endif
+    DOM_SlaveManager mgr = GetSlaveManager()
+    Actor player = Game.GetPlayer()
+    if !mgr || !mgr.actorAliases
+        return
+    endif
+    int n = mgr.GetMaxActorCount()
+    int i = 0
+    while i < n
+        DOM_Actor slave = mgr.actorAliases[i] as DOM_Actor
+        Actor akRef = None
+        if slave
+            akRef = slave.GetActorRef()
+        endif
+        if akRef && akRef != player && !IsFleeingActor(akRef)
+            Int r = GateOrder(speaker, akRef, kind, actionDesc)
+            if r != 0
+                keys.DOMDoActionActor(akRef, eventName, type, false)
+                FinishOrder(speaker, akRef, actionDesc, r)
+            endif
+        endif
+        i += 1
+    endwhile
+EndFunction
+
 Function SpeakAsPlayer(Actor speaker, Actor target, String line)
     if line != ""
         SkyrimNetApi.TransformDialogue(line)
@@ -721,84 +826,114 @@ Function TM_StatusApply(Actor speaker, Actor target, String control, String valu
     endif
 
     String orderDesc = control
+    String kind = control
     if control == "respectful"
-        if mind && mind.should_be_respectful != wantOn
-            keys.DOMDoBeRespectful(target)
-        endif
         orderDesc = "be respectful"
     elseif control == "silent"
-        if mind && mind.should_be_silent != wantOn
-            keys.DOMDoBeSilent(target)
-        endif
         orderDesc = "be silent"
     elseif control == "fight"
-        if mind && mind.should_fight_for_player != wantOn
-            keys.DOMDoFightForMe(target)
-        endif
         orderDesc = "fight for me"
     elseif control == "orgasm"
-        Bool deny = !wantOn
-        if mind && mind.should_be_noorgasm != deny
-            keys.DOMDoSetOrgasmStatus(target)
-        endif
         orderDesc = "set orgasm status"
     elseif control == "noorgasm"
-        if mind && !mind.should_be_noorgasm
-            keys.DOMDoSetOrgasmStatus(target)
-        endif
+        kind = "orgasm"
         orderDesc = "deny orgasm"
     elseif control == "task"
         if value == "maid"
-            keys.DOMDoCleanTheMess(target)
+            kind = "maid"
             orderDesc = "clean the mess"
-        elseif value == "jail"
-            if slave
-                slave.EnterJailTravel(1)
-            endif
-            orderDesc = "go to jail"
-        elseif StringUtil.Find(value, "jail:") == 0
-            int mode = StringUtil.Substring(value, 5) as Int
-            if slave && mode > 0
-                slave.EnterJailTravel(mode)
-            endif
+        elseif value == "jail" || StringUtil.Find(value, "jail:") == 0
+            kind = "jail"
             orderDesc = "go to jail"
         elseif StringUtil.Find(value, "work:") == 0
-            int workType = StringUtil.Substring(value, 5) as Int
-            if workType > 0
-                keys.DOMDoWork(target, workType)
-            endif
+            kind = "work"
             orderDesc = "work"
+        else
+            kind = ""
         endif
     else
         Trace("TM_StatusApply", "unknown control "+control)
         TM_StatusPanelOpen()
         return
     endif
-    OrderNarration(speaker, target, orderDesc)
+    Int gate = GateOrder(speaker, target, kind, orderDesc)
+    if gate == 0
+        TM_StatusPanelOpen()
+        return
+    endif
+    if control == "respectful"
+        if mind && mind.should_be_respectful != wantOn
+            keys.DOMDoBeRespectful(target)
+        endif
+    elseif control == "silent"
+        if mind && mind.should_be_silent != wantOn
+            keys.DOMDoBeSilent(target)
+        endif
+    elseif control == "fight"
+        if mind && mind.should_fight_for_player != wantOn
+            keys.DOMDoFightForMe(target)
+        endif
+    elseif control == "orgasm"
+        Bool deny = !wantOn
+        if mind && mind.should_be_noorgasm != deny
+            keys.DOMDoSetOrgasmStatus(target)
+        endif
+    elseif control == "noorgasm"
+        if mind && !mind.should_be_noorgasm
+            keys.DOMDoSetOrgasmStatus(target)
+        endif
+    elseif control == "task"
+        if value == "maid"
+            keys.DOMDoCleanTheMess(target)
+        elseif value == "jail"
+            if slave
+                slave.EnterJailTravel(1)
+            endif
+        elseif StringUtil.Find(value, "jail:") == 0
+            int mode = StringUtil.Substring(value, 5) as Int
+            if slave && mode > 0
+                slave.EnterJailTravel(mode)
+            endif
+        elseif StringUtil.Find(value, "work:") == 0
+            int workType = StringUtil.Substring(value, 5) as Int
+            if workType > 0
+                keys.DOMDoWork(target, workType)
+            endif
+        endif
+    endif
+    FinishOrder(speaker, target, orderDesc, gate)
     TM_StatusPanelOpen()
 EndFunction
 
 Function TM_StatusApplyGroup(Actor speaker, DOM_Keys keys, String control, String value)
     String orderDesc = control
+    String kind = control
+    String eventName = ""
+    Bool slavers = false
+    String type = ""
     if control == "respectful"
-        keys.DOMAllOrderSlaves("BeRespectful", "", false)
+        eventName = "BeRespectful"
         orderDesc = "be respectful"
     elseif control == "silent"
-        keys.DOMAllOrderSlaves("BeSilent", "", false)
+        eventName = "BeSilent"
         orderDesc = "be silent"
     elseif control == "fight"
-        keys.DOMAllOrderSlavesAndSlavers("FightForMe", "", false)
+        eventName = "FightForMe"
+        slavers = true
         orderDesc = "fight for me"
     elseif control == "orgasm"
-        keys.DOMAllOrderSlaves("FreeOrgasm", "", false)
+        eventName = "FreeOrgasm"
         orderDesc = "have free orgasm"
     elseif control == "noorgasm"
-        keys.DOMAllOrderSlaves("NoOrgasm", "", false)
+        eventName = "NoOrgasm"
+        kind = "orgasm"
         orderDesc = "deny orgasm"
     elseif control == "task"
         if value == "maid"
-            TM_MaidAll(keys)
+            kind = "maid"
             orderDesc = "clean the mess"
+            TM_MaidAllGated(speaker, keys)
+            return
         elseif value == "jail" || StringUtil.Find(value, "jail:") == 0
             int mode = 1
             if StringUtil.Find(value, "jail:") == 0
@@ -807,21 +942,30 @@ Function TM_StatusApplyGroup(Actor speaker, DOM_Keys keys, String control, Strin
             if mode < 1
                 mode = 1
             endif
-            TM_JailAll(mode)
-            orderDesc = "go to jail"
+            TM_JailAllGated(speaker, mode)
+            return
         elseif StringUtil.Find(value, "work:") == 0
             int workType = StringUtil.Substring(value, 5) as Int
-            keys.DOMAllOrderSlaves("Work", workType as String, false)
+            eventName = "Work"
+            type = workType as String
+            kind = "work"
             orderDesc = "work"
+        else
+            Trace("TM_StatusApplyGroup", "unknown task "+value)
+            return
         endif
     else
         Trace("TM_StatusApplyGroup", "unknown control "+control)
         return
     endif
-    OrderNarration(speaker, None, orderDesc)
+    GateOrderGroup(speaker, keys, kind, orderDesc, eventName, type, slavers)
 EndFunction
 
 Function TM_MaidAll(DOM_Keys keys)
+    TM_MaidAllGated(None, keys)
+EndFunction
+
+Function TM_MaidAllGated(Actor speaker, DOM_Keys keys)
     DOM_SlaveManager mgr = GetSlaveManager()
     Actor player = Game.GetPlayer()
     if !mgr || !mgr.actorAliases
@@ -836,13 +980,26 @@ Function TM_MaidAll(DOM_Keys keys)
             akRef = slave.GetActorRef()
         endif
         if akRef && akRef != player && !IsFleeingActor(akRef)
-            keys.DOMDoCleanTheMess(akRef)
+            Int r = -1
+            if speaker
+                r = GateOrder(speaker, akRef, "maid", "clean the mess")
+            endif
+            if r != 0
+                keys.DOMDoCleanTheMess(akRef)
+                if speaker
+                    FinishOrder(speaker, akRef, "clean the mess", r)
+                endif
+            endif
         endif
         i += 1
     endwhile
 EndFunction
 
 Function TM_JailAll(int mode)
+    TM_JailAllGated(None, mode)
+EndFunction
+
+Function TM_JailAllGated(Actor speaker, int mode)
     DOM_SlaveManager mgr = GetSlaveManager()
     Actor player = Game.GetPlayer()
     if !mgr || !mgr.actorAliases
@@ -857,7 +1014,16 @@ Function TM_JailAll(int mode)
             akRef = slave.GetActorRef()
         endif
         if slave && akRef && akRef != player && !IsFleeingActor(akRef)
-            slave.EnterJailTravel(mode)
+            Int r = -1
+            if speaker
+                r = GateOrder(speaker, akRef, "jail", "go to jail")
+            endif
+            if r != 0
+                slave.EnterJailTravel(mode)
+                if speaker
+                    FinishOrder(speaker, akRef, "go to jail", r)
+                endif
+            endif
         endif
         i += 1
     endwhile
@@ -873,12 +1039,13 @@ Function TM_DoOrder(Actor speaker, Actor target, String eventName, String type, 
     if group
         if flag == "bags"
             keys.DOMAllOrderBags(eventName, type, false)
-        elseif flag == "slavers"
-            keys.DOMAllOrderSlavesAndSlavers(eventName, type, false)
-        else
-            keys.DOMAllOrderSlaves(eventName, type, false)
+            OrderNarration(speaker, None, eventName)
+            return
         endif
-        OrderNarration(speaker, None, eventName)
+        Bool slavers = flag == "slavers"
+        String kind = OrderEventKind(eventName)
+        String actionDesc = eventName
+        GateOrderGroup(speaker, keys, kind, actionDesc, eventName, type, slavers)
         return
     endif
     if IsFleeingActor(target)
@@ -890,8 +1057,20 @@ Function TM_DoOrder(Actor speaker, Actor target, String eventName, String type, 
         keys.DOMDoActionActor(target, eventName, type, theFlag)
         return
     endif
+    String kind = OrderEventKind(eventName)
+    Int gate = -1
+    if kind != ""
+        gate = GateOrder(speaker, target, kind, eventName)
+        if gate == 0
+            return
+        endif
+    endif
     keys.DOMDoActionActor(target, eventName, type, theFlag)
-    OrderNarration(speaker, target, eventName)
+    if kind != ""
+        FinishOrder(speaker, target, eventName, gate)
+    else
+        OrderNarration(speaker, target, eventName)
+    endif
 EndFunction
 
 Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
@@ -914,28 +1093,78 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         return
     endif
     DOM_Actor slave = SlaveOf(target)
+    String kind = NamedOrderKind(fn)
     String orderDesc = fn
     if fn == "inventory"
-        keys.DOMDoOpenInventory(target)
         orderDesc = "open inventory"
     elseif fn == "follow"
         TM_DoFollow(speaker, target, "start", "")
         return
     elseif fn == "stand"
-        keys.DOMDoStandStill(target)
         orderDesc = "stand still"
     elseif fn == "wait"
-        keys.DOMDoWaitSandbox(target)
         orderDesc = "wait here"
     elseif fn == "favor"
-        keys.DOMDoFavor(target)
         orderDesc = "do a favor"
     elseif fn == "bag"
-        keys.DOMDoPutInBag(target)
         orderDesc = "get in the bag"
     elseif fn == "display"
-        keys.DOMDoDisplay(target)
         orderDesc = "display"
+    elseif fn == "kneel"
+        orderDesc = "kneel"
+    elseif fn == "salute"
+        orderDesc = "salute"
+    elseif fn == "attention"
+        orderDesc = "stand at attention"
+    elseif fn == "naked"
+        orderDesc = "be naked"
+    elseif fn == "drink"
+        orderDesc = "drink"
+    elseif fn == "shower"
+        orderDesc = "shower"
+    elseif fn == "bath_me"
+        orderDesc = "bathe me"
+    elseif fn == "bath_you"
+        orderDesc = "bathe"
+    elseif fn == "look"
+        orderDesc = "look at me"
+    elseif fn == "turn"
+        orderDesc = "turn around"
+    elseif fn == "come"
+        orderDesc = "come here"
+    elseif fn == "follow_actor"
+        orderDesc = "follow someone"
+    elseif fn == "noweapons"
+        orderDesc = "hold no weapons"
+    elseif fn == "weapons"
+        orderDesc = "hold weapons"
+    elseif fn == "noarmor"
+        orderDesc = "wear no armor"
+    elseif fn == "armor"
+        orderDesc = "wear armor"
+    endif
+
+    Int gate = -1
+    if kind != ""
+        gate = GateOrder(speaker, target, kind, orderDesc)
+        if gate == 0
+            return
+        endif
+    endif
+
+    if fn == "inventory"
+        keys.DOMDoOpenInventory(target)
+        orderDesc = "open inventory"
+    elseif fn == "stand"
+        keys.DOMDoStandStill(target)
+    elseif fn == "wait"
+        keys.DOMDoWaitSandbox(target)
+    elseif fn == "favor"
+        keys.DOMDoFavor(target)
+    elseif fn == "bag"
+        keys.DOMDoPutInBag(target)
+    elseif fn == "display"
+        keys.DOMDoDisplay(target)
     elseif fn == "praise"
         keys.DOMDoPraise(target)
         orderDesc = "accept praise"
@@ -952,13 +1181,10 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         return
     elseif fn == "kneel"
         keys.DOMDoKneel(target)
-        orderDesc = "kneel"
     elseif fn == "salute"
         keys.DOMDoSalute(target)
-        orderDesc = "salute"
     elseif fn == "attention"
         keys.DOMDoAttention(target)
-        orderDesc = "stand at attention"
     elseif fn == "strip"
         keys.DOMDoStrip(target)
         orderDesc = "strip"
@@ -967,7 +1193,6 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         orderDesc = "strip everything"
     elseif fn == "naked"
         keys.DOMDoBeNaked(target)
-        orderDesc = "be naked"
     elseif fn == "inspect"
         String grabType = type
         if grabType == ""
@@ -1002,49 +1227,41 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         endif
     elseif fn == "drink"
         keys.DOMDoDrink(target, type)
-        orderDesc = "drink"
     elseif fn == "shower"
         if slave
             slave.DoShower(speaker)
         else
             keys.DOMDoNPCShower(target)
         endif
-        orderDesc = "shower"
     elseif fn == "bath_me"
         if slave
             slave.DoBathMaster(speaker)
         else
             keys.DOMDoNPCBathMe(target, speaker)
         endif
-        orderDesc = "bathe me"
     elseif fn == "bath_you"
         if slave
             slave.DoBathMe(speaker)
         else
             keys.DOMDoNPCBathMe(speaker, target)
         endif
-        orderDesc = "bathe"
     elseif fn == "look"
         if slave
             slave.Interact_LookAtMe(speaker)
         endif
-        orderDesc = "look at me"
     elseif fn == "turn"
         if slave
             slave.Interact_TurnAround(speaker)
         endif
-        orderDesc = "turn around"
     elseif fn == "come"
         if slave
             slave.Interact_ComeHere(speaker)
         endif
-        orderDesc = "come here"
     elseif fn == "follow_actor"
         Actor other = ActorFromId(type)
         if slave && other
             slave.EnterFollowTarget(other)
         endif
-        orderDesc = "follow someone"
     elseif fn == "mark"
         if slave
             if slave.HasMark()
@@ -1084,22 +1301,18 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         if slave
             slave.HoldNoWeapons()
         endif
-        orderDesc = "hold no weapons"
     elseif fn == "weapons"
         if slave
             slave.HoldWeapons(speaker)
         endif
-        orderDesc = "hold weapons"
     elseif fn == "noarmor"
         if slave
             slave.WearNoArmor()
         endif
-        orderDesc = "wear no armor"
     elseif fn == "armor"
         if slave
             slave.WearArmor(speaker)
         endif
-        orderDesc = "wear armor"
     elseif fn == "feed"
         keys.DOMDoVampireKiss(target)
         orderDesc = "feed"
@@ -1107,7 +1320,11 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         Trace("TM_DoNamed", "unknown fn "+fn)
         return
     endif
-    OrderNarration(speaker, target, orderDesc)
+    if kind != ""
+        FinishOrder(speaker, target, orderDesc, gate)
+    else
+        OrderNarration(speaker, target, orderDesc)
+    endif
 EndFunction
 
 Function TM_DoNamedGroup(Actor speaker, DOM_Keys keys, String fn)
@@ -1160,11 +1377,33 @@ Function TM_DoNamedGroup(Actor speaker, DOM_Keys keys, String fn)
         order = "StripArmor"
     endif
     if slavers
-        keys.DOMAllOrderSlavesAndSlavers(order, "", false)
-    else
-        keys.DOMAllOrderSlaves(order, "", false)
+        String slaverKind = OrderEventKind(order)
+        if fn == "praise" || fn == "equip"
+            slaverKind = ""
+        endif
+        GateOrderGroup(speaker, keys, slaverKind, order, order, "", true)
+        return
     endif
-    OrderNarration(speaker, None, order)
+    String kind = NamedOrderKind(fn)
+    if kind == ""
+        if fn == "display" || fn == "pose"
+            kind = "display"
+        elseif fn == "attention"
+            kind = "attention"
+        elseif fn == "kneel"
+            kind = "kneel"
+        elseif fn == "salute"
+            kind = "salute"
+        elseif fn == "masturbate"
+            kind = "masturbate"
+        elseif fn == "naked" || fn == "clothed"
+            kind = "naked"
+        endif
+    endif
+    if fn == "strip" || fn == "stripall" || fn == "equip" || fn == "praise" || fn == "scold" || fn == "insult" || fn == "flatter" || fn == "threaten" || fn == "noweapons" || fn == "noarmor"
+        kind = ""
+    endif
+    GateOrderGroup(speaker, keys, kind, order, order, "", false)
 EndFunction
 
 Function TM_DoPose(Actor speaker, Actor target, DOM_Actor slave, String typ)
@@ -1172,47 +1411,66 @@ Function TM_DoPose(Actor speaker, Actor target, DOM_Actor slave, String typ)
         return
     endif
     String orderDesc = typ
+    String kind = typ
     if typ == "chair"
-        slave.DoChair(speaker)
         orderDesc = "pose on a chair"
     elseif typ == "light"
-        slave.DoLight(speaker)
         orderDesc = "hold a light"
     elseif typ == "flowers"
-        slave.DoFlowers(speaker)
         orderDesc = "hold flowers"
     elseif typ == "drinks"
-        slave.DoDrinks(speaker)
         orderDesc = "serve drinks"
     elseif typ == "cute"
-        slave.DoCute(speaker)
         orderDesc = "pose cute"
     elseif typ == "dance"
-        slave.DoDance(speaker)
         orderDesc = "dance"
     elseif typ == "music"
-        slave.DoMusic(speaker)
         orderDesc = "play music"
     elseif typ == "submissive"
-        slave.DoSubmissive(speaker)
         orderDesc = "pose submissive"
     elseif typ == "ass"
-        slave.DoAssPresentation(speaker)
         orderDesc = "present ass"
     elseif typ == "breasts"
-        slave.DoBreastsPresentation(speaker)
         orderDesc = "present breasts"
     elseif typ == "pussy"
-        slave.DoPussyPresentation(speaker)
         orderDesc = "present pussy"
+    else
+        kind = "display"
+        orderDesc = "display"
+    endif
+    Int gate = GateOrder(speaker, target, kind, orderDesc)
+    if gate == 0
+        return
+    endif
+    if typ == "chair"
+        slave.DoChair(speaker)
+    elseif typ == "light"
+        slave.DoLight(speaker)
+    elseif typ == "flowers"
+        slave.DoFlowers(speaker)
+    elseif typ == "drinks"
+        slave.DoDrinks(speaker)
+    elseif typ == "cute"
+        slave.DoCute(speaker)
+    elseif typ == "dance"
+        slave.DoDance(speaker)
+    elseif typ == "music"
+        slave.DoMusic(speaker)
+    elseif typ == "submissive"
+        slave.DoSubmissive(speaker)
+    elseif typ == "ass"
+        slave.DoAssPresentation(speaker)
+    elseif typ == "breasts"
+        slave.DoBreastsPresentation(speaker)
+    elseif typ == "pussy"
+        slave.DoPussyPresentation(speaker)
     else
         DOM_Keys keys = GetKeys()
         if keys
             keys.DOMDoDisplay(target)
         endif
-        orderDesc = "display"
     endif
-    OrderNarration(speaker, target, orderDesc)
+    FinishOrder(speaker, target, orderDesc, gate)
 EndFunction
 
 Function ApplyWalkFour(Actor speaker, DOM_Actor sl_alias, String walk4)
@@ -1231,6 +1489,72 @@ Function ApplyWalkFour(Actor speaker, DOM_Actor sl_alias, String walk4)
     endif
 EndFunction
 
+Int Function FollowDistanceMode(String distance)
+    if distance == "0" || distance == "tight"
+        return 0
+    elseif distance == "1" || distance == "close"
+        return 1
+    elseif distance == "2" || distance == "short" || distance == "near"
+        return 2
+    elseif distance == "3" || distance == "long"
+        return 3
+    elseif distance == "4" || distance == "far"
+        return 3
+    elseif distance == "5" || distance == "very far"
+        return 3
+    endif
+    Int n = distance as Int
+    if n < 0
+        return 2
+    elseif n > 3
+        return 3
+    endif
+    return n
+EndFunction
+
+String Function FollowDistanceOrderDesc(Int mode)
+    if mode == 0
+        return "follow tightly"
+    elseif mode == 1
+        return "follow closely"
+    elseif mode == 2
+        return "follow from a short distance"
+    endif
+    return "follow from afar"
+EndFunction
+
+; Order → Follow distance pick (0–3). Does not change walk-on-four.
+Function TM_DoFollowDistance(Actor speaker, Actor target, String distance)
+    if !target
+        Trace("TM_DoFollowDistance", "missing target")
+        return
+    endif
+    if IsFleeingActor(target)
+        return
+    endif
+    DOM_Keys keys = GetKeys()
+    if !keys
+        Trace("TM_DoFollowDistance", "d_keys is None")
+        return
+    endif
+    Int mode = FollowDistanceMode(distance)
+    String orderDesc = FollowDistanceOrderDesc(mode)
+    Int gate = GateOrder(speaker, target, "follow", orderDesc)
+    if gate == 0
+        return
+    endif
+    DOM_Actor sl_alias = SlaveOf(target)
+    if sl_alias
+        if sl_alias.behaviour != "follow_player"
+            sl_alias.EnterFollowPlayer()
+        endif
+        sl_alias.SetFollowMode(mode)
+    else
+        keys.DOMDoFollowMe(target)
+    endif
+    FinishOrder(speaker, target, orderDesc, gate)
+EndFunction
+
 Function TM_DoFollowApply(Actor speaker, Actor target, String distance, String walk4)
     if !target
         Trace("TM_DoFollowApply", "missing target")
@@ -1245,20 +1569,24 @@ Function TM_DoFollowApply(Actor speaker, Actor target, String distance, String w
         return
     endif
     DOM_Actor sl_alias = SlaveOf(target)
-    if sl_alias
-        if sl_alias.behaviour != "follow_player"
-            sl_alias.EnterFollowPlayer()
-        endif
-        sl_alias.SetFollowMode(distance as Int)
-    else
-        keys.DOMDoFollowMe(target)
-    endif
-    ApplyWalkFour(speaker, sl_alias, walk4)
     String orderDesc = "follow"
     if walk4 == "1" || walk4 == "on"
         orderDesc = "follow on four"
     endif
-    OrderNarration(speaker, target, orderDesc)
+    Int gate = GateOrder(speaker, target, "follow", orderDesc)
+    if gate == 0
+        return
+    endif
+    if sl_alias
+        if sl_alias.behaviour != "follow_player"
+            sl_alias.EnterFollowPlayer()
+        endif
+        sl_alias.SetFollowMode(FollowDistanceMode(distance))
+    else
+        keys.DOMDoFollowMe(target)
+    endif
+    ApplyWalkFour(speaker, sl_alias, walk4)
+    FinishOrder(speaker, target, orderDesc, gate)
 EndFunction
 
 Function TM_DoWalkingApply(Actor speaker, Actor target, String walkType)
@@ -1271,18 +1599,22 @@ Function TM_DoWalkingApply(Actor speaker, Actor target, String walkType)
     endif
     DOM_Actor sl_alias = SlaveOf(target)
     Bool crawl = walkType == "four" || walkType == "knees" || walkType == "1" || walkType == "on"
-    if crawl
-        ApplyWalkFour(speaker, sl_alias, "1")
-    else
-        ApplyWalkFour(speaker, sl_alias, "0")
-    endif
     String orderDesc = "walk"
     if walkType == "four"
         orderDesc = "follow on four"
     elseif walkType == "knees"
         orderDesc = "follow on hands and knees"
     endif
-    OrderNarration(speaker, target, orderDesc)
+    Int gate = GateOrder(speaker, target, "walk4", orderDesc)
+    if gate == 0
+        return
+    endif
+    if crawl
+        ApplyWalkFour(speaker, sl_alias, "1")
+    else
+        ApplyWalkFour(speaker, sl_alias, "0")
+    endif
+    FinishOrder(speaker, target, orderDesc, gate)
 EndFunction
 
 Function TM_DoStandApply(Actor speaker, Actor target, String walk4)
@@ -1298,13 +1630,17 @@ Function TM_DoStandApply(Actor speaker, Actor target, String walk4)
         Trace("TM_DoStandApply", "d_keys is None")
         return
     endif
-    keys.DOMDoStandStill(target)
-    ApplyWalkFour(speaker, SlaveOf(target), walk4)
     String orderDesc = "stand still"
     if walk4 == "1" || walk4 == "on"
         orderDesc = "stand still on four"
     endif
-    OrderNarration(speaker, target, orderDesc)
+    Int gate = GateOrder(speaker, target, "stand", orderDesc)
+    if gate == 0
+        return
+    endif
+    keys.DOMDoStandStill(target)
+    ApplyWalkFour(speaker, SlaveOf(target), walk4)
+    FinishOrder(speaker, target, orderDesc, gate)
 EndFunction
 
 Function TM_DoFollow(Actor speaker, Actor target, String kind, String type)
@@ -1326,6 +1662,40 @@ Function TM_DoFollow(Actor speaker, Actor target, String kind, String type)
         return
     endif
     DOM_Actor sl_alias = SlaveOf(target)
+    String orderDesc = kind
+    String gateKind = "follow"
+    if kind == "start"
+        orderDesc = "follow"
+    elseif kind == "distance"
+        orderDesc = "follow at distance"
+    elseif kind == "wait_distance"
+        orderDesc = "wait at distance"
+        gateKind = "wait"
+    elseif kind == "cuff" || kind == "uncuff"
+        gateKind = ""
+        if kind == "cuff"
+            orderDesc = "wear cuffs"
+        else
+            orderDesc = "remove cuffs"
+        endif
+    elseif kind == "walk4" || kind == "follow_walk4"
+        gateKind = "walk4"
+        if type == "1" || type == "on"
+            orderDesc = "walk on four"
+        else
+            orderDesc = "walk standing"
+        endif
+    else
+        Trace("TM_DoFollow", "unknown kind "+kind)
+        return
+    endif
+    Int gate = -1
+    if gateKind != ""
+        gate = GateOrder(speaker, target, gateKind, orderDesc)
+        if gate == 0
+            return
+        endif
+    endif
     Bool startFollow = kind == "distance" || kind == "follow_walk4" || kind == "start"
     if startFollow
         if sl_alias
@@ -1336,38 +1706,27 @@ Function TM_DoFollow(Actor speaker, Actor target, String kind, String type)
             keys.DOMDoFollowMe(target)
         endif
     endif
-    String orderDesc = kind
-    if kind == "start"
-        orderDesc = "follow"
-    elseif kind == "distance"
+    if kind == "distance"
         if sl_alias
             sl_alias.SetFollowMode(type as Int)
         endif
-        orderDesc = "follow at distance"
     elseif kind == "wait_distance"
         keys.DOMDoWaitSandbox(target)
         if sl_alias
             sl_alias.SetWaitMode(type as Int)
         endif
-        orderDesc = "wait at distance"
     elseif kind == "cuff"
         keys.DOMDoWearCuffs(target, type as Int)
-        orderDesc = "wear cuffs"
     elseif kind == "uncuff"
         keys.DOMDoUnCuff(target)
-        orderDesc = "remove cuffs"
     elseif kind == "walk4" || kind == "follow_walk4"
         ApplyWalkFour(speaker, sl_alias, type)
-        if type == "1" || type == "on"
-            orderDesc = "walk on four"
-        else
-            orderDesc = "walk standing"
-        endif
-    else
-        Trace("TM_DoFollow", "unknown kind "+kind)
-        return
     endif
-    OrderNarration(speaker, target, orderDesc)
+    if gateKind != ""
+        FinishOrder(speaker, target, orderDesc, gate)
+    else
+        OrderNarration(speaker, target, orderDesc)
+    endif
 EndFunction
 
 Function TM_DoRestrain(Actor speaker, Actor target, String kind, String flag)
@@ -1507,23 +1866,23 @@ Function TM_DoMasturbate(Actor speaker, Actor target, String kind)
         Trace("TM_DoMasturbate", "missing actions")
         return
     endif
-    String orderDesc = "masturbate"
     if kind == "stop"
         act.StopScene_Masturbate("", target, speaker, true)
-        orderDesc = "stop masturbating"
+        return
     elseif kind == "harder"
+        String orderDesc = "masturbate harder"
+        Int gate = GateOrder(speaker, target, "masturbate_harder", orderDesc)
+        if gate == 0
+            return
+        endif
         DOM_Actor slave = SlaveOf(target)
         if slave
             slave.MasturbateHarder(speaker)
         endif
-        orderDesc = "masturbate harder"
-    else
-        act.StartScene_masturbate("", target, speaker, kind)
-        if kind != ""
-            orderDesc = "masturbate "+kind
-        endif
+        FinishOrder(speaker, target, orderDesc, gate)
+        return
     endif
-    OrderNarration(speaker, target, orderDesc)
+    act.StartScene_masturbate("", target, speaker, kind)
 EndFunction
 
 Function TM_DoPunish(Actor speaker, Actor target, String reason, String type)
@@ -1869,7 +2228,6 @@ Function TM_DoDress(Actor speaker, Actor target)
         return
     endif
     act.Dress_Execute(target, speaker)
-    OrderNarration(speaker, target, "dress")
 EndFunction
 
 Function TM_DoTrainer(Actor speaker, Actor target, String kind, String otherId)

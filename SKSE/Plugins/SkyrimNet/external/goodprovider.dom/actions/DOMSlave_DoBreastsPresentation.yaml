@@ -1,17 +1,29 @@
 customCategory: SkyDOM_Pose
 name: DOMSlave_DoBreastsPresentation
 description: Start presenting your breasts.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoEntertain
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will present their breasts
+    description: The slave being ordered
   - type: static
+    name: kind
     value: breasts
-    name: type
-    description: The entertain type - "breasts" for breasts presentation
+  - type: static
+    name: actionDesc
+    value: present breasts
+  - type: static
+    name: op
+    value: entertain
+  - type: static
+    name: arg
+    value: breasts
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -47,4 +59,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} presents their breasts"

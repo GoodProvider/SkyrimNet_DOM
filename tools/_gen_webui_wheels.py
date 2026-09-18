@@ -204,6 +204,7 @@ def scene_rape(label, el):
 
 
 DIST_LABELS = [("tight", "0"), ("close", "1"), ("near", "2"), ("long", "3"), ("far", "4"), ("very far", "5")]
+FOLLOW_DIST_NAMES = ["tight", "close", "short", "long"]
 WALK_OPTS = [{"value": "0", "label": "walking"}, {"value": "1", "label": "crawling"}]
 DIST_OPTS = [{"value": val, "label": lab} for lab, val in DIST_LABELS]
 WALKING_TYPES = [
@@ -219,17 +220,45 @@ def fields_pap(label, fn, field_list, defaults, maps, el=None):
     return o
 
 
-FOLLOW_FIELDS = fields_pap(
-    "follow",
-    "TM_DoFollowApply",
-    [
-        {"name": "distance", "label": "distance", "widget": "select", "options": DIST_OPTS},
-        {"name": "walk4", "label": "walk", "widget": "select", "options": WALK_OPTS},
-    ],
-    {"distance": "2", "walk4": "0"},
-    mapping(("speaker", "speaker"), ("target", "target"), ("dynamic", "distance"), ("dynamic", "walk4")),
-    el=EL_NOT_DUTY_SLAVE_SLAVER,
-)
+def follow_distance_btn(name):
+    return pap(
+        name,
+        "TM_DoFollowDistance",
+        mapping(("speaker", "speaker"), ("target", "target"), ("static", "distance", name)),
+        close=True,
+    )
+
+
+def follow_distance_children():
+    return [follow_distance_btn(n) for n in FOLLOW_DIST_NAMES]
+
+
+def follow_el_not_following():
+    return rules(
+        g_and(C_NOT_ALL, C_NOT_DUTY, cond("get_faction_rank", "!=", 1, ["currentActor", "DOMActionFollowing"])),
+        g_or(C_SLAVE, C_SLAVER),
+    )
+
+
+def follow_el_mode(mode):
+    return rules(
+        g_and(
+            C_NOT_ALL,
+            C_NOT_DUTY,
+            cond("get_faction_rank", "==", 1, ["currentActor", "DOMActionFollowing"]),
+            cond("get_faction_rank", "==", mode, ["currentActor", "DOMFollowMode"]),
+        ),
+        g_or(C_SLAVE, C_SLAVER),
+    )
+
+
+FOLLOW_PULLS = [
+    pull("follow", follow_distance_children(), el=follow_el_not_following()),
+    pull("follow: tight", follow_distance_children(), el=follow_el_mode(0)),
+    pull("follow: close", follow_distance_children(), el=follow_el_mode(1)),
+    pull("follow: short", follow_distance_children(), el=follow_el_mode(2)),
+    pull("follow: long", follow_distance_children(), el=follow_el_mode(3)),
+]
 WALKING_FIELDS = fields_pap(
     "walking",
     "TM_DoWalkingApply",
@@ -291,7 +320,7 @@ def furniture_open(kind):
 # --- 0800 order ---
 order_opts = [
     named("inventory", "inventory", el=EL_SLAVE_SLAVER),
-    FOLLOW_FIELDS,
+    *FOLLOW_PULLS,
     named("follow all", "follow", "all", el=EL_ALL),
     WALKING_FIELDS,
     named("stand all", "stand", "all", el=EL_ALL),
@@ -338,8 +367,76 @@ threats = [
     "refusing to masturbate",
     "covering self",
 ]
-comforts = ["care", "guilt", "sex", "rape", "pain", "threat", "insult"]
 drinks = [("skooma", "narcotic"), ("alcohol", "alcohol"), ("love potion", "love"), ("lust potion", "lust"), ("lash potion", "lash"), ("mind potion", "mind")]
+
+COMFORT_SEX_DEFAULTS = {
+    "subject": "player",
+    "object": "currentActor",
+    "objectRelation": "with",
+    "andThird": "none",
+    "intent": "comfort with sex",
+    "direction": "fucking",
+    "method": "pussy",
+    "style": "normally",
+    "settingName": "default",
+}
+COMFORT_RAPE_DEFAULTS = {
+    "subject": "player",
+    "object": "currentActor",
+    "objectRelation": "to victim",
+    "andThird": "none",
+    "intent": "pretend to comfort by sexual assault",
+    "direction": "fucking",
+    "method": "pussy",
+    "style": "forcefully",
+    "settingName": "punish_pleasure_pain_rape",
+}
+
+
+def comfort_scene_sex():
+    maps = mapping(
+        ("dynamic", "intent", "comfort with sex"),
+        ("speaker", "speaker"),
+        ("target", "target"),
+        ("dynamic", "style", "forcefully|normally|gently"),
+        ("dynamic", "tags", "comma-separated tags"),
+        ("dynamic", "direction", "fucking|fucked in"),
+        ("dynamic", "setting_name", "scene setting json name"),
+    )
+    return pap(
+        "sex",
+        "WebUI_StartScene_Comfort_Sex",
+        maps,
+        close=True,
+        el=EL_SLAVE,
+        plugin=PLUGIN,
+        script="SkyrimNet_DOM_Actions",
+        panel="scene_start",
+        panelDefaults=COMFORT_SEX_DEFAULTS,
+    )
+
+
+def comfort_scene_rape():
+    maps = mapping(
+        ("dynamic", "intent", "pretend to comfort by sexual assault"),
+        ("speaker", "speaker"),
+        ("target", "target"),
+        ("dynamic", "style", "forcefully|normally|gently"),
+        ("dynamic", "tags", "comma-separated tags"),
+        ("dynamic", "direction", "fucking|fucked in"),
+        ("dynamic", "setting_name", "scene setting json name"),
+    )
+    return pap(
+        "rape",
+        "WebUI_StartScene_Comfort_Rape",
+        maps,
+        close=True,
+        el=EL_SLAVE,
+        plugin=PLUGIN,
+        script="SkyrimNet_DOM_Actions",
+        panel="scene_start",
+        panelDefaults=COMFORT_RAPE_DEFAULTS,
+    )
 
 upkeep = [
     pull(
@@ -381,7 +478,19 @@ abuse_opts = [
     named("flatter all", "flatter", "all", el=EL_ALL),
     pull("threaten", [named(t, "threaten", t, el=EL_SLAVE) for t in threats], el=EL_SLAVE),
     named("threaten all", "threaten", "all", el=EL_ALL),
-    pull("comfort", [named(t, "comfort", t, el=EL_SLAVE) for t in comforts], el=EL_SLAVE),
+    pull(
+        "comfort",
+        [
+            named("care", "comfort", "care", el=EL_SLAVE),
+            named("guilt", "comfort", "guilt", el=EL_SLAVE),
+            comfort_scene_sex(),
+            comfort_scene_rape(),
+            named("pain", "comfort", "pain", el=EL_SLAVE),
+            named("threat", "comfort", "threat", el=EL_SLAVE),
+            named("insult", "comfort", "insult", el=EL_SLAVE),
+        ],
+        el=EL_SLAVE,
+    ),
     pull("promise", [order(lab, "Promise", typ, el=EL_SLAVE) for lab, typ in promises], el=EL_SLAVE),
     order("promise all (freedom)", "Promise", "freedom", "slaves", el=EL_ALL),
     pull("upkeeping", upkeep, el=EL_SLAVE_SLAVER_NPC),

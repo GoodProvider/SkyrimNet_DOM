@@ -14,6 +14,7 @@ Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go throu
 | `Scripts/` | Compiled `.pex` |
 | `Headers/` | Papyrus headers |
 | `skyrimse.ppj` | Pyro project |
+| `SKSE_Source/` | `SkyrimNet_DOM.dll` (DomObedience); CMake `--preset release` |
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + triggers) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`dom.events.*`) |
 | `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu (`0800_dom_*`) + Status/Slaves MainPanels |
@@ -48,6 +49,7 @@ Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_
 ## Compile
 
 - Papyrus: VS Code/Cursor task **`compile: pyro`** / `skyrimse.ppj` only (unless maintainer asks otherwise).
+- SKSE plugin: `SKSE_Source` CMake `--preset release` from a VS 2022 x64 Developer Prompt.
 
 Tools under game `tools/`: Champollion, Caprica, XEditLib, Spriggit (see notes in historical sessions / sibling repo).
 

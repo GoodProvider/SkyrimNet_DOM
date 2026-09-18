@@ -1,24 +1,28 @@
 name: DOMSlave_WalkOnFour
 description: Start walking on all fours.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoActionActor
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will be commanded to walk on all fours
+    description: The slave being ordered
   - type: static
+    name: kind
+    value: walk4
+  - type: static
+    name: actionDesc
+    value: walk on four
+  - type: static
+    name: op
+    value: action
+  - type: static
+    name: arg
     value: WalkOnFour
-    name: the_event
-    description: The action name for walk on fours command
   - type: static
-    value: ''
-    name: type
-    description: Action type parameter (empty for walk on fours)
-  - type: static
-    value: false
-    name: the_flag
-    description: Boolean flag parameter (false for walk on fours)
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -54,4 +58,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} gets on their knees andstarts walking like a dog"

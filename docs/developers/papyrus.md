@@ -12,6 +12,7 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 
 | Path | Role |
 |------|------|
+| `SKSE_Source/` | `SkyrimNet_DOM.dll` (DomObedience natives); CMake `--preset release` |
 | `Scripts/Source/` | Edit Papyrus (`.psc`) here |
 | `Scripts/` | Compiled `.pex` output |
 | `Headers/` | Import headers for Caprica / project |
@@ -26,11 +27,13 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | Script | Responsibility |
 |--------|----------------|
 | `SkyrimNet_DOM_Main` | Init / Setup; load punishment indexes + `punishment_reason.json`; register decorators; kick Actions/Events Setup; `ApplyPluginConfig` / `OnPluginConfigSaved` |
-| `SkyrimNet_DOM_Events` | DOM → Direct Narration / `RegisterEvent` / short-lived events; SexLab anim start/end hooks; Ext2 gated by `dom.events.ext2` — see [../authors/events.md](../authors/events.md) |
-| `SkyrimNet_DOM_Actions` | YAML-callable executes: scenes, masturbate, dress/undress, `AddPunishmentReason` |
+| `SkyrimNet_DOM_Events` | DOM → Direct Narration / `RegisterEvent` / short-lived events; SexLab anim start/end hooks; Ext2 gated by `dom.events.ext2`; honors `ShouldSkipEventNarration` — see [../authors/events.md](../authors/events.md) |
+| `SkyrimNet_DOM_Actions` | YAML-callable executes: scenes, masturbate, dress/undress, `DOMOrder_Execute` (gated DOM_Keys wrapper), `WebUI_StartScene_*` (TargetMenu consensual gate), `AddPunishmentReason` |
+| `SkyrimNet_DOM_Obedience` | Hidden: `TryOrder` / `TryOrderSexCast` / `ShouldSkipEventNarration`; rolls `DOM_Mind.WillObey(..., do_msg=false)` and emits refuse/obey DN or sex `RegisterEvent` |
+| `SkyrimNet_DOM_Native` | Hidden natives implemented by `SkyrimNet_DOM.dll` (kind catalog, skip table, narration strings) |
 | `SkyrimNet_DOM_API` | Shared helpers (`GetSlave`, `AddPunishmentReason`, scene wrappers, tracing) |
 | `SkyrimNet_DOM_Decorators` | Registers `dom_get_actor_info` (thin / slaver / slave buckets) — [../reference/json-keys.md](../reference/json-keys.md) |
-| `SkyrimNet_DOM_Menu` | SexLab overlay dispatcher on quest `0x800`: Status/Slaves JSON (`WebUI_PushMainPanelData`), live punish/praise (`WebUI_PushCascadeChoices`), `TM_StatusApply`, `TM_DoNamed`/`TM_DoOrder`/`TM_DoFollow`/`TM_DoFollowApply`/`TM_DoWalkingApply`/`TM_DoRestrain`/`TM_DoMasturbate`/`TM_DoTrainer`/`TM_DoSack`. Training **sex** and **rape** are SexLab `panel: scene_start`. Order **follow** is `panel: fields` (Start). Order **walking** is `panel: fields` with `applyOnChange`. Abuse insult/flatter/threaten/promise/comfort use `TransformDialogue`. Punish is live `panel: fields` via `TM_PunishPanelOpen` (reasons always include **custom** / **no reason**). Furniture restrain variants are `TM_ListRestrainVariants` → `panel: fields`. Every other `TM_*` leaf `OrderNarration`s except scene_start Start. Trace tag `SkyrimNet_DOM_Menu`. Contract: [../../manifest/DOM.md](../../manifest/DOM.md). |
+| `SkyrimNet_DOM_Menu` | SexLab overlay dispatcher on quest `0x800`: Status/Slaves JSON (`WebUI_PushMainPanelData`), live punish/praise (`WebUI_PushCascadeChoices`), `TM_StatusApply`, `TM_DoNamed`/`TM_DoOrder`/`TM_DoFollow`/`TM_DoFollowDistance`/`TM_DoFollowApply`/`TM_DoWalkingApply`/`TM_DoRestrain`/`TM_DoMasturbate`/`TM_DoTrainer`/`TM_DoSack`. Training **sex** is DOM `WebUI_StartScene_*` (gated); **rape** is SexLab `scene_start` (ungated). Abuse **comfort sex/rape** use `WebUI_StartScene_Comfort_*` (transform + mind, no DOM `Anim_Sexlab`). Order **follow** is distance buttons with live label (`follow` / `follow: short`, modes 0–3). Order **walking** is `panel: fields` with `applyOnChange`. Abuse insult/flatter/threaten/promise/non-sex comfort use `TransformDialogue`. Punish is live `panel: fields` via `TM_PunishPanelOpen` (reasons always include **custom** / **no reason**). Furniture restrain variants are `TM_ListRestrainVariants` → `panel: fields`. Gated `TM_*` leaves use `GateOrder` / `TryOrder`; ungated / missing DLL fall back to `OrderNarration`. Trace tag `SkyrimNet_DOM_Menu`. Contract: [../../manifest/DOM.md](../../manifest/DOM.md). |
 | `SkyrimNet_DOM_PlayerRef` | Load-game refresh |
 
 Legacy `Register_Actions()` from `actions.json` is commented out — SkyrimNet loads YAML from `external/goodprovider.dom/actions/`.
@@ -45,7 +48,7 @@ Full checklist: [../authors/punishment.md](../authors/punishment.md).
 
 ## SexLab bridge / arousal
 
-- YAML sex/punish/masturbate executes call `SkyrimNet_DOM_Actions`, which forwards into **SkyrimNet_SexLab** scene helpers / scene manager — not DOM sex APIs directly.
+- YAML order/pose/chore executes call `SkyrimNet_DOM_Actions.DOMOrder_Execute` (DomObedience then `DOM_Keys`). YAML sex/punish/masturbate still call `SkyrimNet_DOM_Actions` scene helpers, which forward into **SkyrimNet_SexLab**. Social Be_/praise/insult stay on `DOM_Keys`.
 - Watch the [8-parameter](../authors/actions.md) limit (`style` dropped on some signatures).
 - DOM owns arousal; SLSO and other arousal mods do not drive DOM’s arousal factor ([../players/overview.md](../players/overview.md)).
 - Anim start/end + orgasm notification routing: [../authors/events.md](../authors/events.md).
@@ -72,6 +75,7 @@ Do not restate contracts here — see [../reference/papyrus-rules.md](../referen
 ## Compile / tools
 
 - Project compile: `skyrimse.ppj` / Cursor task **`compile: pyro`** when available
+- SKSE plugin: `SKSE_Source` CMake `--preset release` from a VS 2022 x64 Developer Prompt (vcpkg CommonLibSSE-NG; copies `SkyrimNet_DOM.dll` to `SKSE/Plugins/`)
 - Caprica / Champollion under game `tools/` (see [AGENTS.md](../../AGENTS.md))
 - Always include commented lines when citing line numbers
 

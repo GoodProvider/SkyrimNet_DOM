@@ -36,4 +36,5 @@
 ## Compile reminders
 
 - Papyrus: Cursor task `compile: pyro` / `skyrimse.ppj` (preferred)
+- SKSE plugin: `SKSE_Source` CMake `--preset release` (`SkyrimNet_DOM.dll`)
 - Packaging: `make release` (maintainer-owned; see release-guide.xml)

@@ -2,6 +2,14 @@ temp
 ignore
 Headers
 
+# SKSE plugin CMake / MSBuild artifacts
+SKSE_Source/build/
+SKSE_Source/install/
+SKSE_Source/.vs/
+SKSE_Source/CMakeUserPresets.json
+SKSE/Plugins/*.dll
+SKSE/Plugins/*.pdb
+
 # Local / agent noise (do not commit)
 SSEEdit Cache/
 *.refcache
