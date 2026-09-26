@@ -1,0 +1,566 @@
+{
+  "type": "pulldown",
+  "label": "management",
+  "source": "dom",
+  "requiresPlugin": "SkyrimNet_DOM.esp",
+  "eligibilityRules": [
+    {
+      "required": true,
+      "logicalOperator": "OR",
+      "conditions": [
+        {
+          "decoratorName": "get_faction_rank",
+          "comparisonOperator": "==",
+          "expectedValue": 2,
+          "arguments": [
+            "currentActor",
+            "DOMPlayerSlaveFaction"
+          ]
+        },
+        {
+          "decoratorName": "is_in_faction",
+          "comparisonOperator": "==",
+          "expectedValue": true,
+          "arguments": [
+            "currentActor",
+            "DOMPlayerSlaverFaction"
+          ]
+        }
+      ]
+    }
+  ],
+  "options": [
+    {
+      "type": "papyrus",
+      "label": "list trainees",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoTrainer",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "list"
+        },
+        {
+          "type": "static",
+          "name": "otherId",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "set base camp",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoTrainer",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "camp"
+        },
+        {
+          "type": "static",
+          "name": "otherId",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "go to base / travel",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoTrainer",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "travel"
+        },
+        {
+          "type": "static",
+          "name": "otherId",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "guard here",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoTrainer",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "guard"
+        },
+        {
+          "type": "static",
+          "name": "otherId",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "gather trainees",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoTrainer",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "gather"
+        },
+        {
+          "type": "static",
+          "name": "otherId",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "pulldown",
+      "label": "add trainee",
+      "layout": "buttons",
+      "options": [],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ],
+      "optionsFrom": "nearby_actors",
+      "optionTemplate": {
+        "type": "papyrus",
+        "label": "add trainee",
+        "plugin": "SkyrimNet_DOM.esp",
+        "questFormId": "0x800",
+        "scriptName": "SkyrimNet_DOM_Menu",
+        "executionFunctionName": "TM_DoTrainer",
+        "closeWebUI": true,
+        "parameterMapping": [
+          {
+            "type": "speaker",
+            "name": "speaker"
+          },
+          {
+            "type": "target",
+            "name": "target"
+          },
+          {
+            "type": "static",
+            "name": "kind",
+            "value": "add"
+          },
+          {
+            "type": "optionActor",
+            "name": "otherId"
+          }
+        ]
+      }
+    },
+    {
+      "type": "pulldown",
+      "label": "unload trainee",
+      "layout": "buttons",
+      "options": [],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ],
+      "optionsFrom": "nearby_actors",
+      "optionTemplate": {
+        "type": "papyrus",
+        "label": "unload trainee",
+        "plugin": "SkyrimNet_DOM.esp",
+        "questFormId": "0x800",
+        "scriptName": "SkyrimNet_DOM_Menu",
+        "executionFunctionName": "TM_DoTrainer",
+        "closeWebUI": true,
+        "parameterMapping": [
+          {
+            "type": "speaker",
+            "name": "speaker"
+          },
+          {
+            "type": "target",
+            "name": "target"
+          },
+          {
+            "type": "static",
+            "name": "kind",
+            "value": "unload_one"
+          },
+          {
+            "type": "optionActor",
+            "name": "otherId"
+          }
+        ]
+      }
+    },
+    {
+      "type": "papyrus",
+      "label": "unload all trainees",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoTrainer",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "unload_all"
+        },
+        {
+          "type": "static",
+          "name": "otherId",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        },
+        {
+          "required": true,
+          "logicalOperator": "OR",
+          "conditions": [
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "==",
+              "expectedValue": 2,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": true,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

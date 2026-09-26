@@ -40,6 +40,9 @@ Logs:
 |-----|------|
 | Papyrus (primary for this mod) | `Documents\my games\Skyrim Special Edition\Logs\Script\Papyrus.0.log` |
 | SkyrimNet (last resort; ask first) | `Documents\my games\Skyrim Special Edition\SKSE\SkyrimNet.log` |
+| SkyrimNet LLM input (rendered prompts) | `C:\Skyrim\dev\overwrite\SKSE\Plugins\SkyrimNet\logs\openrouter_input.log` |
+
+`openrouter_input.log` holds the full prompt SkyrimNet renders from the `prompts` directories — check it to see exactly what text is sent to the LLM. Older sessions rotate to `openrouter_input.<timestamp>.log` in the same folder.
 
 When counting lines for reviews, include commented lines.
 

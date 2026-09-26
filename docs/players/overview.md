@@ -49,7 +49,7 @@ DOM emits far more events than we send to the LLM. Much lands in history or aged
 
 ### Ordered slaves may refuse
 
-Hotkey orders and DOM YAML commands roll Diary of Mine `DOM_Mind.WillObey` through `SkyrimNet_DOM.dll` **before** the command runs. Refuse is narrated (`{slave} refuses {superior}'s command to {action}.`). Obey is `{slave} obeys {superior}'s command to {action}.`; DOM Ext2 / HUD order text is suppressed for that command. DOM sex orders register an Order event with the same obey sentence (e.g. `have vaginal sex with Bob`), then SexLab StageStart narrates the scene. SexLab overlay sex/rape is not gated.
+Hotkey orders and DOM YAML commands roll Diary of Mine `DOM_Mind.WillObey` through `SkyrimNet_DOM.dll` **before** the command runs. Refuse is narrated (`{slave} refuses {superior}'s command to {action}.`). Obey is `{superior} orders {slave} to {action}.`; DOM Ext2 / HUD order text is suppressed for that command. DOM sex orders register an Order event with the same sentence (e.g. `Bob orders Nina to have vaginal sex with …`), then SexLab StageStart narrates the scene. SexLab overlay sex/rape is not gated.
 
 ### Occasional Direct Narration
 

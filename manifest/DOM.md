@@ -91,7 +91,7 @@ Speaker is always the player. Target is `currentActor`, or `None` for All Slaves
 
 Child wheels are nested TargetMenu nodes `{ "type": "pulldown", "layout": "buttons" }` (SexLab ParameterPanel). Live lists use `WebUI_PushCascadeChoices` (not catalog JSON). Actor pickers use `"optionsFrom": "nearby_actors"`.
 
-**Order DN (DomObedience):** gated `TM_*` leaves call `SkyrimNet_DOM_Obedience.TryOrder` (native catalog + silent `WillObey(..., do_msg=false)`). Refuse DN: `{slave} refuses {superior}'s command to {action}.` plus `RegisterEvent("Reason to Punish", …)` without a second `AddNextPunishmentReason`. Obey DN: `{slave} obeys {superior}'s command to {action}.` plus `RegisterObeyCommand`. Group / All Slaves rolls **per slave**. Ungated leaves (strip, rape, restrain, inspect, kiss, punish, praise, social `SpeakAsPlayer`, inventory) still use `OrderNarration` (`{player} orders {name|the slaves} to {action}.`). DOM consensual `panel: scene_start` (training/services sex) and Scene Creator handoff with `_source: dom` gate via `TryOrder` / `WebUI_StartScene_*` then SexLab StageStart DN. Sex action strings are `FormatSexCommand` (`have vaginal sex with {partner}`), not style+tags. SexLab root sex (`0110_sex.json`, under Custom) and rape stay ungated (`_source: sexlab`). While skip is armed (~4s), Ext2 / `OnNotificationSent` order DNs are dropped; SexLab StageStart DN is never on that path. **DOM leash is not in this overlay** — SkyrimNet_Leashed owns leash UI. All bondage lives under **restrain**. Do not call `DOMDo*Menu` / `ShowDOM*` / `OpenMenu()`.
+**Order DN (DomObedience):** gated `TM_*` leaves call `SkyrimNet_DOM_Obedience.TryOrder` (native catalog + silent `WillObey(..., do_msg=false)`). Refuse DN: `{slave} refuses {superior}'s command to {action}.` plus `RegisterEvent("Reason to Punish", …)` without a second `AddNextPunishmentReason`. Obey DN: `{superior} orders {slave} to {action}.` (same phrasing as ungated `OrderNarration`; DirectNarration source=superior, target=slave) plus `RegisterObeyCommand`. Group / All Slaves rolls **per slave**. Ungated leaves (strip, rape, restrain, inspect, kiss, punish, praise, social `SpeakAsPlayer`, inventory) still use `OrderNarration` (`{player} orders {name|the slaves} to {action}.`). DOM consensual `panel: scene_start` (training/services sex) and Scene Creator handoff with `_source: dom` gate via `TryOrder` / `WebUI_StartScene_*` then SexLab StageStart DN. Sex action strings are `FormatSexCommand` (`have vaginal sex with {partner}`), not style+tags. SexLab root sex (`0110_sex.json`, under Custom) and rape stay ungated (`_source: sexlab`). While skip is armed (~4s), Ext2 / `OnNotificationSent` order DNs are dropped; SexLab StageStart DN is never on that path. **DOM leash is not in this overlay** — SkyrimNet_Leashed owns leash UI. All bondage lives under **restrain**. Do not call `DOMDo*Menu` / `ShowDOM*` / `OpenMenu()`.
 
 ### `0800_dom_order.json` — order
 
@@ -124,10 +124,10 @@ No Follow/Walking/Wait leash panels. No Order untie (restrain owns bondage). Fol
 | comfort rape | single slave | `panel: scene_start` → `WebUI_StartScene_Comfort_Rape` (transform + mind without `Anim_Sexlab` + intent **pretend to comfort by sexual assault**) | true on Start |
 | * all | All Slaves | `DOMAllOrderSlaves` (order DN) | true |
 | Upkeeping | slave / slaver / NPC | bath / look / turn / come / **Follow actor** (`nearby_actors`) / drink / mark / brand | true |
-| Punish | single slave | `TM_PunishPanelOpen` → `panel: fields` (Start + live reason + live method). Reason list always ends with **custom** (`opensText` text panel) and **no reason** → `StartPunishing` / index-0 | false then true on Start |
+| Punish | single slave | `TM_PunishPanelOpen` → `panel: fields` (Start + reason + method). Reasons end with **custom** (`opensText` → inline text, add-to-pulldown) and **no reason**. Method `rape` expands SexLab `scene_start` options (**no Custom**); Start → `TM_PunishRapeRecord` (mind only) then SexLab `StartScene_Nonconsensual_*`. Other methods → `TM_DoPunish` / `StartPunishing` | false then true on Start |
 | NPC extras | NPC | shower / bath me / bath you / hug / feed / walk on 4 | true |
 
-Punish reasons walk the same crying / angry / posture / `"being a bad slave"` fallbacks as `ShowDOMPunishmentMenu`, then always append **custom** and **no reason**. Punish methods come from `GetJSONNumberOfPunishmentTypes` / `GetJSONPunishmentTypeNameByIndex`. Praise types come from `GetJSONNumberOfPraisingTypes` / `GetJSONPraisingTypeNameByIndex`.
+Punish reasons walk the same crying / angry / posture / `"being a bad slave"` fallbacks as `ShowDOMPunishmentMenu`, then always append **custom** and **no reason**. Punish methods come from `GetJSONNumberOfPunishmentTypes` / `GetJSONPunishmentTypeNameByIndex` (DOM punishment wheel). Do **not** call `slave.StartPunishing(..., "rape")` from WebUI — that path runs `Anim_Sexlab`; use `TM_PunishRapeRecord` + SexLab scene instead. Praise types come from `GetJSONNumberOfPraisingTypes` / `GetJSONPraisingTypeNameByIndex`.
 
 ### `TargetMenu/Scene/options/0810_dom_abuse.json` — abuse (mid-scene)
 
@@ -174,9 +174,9 @@ Do not call `DOMDoTieUpMenu` / `ShowDOM*`. Do not use SexLab `panel: bondage`.
 
 | Label | Who | Leaf | close |
 |-------|-----|------|-------|
-| Rip-off / rip-off everything | single slave | `DOMDoRipOff` / `Interact_UndressAll` | true |
-| Strip / strip all (actor) / be naked / dress | single slave | `DOMDoStrip` / `DOMDoStripAll` / `DOMDoBeNaked` / `Dress_Execute` | true |
-| Re-equip / weapons / armor | single slave | `SendOrderEquipInventory` / `HoldNoWeapons` / `HoldWeapons` / `WearNoArmor` / `WearArmor` | true |
+| You rip-off / you rip-off everything | single slave | `DOMDoRipOff` / `Interact_UndressAll` | true |
+| Order to strip / order to strip all (actor) / order to be naked / order to dress | single slave | `DOMDoStrip` / `DOMDoStripAll` / `DOMDoBeNaked` / `Dress_Execute` | true |
+| Order to re-equip inventory / order to no weapons / order to hold weapons / order to no armor / order to wear armor | single slave | `SendOrderEquipInventory` / `HoldNoWeapons` / `HoldWeapons` / `WearNoArmor` / `WearArmor` | true |
 | Group | All Slaves | `BeNaked` / `DontBeNaked` / `Strip` / `StripAll` / `EquipInventoryForced` / `StripWeapons` / `StripArmor` | true |
 
 ### `0850_dom_management.json` / `0860_dom_trainees.json`
@@ -266,12 +266,13 @@ Trace tag: `SkyrimNet_DOM_Menu` (not `SkyrimNet_DOM_Event`).
 | `TM_DoRestrain(speaker, target, kind, flag)` | tie / furniture `*ByIndex` / gag / plug / blindfold / cuff; group `DOMAllOrderSlaves` event strings |
 | `TM_ListRestrainVariants(speaker, target, kind)` | Live furniture names from `restrains/{kind}.json` as `panel: fields` variant select + Start → `TM_DoRestrain` |
 | `TM_DoMasturbate(speaker, target, kind)` | pose start / `harder` / `stop` |
-| `TM_PunishPanelOpen` / `TM_ListPraiseReasons` / `TM_ListPraiseTypes` | `WebUI_PushCascadeChoices` live lists / fields; punish reasons always include **custom** (`opensText`) and **no reason** |
-| `TM_DoPunish(speaker, target, reason, type)` / `TM_DoPraise` | `StartPunishing` / `StartPraising`; **no reason** uses `StartPunishingByIndex(..., 0, …)` for pain |
+| `TM_PunishPanelOpen` / `TM_ListPraiseReasons` / `TM_ListPraiseTypes` | `WebUI_PushCascadeChoices` live lists / fields; punish reasons always include **custom** (`opensText`) and **no reason**; method **rape** expands scene options |
+| `TM_DoPunish(speaker, target, reason, type)` / `TM_DoPraise` | Non-rape `StartPunishing` / `StartPraising`; **no reason** uses `StartPunishingByIndex(..., 0, …)` for pain; rejects `type=rape` |
+| `TM_PunishRapeRecord(speaker, target, reason)` | Mind-only rape record (no `Anim_Sexlab`); JS then fires SexLab `StartScene_Nonconsensual_*` |
 | `TM_DoTrainer` / `TM_ListSackOptions` / `TM_DoSack` | trainer hub / sack by slave bag state |
 | Sex / rape / comfort sex\|rape | Training consensual sex → `WebUI_StartScene_Consensual_*` (gated); comfort sex/rape → `WebUI_StartScene_Comfort_*` (transform + mind, no DOM `Anim_Sexlab`); rape / SexLab root `0110_sex` → SexLab Actions (ungated). Scene Creator carries `_source` (`dom`\|`sexlab`) |
 
-SexLab natives: `WebUI_PushMainPanelData`, `WebUI_PushCascadeChoices`, `WebUI_GetFocusActor`, `WebUI_GetFocusKind`. Cascade JSON uses `JValueToJsonString` (preserve camelCase). MainPanel JSON uses `ObjectToLowerCaseKeyJson`.
+SexLab natives: `WebUI_PushMainPanelData`, `WebUI_PushCascadeChoices`, `WebUI_GetFocusActor`, `WebUI_GetFocusKind`. Cascade JSON uses `ObjectToLowerCaseKeyJson` (string pool remaps `name`/`label`/`options`). Field schema: `fieldId` / `caption` / `choices` / choice `val`+`caption` (+ `opensText`). MainPanel JSON also uses `ObjectToLowerCaseKeyJson`.
 
 ---
 

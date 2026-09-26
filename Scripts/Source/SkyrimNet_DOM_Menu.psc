@@ -96,7 +96,8 @@ Function OrderNarration(Actor speaker, Actor target, String orderDesc)
         who = target.GetDisplayName()
     endif
     String msg = speaker.GetDisplayName()+" orders "+who+" to "+orderDesc+"."
-    SkyrimNet_SexLab_Utilities.DirectNarration(msg, target)
+    ; source=superior, target=slave — slave-as-source makes SkyrimNet attribute the order to the focus actor
+    SkyrimNet_SexLab_Utilities.DirectNarration(msg, speaker, target)
     if target
         Obey(speaker, target, orderDesc)
     endif
@@ -242,12 +243,14 @@ Actor Function ActorFromId(String otherId)
 EndFunction
 
 Function PushCascade(int root)
-    String json = SkyrimNet_SexLab_Utilities.JValueToJsonString(root)
+    ; Lowercase keys — Skyrim string pool remaps name/label/options casing.
+    String json = SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson(root)
     JValue.release(root)
-    if json == "" || json == "null"
+    if json == "" || json == "null" || json == "{}"
         Trace("PushCascade", "empty json")
         return
     endif
+    Trace("PushCascade", "json length="+StringUtil.GetLength(json))
     SkyrimNet_SexLab_WebUI.WebUI_PushCascadeChoices(json)
 EndFunction
 
@@ -290,10 +293,11 @@ Function ChoiceDynamic(int opt, String name)
     JArray.addObj(maps, m)
 EndFunction
 
+; Choice entry for panel: fields (pool-safe keys; avoid name/label/value/options).
 int Function FieldOption(String value, String label)
     int o = JMap.object()
-    JMap.setStr(o, "value", value)
-    JMap.setStr(o, "label", label)
+    JMap.setStr(o, "val", value)
+    JMap.setStr(o, "caption", label)
     return o
 EndFunction
 
@@ -1901,6 +1905,11 @@ Function TM_DoPunish(Actor speaker, Actor target, String reason, String type)
     if type == ""
         type = "pain"
     endif
+    ; Rape uses TM_PunishRapeRecord + SexLab scene_start (JS); never Anim_Sexlab here.
+    if type == "rape"
+        Trace("TM_DoPunish", "rape must use TM_PunishRapeRecord path")
+        return
+    endif
     ; Bare sentinel must never reach StartPunishing (JS opens text panel).
     if reason == "custom" || reason == ""
         reason = "being a bad slave"
@@ -1933,6 +1942,50 @@ Function TM_DoPunish(Actor speaker, Actor target, String reason, String type)
         if known <= 0
             mind.whipping_reason_name = reason
             mind.current_punishment_reason_name = reason
+        endif
+    endif
+    OrderNarration(speaker, target, "be punished for "+reason)
+EndFunction
+
+; Mind-only rape punish record (no Interact_Punish / Anim_Sexlab). JS then starts SexLab scene.
+Function TM_PunishRapeRecord(Actor speaker, Actor target, String reason)
+    if !target
+        Trace("TM_PunishRapeRecord", "missing target")
+        return
+    endif
+    if IsFleeingActor(target)
+        return
+    endif
+    DOM_Actor slave = SlaveOf(target)
+    if !slave
+        Trace("TM_PunishRapeRecord", "no DOM actor")
+        return
+    endif
+    DOM_Mind mind = slave.mind
+    if !mind
+        Trace("TM_PunishRapeRecord", "no DOM mind")
+        return
+    endif
+    if reason == "custom" || reason == ""
+        reason = "being a bad slave"
+    endif
+    if reason == "no reason"
+        mind.StartPunishingByIndex(speaker, 0, "rape")
+        mind.current_punishment_reason = 0
+        mind.current_punishment_reason_name = "no reason"
+        OrderNarration(speaker, target, "be punished for no reason")
+        return
+    endif
+    mind.StartPunishing(speaker, reason, "rape")
+    if reason != "being a bad slave"
+        DOM_Core core = GetCore()
+        int known = 0
+        if core
+            known = core.GetJSONPunishmentReasonIndexByName(reason)
+        endif
+        if known <= 0
+            mind.current_punishment_reason_name = reason
+            mind.whipping_reason_name = reason
         endif
     endif
     OrderNarration(speaker, target, "be punished for "+reason)
@@ -2028,21 +2081,21 @@ Function TM_PunishPanelOpen(Actor speaker, Actor target)
     if JArray.count(methodOpts) <= 0
         JArray.addObj(methodOpts, FieldOption("pain", "pain"))
     endif
-    String defReason = JMap.getStr(JArray.getObj(reasonOpts, 0), "value")
+    String defReason = JMap.getStr(JArray.getObj(reasonOpts, 0), "val")
     if defReason == "custom"
         defReason = "no reason"
     endif
-    String defType = JMap.getStr(JArray.getObj(methodOpts, 0), "value")
+    String defType = JMap.getStr(JArray.getObj(methodOpts, 0), "val")
     int reasonField = JMap.object()
-    JMap.setStr(reasonField, "name", "reason")
-    JMap.setStr(reasonField, "label", "punish reason")
+    JMap.setStr(reasonField, "fieldId", "reason")
+    JMap.setStr(reasonField, "caption", "reason")
     JMap.setStr(reasonField, "widget", "select")
-    JMap.setObj(reasonField, "options", reasonOpts)
+    JMap.setObj(reasonField, "choices", reasonOpts)
     int methodField = JMap.object()
-    JMap.setStr(methodField, "name", "type")
-    JMap.setStr(methodField, "label", "punish method")
+    JMap.setStr(methodField, "fieldId", "type")
+    JMap.setStr(methodField, "caption", "method")
     JMap.setStr(methodField, "widget", "select")
-    JMap.setObj(methodField, "options", methodOpts)
+    JMap.setObj(methodField, "choices", methodOpts)
     int fields = JArray.object()
     JArray.addObj(fields, reasonField)
     JArray.addObj(fields, methodField)
@@ -2070,6 +2123,7 @@ Function TM_PunishPanelOpen(Actor speaker, Actor target)
     JMap.setObj(root, "parameterMapping", maps)
     JMap.setObj(root, "panelFields", fields)
     JMap.setObj(root, "panelDefaults", defaults)
+    Trace("TM_PunishPanelOpen", "reasons="+JArray.count(reasonOpts)+" methods="+JArray.count(methodOpts))
     PushCascade(root)
 EndFunction
 
@@ -2387,12 +2441,12 @@ Function TM_ListRestrainVariants(Actor speaker, Actor target, String kind)
         endwhile
     endif
     JArray.addObj(variantOpts, FieldOption("random", "random"))
-    String defFlag = JMap.getStr(JArray.getObj(variantOpts, 0), "value")
+    String defFlag = JMap.getStr(JArray.getObj(variantOpts, 0), "val")
     int flagField = JMap.object()
-    JMap.setStr(flagField, "name", "flag")
-    JMap.setStr(flagField, "label", kind)
+    JMap.setStr(flagField, "fieldId", "flag")
+    JMap.setStr(flagField, "caption", kind)
     JMap.setStr(flagField, "widget", "select")
-    JMap.setObj(flagField, "options", variantOpts)
+    JMap.setObj(flagField, "choices", variantOpts)
     int fields = JArray.object()
     JArray.addObj(fields, flagField)
     int defaults = JMap.object()

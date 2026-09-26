@@ -1,0 +1,414 @@
+{
+  "type": "pulldown",
+  "label": "services",
+  "source": "dom",
+  "requiresPlugin": "SkyrimNet_DOM.esp",
+  "eligibilityRules": [
+    {
+      "required": true,
+      "conditions": [
+        {
+          "decoratorName": "webui_focus_kind",
+          "comparisonOperator": "!=",
+          "expectedValue": "all_slaves"
+        },
+        {
+          "decoratorName": "get_faction_rank",
+          "comparisonOperator": "<=",
+          "expectedValue": 0,
+          "arguments": [
+            "currentActor",
+            "DOMPlayerSlaveFaction"
+          ]
+        },
+        {
+          "decoratorName": "is_in_faction",
+          "comparisonOperator": "==",
+          "expectedValue": false,
+          "arguments": [
+            "currentActor",
+            "DOMPlayerSlaverFaction"
+          ]
+        }
+      ]
+    }
+  ],
+  "options": [
+    {
+      "type": "papyrus",
+      "label": "rape slave",
+      "plugin": "SkyrimNet_SexLab.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_SexLab_Actions",
+      "executionFunctionName": "StartScene_Nonconsensual_Two_TargetVictim",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "dynamic",
+          "name": "intent",
+          "description": "sexual assault"
+        },
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "dynamic",
+          "name": "style",
+          "description": "forcefully|normally|gently"
+        },
+        {
+          "type": "dynamic",
+          "name": "tags",
+          "description": "comma-separated tags"
+        },
+        {
+          "type": "dynamic",
+          "name": "direction",
+          "description": "fucking|fucked in"
+        },
+        {
+          "type": "dynamic",
+          "name": "setting_name",
+          "description": "scene setting json name"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "<=",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": false,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ],
+      "panel": "scene_start",
+      "panelDefaults": {
+        "subject": "player",
+        "object": "currentActor",
+        "objectRelation": "to victim",
+        "andThird": "none",
+        "intent": "sexual assault",
+        "direction": "fucking",
+        "method": "pussy",
+        "style": "forcefully",
+        "settingName": "punish_pleasure_pain_rape"
+      }
+    },
+    {
+      "type": "papyrus",
+      "label": "sex with",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Actions",
+      "executionFunctionName": "WebUI_StartScene_Consensual_Two",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "dynamic",
+          "name": "intent",
+          "description": "sexual activities"
+        },
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "dynamic",
+          "name": "style",
+          "description": "forcefully|normally|gently"
+        },
+        {
+          "type": "dynamic",
+          "name": "tags",
+          "description": "comma-separated tags"
+        },
+        {
+          "type": "dynamic",
+          "name": "direction",
+          "description": "fucking|fucked in"
+        },
+        {
+          "type": "dynamic",
+          "name": "setting_name",
+          "description": "scene setting json name"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "<=",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": false,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ],
+      "panel": "scene_start",
+      "panelDefaults": {
+        "subject": "player",
+        "object": "currentActor",
+        "objectRelation": "with",
+        "andThird": "none",
+        "intent": "sexual activities",
+        "direction": "fucking",
+        "method": "pussy",
+        "style": "normally",
+        "settingName": "default"
+      }
+    },
+    {
+      "type": "papyrus",
+      "label": "player 3some",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Actions",
+      "executionFunctionName": "WebUI_StartScene_Consensual_Two",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "dynamic",
+          "name": "intent",
+          "description": "sexual activities"
+        },
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "dynamic",
+          "name": "style",
+          "description": "forcefully|normally|gently"
+        },
+        {
+          "type": "dynamic",
+          "name": "tags",
+          "description": "comma-separated tags"
+        },
+        {
+          "type": "dynamic",
+          "name": "direction",
+          "description": "fucking|fucked in"
+        },
+        {
+          "type": "dynamic",
+          "name": "setting_name",
+          "description": "scene setting json name"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "<=",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": false,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ],
+      "panel": "scene_start",
+      "panelDefaults": {
+        "subject": "currentActor",
+        "object": "player",
+        "objectRelation": "with",
+        "andThird": "and",
+        "intent": "sexual activities",
+        "direction": "fucking",
+        "method": "pussy",
+        "style": "normally",
+        "settingName": "default"
+      }
+    },
+    {
+      "type": "papyrus",
+      "label": "re-equip inventory",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "equip"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "<=",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": false,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "equip no clothes",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "naked"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": "<=",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            },
+            {
+              "decoratorName": "is_in_faction",
+              "comparisonOperator": "==",
+              "expectedValue": false,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaverFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Items and triggers
 
-SkyrimNet content that is not YAML actions or prompt slices: item renames/descriptions and hit→Direct Narration triggers.
+SkyrimNet content that is not YAML actions or prompt slices: item renames/descriptions, hit→Direct Narration triggers, and the Dialogue Actions blacklist.
 
 See also: [events.md](events.md) · [../players/overview.md](../players/overview.md)
 
@@ -49,6 +49,32 @@ SKSE/Plugins/SkyrimNet/external/goodprovider.dom/triggers/
 - Audience `target`; short cooldown (`cooldownSeconds: 5` in the trigger file).
 
 This is SkyrimNet config, not Papyrus in this mod. Use it when play calls for cleaning up welts before comfort dialogue (see [../players/overview.md](../players/overview.md)).
+
+## Dialogue Actions blacklist
+
+Path (content plugin, SkyrimNet Beta 25 rc11+):
+
+```
+SKSE/Plugins/SkyrimNet/external/goodprovider.dom/dialogue_actions/
+```
+
+SkyrimNet's `available_dialogue` decorator shows vanilla/mod dialogue to the LLM. Core `0740_quest_dialogue.prompt` puts it under "Quests You Could Raise", and the `SpeakQuestLine` action can fire those lines. Diary of Mine's `DOM01` ("Diary Of Mine Readers Manager") has a quest type and an objective, so SkyrimNet classes its player→slave command menu (Orders, rope/chain poses) as quest dialogue. [`dom01_readers_manager.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/dialogue_actions/dom01_readers_manager.yaml) blacklists it:
+
+```yaml
+kind: lists
+name: Diary of Mine Readers Manager
+description: Keeps the LLM from seeing or firing Diary of Mine's DOM01 player-to-slave command menu (Orders, bondage poses) as quest dialogue.
+blacklist:
+  - DOM01
+```
+
+| Field | Role |
+|-------|------|
+| `kind: lists` | Whitelist/blacklist file |
+| `blacklist` | Quest EditorIDs (whole quest), or `TIF__XXXXXXXX` for a single line |
+| `whitelist` | Lines to allow even when their category is disabled |
+
+SkyrimNet ships examples in `SKSE/Plugins/SkyrimNet/library/skyrimnet.base/dialogue_actions/` (`nff_follower_controller.yaml` blacklists `nwsFollowerController`). In game, the entries appear under SkyrimNet Settings (search "blacklist"). The blacklist applies to every `available_dialogue` mode (`quest`, `fires`, `ids`, unfiltered).
 
 ## Tips
 

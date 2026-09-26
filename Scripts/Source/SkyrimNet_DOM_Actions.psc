@@ -33,12 +33,13 @@ EndFunction
 Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
     String speaker_name = GetDisplayname(speaker)
     String superior_name = GetDisplayname(superior)
-    String msg = speaker_name+" obeys "+superior_name+"'s command to "+action_desc
+    ; speaker arg is the slave; superior is the order-giver
+    String msg = superior_name+" orders "+speaker_name+" to "+action_desc
     int ttl = 100000
     if dom_main
         ttl = dom_main.short_lived_ttl
     endif
-    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, speaker, superior)
+    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, superior, speaker)
 EndFunction
 
 Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc)

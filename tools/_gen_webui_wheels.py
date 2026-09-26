@@ -205,12 +205,12 @@ def scene_rape(label, el):
 
 DIST_LABELS = [("tight", "0"), ("close", "1"), ("near", "2"), ("long", "3"), ("far", "4"), ("very far", "5")]
 FOLLOW_DIST_NAMES = ["tight", "close", "short", "long"]
-WALK_OPTS = [{"value": "0", "label": "walking"}, {"value": "1", "label": "crawling"}]
-DIST_OPTS = [{"value": val, "label": lab} for lab, val in DIST_LABELS]
+WALK_OPTS = [{"val": "0", "caption": "walking"}, {"val": "1", "caption": "crawling"}]
+DIST_OPTS = [{"val": val, "caption": lab} for lab, val in DIST_LABELS]
 WALKING_TYPES = [
-    {"value": "walking", "label": "walking"},
-    {"value": "four", "label": "follow on four"},
-    {"value": "knees", "label": "follow on hands and knees"},
+    {"val": "walking", "caption": "walking"},
+    {"val": "four", "caption": "follow on four"},
+    {"val": "knees", "caption": "follow on hands and knees"},
 ]
 
 
@@ -264,11 +264,11 @@ WALKING_FIELDS = fields_pap(
     "TM_DoWalkingApply",
     [
         {
-            "name": "walkType",
-            "label": "type",
+            "fieldId": "walkType",
+            "caption": "type",
             "widget": "select",
             "applyOnChange": True,
-            "options": WALKING_TYPES,
+            "choices": WALKING_TYPES,
         },
     ],
     {"walkType": "walking"},
