@@ -28,7 +28,7 @@
             <Import>@ModsFolder\SkyrimNet_SexLab\Headers_Source\OStimNet</Import>
             <Import>@ModsFolder\SkyrimNet_SexLab\Headers_Source\SLO Aroused NG</Import>
             <Import>@ModsFolder\SexLab Separate Orgasm\Scripts\Source</Import>
-            <Import>@ModsFolder\SexLabFrameworkAE_v166b\scripts\Source</Import>
+            <Import>@ModsFolder\SexLabFrameworkAE\scripts\Source</Import>
                 <Import>@ModsFolder\MfgFix\Source\Scripts</Import>
                 <Import>@ModsFolder\FNIS Behavior SE 7_6\source\scripts</Import>
                 <!-- RaceMenu\scripts\source is not installed in this mods tree; pyro fails if the path is missing. -->
@@ -68,6 +68,9 @@
         <Import>@ModsFolder\SlaveTatsSE\Source\Scripts</Import>
         <Import>@ModsFolder\JContainers SE\scripts\source</Import>
         -->
+        <!-- SexLab header stubs (P+ bridge, TNG, Lover's Ledger) referenced by SkyrimNet_SexLab scripts; last so they only fill gaps -->
+        <Import>@ModsFolder\SkyrimNet_SexLab\Headers_Source</Import>
+        <Import>@ModsFolder\SkyrimNet_SexLab\Headers_Source\LoversLedger</Import>
         <Import>C:\Skyrim\dev\skyrim\Data\Source\Scripts</Import>
     </Imports>
     <Folders>

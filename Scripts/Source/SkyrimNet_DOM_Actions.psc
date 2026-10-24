@@ -119,7 +119,8 @@ Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool
     SaveThreadsJson()
 EndFunction
 
-; Dump after masturbate start/stop so paused 0050 does not keep the previous threads.json.
+; Push DOM threads after masturbate start/stop so sexlab_get_threads / threads.json stay current.
+; SaveThreadsJson is SexLab's shim for DOM (-> Scene_Manager.PushDomThreads); works on older SexLab too.
 Function SaveThreadsJson()
     SkyrimNet_SexLab_Scene_Manager sm = manager
     if sm == None
@@ -131,7 +132,7 @@ Function SaveThreadsJson()
         return
     endif
     sm.SaveThreadsJson()
-    Trace("SaveThreadsJson", "--- dumped threads.json")
+    Trace("SaveThreadsJson", "--- pushed DOM threads")
 EndFunction 
 
 

@@ -1,0 +1,2 @@
+5720 2026-10-23 20:41:16 pyro-incremental.log <- C:/Users/bhuff/AppData/Local/Temp/claude/c--Skyrim-dev-mods-SkyrimNet-DOM/94086ed4-b923-43c4-8411-83d22c4afd9f/scratchpad/pyro.log
+6028 2026-10-23 20:41:16 pyro-full.log <- C:/Users/bhuff/AppData/Local/Temp/claude/c--Skyrim-dev-mods-SkyrimNet-DOM/94086ed4-b923-43c4-8411-83d22c4afd9f/scratchpad/pyro-full.log

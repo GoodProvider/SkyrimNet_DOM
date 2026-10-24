@@ -52,7 +52,8 @@ Full checklist: [../authors/punishment.md](../authors/punishment.md).
 - Watch the [8-parameter](../authors/actions.md) limit (`style` dropped on some signatures).
 - DOM owns arousal; SLSO and other arousal mods do not drive DOM’s arousal factor ([../players/overview.md](../players/overview.md)).
 - Anim start/end + orgasm notification routing: [../authors/events.md](../authors/events.md).
-- Live masturbate threads: `GetThreads` walks `DOM02.actorAliases` / `GetMaxActorCount` (`GetActorCount` / `actorArray` lag until after Mind `AfterAssign`). `StartScene_masturbate` / `StopScene_Masturbate` call `SaveThreadsJson` so paused SexLab `0050` does not keep a stale dump.
+- Live masturbate threads: `GetThreads` walks `DOM02.actorAliases` / `GetMaxActorCount` (`GetActorCount` / `actorArray` lag until after Mind `AfterAssign`). `StartScene_masturbate` / `StopScene_Masturbate` call `SaveThreadsJson` so paused SexLab `0050` does not keep a stale dump. On SexLab 0.36.5+ that is a shim kept for DOM: `Scene_Manager.SaveThreadsJson` → `PushDomThreads` → native `Threads_SetDom`, and SexLab's C++ writes `sexlab_get_threads` / `threads.json`. Keep calling `SaveThreadsJson` (works on older SexLab too).
+- Build: DOM compiles against `SkyrimNet_SexLab\Scripts\Source`, so `skyrimse.ppj` also imports SexLab `Headers_Source` and `Headers_Source\LoversLedger` (stubs those scripts reference). See [KNOWLEDGEBASE.md](../../KNOWLEDGEBASE.md).
 - Overlay live lists: SexLab native `WebUI_PushCascadeChoices` + `index.html` `setCascadeChoices`. Rebuild the SexLab SKSE plugin if that native is missing; without it punish/praise stay empty after the opener click. Do not bake `punishment_reason.json` into overlay catalogs.
 
 ## Paused actor JSON

@@ -91,6 +91,16 @@ Pyro compile: `RaceMenu\scripts\source` is not in this mods tree. `skyrimse.ppj`
 
 **Fix**: `SkyrimNet_DOM_Events` `OnUpdate` (2s) walks `DOM02.actorAliases` (filled at `ForceRefTo`, before Mind `AfterAssign`). `GetActorCount` / `actorArray` are only refreshed in `UpdateActorArray` **after** Mind `AfterAssign`, so they stay empty during capture. New player-owned aliases (`mind.is_player_slave`) get required grab `DirectNarration` once per FormID (`OnCaptureAssigned`). Existing aliases are seeded on load. Late `"was just captured"` stays in `OnNotifcationSkip`. Do not rewrite every `freshly captured` notification (personality “will be fairly easy to train” uses that type).
 
+## DOM build must follow SexLab's header stubs (2026-10-23)
+
+**Symptom**: After SexLab 0.36.x, `compile: pyro` fails on DOM. First it reports `Import path does not exist` (`SexLabFrameworkAE_v166b`, or the old extension's `pyro.exe` path in `.vscode/tasks.json`). After that, it reports unknown types in SexLab scripts.
+
+**Cause**: DOM imports `SkyrimNet_SexLab\Scripts\Source`, and Papyrus type-checks the SexLab scripts DOM pulls in (`Utilities`, `Scene_Manager`, `Actions`, `Main`, `WebUI`). Since 2026-10-14, `SkyrimNet_SexLab_Utilities` references `SkyrimNet_SexLab_PPlus` and `TNG_PapyrusUtil`, and `Scene` → `LoversLedger` references `TTLL_*`. Those stubs live only in SexLab `Headers_Source\` (root) and `Headers_Source\LoversLedger\`.
+
+**Fix**: `skyrimse.ppj` imports `@ModsFolder\SkyrimNet_SexLab\Headers_Source` and `...\Headers_Source\LoversLedger` last, so they only fill gaps. SexLab framework is `@ModsFolder\SexLabFrameworkAE\scripts\Source`. Pyro is `C:/Skyrim/tools/Pyro/pyro.exe` (same as SexLab). When SexLab adds a new `Headers_Source\<dir>` stub folder, mirror its import here; do not copy the stubs into DOM. `Headers/SkyrimNet_SexLab_*.psc` in this repo are stale copies that no build imports.
+
+**Threads**: SexLab now pushes threads natively. `Scene_Manager.SaveThreadsJson` is a shim kept for DOM (→ `PushDomThreads` → `Threads_SetDom`). DOM keeps calling it. `skyrimnet_sexlab_scene_actor_lock` is still mirrored to StorageUtil (`ActorLocker.cpp`), so the `papyrus_util HasIntValue` YAML gates still work.
+
 ## Shared engine gotchas
 
 See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves a SE/VR or Papyrus quirk for this project.

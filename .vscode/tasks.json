@@ -56,7 +56,7 @@
         {
             "label": "compile: pyro",
             "type": "shell",
-            "command": "c:/Users/bhuff/.vscode/extensions/joelday.papyrus-lang-vscode-2024.578.1412/pyro/pyro.exe",
+            "command": "C:/Skyrim/tools/Pyro/pyro.exe",
             "args": [
                 "${workspaceFolder}/skyrimse.ppj",
                 "--game-path",
