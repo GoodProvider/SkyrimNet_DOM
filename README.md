@@ -24,5 +24,5 @@ Basic SkyrimNet support for Diary of Mine.
 | Prompts / `dom_actor` | [docs/authors/prompts.md](docs/authors/prompts.md), [docs/reference/json-keys.md](docs/reference/json-keys.md) |
 | Punishment reasons | [docs/authors/punishment.md](docs/authors/punishment.md) |
 | Events / DN | [docs/authors/events.md](docs/authors/events.md) |
-| Items / triggers | [docs/authors/content.md](docs/authors/content.md) |
+| Items | [docs/authors/content.md](docs/authors/content.md) |
 | Papyrus bridge | [docs/developers/papyrus.md](docs/developers/papyrus.md), [docs/reference/papyrus-rules.md](docs/reference/papyrus-rules.md) |

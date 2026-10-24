@@ -15,13 +15,15 @@ Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go throu
 | `Headers/` | Papyrus headers |
 | `skyrimse.ppj` | Pyro project |
 | `SKSE_Source/` | `SkyrimNet_DOM.dll` (DomObedience); CMake `--preset release` |
-| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + triggers + dialogue_actions blacklist) |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + dialogue_actions blacklist) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`dom.events.*`) |
 | `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu (`0800_dom_*`) + Status/Slaves MainPanels |
 
 Repo root: `c:\Skyrim\dev\mods\SkyrimNet_DOM`.
 
 Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_SexLab/docs/) and [README](../SkyrimNet_SexLab/README.md).
+
+SkyrimNet C++ API (`PublicAPI.h`, `PublicAPIMemoryQuery.h`): `c:\Skyrim\dev\mods\SkyrimNet devkit\CppAPI`. If `SKSE_Source` ever needs it, add `"${CMAKE_CURRENT_SOURCE_DIR}/../../SkyrimNet devkit/CppAPI"` to `target_include_directories` (same as SexLab). Modding docs: `..\SkyrimNet devkit\docs\modding\`.
 
 ## Documentation map
 

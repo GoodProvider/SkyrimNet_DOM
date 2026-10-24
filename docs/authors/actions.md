@@ -13,7 +13,6 @@ SkyrimNet Beta 25+ reads this mod's LLM content from the **external plugin** fol
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Plugin root (`manifest.json`) |
 | `…/actions/` | Action YAML (filename stem must equal in-file `name`) |
 | `…/prompts/` | Bio / helper / user_final_instructions prompts |
-| `…/triggers/` | Healing Hands trigger |
 
 Do **not** use `SKSE/Plugins/SkyrimNet_DOM/actions.json` — that file is legacy and is no longer registered.
 

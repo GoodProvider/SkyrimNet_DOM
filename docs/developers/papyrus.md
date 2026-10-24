@@ -17,7 +17,7 @@ Bridge **Diary of Mine** ↔ **SkyrimNet**, with sex/punish scenes going through
 | `Scripts/` | Compiled `.pex` output |
 | `Headers/` | Import headers for Caprica / project |
 | `skyrimse.ppj` | Papyrus project (imports + compile) |
-| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 content plugin (actions + prompts + triggers; `manifest.json`) |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 content plugin (actions + prompts + dialogue_actions; `manifest.json`) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`Plugin_SkyrimNet_DOM`, `dom.events.*`) |
 | `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu Actor options (`0800_dom_*` through `0880_dom_sack.json`) + Status/Slaves MainPanels (deploys into SexLab’s webui folder) |
 | `manifest/DOM.md` | WebUI interaction contract (TargetMenu leaves, panels, All Slaves) |

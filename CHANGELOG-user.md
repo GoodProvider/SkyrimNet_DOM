@@ -1,3 +1,9 @@
+## 0.1.1
+
+- Healing Hands no longer triggers comfort narration (trigger removed).
+
+## 0.1.0
+
 https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.1.0
 
 Requires SkyrimNet 0.25.0 (Beta 25) or later. LLM actions and prompts install as plugin `goodprovider.dom` (External on the Plugins page). Do not use Plugins > Import Old Content for this mod's files.

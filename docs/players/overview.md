@@ -31,7 +31,6 @@ Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_Sex
 - Character bio prompts for DOM actors (slaves, slavers, and others — appearance, bondages, skills, aged notifications, and more)
 - Punishment reason mapping (`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`)
 - Item descriptions for DOM ropes (`config/items/`)
-- Healing Hands trigger — cleanup / comfort Direct Narration when healing is cast
 
 ## Notes / FAQ
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 (since 0.1.0)
+
+- Remove Healing Hands `hit` trigger (`triggers/Healing_Hands.yaml`, `weapon_id` 316402). The `goodprovider.dom` bundle no longer ships `triggers/`; `manifest.json` version 0.1.1.
+
 ## 0.1.0 (since 0.0.6)
 
 - Ship LLM actions, prompts, and the Healing Hands trigger as SkyrimNet Beta 25 external plugin `goodprovider.dom` (`SKSE/Plugins/SkyrimNet/external/goodprovider.dom/`). Loose `config/actions/`, `config/triggers/`, and `prompts/` are removed; Beta 25 does not read those folders.

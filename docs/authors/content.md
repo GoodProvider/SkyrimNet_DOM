@@ -1,6 +1,6 @@
-# Items and triggers
+# Items and dialogue blacklist
 
-SkyrimNet content that is not YAML actions or prompt slices: item renames/descriptions, hit→Direct Narration triggers, and the Dialogue Actions blacklist.
+SkyrimNet content that is not YAML actions or prompt slices: item renames/descriptions and the Dialogue Actions blacklist.
 
 See also: [events.md](events.md) · [../players/overview.md](../players/overview.md)
 
@@ -33,22 +33,6 @@ customDescription: A rough rope binding the wrists together and making arms usel
 `diaryofmine_BB1B47.yaml` (DOM Training Info) is an example stub with `enabled: false`.
 
 If you write more Diary of Mine item descriptions, please share them.
-
-## Triggers
-
-Path (Beta 25 content plugin):
-
-```
-SKSE/Plugins/SkyrimNet/external/goodprovider.dom/triggers/
-```
-
-**Healing Hands** ([`Healing_Hands.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/triggers/Healing_Hands.yaml), `name: Healing_Hands`) — comfort / blood-cleanup narrative hook:
-
-- Fires on `hit` when `weapon_id` equals Healing Hands (316402).
-- Response type `direct_narration` with warm “healed / grateful” copy.
-- Audience `target`; short cooldown (`cooldownSeconds: 5` in the trigger file).
-
-This is SkyrimNet config, not Papyrus in this mod. Use it when play calls for cleaning up welts before comfort dialogue (see [../players/overview.md](../players/overview.md)).
 
 ## Dialogue Actions blacklist
 

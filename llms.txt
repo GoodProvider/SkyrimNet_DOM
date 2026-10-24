@@ -1,6 +1,6 @@
 # SkyrimNet_DOM
 
-> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items/triggers. LLM content ships as `goodprovider.dom`.
+> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items. LLM content ships as `goodprovider.dom`.
 
 ## Read by job
 
