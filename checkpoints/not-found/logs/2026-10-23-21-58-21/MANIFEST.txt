@@ -1,0 +1,2 @@
+SkyrimNet.log	576398	2026-10-23 21:54:29	C:\Users\bhuff\OneDrive\Documents\my games\Skyrim Special Edition\SKSE\SkyrimNet.log
+Papyrus.0.log	128925	2026-10-23 21:53:37	C:\Users\bhuff\OneDrive\Documents\my games\Skyrim Special Edition\Logs\Script\Papyrus.0.log

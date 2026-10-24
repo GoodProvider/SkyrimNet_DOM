@@ -147,6 +147,9 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
     RegisterForModEvent("DOMOnBehaviourChange", "OnBehaviourChange")
     RegisterForModEvent("DOMOnNotificationSent", "OnNotificationSent")
+    ; Injury Engine (soft): torture of a slave is a DOM pain punishment; Healing Hands on a slave is care comfort
+    RegisterForModEvent("Injury_Engine_Torture", "OnInjuryTorture")
+    RegisterForModEvent("Injury_Engine_HealStart", "OnInjuryHealStart")
     ;  -------
     ; will be handled (if at all) by decorators
     ;  -------
@@ -868,6 +871,141 @@ Event OnKissed(Form sender, string kissType, string kissResults, bool isObedient
     endif 
     DirectNarration_Optional("kissed", msg, slave)
 EndEvent 
+
+; --------------------------
+; Injury Engine
+; --------------------------
+int Property HEAL_SOURCE_SPELL = 1 AutoReadOnly ; Injury_Engine_Main.HealSyncSourceMethod: spell
+int Property HEALING_HANDS = 0x04D3F2 AutoReadOnly ; Skyrim.esm
+
+; Every torture batch Injury Engine lands. Starts DOM's pain punishment unless DOM already did (a weapon whip's OnHit
+; starts it before this event arrives); the first batch of each punishment picks its reason (TortureReasonNamed).
+; Every batch counts as a punishment hit (hand / spell torture fires no OnHit, so DOM would end it at once).
+; DOM ends the punishment after a tick without hits and trains (EndPunishing -> TrainAfterPunished).
+Event OnInjuryTorture(Form akAttacker, Form akVictim, String source, Int hits, String cause)
+    Actor attacker = akAttacker as Actor
+    Actor victim = akVictim as Actor
+    if attacker == None || victim == None || attacker == victim || !main || !main.d_core
+        return
+    endif
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", "OnInjuryTorture", victim)
+    if !slave || !slave.mind
+        return
+    endif
+    if attacker != player && !main.d_core.IsAllowedToPunish(attacker)
+        return
+    endif
+    if main.d_core.IsFleeing(victim)
+        return
+    endif
+    DOM_Mind mind = slave.mind
+    if !mind.whipping_active
+        mind.StartPunishingByIndex(attacker, 0, "pain")
+    endif
+    Bool fresh = !SkyrimNet_DOM_API.TortureReasonNamed(victim, mind)
+    Trace("OnInjuryTorture", attacker.GetDisplayName() + " -> " + victim.GetDisplayName() + " " + source + " hits:" + hits \
+        + " active:" + mind.whipping_active + " reason:" + mind.whipping_reason + " fresh:" + fresh)
+    if fresh
+        StartTortureReason(attacker, victim, mind)
+    endif
+    mind.HandlePunishmentOnHit(attacker, None)
+    SkyrimNet_DOM_API.MarkTortureDamage(victim, mind)
+EndEvent
+
+; Panel reason (SkyrimNet_SexLab Punish), else the player's list (dom.punish.torture_choose_reason; always offers
+; custom / no reason), else a random open reason ("being a bad slave" when none). While the list is up the punishment
+; carries that random reason (no event), so later batches don't reopen it and Esc / Close still trains on a real reason.
+Function StartTortureReason(Actor attacker, Actor victim, DOM_Mind mind)
+    String reason = SkyrimNet_DOM_API.TakePanelReason(victim)
+    if reason == ""
+        reason = SkyrimNet_DOM_API.RandomOpenReason(victim)
+        if attacker == player && main.torture_choose_reason
+            SkyrimNet_DOM_Menu menu = (self as Quest) as SkyrimNet_DOM_Menu
+            if menu
+                SkyrimNet_DOM_API.NameRunningPunishment(victim, mind, reason)
+                menu.OpenTortureReasonList(attacker, victim, SkyrimNet_DOM_API.OpenPunishReasons(victim))
+                return
+            endif
+        endif
+    endif
+    SkyrimNet_DOM_API.ApplyTortureReason(attacker, victim, reason)
+EndFunction
+
+; A healing source opened a heal session. Healing Hands cast on a slave: a shocked slave gets DOM "care" comfort,
+; otherwise praise ("tell"). The player picks the reason when dom.praise.heal_choose_reason is on (Close: no praise);
+; otherwise, or with no reason picked, "being a good slave" / "being a good slaver".
+Event OnInjuryHealStart(Form akCaster, Form akTarget, Int source)
+    Actor caster = akCaster as Actor
+    Actor target = akTarget as Actor
+    if source != HEAL_SOURCE_SPELL || caster == None || target == None || caster == target || !main || !main.d_core
+        return
+    endif
+    Spell hands = Game.GetFormFromFile(HEALING_HANDS, "Skyrim.esm") as Spell
+    if hands == None || (caster.GetEquippedSpell(0) != hands && caster.GetEquippedSpell(1) != hands)
+        return
+    endif
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", "OnInjuryHealStart", target)
+    if !slave || !slave.mind
+        return
+    endif
+    if slave.mind.mood == "shocked"
+        ComfortCareNoHug(caster, slave, target)
+        return
+    endif
+    if caster == player && main.heal_choose_reason
+        SkyrimNet_DOM_Menu menu = (self as Quest) as SkyrimNet_DOM_Menu
+        if menu
+            menu.OpenHealPraiseList(caster, target)
+            return
+        endif
+    endif
+    slave.StartPraising(caster, SkyrimNet_DOM_Menu.DefaultPraiseReason(slave.mind), "tell")
+    Trace("OnInjuryHealStart", caster.GetDisplayName() + " heals and praises " + target.GetDisplayName())
+EndEvent
+
+; DOM_Mind.StartComfortingWith(caster, "care") without its Anim_GetPlayerHug (DOM's abuse_type is private and
+; stays as it was).
+Function ComfortCareNoHug(Actor caster, DOM_Actor slave, Actor target)
+    DOM_Core core = main.d_core
+    DOM_Mind mind = slave.mind
+    String name = target.GetDisplayName()
+    int broken = 0
+    float mod = core.GetPredatorModifier(caster)
+    if !mind.IsComforted()
+        mind.SetNextPunishmentReasonForceMessage(17, "doesn't want to be comforted") ; "didnt listen"
+    endif
+    if !mind.StartGuilt()
+        mind.SetNextPunishmentReasonForceMessage(17, "doesn't care about being healed") ; "didnt listen"
+    else
+        float amount = core.train_speed_tell * 0.1 * mind.MOD_Ease * mod
+        mind.TrainRespect(amount)
+        mind.TrainAnger(amount)
+        mind.number_of_comfort += 1
+        mind.SendNotificationAbuse("Comforting " + name + " with care")
+        if core.DOMPlayerAlias
+            core.DOMPlayerAlias.HasChatWith(slave)
+        endif
+        broken = 2
+    endif
+    if broken > 0
+        float now = Utility.GetCurrentGameTime()
+        mind.time_last_abused = now
+        mind.time_last_resilience = now
+    endif
+    DOM_Mind casterMind = core.GetActorMind(caster)
+    if casterMind != None
+        casterMind.TrainSkillPredator(0.5)
+        casterMind.SetNextPraiseReasonSilent(47) ; "being a perverted trainer"
+        casterMind.CheckAndRegisterKink(100, 1.0) ; "taking advantage of slaves"
+    else
+        if caster == player
+            core.DOM04.NotifyEndComforted(slave, "care", broken > 0)
+            slave.SendExternalEventSSB("Comforted", "care", broken > 0)
+        endif
+        core.TrainSkillPredator(caster, 0.5)
+    endif
+    Trace("ComfortCareNoHug", caster.GetDisplayName() + " heals " + name + " broken:" + broken)
+EndFunction
 
 Event OnPunished(Form akRef, string punish_method, string punish_reason, bool is_obedient)
     Actor slave = akRef as Actor 

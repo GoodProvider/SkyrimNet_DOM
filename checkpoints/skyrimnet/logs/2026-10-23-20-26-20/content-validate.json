@@ -1,0 +1,280 @@
+{
+  "errors": [],
+  "files": 82,
+  "not_checked": [
+    "decorator names, arities and values (users register their own; every call is listed under unresolved)",
+    "action questEditorId / scriptName / executionFunctionName existence (needs game data)",
+    "eventType membership is a warning only (the game is the only source of the list)"
+  ],
+  "ok": true,
+  "plugin_id": "goodprovider.dom",
+  "shadows": [],
+  "unresolved": [
+    {
+      "code": "UNRESOLVED",
+      "col": 18,
+      "file": "helpers/dom_action_rape_start",
+      "line": 1,
+      "message": "variable 'decnpc' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 29,
+      "file": "helpers/dom_action_rape_start",
+      "line": 2,
+      "message": "variable 'get_nearby_npc_list' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 18,
+      "file": "helpers/dom_action_rape_start",
+      "line": 4,
+      "message": "object must be an array"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 27,
+      "file": "helpers/dom_action_rape_start",
+      "line": 11,
+      "message": "variable 'name' not found",
+      "original": "{{ decnpc(npc.UUID).name }}"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 128,
+      "file": "helpers/dom_action_rape_start",
+      "line": 11,
+      "message": "variable 'name' not found",
+      "original": "{{ decnpc(npc.UUID).name}}"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 18,
+      "file": "helpers/dom_action_raped_by_start",
+      "line": 1,
+      "message": "variable 'decnpc' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 29,
+      "file": "helpers/dom_action_raped_by_start",
+      "line": 2,
+      "message": "variable 'get_nearby_npc_list' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 18,
+      "file": "helpers/dom_action_raped_by_start",
+      "line": 4,
+      "message": "object must be an array"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 27,
+      "file": "helpers/dom_action_raped_by_start",
+      "line": 11,
+      "message": "variable 'name' not found",
+      "original": "{{ decnpc(npc.UUID).name }}"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 18,
+      "file": "helpers/dom_action_sex_start",
+      "line": 1,
+      "message": "variable 'decnpc' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 29,
+      "file": "helpers/dom_action_sex_start",
+      "line": 2,
+      "message": "variable 'get_nearby_npc_list' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 20,
+      "file": "helpers/dom_action_sex_start",
+      "line": 4,
+      "message": "object must be an array"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 27,
+      "file": "helpers/dom_action_sex_start",
+      "line": 11,
+      "message": "variable 'name' not found",
+      "original": "{{ decnpc(npc.UUID).name }}"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 130,
+      "file": "helpers/dom_action_sex_start",
+      "line": 11,
+      "message": "variable 'name' not found",
+      "original": "{{ decnpc(npc.UUID).name}}"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 199,
+      "file": "helpers/dom_action_sex_start",
+      "line": 11,
+      "message": "variable 'name' not found",
+      "original": "{{decnpc(npc.UUID).name}}"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 35,
+      "file": "submodules/character_bio/0006_dom_variables",
+      "line": 4,
+      "message": "variable 'is_in_faction' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 54,
+      "file": "submodules/character_bio/0006_dom_variables",
+      "line": 7,
+      "message": "variable 'actor_name' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 53,
+      "file": "submodules/character_bio/0006_dom_variables",
+      "line": 7,
+      "message": "variable 'add' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 64,
+      "file": "submodules/character_bio/0006_dom_variables",
+      "line": 7,
+      "message": "variable 'add' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 7,
+      "file": "submodules/character_bio/0015_dom_characteristics",
+      "line": 3,
+      "message": "variable 'dom_is_actor_faction' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 25,
+      "file": "submodules/character_bio/0016_dom_slaver",
+      "line": 2,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 25,
+      "file": "submodules/character_bio/0017_dom_orders",
+      "line": 2,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 25,
+      "file": "submodules/character_bio/0018_dom_promise_virgin",
+      "line": 2,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 25,
+      "file": "submodules/character_bio/0030_dom_experience",
+      "line": 2,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 25,
+      "file": "submodules/character_bio/0031_dom_love_loyal",
+      "line": 2,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 49,
+      "file": "submodules/character_bio/0055_dom_physical_activity",
+      "line": 3,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 25,
+      "file": "submodules/character_bio/0305_dom_personality",
+      "line": 2,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 49,
+      "file": "submodules/character_bio/0410_dom_appearance",
+      "line": 3,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 49,
+      "file": "submodules/character_bio/0413_dom_bondages",
+      "line": 3,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 9,
+      "file": "submodules/character_bio/0515_dom_skills",
+      "line": 3,
+      "message": "variable 'actor_having_sex' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 72,
+      "file": "submodules/character_bio/0515_dom_skills",
+      "line": 3,
+      "message": "variable 'dom_actor.loaded' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 16,
+      "file": "submodules/character_bio/7200_dom_notifications",
+      "line": 1,
+      "message": "variable 'dom_actor' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 7,
+      "file": "submodules/user_final_instructions/0551_dom_instructions",
+      "line": 3,
+      "message": "variable 'get_global_value' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 28,
+      "file": "submodules/user_final_instructions/0551_dom_instructions",
+      "line": 23,
+      "message": "variable 'is_in_faction' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 42,
+      "file": "submodules/user_final_instructions/0551_dom_instructions",
+      "line": 24,
+      "message": "variable 'name' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 49,
+      "file": "submodules/user_final_instructions/0551_dom_instructions",
+      "line": 27,
+      "message": "variable 'add' not found"
+    },
+    {
+      "code": "UNRESOLVED",
+      "col": 64,
+      "file": "submodules/user_final_instructions/0551_dom_instructions",
+      "line": 27,
+      "message": "variable 'add' not found"
+    }
+  ],
+  "warnings": []
+}

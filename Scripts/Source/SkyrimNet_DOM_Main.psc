@@ -24,6 +24,10 @@ String PLUGIN_CONFIG = "Plugin_SkyrimNet_DOM"
 bool Property ext2_enabled = false Auto
 int Property notification_ring = 20 Auto
 int Property short_lived_ttl = 100000 Auto
+; Injury Engine torture by the player: true = WebUI reason list, false = random open reason
+bool Property torture_choose_reason = true Auto
+; Healing Hands by the player on a non-shocked slave: true = WebUI praise reason list, false = DOM picks
+bool Property heal_choose_reason = false Auto
 
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
@@ -108,12 +112,15 @@ Function ApplyPluginConfig()
     endif
     short_lived_ttl = ttl
 
+    torture_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.punish.torture_choose_reason", true)
+    heal_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.praise.heal_choose_reason", false)
+
     SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
     if events
         events.notifications_size = notification_ring
         events.ApplyExt2Events()
     endif
-    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl)
+    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl+" torture_choose_reason:"+torture_choose_reason+" heal_choose_reason:"+heal_choose_reason)
 EndFunction
 
 Event OnPluginConfigSaved(string eventName, string strArg, float numArg, Form sender)
@@ -153,6 +160,11 @@ int Function Get_Punishment_To_Index(String reason)
         return punishment_default_index
     endif
     return index
+EndFunction
+
+; True when reason is a loaded punishment token (free text is not).
+bool Function Has_Punishment_Reason(String reason)
+    return JMap.hasKey(punishment_to_index, reason)
 EndFunction
 
 Function Register_Punishment_Reason(String name, int index, String description)
@@ -203,6 +215,11 @@ Function Load_Punishment_Reasons(String fname)
         endif
         i += 1
     endwhile
+EndFunction
+
+; Description of reason only ("" when punishment_reason.json does not know it; no default fallback)
+String Function Get_Punishment_Description_Exact(String reason)
+    return JMap.getStr(punishment_to_description, reason, "")
 EndFunction
 
 String Function Get_Punishment_To_Description(String reason)

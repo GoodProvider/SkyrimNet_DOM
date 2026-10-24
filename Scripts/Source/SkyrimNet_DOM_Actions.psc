@@ -43,7 +43,8 @@ Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
 EndFunction
 
 Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc)
-    return SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc)
+    ; LLM chose the action: no WillObey roll
+    return SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, false)
 EndFunction
 
 String Function SexOrderDesc(Actor ordered, Actor superior, Actor speaker, Actor target, String method, Actor participate=None)

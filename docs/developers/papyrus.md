@@ -45,6 +45,8 @@ Full checklist: [../authors/punishment.md](../authors/punishment.md).
 1. DOM’s `PunishmentReasons.json` (StorageUtilData) → numeric indexes
 2. `SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json` → LLM-facing names / aliases → those indexes
 3. YAML refuse / AddPunishmentReason → `SkyrimNet_DOM_Actions.AddPunishmentReason` → `SkyrimNet_DOM_API.AddPunishmentReason` → `RegisterEvent("Reason to Punish", …)`
+4. Injury Engine torture: `Injury_Engine_Torture(Form attacker, Form victim, String source, Int hits, String cause)` → `Events.OnInjuryTorture`. The first hit runs `StartPunishingByIndex(.., 0, "pain")` and `StartTortureReason`, which uses `TakePanelReason`, then `OpenPunishReasons`, then `Menu.OpenTortureReasonList` (SexLab `Choice_Open`) or a random reason, then `ApplyTortureReason`. Every hit runs `mind.HandlePunishmentOnHit`. The list's pick runs `Menu.TM_DoTortureReason(speaker, reason, slaveId)`.
+5. Healing Hands: `Injury_Engine_HealStart(Form caster, Form target, Int source)` → `Events.OnInjuryHealStart` (source 1 = spell, caster has `0x04D3F2` equipped). Shocked slave (`mind.mood == "shocked"`) → `ComfortCareNoHug`. Otherwise the player with `dom.praise.heal_choose_reason` gets `Menu.OpenHealPraiseList` (SexLab `Choice_Open`, reasons from `PraiseReasonList` + custom). The pick runs `Menu.TM_DoHealPraise(speaker, slaveId, reason)`, and Close gives no praise. Everyone else: `StartPraising(caster, DefaultPraiseReason(mind), "tell")` ("being a good slave" / "being a good slaver"; also used for a blank custom).
 
 ## SexLab bridge / arousal
 

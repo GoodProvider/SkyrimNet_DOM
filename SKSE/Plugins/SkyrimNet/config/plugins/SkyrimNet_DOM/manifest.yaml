@@ -30,3 +30,17 @@ schema:
       max: 600000
       defaultValue: 100000
       category: "Events"
+
+    - name: "When player tortures let player choose"
+      path: "dom.punish.torture_choose_reason"
+      type: "bool"
+      description: "Injury Engine torture of a slave is a DOM punishment. On: when you start torturing a slave, the WebUI lists being a bad slave, didnt obey, the slave's other open punishment reasons, random, custom and no reason. Off: an open reason is chosen at random."
+      defaultValue: true
+      category: "Punishment"
+
+    - name: "Ask player praise reason when healing"
+      path: "dom.praise.heal_choose_reason"
+      type: "bool"
+      description: "Healing Hands on a slave who is not in shock praises them (a shocked slave gets care comfort instead). On: when you heal, the WebUI lists the slave's praise reasons plus custom; closing the list gives no praise. 'Being a good slave' (or slaver) is always listed first and is the reason used when the setting is off."
+      defaultValue: false
+      category: "Praise"

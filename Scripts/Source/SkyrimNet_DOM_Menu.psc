@@ -2203,6 +2203,33 @@ Function TM_ListPraiseReasons(Actor speaker, Actor target)
     JMap.setStr(root, "title", "praise reason")
     int options = JArray.object()
     JMap.setObj(root, "options", options)
+    int reasons = PraiseReasonList(sl_mind)
+    int i = 0
+    while i < JArray.count(reasons)
+        String reason = JArray.getStr(reasons, i)
+        int opt = ChoicePapyrus(reason, "TM_ListPraiseTypes", false)
+        ChoiceStatic(opt, "reason", reason)
+        JArray.addObj(options, opt)
+        i += 1
+    endwhile
+    JValue.release(reasons)
+    PushCascade(root)
+EndFunction
+
+; The praise reason used when none is picked: "being a good slave" (or "being a good slaver").
+String Function DefaultPraiseReason(DOM_Mind sl_mind) global
+    if sl_mind && !sl_mind.is_slave
+        return "being a good slaver"
+    endif
+    return "being a good slave"
+EndFunction
+
+; Praise reasons for a mind (JArray of strings, caller releases): the default (DefaultPraiseReason) first, then
+; DOM's queued reasons, then crying (DOM toggle).
+int Function PraiseReasonList(DOM_Mind sl_mind)
+    int reasons = JValue.retain(JArray.object())
+    String fallback = DefaultPraiseReason(sl_mind)
+    JArray.addStr(reasons, fallback)
     int n = 0
     if sl_mind
         n = sl_mind.GetNumberOfNextPraiseReasons()
@@ -2210,36 +2237,18 @@ Function TM_ListPraiseReasons(Actor speaker, Actor target)
     int i = 0
     while i < n
         String reason = sl_mind.GetNextPraiseReason(i)
-        int opt = ChoicePapyrus(reason, "TM_ListPraiseTypes", false)
-        ChoiceStatic(opt, "reason", reason)
-        JArray.addObj(options, opt)
+        if reason != fallback
+            JArray.addStr(reasons, reason)
+        endif
         i += 1
     endwhile
     DOM_Core core = GetCore()
-    if core && sl_mind
-        if core.cryingPraiseToggle && sl_mind.IsCrying()
-            if !PraiseListed(sl_mind, n, "crying")
-                int opt = ChoicePapyrus("crying", "TM_ListPraiseTypes", false)
-                ChoiceStatic(opt, "reason", "crying")
-                JArray.addObj(options, opt)
-            endif
-        endif
-        String fallback = "being a good slaver"
-        if sl_mind.is_slave
-            fallback = "being a good slave"
-        endif
-        if !PraiseListed(sl_mind, n, fallback)
-            int opt = ChoicePapyrus(fallback, "TM_ListPraiseTypes", false)
-            ChoiceStatic(opt, "reason", fallback)
-            JArray.addObj(options, opt)
+    if core && sl_mind && core.cryingPraiseToggle && sl_mind.IsCrying()
+        if !PraiseListed(sl_mind, n, "crying")
+            JArray.addStr(reasons, "crying")
         endif
     endif
-    if JArray.count(options) <= 0
-        int opt = ChoicePapyrus("being a good slave", "TM_ListPraiseTypes", false)
-        ChoiceStatic(opt, "reason", "being a good slave")
-        JArray.addObj(options, opt)
-    endif
-    PushCascade(root)
+    return reasons
 EndFunction
 
 Function TM_ListPraiseTypes(Actor speaker, Actor target, String reason)
@@ -2305,6 +2314,140 @@ Function TM_ListComfortPainActions(Actor speaker, Actor target)
     JMap.setInt(customOpt, "opensText", 1)
     JArray.addObj(options, customOpt)
     PushCascade(root)
+EndFunction
+
+; Injury Engine torture by the player (SkyrimNet_DOM_Events.StartTortureReason): random, "being a bad slave" and
+; "didnt obey" (always: they cover what the LLM missed), the slave's other open reasons, custom, no reason, as a
+; scrollable solo list (SkyrimNet_SexLab Choice_Open). The pick names the running punishment (TM_DoTortureReason).
+; JSON is built as a string: the JContainers serializer dropped the options array when called from this hit event
+; (Choice_Open options=0).
+Function OpenTortureReasonList(Actor torturer, Actor slave, String[] reasons)
+    String slaveId = slave.GetFormID() as String
+    String badSlave = SkyrimNet_DOM_API.REASON_BAD_SLAVE()
+    String disobey = SkyrimNet_DOM_API.REASON_DISOBEY()
+    String opts = TortureReasonChoice("random", slaveId)
+    opts += "," + TortureReasonChoice(badSlave, slaveId)
+    opts += "," + TortureReasonChoice(disobey, slaveId)
+    int i = 0
+    while i < reasons.Length
+        if reasons[i] != badSlave && reasons[i] != disobey
+            opts += "," + TortureReasonChoice(reasons[i], slaveId)
+        endif
+        i += 1
+    endwhile
+    opts += "," + TortureReasonChoice("custom", slaveId)
+    opts += "," + TortureReasonChoice("no reason", slaveId)
+    String json = "{\"title\":" + SkyrimNet_SexLab_Utilities.JsonQuote("punish " + TargetName(slave) + " for") \
+        + ",\"options\":[" + opts + "]}"
+    Trace("OpenTortureReasonList", TargetName(slave) + " reasons=" + reasons.Length + " json(" \
+        + StringUtil.GetLength(json) + ")=" + StringUtil.Substring(json, 0, 200))
+    SkyrimNet_SexLab_WebUI.Choice_Open(json)
+EndFunction
+
+; One papyrus option as JSON: speaker (the player) + static reason / slaveId; the list has no focus target.
+String Function TortureReasonChoice(String reason, String slaveId)
+    return "{\"type\":\"papyrus\",\"label\":" + SkyrimNet_SexLab_Utilities.JsonQuote(reason) \
+        + ",\"plugin\":\"SkyrimNet_DOM.esp\",\"questFormId\":\"0x800\",\"scriptName\":\"SkyrimNet_DOM_Menu\"" \
+        + ",\"executionFunctionName\":\"TM_DoTortureReason\",\"closeWebUI\":1,\"parameterMapping\":[" \
+        + "{\"type\":\"speaker\",\"name\":\"speaker\"}" \
+        + ",{\"type\":\"static\",\"name\":\"reason\",\"value\":" + SkyrimNet_SexLab_Utilities.JsonQuote(reason) + "}" \
+        + ",{\"type\":\"static\",\"name\":\"slaveId\",\"value\":" + SkyrimNet_SexLab_Utilities.JsonQuote(slaveId) + "}]}"
+EndFunction
+
+; custom: UIExtensions text box; empty / cancelled keeps the provisional reason (no event, like Esc).
+Function TM_DoTortureReason(Actor speaker, String reason, String slaveId)
+    Actor slave = Game.GetFormEx(slaveId as Int) as Actor
+    if !slave
+        Trace("TM_DoTortureReason", "no slave for id " + slaveId)
+        return
+    endif
+    if !speaker
+        speaker = Game.GetPlayer()
+    endif
+    if reason == "custom"
+        UIExtensions.OpenMenu("UITextEntryMenu")
+        reason = UIExtensions.GetMenuResultString("UITextEntryMenu")
+        Trace("TM_DoTortureReason", "custom: '" + reason + "'")
+        if reason == ""
+            return
+        endif
+    elseif reason == "random" || reason == ""
+        reason = SkyrimNet_DOM_API.RandomOpenReason(slave)
+    endif
+    SkyrimNet_DOM_API.ApplyTortureReason(speaker, slave, reason)
+EndFunction
+
+; Healing Hands by the player (SkyrimNet_DOM_Events.OnInjuryHealStart, dom.praise.heal_choose_reason): the slave's
+; praise reasons + custom as a solo list (SkyrimNet_SexLab Choice_Open). Close sends nothing: no praise.
+Function OpenHealPraiseList(Actor healer, Actor slave)
+    DOM_Actor sl_alias = SlaveOf(slave)
+    if !sl_alias
+        Trace("OpenHealPraiseList", "no DOM actor")
+        return
+    endif
+    int root = JMap.object()
+    JMap.setStr(root, "title", "praise " + TargetName(slave) + " for")
+    int options = JArray.object()
+    JMap.setObj(root, "options", options)
+    String slaveId = slave.GetFormID() as String
+    int reasons = PraiseReasonList(sl_alias.mind)
+    int i = 0
+    while i < JArray.count(reasons)
+        int opt = HealPraiseChoice(slaveId)
+        ChoiceStatic(opt, "reason", JArray.getStr(reasons, i))
+        JMap.setStr(opt, "label", JArray.getStr(reasons, i))
+        JArray.addObj(options, opt)
+        i += 1
+    endwhile
+    int customOpt = HealPraiseChoice(slaveId)
+    ChoiceDynamic(customOpt, "reason")
+    JMap.setInt(customOpt, "opensText", 1)
+    JArray.addObj(options, customOpt)
+    String json = SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson(root)
+    JValue.release(root)
+    Trace("OpenHealPraiseList", TargetName(slave) + " reasons=" + JArray.count(reasons))
+    JValue.release(reasons)
+    SkyrimNet_SexLab_WebUI.Choice_Open(json)
+EndFunction
+
+; Speaker (the player) + static slaveId; the caller adds the reason (static, or dynamic for custom).
+int Function HealPraiseChoice(String slaveId)
+    int opt = JMap.object()
+    JMap.setStr(opt, "type", "papyrus")
+    JMap.setStr(opt, "label", "custom")
+    JMap.setStr(opt, "plugin", "SkyrimNet_DOM.esp")
+    JMap.setStr(opt, "questFormId", "0x800")
+    JMap.setStr(opt, "scriptName", "SkyrimNet_DOM_Menu")
+    JMap.setStr(opt, "executionFunctionName", "TM_DoHealPraise")
+    JMap.setInt(opt, "closeWebUI", 1)
+    int maps = JArray.object()
+    JMap.setObj(opt, "parameterMapping", maps)
+    int m1 = JMap.object()
+    JMap.setStr(m1, "type", "speaker")
+    JMap.setStr(m1, "name", "speaker")
+    JArray.addObj(maps, m1)
+    ChoiceStatic(opt, "slaveId", slaveId)
+    return opt
+EndFunction
+
+Function TM_DoHealPraise(Actor speaker, String slaveId, String reason)
+    Actor slave = Game.GetFormEx(slaveId as Int) as Actor
+    DOM_Actor sl_alias = None
+    if slave
+        sl_alias = SlaveOf(slave)
+    endif
+    if !sl_alias
+        Trace("TM_DoHealPraise", "no slave for id " + slaveId)
+        return
+    endif
+    if reason == "" || reason == "custom"
+        reason = DefaultPraiseReason(sl_alias.mind)
+    endif
+    if !speaker
+        speaker = Game.GetPlayer()
+    endif
+    sl_alias.StartPraising(speaker, reason, "tell")
+    Trace("TM_DoHealPraise", TargetName(slave) + " praised for " + reason)
 EndFunction
 
 Function TM_DoComfortByPain(Actor speaker, Actor target, String painAction)

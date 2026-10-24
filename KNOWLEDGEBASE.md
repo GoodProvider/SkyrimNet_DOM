@@ -6,6 +6,8 @@ Master reference for quirks, gotchas, and cross-version differences discovered w
 
 For agent policy (safety, confidence), see [AGENTS.md](AGENTS.md). For protocol contracts, see [docs/reference/](docs/reference/).
 
+**Builds are the agent's job:** the agent runs the VS Code tasks (`compile: pyro` here, `compile: papyrus` in Injury_Engine, the SexLab tasks / CMake `--preset release`) itself, by running each task's command from `.vscode/tasks.json`, and reports the result. Do not hand compiling back to the maintainer.
+
 ## DOM-specific
 
 | Fact | Notes |
@@ -101,6 +103,36 @@ Pyro compile: `RaceMenu\scripts\source` is not in this mods tree. `skyrimse.ppj`
 
 **Threads**: SexLab now pushes threads natively. `Scene_Manager.SaveThreadsJson` is a shim kept for DOM (→ `PushDomThreads` → `Threads_SetDom`). DOM keeps calling it. `skyrimnet_sexlab_scene_actor_lock` is still mirrored to StorageUtil (`ActorLocker.cpp`), so the `papyrus_util HasIntValue` YAML gates still work.
 
+## Injury Engine torture as DOM punishment (2026-10-23)
+
+**OnHit is not enough.** DOM counts a punishment's hits in `DOM_Actor.OnHit` → `HandlePunishmentOnHit`, and `HandlePunishmentOnUpdate` ends a pain punishment after one tick with no hit. Injury Engine hand torture (`External_*`, `Torture_Target` slap / pinch / pull) and torture-spell ticks fire no `OnHit`, so `OnInjuryTorture` calls `mind.HandlePunishmentOnHit` itself on every `Injury_Engine_Torture` batch. A whip lash can count twice (OnHit plus the event); that only changes DOM's pain tallies.
+
+**DOM starts weapon whippings itself.** A weapon lash's `OnHit` runs `DOM_Actor.StartWhipping` → `StartPunishingByIndex` with DOM's next reason (or 0, "no reason") *before* the async `Injury_Engine_Torture` event arrives, so `whipping_active` is already true. Never gate the reason pick on `!whipping_active` (that hid the player's list, 2026-10-23 test). `SkyrimNet_DOM_API.TortureReasonNamed` keeps a StorageUtil marker per slave instead: the `whipping_reason` the bridge wrote plus `whipping_pain_damage` after its last batch. `StartPunishingByIndex` resets the damage and `EndPunishing` resets the reason, so either one changing means a new punishment.
+
+**Reason after the fact.** `StartPunishingByIndex` returns early while `whipping_active`, so a reason picked later (WebUI list) is written straight to `mind.whipping_reason` / `whipping_reason_name` (`NameRunningPunishment`). While the list is up, the punishment carries a random open reason (no event). That keeps later batches from reopening the list, and a list closed without a pick still trains on a real reason.
+
+**Choice_Open JSON from a hit event: build it as a string.** `OpenTortureReasonList` built its options with JMap/JArray and `SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson`. Called from `OnInjuryTorture`, the list arrived empty (`Choice_Open options=0` in SkyrimNet_SexLab.log, while Papyrus had built 2 rows). The same serializer works from menu callbacks. `JMapToJson` silently writes `null` when a nested call returns "", so a dropped array leaves no trace. The list now concatenates the JSON with `SkyrimNet_SexLab_Utilities.JsonQuote` and traces its first 200 chars.
+
+**Resolve stored FormIDs with `Game.GetFormEx`, not `Game.GetForm`.** `TM_DoTortureReason` gets the slave as a static string FormID through SexLab `Choice_Open`. For an ESL-plugin slave (`-33241028` = `0xFE04C83C`) `Game.GetForm(slaveId as Int)` returned None (`no slave for id -33241028`), so the pick was dropped. The string arrived intact; SKSE `Game.GetFormEx` resolves light-plugin forms. Other mods here (SeverActions, NL_CMD) use `GetFormEx` for the same reason.
+
+**Care without the hug.** `StartComfortingWith(.., "care")` always plays `Anim_GetPlayerHug`. Healing Hands therefore copies the branch (`ComfortCareNoHug`). DOM's `abuse_type` is a private variable and is not set.
+
+**Heal = praise unless shocked.** DOM has no "reward". Its reward is praise (`DOM_Actor.StartPraising(abuser, reason, type)`), which fires `DOMOnPraised`. Healing Hands praises with type `"tell"` so no pat or kiss idle interrupts the cast. Care comfort applies only when `DOM_Mind.mood == "shocked"` (the token `DOMOnMoodChange` sends; inferred, as DOM's source is not available locally). Papyrus `parameterMapping` order must match the callback's signature (`TM_DoHealPraise(speaker, slaveId, reason)`).
+
+**SexLab panel reason.** The Punish panel lands hits through `External_TortureText`, which has no cause. SexLab C++ `PunishNarrated` dispatches `SkyrimNet_DOM_API.PanelPunished` before the hit (only when that script exists), and the torture handler reads it within 10 s (`TakePanelReason`).
+
+**Stubs.** Every DOM member used here must exist in `Headers_Source/DOM` (Pyro: first import wins), and that folder is not in git. Keep it in sync on other machines.
+
+## Manifest YAML error drops the whole config (2026-10-23)
+
+**One bad quote disables every setting.** If `config/plugins/SkyrimNet_DOM/manifest.yaml` does not parse, SkyrimNet logs `PluginConfig.cpp:198 ... yaml-cpp: error at line N, column M` and `PluginConfigDiscovery.cpp:95 Failed to load plugin config 'Plugin_SkyrimNet_DOM'` at startup. The config is never registered. Later, every Papyrus `GetConfigInt/Bool` logs `ConfigManager.h:236 Configuration 'Plugin_SkyrimNet_DOM' not found` and returns the default value, and the WebUI shows no DOM settings. The cause was an unescaped `"..."` inside a double-quoted `description:`. Use single quotes inside, or escape them as `\"`. When you see "not found", search the startup log for `PluginConfig`.
+
 ## Shared engine gotchas
 
 See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves a SE/VR or Papyrus quirk for this project.
+
+**Default args are filled in at the caller's compile time.** DOM added `bool choose_not=true` to `DOM_Mind.WillObey`, but `Headers_Source/DOM/DOM_Mind.psc` still had 5 params. `SkyrimNet_DOM_Obedience.TryOrder` compiled a 5-arg call. At runtime: `Incorrect number of arguments passed to function dom_mind.WillObey ... Expected 6, got 5`, the call returns None (false), and every gated order is refused. After a DOM update, diff `Headers_Source/DOM` against the installed DOM source. When you add a param to one of our own global functions (e.g. `TryOrder`), recompile every caller: Pyro incremental skips unchanged callers, and their old .pex fail the same way.
+
+**LLM actions skip WillObey.** `SkyrimNet_DOM_Actions.GateSlave` passes `rollObedience=false` because the LLM already decided the slave obeys. WebUI menu (`Menu.GateOrder`) and Scene Creator (`TryOrderSexCast`) orders still roll.
+
+**Unknown punishment reason tokens fall back to index 0.** `Main.Get_Punishment_To_Index` returns `punishment_default_index` (0) for free text. With `whipping_reason = 0`, DOM's end-of-punishment summary and training use the slave's queued/provisional reason instead ("custom: 'refusing sex'" → "6 strokes for being too slow", `Training: efficiency`). Map free text to a real token (`Main.Has_Punishment_Reason` check → `being a bad slave`) and keep the text on `whipping_reason_name`.

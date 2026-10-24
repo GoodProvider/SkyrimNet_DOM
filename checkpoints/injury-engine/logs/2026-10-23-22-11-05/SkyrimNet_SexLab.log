@@ -1,0 +1,236 @@
+[21:59:07.890] [65180] [I] SkyrimNet_SexLab v0-0-1-0
+[21:59:07.890] [65180] [I] [SexLabNet::InitSkyrimNetAPI] SkyrimNet PublicAPI loaded (version=12)
+[21:59:07.890] [65180] [I] [AnimSpeed::Install] AnimSpeed: UpdateAnimation hooks installed
+[21:59:07.890] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] SkyrimNet_SexLab: Trying to load WebUI plugin...
+[21:59:07.890] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] WebUI Papyrus functions registered
+[21:59:07.890] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] Utilities Papyrus functions registered
+[21:59:07.890] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] API Papyrus functions registered
+[21:59:07.891] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] AnimationDB Papyrus functions registered
+[21:59:07.891] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] Json Papyrus functions registered
+[21:59:07.891] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] OrgasmEngine Papyrus functions registered
+[21:59:07.891] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] ActorLocker Papyrus functions registered
+[21:59:07.891] [65180] [I] [`anonymous-namespace'::SKSEPlugin_Load] Decorators Papyrus functions registered
+[21:59:26.411] [73600] [I] [PapyrusBindings_WebUI::Register_WebUI_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_WebUI
+[21:59:26.411] [73600] [I] [PapyrusBindings_Utilities::Register_Utilities_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_Utilities
+[21:59:26.411] [73600] [I] [PapyrusBindings_API::Register_API_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_API
+[21:59:26.411] [73600] [I] [PapyrusBindings_AnimationDB::Register_AnimationDB_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_AnimDb
+[21:59:26.411] [73600] [I] [PapyrusBindings_Json::Register_Json_Functions] Successfully registered Papyrus functions for SNSL_JValue/JMap/JArray/JFormMap
+[21:59:26.411] [73600] [I] [PapyrusBindings_OrgasmEngine::Register_OrgasmEngine_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_OrgasmEngine
+[21:59:40.403] [31860] [I] [AnimationDB::Open] AnimationDB: opened C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\animationdb.sql (762 rows)
+[21:59:40.403] [31860] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-strict.json clusters=38 tags=92
+[21:59:40.404] [31860] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-broad.json clusters=56 tags=166
+[21:59:40.404] [31860] [I] [AnimationDB::`anonymous-namespace'::LoadSexTagsFile] AnimationDB: sex_tags n=21
+[21:59:40.405] [31860] [I] [AnimationDB::LoadSynonyms] AnimationDB: sexual tag added to 0 rows
+[21:59:40.405] [31860] [I] [] PrismaUI API acquired successfully.
+[21:59:40.405] [31860] [I] [ActionCatalog::Load] ActionCatalog loading from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\webui
+[21:59:40.432] [31860] [I] [ActionCatalog::`anonymous-namespace'::LoadSceneSettings] ActionCatalog loaded 14 scene settings from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\scenes
+[21:59:40.436] [31860] [I] [ActionCatalog::`anonymous-namespace'::LoadControlModes] ActionCatalog loaded 1 ControlPanel modes; current=sexlab
+[21:59:40.436] [31860] [I] [ActionCatalog::Load] ActionCatalog loaded 42 actions, 22 actor options, 6 scene options, 5 main panels, 14 scene settings
+[21:59:40.437] [31860] [I] [KeyHandler::RegisterSink] KeyHandler sink registered (prepended).
+[21:59:40.437] [31860] [I] [] Hud: view created
+[21:59:40.437] [31860] [I] [SexLabNet::Config::ApplyLogLevel] ApplyLogLevel: verbose=true level=debug
+[21:59:40.438] [31860] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_public_sex_accepted = 0
+[21:59:40.438] [31860] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_hide_hermaphrodites = 0
+[21:59:40.438] [31860] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_ostim_player = 0
+[21:59:40.438] [31860] [I] [SexLabNet::Config::ApplyMenuHotkey] ApplyMenuHotkey: enabled=true vk=220 dx=0x2b
+[21:59:40.438] [31860] [I] [WebUI_SetMenuHotkey] WebUI menu hotkey registered dx=0x2b.
+[21:59:40.439] [31860] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'resist' ignored
+[21:59:40.439] [31860] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'forbid' ignored
+[21:59:40.439] [31860] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'focus' ignored
+[21:59:40.439] [31860] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_self'
+[21:59:40.439] [31860] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_all'
+[21:59:40.439] [31860] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'focused'
+[21:59:40.445] [31860] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config minigame=true role mults=0.4/0.45/0.3 jitter=0.95-1.1 dom scale=0.2/0.2 arouse=2.4 calm=3.2 cost=8/8 edge=4s random=10 window=3s group_join=85 group_join_final=90 stage_spike=5 gate=true gate_lead=5
+[21:59:40.445] [31860] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config engine_off=false mode=minigame bonus scale=0.5 clamp=0.75 together_k=2 minigame_bonus=1 npc interval=2s step=4-8 mutual_target=87 passive_share=0.3 defaults=mutual/selfish/passive
+[21:59:40.449] [31860] [I] [Hud::ApplyConfig] Hud: config enjoyment=true controls=true minigame=true mouse=true
+[21:59:40.450] [31860] [I] [SexLabNet::Config::WriteHotkeyMap] WriteHotkeyMap: wrote Data/SKSE/Plugins/SkyrimNet_SexLab/hotkey-map.json
+[21:59:40.450] [31860] [I] [] RegisterDecorators: registered sexlab_npc_stop_allowed
+[21:59:40.450] [31860] [I] [] RegisterDecorators: registered sexlab_verbose
+[21:59:40.451] [31860] [I] [] RegisterDecorators: registered sexlab_get_threads
+[21:59:40.451] [31860] [I] [] RegisterDecorators: registered sexlab_activities
+[21:59:40.451] [31860] [I] [] RegisterDecorators: registered sexlab_cum
+[21:59:40.451] [31860] [I] [] RegisterDecorators: registered sexlab_has_cum
+[21:59:40.451] [31860] [I] [] RegisterDecorators: registered sexlab_cum_count
+[21:59:40.451] [31860] [I] [] RegisterDecorators: registered sexlab_has_stripped_items
+[21:59:40.451] [31860] [I] [] OrgasmEngine: tick installed (250 ms)
+[21:59:40.451] [31860] [I] [StrategyDecision::Install] StrategyDecision: installed (3 dialogue event types)
+[21:59:40.451] [31860] [I] [NarrationTiming::Install] NarrationTiming: listening for SkyrimNet_SpeechStarted
+[21:59:40.451] [31860] [I] [`anonymous-namespace'::JsonStore_SelfTest] JsonStore self-test passed: {"_mode":"creator","count":2,"items":["a","b"]}
+[21:59:40.451] [31860] [I] [`anonymous-namespace'::JsonStore_SelfTest] JsonStore slots=3 live=0 roots=0 free=2 session=16 reparentCopies=0
+[21:59:40.641] [65180] [I] [Hud::Init::<lambda_1>::] Hud: DomReady
+[21:59:40.641] [65180] [I] [InitWebUI::<lambda_1>::] WebUI DomReady.
+[21:59:47.967] [65180] [I] [OrgasmEngine::Load] OrgasmEngine: co-save loaded 0 scene(s), 0 actor(s) auto_play=false
+[21:59:47.967] [65180] [I] [ActorLocker::Load] ActorLocker: released 0 stale lock(s) on load
+[21:59:47.967] [65180] [I] [Decorators::Load] loaded cum state for 0 actor(s)
+[21:59:47.967] [65180] [I] [Decorators::LoadStripped] loaded stripped items state for 0 actor(s)
+[21:59:47.984] [65180] [I] [TargetMenuRegistry::Clear] TargetMenuRegistry cleared
+[21:59:47.985] [65180] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-strict.json clusters=38 tags=92
+[21:59:47.985] [65180] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-broad.json clusters=56 tags=166
+[21:59:47.985] [65180] [I] [AnimationDB::`anonymous-namespace'::LoadSexTagsFile] AnimationDB: sex_tags n=21
+[21:59:47.985] [65180] [I] [AnimationDB::LoadSynonyms] AnimationDB: sexual tag added to 0 rows
+[21:59:47.986] [65180] [I] [ActionCatalog::Load] ActionCatalog loading from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\webui
+[21:59:48.006] [65180] [I] [ActionCatalog::`anonymous-namespace'::LoadSceneSettings] ActionCatalog loaded 14 scene settings from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\scenes
+[21:59:48.009] [65180] [I] [ActionCatalog::`anonymous-namespace'::LoadControlModes] ActionCatalog loaded 1 ControlPanel modes; current=sexlab
+[21:59:48.009] [65180] [I] [ActionCatalog::Load] ActionCatalog loaded 42 actions, 22 actor options, 6 scene options, 5 main panels, 14 scene settings
+[21:59:48.009] [65180] [I] [WebUI_SetGameReady] Game ready — WebUI input enabled; ActionCatalog reloaded.
+[21:59:48.009] [65180] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_public_sex_accepted = 0
+[21:59:48.009] [65180] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_hide_hermaphrodites = 0
+[21:59:48.009] [65180] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_ostim_player = 0
+[21:59:48.010] [65180] [I] [SexLabNet::Config::ApplyMenuHotkey] ApplyMenuHotkey: enabled=true vk=220 dx=0x2b
+[21:59:48.010] [65180] [I] [WebUI_SetMenuHotkey] WebUI menu hotkey registered dx=0x2b.
+[21:59:48.010] [65180] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'resist' ignored
+[21:59:48.010] [65180] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'forbid' ignored
+[21:59:48.010] [65180] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'focus' ignored
+[21:59:48.010] [65180] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_self'
+[21:59:48.010] [65180] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_all'
+[21:59:48.010] [65180] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'focused'
+[21:59:48.015] [65180] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config minigame=true role mults=0.4/0.45/0.3 jitter=0.95-1.1 dom scale=0.2/0.2 arouse=2.4 calm=3.2 cost=8/8 edge=4s random=10 window=3s group_join=85 group_join_final=90 stage_spike=5 gate=true gate_lead=5
+[21:59:48.015] [65180] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config engine_off=false mode=minigame bonus scale=0.5 clamp=0.75 together_k=2 minigame_bonus=1 npc interval=2s step=4-8 mutual_target=87 passive_share=0.3 defaults=mutual/selfish/passive
+[21:59:48.017] [65180] [I] [Hud::ApplyConfig] Hud: config enjoyment=true controls=true minigame=true mouse=true
+[21:59:48.018] [65180] [I] [SexLabNet::Config::WriteHotkeyMap] WriteHotkeyMap: wrote Data/SKSE/Plugins/SkyrimNet_SexLab/hotkey-map.json
+[21:59:48.018] [65180] [I] [SexLabNet::Json::OnNewSession] JsonStore: new session 17 (loaded save session 18), freed 0 nodes
+[21:59:48.162] [49840] [I] [SkyrimNet_SexLab_Main.Setup] 
+[21:59:48.162] [49840] [I] [skyrimnet_sexlab_actions.Setup] Found Ostim.esp, OStimActorCountFaction set to [Faction < (FE055ECA)>]
+[21:59:48.162] [49840] [I] [SkyrimNet_SexLab_MCM.Setup] leashed_found: TRUE
+[21:59:48.165] [72792] [I] [SkyrimNet_SexLab_Handler_UDNG_PlayerRef.OnPlayerLoadGame] Initializing UDNG handler for player reference
+[21:59:48.657] [15736] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'resist' ignored
+[21:59:48.657] [15736] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'forbid' ignored
+[21:59:48.657] [15736] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'focus' ignored
+[21:59:48.657] [15736] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_self'
+[21:59:48.657] [15736] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_all'
+[21:59:48.657] [15736] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'focused'
+[21:59:48.662] [15736] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config minigame=true role mults=0.4/0.45/0.3 jitter=0.95-1.1 dom scale=0.2/0.2 arouse=2.4 calm=3.2 cost=8/8 edge=4s random=10 window=3s group_join=85 group_join_final=90 stage_spike=5 gate=true gate_lead=5
+[21:59:48.662] [15736] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config engine_off=false mode=minigame bonus scale=0.5 clamp=0.75 together_k=2 minigame_bonus=1 npc interval=2s step=4-8 mutual_target=87 passive_share=0.3 defaults=mutual/selfish/passive
+[21:59:48.665] [15736] [I] [Hud::ApplyConfig] Hud: config enjoyment=true controls=true minigame=true mouse=true
+[21:59:48.665] [15736] [I] [SexLabNet::Config::WriteHotkeyMap] WriteHotkeyMap: wrote Data/SKSE/Plugins/SkyrimNet_SexLab/hotkey-map.json
+[21:59:48.739] [32852] [I] [PapyrusBindings_WebUI::WebUI_SetHotkey] WebUI_SetHotkey dx=0x2b enabled=true
+[21:59:48.739] [32852] [I] [WebUI_SetMenuHotkey] WebUI menu hotkey registered dx=0x2b.
+[21:59:48.739] [37100] [I] [SkyrimNet_SexLab_MCM.ApplyHotkey] --- webui enabled:TRUE vk:220 dx:43
+[21:59:48.739] [37100] [I] [SkyrimNet_SexLab_MCM.ApplyPluginConfig] rape_allowed:TRUE cool_off:20.000000 hotkey:43 enabled:TRUE
+[21:59:48.757] [49840] [W] [CorpsePatch::Recheck] CorpsePatch: sslActorAlias.pex sha256 89bb7b17c557371261ca94d183c0eb8869c9f247dc8b9b539a9b790236dad540 (want 6a4100567332be8a2eabdca93dbd86b95e5add6cbcc7e021905c4d252aaffe5a)
+[21:59:48.773] [72792] [I] [SkyrimNet_SexLab_MCM.Setup] complete hotkey enabled=TRUE dx=43
+[21:59:48.807] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.Setup] 
+[21:59:48.807] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.Setup] Sexlab version:16601 plugin:1 P+:False SLSO:False
+[21:59:48.807] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.RebuildScenePool] rebuilding sl_scenes from GetFormFromFile
+[21:59:48.807] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.RebuildScenePool] rebuilding sl_scene_generic from GetFormFromFile
+[21:59:48.807] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.Setup] Found Ostim.esp, OStimActorCountFaction set to [Faction < (FE055ECA)>]
+[21:59:48.807] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.Initialize] empty == cancel: False
+[21:59:49.023] [49840] [I] [SkyrimNet_SexLab_Scene_Manager.RegisterEventsActions] 
+[21:59:49.073] [15736] [I] [SkyrimNet_SexLab_Scene_Manager.RegisterSexlabEvents] 
+[21:59:49.373] [37100] [I] [SkyrimNet_SexLab_AnimDb.IsAligned] db_count=762 registered=762
+[21:59:49.408] [64172] [I] [SkyrimNet_SexLab_Scene_Manager.PushDomThreads] dom threads:0 kept:0
+[21:59:49.408] [64172] [I] [skyrimnet_sexlab_handler_dom.Setup] success
+[21:59:49.423] [72792] [I] [skyrimnet_sexlab_handler_dom.Setup] --- registered DOMOnBehaviourChange
+[21:59:49.423] [72792] [I] [SkyrimNet_SexLab_Main.Setup] Found TT_OstimNet.esp found
+[21:59:55.552] [45004] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"1","threads":[]}
+[21:59:55.603] [45004] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"2","threads":[]}
+[22:00:21.140] [65180] [I] [InitWebUI::<lambda_1>::] Escape key pressed.
+[22:00:21.157] [65180] [I] [InitWebUI::<lambda_1>::] onWebUIHide commit=true endSession=true
+[22:00:21.157] [65180] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=false
+[22:00:21.157] [65180] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:00:21.157] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:00:21.158] [65180] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:00:25.093] [15736] [I] [PapyrusBindings_WebUI::Choice_Open] Choice_Open options=4 overlay_was_open=false
+[22:00:25.096] [15736] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=12 listed=2 distSkip=11 [Fox@9705, Ramati The bandit@9011, Razzamin af-Ganet@4696, Tamij af-Owlin@3611, Frodya@3689, Rabbit@6500, Rabbit@7384, Elk@6435]
+[22:00:25.100] [15736] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:00:25.121] [15736] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a1 actor_count=2 gender_match=true has_description=0 results=125 total=762
+[22:00:25.125] [15736] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:00:25.125] [15736] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:00:25.125] [15736] [I] [] HandleResolveDeviousTags id=d1 actors=2 tags=
+[22:00:25.222] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:00:25.782] [65180] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a2 actor_count=-1 gender_match=false has_description=0 results=125 total=762
+[22:00:26.007] [65180] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Start punishment of a fearful Skadi with pain source:Skadi
+[22:00:28.283] [65180] [I] [InitWebUI::<lambda_1>::] onAction papyrus label=being a bad slave
+[22:00:28.289] [65180] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:00:28.289] [65180] [I] [] ExecutePapyrusOption: dispatched SkyrimNet_DOM_Menu::TM_DoTortureReason (3 args) for being a bad slave
+[22:00:28.289] [65180] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:00:28.289] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:00:28.289] [65180] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:00:36.761] [71320] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"3","threads":[]}
+[22:00:38.377] [15736] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Skadi trips and falls as he is being pulled by his leash source:Skadi
+[22:00:38.493] [64172] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Kneel. source:Bob target:Skadi
+[22:00:39.861] [73048] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"4","threads":[]}
+[22:00:41.233] [49840] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 2.81s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Kneel." | clean n=1 mean 2.81 median 2.81 p90 2.81 min 2.81 max 2.81 | busy 0 overlapped 0 missed 0
+[22:00:41.250] [64172] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 1 complete speaker=FE04C83C
+[22:00:45.672] [68964] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"5","threads":[]}
+[22:00:45.770] [68964] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"6","threads":[]}
+[22:00:58.399] [39008] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"7","threads":[]}
+[22:00:59.545] [72792] [I] [SkyrimNet_SexLab_Utilities.DirectNarration.CheckDuplicate] changing duplicate "Bob orders Skadi to Kneel." to ""
+[22:01:28.780] [70732] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"8","threads":[]}
+[22:01:28.815] [70732] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"9","threads":[]}
+[22:01:36.353] [69952] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"10","threads":[]}
+[22:01:43.215] [32852] [I] [SkyrimNet_SexLab_Utilities.DirectNarration.CheckDuplicate] changing duplicate "Bob orders Skadi to Kneel." to ""
+[22:01:47.525] [28532] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"11","threads":[]}
+[22:01:47.593] [28532] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"12","threads":[]}
+[22:02:06.732] [72792] [I] [PapyrusBindings_WebUI::Choice_Open] Choice_Open options=5 overlay_was_open=false
+[22:02:06.738] [72792] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9941, Ramati The bandit@9420, Razzamin af-Ganet@4887, Tamij af-Owlin@3760, Frodya@3892, Rabbit@6673, Rabbit@7618, Elk@6591]
+[22:02:06.742] [72792] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:02:06.760] [72792] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a3 actor_count=2 gender_match=true has_description=0 results=125 total=762
+[22:02:06.763] [72792] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:02:06.763] [72792] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:02:06.764] [72792] [I] [] HandleResolveDeviousTags id=d2 actors=2 tags=
+[22:02:06.880] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:02:07.197] [65180] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Start punishment of an angry Skadi with pain source:Skadi
+[22:02:07.386] [65180] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a4 actor_count=-1 gender_match=false has_description=0 results=125 total=762
+[22:02:13.812] [65180] [I] [InitWebUI::<lambda_1>::] onAction papyrus label=custom
+[22:02:13.813] [65180] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:02:13.813] [65180] [I] [] ExecutePapyrusOption: dispatched SkyrimNet_DOM_Menu::TM_DoTortureReason (3 args) for custom
+[22:02:13.813] [65180] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:02:13.813] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:02:13.824] [65180] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:02:20.704] [15736] [I] [SkyrimNet_SexLab_Utilities.DirectNarration.CheckDuplicate] changing duplicate "Bob orders Skadi to Kneel." to ""
+[22:02:22.008] [72508] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"13","threads":[]}
+[22:02:25.138] [67692] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"14","threads":[]}
+[22:02:25.216] [67692] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"15","threads":[]}
+[22:02:26.166] [65180] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Punishing an angry Skadi with 6 strokes for being too slow source:Skadi
+[22:02:26.383] [65180] [I] [InitWebUI::<lambda_1>::] Escape key pressed.
+[22:02:26.404] [65180] [I] [InitWebUI::<lambda_1>::] onWebUIHide commit=true endSession=true
+[22:02:26.405] [65180] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=false
+[22:02:26.405] [65180] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:02:26.405] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:02:26.407] [65180] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:02:28.134] [49840] [I] [skyrimnet_sexlab_actions.StartScene_Consensual_Two] intent:sexual activities speaker:Skadi + Bob style: forceful direction: giving method:Handjob setting_name:no_penis
+[22:02:28.336] [37100] [I] [skyrimnet_sexlab_actions.StartScene_Event] event_name:SkyrimNet_SexLab_Action_Start intent:sexual activities speaker:Skadi target:Bob victim:None style:forceful speaker_position:0 tags:Handjob event_hook: setting_name:no_penis participate_3_name:None
+[22:02:28.351] [37100] [I] [SkyrimNet_SexLab_Scene_Manager.Action_Start] intent:sexual activities
+[22:02:28.384] [32852] [I] [SkyrimNet_SexLab_Scene_Manager.Action_Start] intent:sexual activities speaker:Skadi target:Bob victim:None style:forceful tags:Handjob speaker_position:0 event_hook: setting_name:no_penis participate_3:None
+[22:02:28.450] [72792] [I] [SkyrimNet_SexLab_Scene_Manager.CreateCreator] intent: sexual activities actors: ["Skadi","Bob"] speaker: Skadi target: Bob Tags: Handjob setting_name: no_penis
+[22:02:28.536] [32852] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 loading default
+[22:02:28.651] [64172] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 defaults: no_strip:0 no_orgasm:0 speaking_modifier:_pleasure_
+[22:02:28.657] [72792] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 loading no_penis
+[22:02:28.751] [37100] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 defaults: no_strip:0 no_orgasm:0 speaking_modifier:_pleasure_
+[22:02:28.758] [15736] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0  no_stripping:[0,0] no_orgasm:[0,0] tags:[] suppress:[vaginal,anal] speaking_modifiers:[["_pleasure_","_pleasure_"]]
+[22:02:28.851] [49840] [I] [skyrimnet_sexlab_scene_creator.Setup] sid:0 intent: sexual activities actors: [Skadi and Bob] victims: [] assailants: [Skadi and Bob] no_orgasm: [] no_stripping: [] tags:Handjob suppress_tags:vaginal,anal style:normally event_hook: speaking_modifiers: ["_pleasure_", "_pleasure_"]
+[22:02:28.901] [49840] [I] [ActorLocker::TryLock] ActorLocker: locked FE04C83C
+[22:02:28.951] [64172] [I] [skyrimnet_sexlab_scene_creator.LockActorLock] sid:0 Skadi is locked
+[22:02:28.984] [15736] [I] [ActorLocker::TryLock] ActorLocker: locked 00000014
+[22:02:29.035] [49840] [I] [skyrimnet_sexlab_scene_creator.LockActorLock] sid:0 Bob is locked
+[22:02:29.035] [49840] [I] [skyrimnet_sexlab_scene_creator.StartScene] sid:0 manager.empty == manager.cancel: False
+[22:02:29.134] [15736] [I] [skyrimnet_sexlab_scene_creator.StartScene] sid:0 intent: sexual activities actors: [Skadi and Bob] victims: [] assailants: [Skadi and Bob] no_orgasm: [] no_stripping: [] tags:Handjob suppress_tags:vaginal,anal style:forcefully event_hook: speaking_modifiers: ["_pleasure_", "_pleasure_"]
+[22:02:29.168] [64172] [I] [skyrimnet_sexlab_scene_creator.EnsureSexLabActorsValid] sid:0 Skadi was forbidden, AllowActor
+[22:02:29.685] [32852] [I] [skyrimnet_sexlab_scene_creator.SelectAnimations] sid:0  actors:Skadi and Bob
+[22:02:29.751] [49840] [I] [skyrimnet_sexlab_scene_creator.YesNoDialog] sid:0 intent:sexual activities num_victims:0
+[22:02:29.768] [37100] [I] [PapyrusBindings_WebUI::YesNo_Open] YesNo_Open creator_sid=0 overlay_was_open=false
+[22:02:29.771] [37100] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=14 listed=2 distSkip=13 [Fox@9941, Ramati The bandit@9148, Razzamin af-Ganet@4887, Tamij af-Owlin@3760, Frodya@3983, Rabbit@6673, Rabbit@7618, Elk@6591]
+[22:02:29.777] [37100] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:02:29.781] [15736] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:02:29.934] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] yesno solo yesno-panel=block 564x162@847,558 left-column=none 0x0@0,0 control-panel=none 0x0@0,0 main-panel-host=none 0x0@0,0
+[22:02:30.682] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:02:41.733] [65180] [I] [InitWebUI::<lambda_1>::] onYesNoResult button=4 creator_sid=0 was_open=false
+[22:02:41.733] [65180] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:02:41.733] [65180] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:02:41.733] [65180] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:02:41.733] [65180] [I] [] DispatchManagerMethodIntStr: WebUI_OnYesNoExplain
+[22:02:41.734] [65180] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:02:41.834] [37100] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob rejects Skadi's request for sexual activities by Handjob, because with your mouth. source:Bob target:Skadi
+[22:02:41.868] [37100] [I] [ActorLocker::Unlock] ActorLocker: unlocked FE04C83C
+[22:02:41.901] [15736] [I] [ActorLocker::Unlock] ActorLocker: unlocked 00000014
+[22:02:46.290] [42128] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"16","threads":[]}
+[22:02:46.907] [15736] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 5.14s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob rejects Skadi's request for sexual activities by Handjob..." | clean n=2 mean 3.97 median 3.97 p90 5.14 min 2.81 max 5.14 | busy 0 overlapped 0 missed 0
+[22:02:47.143] [37100] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 2 complete speaker=FE04C83C
+[22:02:57.273] [31020] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"17","threads":[]}
+[22:02:57.330] [31020] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"18","threads":[]}
+[22:03:13.103] [64172] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be silent. source:Bob target:Skadi
+[22:03:24.660] [26912] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"19","threads":[]}
+[22:03:26.560] [72792] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 13.52s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Be silent." | clean n=3 mean 7.16 median 5.14 p90 13.52 min 2.81 max 13.52 | busy 0 overlapped 0 missed 0
+[22:03:26.577] [49840] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 3 complete speaker=FE04C83C
+[22:03:26.722] [72792] [I] [SkyrimNet_SexLab_Utilities.DirectNarration.CheckDuplicate] changing duplicate "Bob orders Skadi to Be silent." to ""

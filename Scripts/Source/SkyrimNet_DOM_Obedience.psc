@@ -25,7 +25,8 @@ Bool Function ShouldSkipEventNarration(Actor slave) global
     return SkyrimNet_DOM_Native.ShouldSkipEventNarration(slave)
 EndFunction
 
-Int Function TryOrder(Actor superior, Actor slave, String kind, String actionDesc) global
+; rollObedience=false: LLM actions already decided the slave obeys; skip DOM WillObey.
+Int Function TryOrder(Actor superior, Actor slave, String kind, String actionDesc, Bool rollObedience = true) global
     if !slave
         return -1
     endif
@@ -47,11 +48,12 @@ Int Function TryOrder(Actor superior, Actor slave, String kind, String actionDes
 
     DOM_Actor da = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Obedience", "TryOrder", slave, false)
     Bool obeyed = true
-    if da && da.mind
+    if rollObedience && da && da.mind
         int reason = SkyrimNet_DOM_Native.KindReason(kind)
         int facet = SkyrimNet_DOM_Native.KindFacet(kind)
         int training = SkyrimNet_DOM_Native.KindTraining(kind)
-        obeyed = da.mind.WillObey(reason, facet, training, 1.0, false)
+        ; pass all 6 args: DOM added choose_not, and defaults are filled at our compile time
+        obeyed = da.mind.WillObey(reason, facet, training, 1.0, false, true)
         if !obeyed
             da.ChooseAnswerNo(superior)
         endif

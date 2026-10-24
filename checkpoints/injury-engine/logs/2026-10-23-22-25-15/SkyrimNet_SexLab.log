@@ -1,0 +1,1022 @@
+[22:13:15.425] [38684] [I] SkyrimNet_SexLab v0-0-1-0
+[22:13:15.425] [38684] [I] [SexLabNet::InitSkyrimNetAPI] SkyrimNet PublicAPI loaded (version=12)
+[22:13:15.425] [38684] [I] [AnimSpeed::Install] AnimSpeed: UpdateAnimation hooks installed
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] SkyrimNet_SexLab: Trying to load WebUI plugin...
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] WebUI Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] Utilities Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] API Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] AnimationDB Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] Json Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] OrgasmEngine Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] ActorLocker Papyrus functions registered
+[22:13:15.425] [38684] [I] [`anonymous-namespace'::SKSEPlugin_Load] Decorators Papyrus functions registered
+[22:13:34.367] [71508] [I] [PapyrusBindings_WebUI::Register_WebUI_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_WebUI
+[22:13:34.367] [71508] [I] [PapyrusBindings_Utilities::Register_Utilities_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_Utilities
+[22:13:34.367] [71508] [I] [PapyrusBindings_API::Register_API_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_API
+[22:13:34.367] [71508] [I] [PapyrusBindings_AnimationDB::Register_AnimationDB_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_AnimDb
+[22:13:34.367] [71508] [I] [PapyrusBindings_Json::Register_Json_Functions] Successfully registered Papyrus functions for SNSL_JValue/JMap/JArray/JFormMap
+[22:13:34.368] [71508] [I] [PapyrusBindings_OrgasmEngine::Register_OrgasmEngine_Functions] Successfully registered Papyrus functions for SkyrimNet_SexLab_OrgasmEngine
+[22:13:48.305] [27492] [I] [AnimationDB::Open] AnimationDB: opened C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\animationdb.sql (762 rows)
+[22:13:48.306] [27492] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-strict.json clusters=38 tags=92
+[22:13:48.306] [27492] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-broad.json clusters=56 tags=166
+[22:13:48.306] [27492] [I] [AnimationDB::`anonymous-namespace'::LoadSexTagsFile] AnimationDB: sex_tags n=21
+[22:13:48.307] [27492] [I] [AnimationDB::LoadSynonyms] AnimationDB: sexual tag added to 0 rows
+[22:13:48.307] [27492] [I] [] PrismaUI API acquired successfully.
+[22:13:48.307] [27492] [I] [ActionCatalog::Load] ActionCatalog loading from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\webui
+[22:13:48.331] [27492] [I] [ActionCatalog::`anonymous-namespace'::LoadSceneSettings] ActionCatalog loaded 14 scene settings from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\scenes
+[22:13:48.336] [27492] [I] [ActionCatalog::`anonymous-namespace'::LoadControlModes] ActionCatalog loaded 1 ControlPanel modes; current=sexlab
+[22:13:48.336] [27492] [I] [ActionCatalog::Load] ActionCatalog loaded 42 actions, 22 actor options, 6 scene options, 5 main panels, 14 scene settings
+[22:13:48.336] [27492] [I] [KeyHandler::RegisterSink] KeyHandler sink registered (prepended).
+[22:13:48.336] [27492] [I] [] Hud: view created
+[22:13:48.337] [27492] [I] [SexLabNet::Config::ApplyLogLevel] ApplyLogLevel: verbose=true level=debug
+[22:13:48.337] [27492] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_public_sex_accepted = 0
+[22:13:48.337] [27492] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_hide_hermaphrodites = 0
+[22:13:48.337] [27492] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_ostim_player = 0
+[22:13:48.338] [27492] [I] [SexLabNet::Config::ApplyMenuHotkey] ApplyMenuHotkey: enabled=true vk=220 dx=0x2b
+[22:13:48.338] [27492] [I] [WebUI_SetMenuHotkey] WebUI menu hotkey registered dx=0x2b.
+[22:13:48.338] [27492] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'resist' ignored
+[22:13:48.338] [27492] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'forbid' ignored
+[22:13:48.338] [27492] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'focus' ignored
+[22:13:48.338] [27492] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_self'
+[22:13:48.338] [27492] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_all'
+[22:13:48.338] [27492] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'focused'
+[22:13:48.343] [27492] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config minigame=true role mults=0.4/0.45/0.3 jitter=0.95-1.1 dom scale=0.2/0.2 arouse=2.4 calm=3.2 cost=8/8 edge=4s random=10 window=3s group_join=85 group_join_final=90 stage_spike=5 gate=true gate_lead=5
+[22:13:48.343] [27492] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config engine_off=false mode=minigame bonus scale=0.5 clamp=0.75 together_k=2 minigame_bonus=1 npc interval=2s step=4-8 mutual_target=87 passive_share=0.3 defaults=mutual/selfish/passive
+[22:13:48.346] [27492] [I] [Hud::ApplyConfig] Hud: config enjoyment=true controls=true minigame=true mouse=true
+[22:13:48.348] [27492] [I] [SexLabNet::Config::WriteHotkeyMap] WriteHotkeyMap: wrote Data/SKSE/Plugins/SkyrimNet_SexLab/hotkey-map.json
+[22:13:48.348] [27492] [I] [] RegisterDecorators: registered sexlab_npc_stop_allowed
+[22:13:48.348] [27492] [I] [] RegisterDecorators: registered sexlab_verbose
+[22:13:48.348] [27492] [I] [] RegisterDecorators: registered sexlab_get_threads
+[22:13:48.348] [27492] [I] [] RegisterDecorators: registered sexlab_activities
+[22:13:48.348] [27492] [I] [] RegisterDecorators: registered sexlab_cum
+[22:13:48.348] [27492] [I] [] RegisterDecorators: registered sexlab_has_cum
+[22:13:48.349] [27492] [I] [] RegisterDecorators: registered sexlab_cum_count
+[22:13:48.349] [27492] [I] [] RegisterDecorators: registered sexlab_has_stripped_items
+[22:13:48.349] [27492] [I] [] OrgasmEngine: tick installed (250 ms)
+[22:13:48.349] [27492] [I] [StrategyDecision::Install] StrategyDecision: installed (3 dialogue event types)
+[22:13:48.349] [27492] [I] [NarrationTiming::Install] NarrationTiming: listening for SkyrimNet_SpeechStarted
+[22:13:48.349] [27492] [I] [`anonymous-namespace'::JsonStore_SelfTest] JsonStore self-test passed: {"_mode":"creator","count":2,"items":["a","b"]}
+[22:13:48.349] [27492] [I] [`anonymous-namespace'::JsonStore_SelfTest] JsonStore slots=3 live=0 roots=0 free=2 session=16 reparentCopies=0
+[22:13:48.530] [38684] [I] [InitWebUI::<lambda_1>::] WebUI DomReady.
+[22:13:48.530] [38684] [I] [Hud::Init::<lambda_1>::] Hud: DomReady
+[22:13:56.417] [38684] [I] [OrgasmEngine::Load] OrgasmEngine: co-save loaded 0 scene(s), 0 actor(s) auto_play=false
+[22:13:56.417] [38684] [I] [ActorLocker::Load] ActorLocker: released 0 stale lock(s) on load
+[22:13:56.417] [38684] [I] [Decorators::Load] loaded cum state for 0 actor(s)
+[22:13:56.417] [38684] [I] [Decorators::LoadStripped] loaded stripped items state for 0 actor(s)
+[22:13:56.433] [38684] [I] [TargetMenuRegistry::Clear] TargetMenuRegistry cleared
+[22:13:56.433] [38684] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-strict.json clusters=38 tags=92
+[22:13:56.434] [38684] [I] [AnimationDB::`anonymous-namespace'::LoadSynonymsFile] AnimationDB: synonyms synonyms-broad.json clusters=56 tags=166
+[22:13:56.434] [38684] [I] [AnimationDB::`anonymous-namespace'::LoadSexTagsFile] AnimationDB: sex_tags n=21
+[22:13:56.434] [38684] [I] [AnimationDB::LoadSynonyms] AnimationDB: sexual tag added to 0 rows
+[22:13:56.435] [38684] [I] [ActionCatalog::Load] ActionCatalog loading from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\webui
+[22:13:56.456] [38684] [I] [ActionCatalog::`anonymous-namespace'::LoadSceneSettings] ActionCatalog loaded 14 scene settings from C:\Skyrim\dev\skyrim\data\SKSE\Plugins\SkyrimNet_SexLab\scenes
+[22:13:56.458] [38684] [I] [ActionCatalog::`anonymous-namespace'::LoadControlModes] ActionCatalog loaded 1 ControlPanel modes; current=sexlab
+[22:13:56.458] [38684] [I] [ActionCatalog::Load] ActionCatalog loaded 42 actions, 22 actor options, 6 scene options, 5 main panels, 14 scene settings
+[22:13:56.458] [38684] [I] [WebUI_SetGameReady] Game ready — WebUI input enabled; ActionCatalog reloaded.
+[22:13:56.459] [38684] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_public_sex_accepted = 0
+[22:13:56.459] [38684] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_hide_hermaphrodites = 0
+[22:13:56.459] [38684] [I] [SexLabNet::`anonymous-namespace'::SetGlobalByEditorId] Config: set skyrimnet_sexlab_ostim_player = 0
+[22:13:56.459] [38684] [I] [SexLabNet::Config::ApplyMenuHotkey] ApplyMenuHotkey: enabled=true vk=220 dx=0x2b
+[22:13:56.459] [38684] [I] [WebUI_SetMenuHotkey] WebUI menu hotkey registered dx=0x2b.
+[22:13:56.459] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'resist' ignored
+[22:13:56.459] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'forbid' ignored
+[22:13:56.459] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'focus' ignored
+[22:13:56.459] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_self'
+[22:13:56.459] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_all'
+[22:13:56.459] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'focused'
+[22:13:56.464] [38684] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config minigame=true role mults=0.4/0.45/0.3 jitter=0.95-1.1 dom scale=0.2/0.2 arouse=2.4 calm=3.2 cost=8/8 edge=4s random=10 window=3s group_join=85 group_join_final=90 stage_spike=5 gate=true gate_lead=5
+[22:13:56.464] [38684] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config engine_off=false mode=minigame bonus scale=0.5 clamp=0.75 together_k=2 minigame_bonus=1 npc interval=2s step=4-8 mutual_target=87 passive_share=0.3 defaults=mutual/selfish/passive
+[22:13:56.467] [38684] [I] [Hud::ApplyConfig] Hud: config enjoyment=true controls=true minigame=true mouse=true
+[22:13:56.468] [38684] [I] [SexLabNet::Config::WriteHotkeyMap] WriteHotkeyMap: wrote Data/SKSE/Plugins/SkyrimNet_SexLab/hotkey-map.json
+[22:13:56.468] [38684] [I] [SexLabNet::Json::OnNewSession] JsonStore: new session 17 (loaded save session 18), freed 0 nodes
+[22:13:56.603] [71052] [I] [SkyrimNet_SexLab_Main.Setup] 
+[22:13:56.603] [71052] [I] [skyrimnet_sexlab_actions.Setup] Found Ostim.esp, OStimActorCountFaction set to [Faction < (FE055ECA)>]
+[22:13:56.603] [71052] [I] [SkyrimNet_SexLab_MCM.Setup] leashed_found: TRUE
+[22:13:56.608] [71052] [I] [SkyrimNet_SexLab_Handler_UDNG_PlayerRef.OnPlayerLoadGame] Initializing UDNG handler for player reference
+[22:13:57.114] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'resist' ignored
+[22:13:57.114] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'forbid' ignored
+[22:13:57.114] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: unknown key 'focus' ignored
+[22:13:57.114] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_self'
+[22:13:57.114] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'deny_all'
+[22:13:57.114] [38684] [W] [OrgasmEngine::`anonymous-namespace'::LoadStrategies] OrgasmEngine: strategies.json: no entry for 'focused'
+[22:13:57.118] [38684] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config minigame=true role mults=0.4/0.45/0.3 jitter=0.95-1.1 dom scale=0.2/0.2 arouse=2.4 calm=3.2 cost=8/8 edge=4s random=10 window=3s group_join=85 group_join_final=90 stage_spike=5 gate=true gate_lead=5
+[22:13:57.118] [38684] [I] [OrgasmEngine::ReloadConfig] OrgasmEngine: config engine_off=false mode=minigame bonus scale=0.5 clamp=0.75 together_k=2 minigame_bonus=1 npc interval=2s step=4-8 mutual_target=87 passive_share=0.3 defaults=mutual/selfish/passive
+[22:13:57.121] [38684] [I] [Hud::ApplyConfig] Hud: config enjoyment=true controls=true minigame=true mouse=true
+[22:13:57.122] [38684] [I] [SexLabNet::Config::WriteHotkeyMap] WriteHotkeyMap: wrote Data/SKSE/Plugins/SkyrimNet_SexLab/hotkey-map.json
+[22:13:57.196] [38684] [I] [PapyrusBindings_WebUI::WebUI_SetHotkey] WebUI_SetHotkey dx=0x2b enabled=true
+[22:13:57.196] [38684] [I] [WebUI_SetMenuHotkey] WebUI menu hotkey registered dx=0x2b.
+[22:13:57.197] [38684] [I] [SkyrimNet_SexLab_MCM.ApplyHotkey] --- webui enabled:TRUE vk:220 dx:43
+[22:13:57.197] [38684] [I] [SkyrimNet_SexLab_MCM.ApplyPluginConfig] rape_allowed:TRUE cool_off:20.000000 hotkey:43 enabled:TRUE
+[22:13:57.214] [38684] [W] [CorpsePatch::Recheck] CorpsePatch: sslActorAlias.pex sha256 89bb7b17c557371261ca94d183c0eb8869c9f247dc8b9b539a9b790236dad540 (want 6a4100567332be8a2eabdca93dbd86b95e5add6cbcc7e021905c4d252aaffe5a)
+[22:13:57.231] [38684] [I] [SkyrimNet_SexLab_MCM.Setup] complete hotkey enabled=TRUE dx=43
+[22:13:57.263] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.Setup] 
+[22:13:57.264] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.Setup] Sexlab version:16601 plugin:1 P+:False SLSO:False
+[22:13:57.264] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.RebuildScenePool] rebuilding sl_scenes from GetFormFromFile
+[22:13:57.264] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.RebuildScenePool] rebuilding sl_scene_generic from GetFormFromFile
+[22:13:57.264] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.Setup] Found Ostim.esp, OStimActorCountFaction set to [Faction < (FE055ECA)>]
+[22:13:57.264] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.Initialize] empty == cancel: False
+[22:13:57.497] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.RegisterEventsActions] 
+[22:13:57.547] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.RegisterSexlabEvents] 
+[22:13:57.964] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.PushDomThreads] dom threads:0 kept:0
+[22:13:57.964] [38684] [I] [skyrimnet_sexlab_handler_dom.Setup] success
+[22:13:57.980] [38684] [I] [skyrimnet_sexlab_handler_dom.Setup] --- registered DOMOnBehaviourChange
+[22:13:57.980] [38684] [I] [SkyrimNet_SexLab_Main.Setup] Found TT_OstimNet.esp found
+[22:13:59.115] [70492] [I] [SkyrimNet_SexLab_AnimDb.IsAligned] db_count=762 registered=762
+[22:14:00.009] [52412] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"1","threads":[]}
+[22:14:00.101] [52412] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"2","threads":[]}
+[22:14:05.883] [70604] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Skadi refrains a call for help as his restraints tighten source:Skadi
+[22:14:12.098] [38684] [I] [InitWebUI::<lambda_1>::] Escape key pressed.
+[22:14:12.114] [38684] [I] [InitWebUI::<lambda_1>::] onWebUIHide commit=true endSession=true
+[22:14:12.116] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=false
+[22:14:12.116] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:14:12.116] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:14:12.116] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:14:15.850] [71052] [I] [PapyrusBindings_WebUI::Choice_Open] Choice_Open options=6 overlay_was_open=false
+[22:14:15.851] [71052] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=12 listed=2 distSkip=11 [Fox@9705, Ramati The bandit@9388, Tamij af-Owlin@3611, Razzamin af-Ganet@4696, Frodya@3855, Elk@6435, Rabbit@7384, Rabbit@6500]
+[22:14:15.854] [71052] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:14:15.874] [56888] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a1 actor_count=2 gender_match=true has_description=0 results=125 total=762
+[22:14:15.879] [56888] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:14:15.879] [56888] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:14:15.880] [56888] [I] [] HandleResolveDeviousTags id=d1 actors=2 tags=
+[22:14:15.950] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:14:16.483] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a2 actor_count=-1 gender_match=false has_description=0 results=125 total=762
+[22:14:16.648] [38684] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Start punishment of a fearful Skadi with pain source:Skadi
+[22:14:54.534] [38684] [I] [InitWebUI::<lambda_1>::] onAction papyrus label=didnt obey
+[22:14:54.534] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:14:54.534] [38684] [I] [] ExecutePapyrusOption: dispatched SkyrimNet_DOM_Menu::TM_DoTortureReason (3 args) for didnt obey
+[22:14:54.534] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:14:54.534] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:14:54.534] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:14:56.308] [72104] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"3","threads":[]}
+[22:15:02.011] [61132] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"4","threads":[]}
+[22:15:02.058] [61132] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"5","threads":[]}
+[22:15:19.838] [71052] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Punishing a fearful Skadi with 7 strokes for didnt obey source:Skadi
+[22:15:20.438] [56888] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be respectful. source:Bob target:Skadi
+[22:15:27.780] [6376 ] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"6","threads":[]}
+[22:15:29.380] [72856] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 9.01s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Be respectful." | clean n=1 mean 9.01 median 9.01 p90 9.01 min 9.01 max 9.01 | busy 0 overlapped 0 missed 0
+[22:15:29.397] [70492] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 1 complete speaker=FE04C83C
+[22:15:50.890] [43184] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"7","threads":[]}
+[22:15:50.925] [43184] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"8","threads":[]}
+[22:15:59.974] [56888] [I] [SkyrimNet_SexLab_Utilities.DirectNarration.CheckDuplicate] changing duplicate "Bob orders Skadi to Be respectful." to ""
+[22:16:25.859] [70604] [I] [PapyrusBindings_WebUI::Choice_Open] Choice_Open options=8 overlay_was_open=false
+[22:16:25.861] [70604] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=12 listed=2 distSkip=11 [Fox@9714, Ramati The bandit@9033, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3836, Elk@6423, Rabbit@7392, Rabbit@6490]
+[22:16:25.865] [70604] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:16:25.885] [72856] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a3 actor_count=2 gender_match=true has_description=0 results=125 total=762
+[22:16:25.888] [72856] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:16:25.888] [72856] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:16:25.888] [72856] [I] [] HandleResolveDeviousTags id=d2 actors=2 tags=
+[22:16:25.957] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:16:26.493] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a4 actor_count=-1 gender_match=false has_description=0 results=125 total=762
+[22:16:26.790] [38684] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Start punishment of a fearful Skadi with pain source:Skadi
+[22:16:30.884] [38684] [I] [InitWebUI::<lambda_1>::] onAction papyrus label=didnt obey
+[22:16:30.884] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:16:30.884] [38684] [I] [] ExecutePapyrusOption: dispatched SkyrimNet_DOM_Menu::TM_DoTortureReason (3 args) for didnt obey
+[22:16:30.885] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:16:30.885] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:16:30.885] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:16:43.543] [72856] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Punishing a fearful Skadi with 6 strokes for didnt obey again source:Skadi
+[22:16:43.782] [6272 ] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"9","threads":[]}
+[22:16:43.818] [6272 ] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"10","threads":[]}
+[22:17:00.312] [70696] [I] [skyrimnet_sexlab_actions.StartScene_Consensual_Two] intent:sexual activities speaker:Skadi + Bob style: normal direction: giving method:Oral setting_name:no_penis
+[22:17:00.529] [72856] [I] [skyrimnet_sexlab_actions.StartScene_Event] event_name:SkyrimNet_SexLab_Action_Start intent:sexual activities speaker:Skadi target:Bob victim:None style:normal speaker_position:0 tags:Oral event_hook: setting_name:no_penis participate_3_name:None
+[22:17:00.547] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.Action_Start] intent:sexual activities
+[22:17:00.580] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.Action_Start] intent:sexual activities speaker:Skadi target:Bob victim:None style:normal tags:Oral speaker_position:0 event_hook: setting_name:no_penis participate_3:None
+[22:17:00.662] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.CreateCreator] intent: sexual activities actors: ["Skadi","Bob"] speaker: Skadi target: Bob Tags: Oral setting_name: no_penis
+[22:17:00.747] [71052] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 loading default
+[22:17:00.880] [70696] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 defaults: no_strip:0 no_orgasm:0 speaking_modifier:_pleasure_
+[22:17:00.889] [72856] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 loading no_penis
+[22:17:01.013] [70604] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0 defaults: no_strip:0 no_orgasm:0 speaking_modifier:_pleasure_
+[22:17:01.021] [56888] [I] [skyrimnet_sexlab_scene_creator.LoadSetting] sid:0  no_stripping:[0,0] no_orgasm:[0,0] tags:[] suppress:[vaginal,anal] speaking_modifiers:[["_pleasure_","_pleasure_"]]
+[22:17:01.129] [70492] [I] [skyrimnet_sexlab_scene_creator.Setup] sid:0 intent: sexual activities actors: [Skadi and Bob] victims: [] assailants: [Skadi and Bob] no_orgasm: [] no_stripping: [] tags:Oral suppress_tags:vaginal,anal style:normally event_hook: speaking_modifiers: ["_pleasure_", "_pleasure_"]
+[22:17:01.196] [70696] [I] [ActorLocker::TryLock] ActorLocker: locked FE04C83C
+[22:17:01.245] [72856] [I] [skyrimnet_sexlab_scene_creator.LockActorLock] sid:0 Skadi is locked
+[22:17:01.279] [72856] [I] [ActorLocker::TryLock] ActorLocker: locked 00000014
+[22:17:01.329] [70604] [I] [skyrimnet_sexlab_scene_creator.LockActorLock] sid:0 Bob is locked
+[22:17:01.329] [70604] [I] [skyrimnet_sexlab_scene_creator.StartScene] sid:0 manager.empty == manager.cancel: False
+[22:17:01.448] [70492] [I] [skyrimnet_sexlab_scene_creator.StartScene] sid:0 intent: sexual activities actors: [Skadi and Bob] victims: [] assailants: [Skadi and Bob] no_orgasm: [] no_stripping: [] tags:Oral suppress_tags:vaginal,anal style:normally event_hook: speaking_modifiers: ["_pleasure_", "_pleasure_"]
+[22:17:02.079] [70492] [I] [skyrimnet_sexlab_scene_creator.SelectAnimations] sid:0  actors:Skadi and Bob
+[22:17:02.146] [70492] [I] [skyrimnet_sexlab_scene_creator.YesNoDialog] sid:0 intent:sexual activities num_victims:0
+[22:17:02.163] [70696] [I] [PapyrusBindings_WebUI::YesNo_Open] YesNo_Open creator_sid=0 overlay_was_open=false
+[22:17:02.165] [70696] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9330, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3725, Elk@6423, Rabbit@7392, Rabbit@6490]
+[22:17:02.166] [70696] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:17:02.175] [56888] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:17:02.337] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] yesno solo yesno-panel=block 556x162@851,559 left-column=none 0x0@0,0 control-panel=none 0x0@0,0 main-panel-host=none 0x0@0,0
+[22:17:03.176] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:17:07.743] [38684] [I] [InitWebUI::<lambda_1>::] onYesNoResult button=0 creator_sid=0 was_open=false
+[22:17:08.527] [38684] [I] [PapyrusBindings_WebUI::SceneCreator_Open] SceneCreator_Open
+[22:17:08.527] [38684] [I] [PapyrusBindings_WebUI::SceneCreator_Open] SceneCreator_Open state bytes=2084
+[22:17:08.530] [38684] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9327, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3724, Elk@6423, Rabbit@7392, Rabbit@6490]
+[22:17:08.531] [38684] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=true ourFocus=true
+[22:17:08.564] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a5 actor_count=2 gender_match=true has_description=0 results=50 total=762
+[22:17:08.566] [38684] [I] [InitWebUI::<lambda_1>::] onMainPanelChange key=scene_panel
+[22:17:08.566] [38684] [I] [ActionCatalog::`anonymous-namespace'::OpenMainPanelEntry] scene_panel -> scene_creator_panel
+[22:17:08.566] [38684] [I] [ActionCatalog::SwitchMainPanel] SwitchMainPanel: selected 'scene_panel'
+[22:17:08.566] [38684] [I] [ActionCatalog::SetShowScenePanel] show_scene_panel=true
+[22:17:08.566] [38684] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:17:08.566] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:17:08.567] [38684] [I] [] HandleResolveDeviousTags id=d3 actors=2 tags=
+[22:17:08.567] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:17:08.567] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:17:08.626] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a6 actor_count=2 gender_match=true has_description=0 results=50 total=762
+[22:17:08.628] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:17:08.628] [38684] [I] [] HandleResolveDeviousTags id=d4 actors=2 tags=
+[22:17:08.628] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:17:08.628] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:17:09.802] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a7 actor_count=2 gender_match=true has_description=0 results=50 total=762
+[22:17:09.804] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:17:09.804] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnResolveActorMeta
+[22:17:09.804] [38684] [I] [] HandleResolveDeviousTags id=d5 actors=2 tags=
+[22:17:09.804] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:17:09.804] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:17:10.301] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a8 actor_count=2 gender_match=true has_description=0 results=50 total=762
+[22:17:10.503] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a9 actor_count=2 gender_match=true has_description=0 results=50 total=762
+[22:17:11.002] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a10 actor_count=2 gender_match=true has_description=0 results=50 total=762
+[22:17:20.044] [38684] [I] [InitWebUI::<lambda_1>::] onMainPanelChange key=
+[22:17:20.044] [38684] [I] [InitWebUI::<lambda_1>::] onWebUIHide commit=true endSession=false
+[22:17:20.045] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:17:20.045] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:17:20.045] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:17:20.045] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=912
+[22:17:20.045] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:17:20.045] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:17:20.045] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"new","_mode":"creator","_scene_sid":-1,"_creator_sid":0,"_from_target_menu":0,"_intent":"sexual activities","_style":"normally","_initiator_form_id":20,"_method":"oral sex","_positions":[{"_dressed":0,"_form_id":-33241028,"_gender":0,"_intersex":1,"_name":"Skadi","_no_orgasm":1,"_race_key":"","_speaking":"","_uuid":"1649350245772434271","_victim":0},{"_dressed":0,"_form_id":20,"_gender":0,"_intersex":0,"_name":"Bob","_no_orgasm":0,"_race_key":"","_speaking":"_pleasure_","_uuid":"4581553741539567915","_victim":0}],"_position_override":0,"_tags":"Oral","_tags_suppress":"vaginal,anal","_scene_setting":"no_penis","_synonyms":"broad","_in_thread_registries":[],"_active_registry":"","_next_registry":"","_stage":1,"_stages":[],"_selected_registries":["b_b_chbj"],"_event_hook":"","_pending_stop":0,"_stop_style":"stop","_stop_narration":"","_stop_speaker_form_id":0,"_pending_create":1}]}
+[22:17:20.102] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneCreatorResult] sid:0 creator found
+[22:17:20.113] [71052] [I] [skyrimnet_sexlab_scene_creator.ReadSettingFlags] sid:0 no_penis strict:False has_filter:False
+[22:17:20.263] [71052] [I] [skyrimnet_sexlab_scene_creator.ApplyWebUIState] sid:0 initiator:Bob
+[22:17:21.828] [38684] [I] [skyrimnet_sexlab_scene_creator.ApplyMajorityClothed] sid:0 Skadi clothed_majority:0 candidates:1
+[22:17:21.844] [38684] [I] [skyrimnet_sexlab_scene_creator.ApplyMajorityClothed] sid:0 Bob clothed_majority:0 candidates:1
+[22:17:21.844] [38684] [I] [skyrimnet_sexlab_scene_creator.StartScene] sid:0 intent:sexual activities actors: [Skadi and Bob] victims: [] assailants: [Skadi and Bob] no_orgasm: [Skadi] no_stripping: [] tag:Oral suppressed:vaginal,anal style:normally event_hook:
+[22:17:21.944] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.HoldScenePackages] Skadi held:1
+[22:17:23.978] [38684] [I] [skyrimnet_sexlab_scene.SetPosition] sid:0 end index:0 name: Skadi no_orgasm: 0 speaking_modifiers: ["_pleasure_"]
+[22:17:24.595] [38684] [I] [skyrimnet_sexlab_scene.SetPosition] sid:0 end index:1 name: Bob no_orgasm: 0 speaking_modifiers: ["_pleasure_"]
+[22:17:24.927] [38684] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking:_pleasure_ voiced:TRUE
+[22:17:25.061] [38684] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:17:25.111] [38684] [I] [skyrimnet_sexlab_scene.Setup] sid:0 initiator:Bob sender:Bob receiver:Skadi
+[22:17:25.211] [38684] [I] [ActorLocker::Unlock] ActorLocker: unlocked FE04C83C
+[22:17:25.244] [38684] [I] [ActorLocker::Unlock] ActorLocker: unlocked 00000014
+[22:17:42.181] [70604] [I] [skyrimnet_sexlab_scene.AnimationStart] sid:0 stage:1/5 last:0 state:prepare anim:B_B_ChBJ leadIn:False status:Setup
+[22:17:42.464] [70604] [I] [skyrimnet_sexlab_scene.ApplyStyleSpeed] sid:0 style:normally speed:1.000000 actors:2
+[22:17:42.497] [72856] [I] [OrgasmEngine::BeginScene] OrgasmEngine: 0xfe04c83c jitter 1.021
+[22:17:42.497] [72856] [I] [OrgasmEngine::BeginScene] OrgasmEngine: 0x14 jitter 1.087
+[22:17:42.497] [72856] [I] [OrgasmEngine::BeginScene] OrgasmEngine: 0xfe04c83c default strategy mutual
+[22:17:42.497] [72856] [I] [OrgasmEngine::BeginScene] OrgasmEngine: 0x14 default strategy passive
+[22:17:42.497] [72856] [I] [OrgasmEngine::BeginScene] OrgasmEngine: began scene 0 actors=2 player=true
+[22:17:42.564] [70696] [I] [OrgasmEngine::SetDomSlave] OrgasmEngine: 0xfe04c83c dom slave on (DOM decides)
+[22:17:42.685] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.1 daring=0 naivety=0 mini=0 share=0 prepay=true
+[22:17:42.800] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:42.831] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:42.931] [56888] [I] [skyrimnet_sexlab_handler_dom.DomSync] Skadi prepay owed:5.235471 taken:5.235471 debt:0.000000 arousal:11.357346->6.121875
+[22:17:43.014] [71052] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 3.0609374
+[22:17:43.364] [72856] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:17:43.530] [56888] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:17:43.664] [70604] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:17:43.714] [70604] [I] [OrgasmEngine::SetOrgasmExpected] OrgasmEngine: 0xfe04c83c orgasm expected false
+[22:17:43.914] [72856] [I] [skyrimnet_sexlab_scene.Ending_RollTarget] sid:0 Bob (male) target:1
+[22:17:43.947] [70492] [I] [OrgasmEngine::SetEndingTarget] OrgasmEngine: scene 0 ending lead 0x14 target 1
+[22:17:43.964] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:44.131] [56888] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking:_pleasure_ voiced:False
+[22:17:44.264] [70492] [I] [skyrimnet_sexlab_scene.SyncAnimationDefaults] sid:0 animation B_B_ChBJ first:TRUE, reloading its defaults
+[22:17:44.664] [70492] [I] [skyrimnet_sexlab_scene.SetPosition] sid:0 end index:0 name: Skadi no_orgasm: 1 speaking_modifiers: []
+[22:17:44.981] [70604] [I] [skyrimnet_sexlab_scene.SetPosition] sid:0 end index:1 name: Bob no_orgasm: 0 speaking_modifiers: ["_pleasure_"]
+[22:17:44.997] [72856] [I] [skyrimnet_sexlab_scene.ApplyDressedToActor] sid:0 Skadi clothed:False stage:1
+[22:17:45.218] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:45.247] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:17:46.281] [70604] [I] [skyrimnet_sexlab_scene.ApplyDressedToActor] sid:0 Bob clothed:False stage:1
+[22:17:46.631] [70492] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:1/5 last:0 state:animating anim:B_B_ChBJ leadIn:False status:Setup
+[22:17:46.714] [70604] [I] [skyrimnet_sexlab_scene.StageStart_NarrateStart] sid:0 start DN after 20.740997S
+[22:17:46.931] [70604] [I] [skyrimnet_sexlab_loversledger.FirstTimes] This is the first time Skadi has had sex. This is the first time Bob has had sex with an intersex partner and with a Nord.
+[22:17:46.997] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:47.314] [70604] [I] [SkyrimNet_SexLab_Utilities.RegisterEventForce] event_name:sexlab start info msg:Skadi is intersex. This is the first time Skadi has had sex. This is the first time Bob has had sex with an intersex partner and with a Nord. source:Bob target:Skadi
+[22:17:47.415] [70696] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob initiates: Bob sits down, legs spread. Skadi kneels between them, and starts running her lips up and down his cock. source:Bob target:Skadi
+[22:17:47.547] [70492] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:17:47.656] [30204] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"11","threads":[]}
+[22:17:48.031] [71052] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:17:48.164] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.HoldScenePackages] Skadi held:1
+[22:17:48.181] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:17:48.231] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:48.314] [70492] [I] [OrgasmEngine::AddEnjoyment] OrgasmEngine: SexLab added 10 to 0x14 -> 14.110687
+[22:17:48.364] [71052] [I] [skyrimnet_sexlab_scene.Mirror_Apply] sid:0 Bob external SexLab change 10 -> engine 14
+[22:17:48.381] [70696] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:17:48.648] [71052] [I] [OrgasmEngine::`anonymous-namespace'::CalibrateMiniGame] OrgasmEngine: scene 0 mini-game calibration T=80.0s spikes=15 budget=72.0 passive=0.270/s steps=0.630/s
+[22:17:48.648] [71052] [I] [OrgasmEngine::SetStageTimers] OrgasmEngine: scene 0 stages=5 leadIn=false targetSecs=88.1 baseRate=1.135/s regen=37.5/min
+[22:17:48.701] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.1044496 cost=6.6666665 -> 2.9313848
+[22:17:48.701] [70492] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.1044496 share=0.011044497 prepay=false
+[22:17:48.703] [70492] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=scene_start current=mutual options=9
+[22:17:48.714] [56888] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:17:48.718] [14920] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"13","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":2,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ChBJ","sl_mirror_pre":0,"sl_mirror_set":3,"sl_mirror_stage":1,"sl_mirror_wait":1,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":14,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ChBJ","sl_mirror_pre":3,"sl_mirror_set":4,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob sits down, legs spread. Skadi kneels between them, and starts running her lips up and down his cock.","location":"on a chair ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:17:48.764] [71052] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:17:48.933] [70604] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer deny_p2 p=0.45 (low confidence, kept current)
+[22:17:49.231] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:49.983] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:50.402] [56888] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.05s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob initiates: Bob sits down, legs spread. Skadi kneels betw..." | clean n=2 mean 6.03 median 6.03 p90 9.01 min 3.05 max 9.01 | busy 0 overlapped 0 missed 0
+[22:17:50.481] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:50.953] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.4629743 cost=6.6666665 -> 3.0319118
+[22:17:50.953] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.4629743 share=0.014629743 prepay=false
+[22:17:51.282] [72856] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 6.7559404
+[22:17:51.496] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:51.972] [70696] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=mutual options=9
+[22:17:51.973] [70696] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 2 complete speaker=FE04C83C
+[22:17:52.199] [71052] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be respectful. source:Bob target:Skadi
+[22:17:52.205] [71052] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.35 (low confidence, kept current)
+[22:17:52.517] [72276] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"16","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":6,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ChBJ","sl_mirror_pre":0,"sl_mirror_set":3,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":15,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ChBJ","sl_mirror_pre":14,"sl_mirror_set":15,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob sits down, legs spread. Skadi kneels between them, and starts running her lips up and down his cock.","location":"on a chair ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:17:52.955] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.85646594 cost=6.6666665 -> 6.7559404
+[22:17:52.955] [70492] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.85646594 share=0.008564659 prepay=false
+[22:17:53.038] [70492] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 0.91s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Be respectful." | clean n=3 mean 4.32 median 3.05 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 0 missed 0
+[22:17:53.157] [72856] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=mutual options=9
+[22:17:53.157] [72856] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 3 complete speaker=FE04C83C
+[22:17:53.387] [70492] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer selfless p=0.35 (low confidence, kept current)
+[22:17:53.482] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:54.116] [71052] [I] [skyrimnet_sexlab_scene.GetThreadActive] sid:0 thread is not animating or prepare `Advancing'
+[22:17:54.515] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:54.532] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:54.549] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:17:54.582] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:17:54.968] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.1283207 cost=6.6666665 -> 6.8338957
+[22:17:54.968] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.1283207 share=0.011283207 prepay=false
+[22:17:55.982] [70492] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:2/5 last:1 state:animating anim:B_B_ChBJ leadIn:False status:active
+[22:17:56.148] [72856] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:17:56.649] [72856] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:17:56.899] [56888] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:17:56.970] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.8623111 cost=6.6666665 -> 6.871819
+[22:17:56.970] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.8623111 share=0.008623111 prepay=false
+[22:17:57.048] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:17:57.282] [70696] [I] [OrgasmEngine::SetStage] OrgasmEngine: scene 0 stage 2/5 stage spike +5
+[22:17:57.315] [71052] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:17:57.349] [56888] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:17:57.504] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:57.762] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:17:57.965] [72856] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:Event msg:Scene changes to Bob moans as Skadi takes him in her mouth. source:Bob target:Skadi
+[22:17:58.499] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:17:58.974] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.3191508 cost=6.6666665 -> 6.88553
+[22:17:58.974] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.3191508 share=0.013191508 prepay=false
+[22:18:00.749] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:01.223] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.1693887 cost=6.6666665 -> 7.0055985
+[22:18:01.223] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.1693887 share=0.0116938865 prepay=false
+[22:18:01.516] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:02.766] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:03.239] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.5157121 cost=6.6666665 -> 7.0472603
+[22:18:03.239] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.5157121 share=0.015157121 prepay=false
+[22:18:03.766] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:03.840] [71052] [I] [] Call_ProcessHotkey: dispatched key=43
+[22:18:03.916] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:03.933] [70604] [I] [skyrimnet_sexlab_menu.ProcessHotkey] Target: Skadi preferExplicit:TRUE
+[22:18:03.949] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:04.049] [72856] [I] [skyrimnet_sexlab_menu.Open_WebUI_Target] Skadi hasStripped:False editTagsPlayer:TRUE editTagsNonPlayer:False
+[22:18:04.100] [56888] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=false
+[22:18:04.100] [56888] [I] [PapyrusBindings_WebUI::Target_Menu_Open] Target_Menu_Open triggered. Target: Skadi hasStrippedItems=false editTagsPlayer=true editTagsNonPlayer=false
+[22:18:04.101] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=undress
+[22:18:04.101] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=Clean Cum
+[22:18:04.101] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=praise all
+[22:18:04.101] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=scold all
+[22:18:04.101] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=insult all
+[22:18:04.101] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=flatter all
+[22:18:04.102] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=threaten all
+[22:18:04.102] [56888] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=promise all (freedom)
+[22:18:04.107] [56888] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=14 listed=2 distSkip=13 [Fox@9714, Ramati The bandit@9372, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3935, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:18:04.109] [56888] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:18:04.112] [70604] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:18:04.112] [70604] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:18:04.141] [70604] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a11 actor_count=-1 gender_match=false has_description=0 results=125 total=762
+[22:18:04.146] [70604] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:18:04.149] [70492] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:18:04.171] [70696] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ChBJ stage:2 anims:1 actors:2
+[22:18:04.178] [72856] [I] [InitWebUI::<lambda_1>::] onControlActorChange payload
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=undress
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=Clean Cum
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=praise all
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=scold all
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=insult all
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=flatter all
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=threaten all
+[22:18:04.179] [72856] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=promise all (freedom)
+[22:18:04.181] [72856] [I] [] Call_ControlActorFocus: dispatched
+[22:18:04.239] [38684] [I] [skyrimnet_sexlab_menu.WebUI_OnControlActorFocus] Skadi hasStripped:False
+[22:18:04.267] [38684] [I] [PapyrusBindings_WebUI::Target_Menu_Refresh] Target_Menu_Refresh hasStrippedItems=false
+[22:18:04.268] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=undress
+[22:18:04.268] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=Clean Cum
+[22:18:04.268] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=praise all
+[22:18:04.269] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=scold all
+[22:18:04.269] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=insult all
+[22:18:04.269] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=flatter all
+[22:18:04.269] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=threaten all
+[22:18:04.269] [38684] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=promise all (freedom)
+[22:18:04.294] [38684] [I] [PapyrusBindings_WebUI::WebUI_MaybeRestoreScenePanel] WebUI_MaybeRestoreScenePanel: show_scene_panel -> Scene
+[22:18:04.294] [38684] [I] [ActionCatalog::`anonymous-namespace'::OpenMainPanelEntry] scene_panel -> description_editor_panel
+[22:18:04.294] [38684] [I] [ActionCatalog::SwitchMainPanel] SwitchMainPanel: selected 'scene_panel'
+[22:18:04.327] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] DE opening before reset pick=none active=- inThread(0)=[] pending=none
+[22:18:05.064] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ChBJ stage:2/5
+[22:18:05.159] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ChBJ in_thread(1)=[B_B_ChBJ]
+[22:18:05.159] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=scene:0 active=B_B_ChBJ inThread(1)=[B_B_ChBJ] pending=none
+[22:18:07.265] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] deRenderLoadedList pick=scene:0 active=B_B_ChBJ inThread(1)=[B_B_ChBJ] pending=none
+[22:18:07.283] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=f1 actor_count=2 gender_match=true has_description=0 results=125 total=762
+[22:18:07.287] [38684] [I] [] HandleResolveDeviousTags id=d6 actors=2 tags=
+[22:18:16.169] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=f2 actor_count=2 gender_match=true has_description=0 results=97 total=762
+[22:18:19.349] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] deRenderLoadedList pick=scene:0 active=B_B_ChBJ inThread(2)=[B_B_ChBJ,b_b_adogff] pending=b_b_adogff
+[22:18:19.349] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] deAddAnimToScene b_b_adogff pick=scene:0 active=B_B_ChBJ inThread(2)=[B_B_ChBJ,b_b_adogff] pending=b_b_adogff
+[22:18:20.481] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] deSendPendingSwitch sending pick=scene:0 active=B_B_ChBJ inThread(2)=[B_B_ChBJ,b_b_adogff] pending=b_b_adogff(sent)
+[22:18:20.481] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=117
+[22:18:20.481] [38684] [I] [InitWebUI::<lambda_1>::] onGamePauseSet paused=false
+[22:18:20.481] [38684] [I] [InitWebUI::<lambda_1>::] onGamePauseSet Focus(pause=false) ok=true hasFocus=true
+[22:18:20.481] [38684] [I] [InitWebUI::<lambda_1>::] onWebUIHide commit=true endSession=false
+[22:18:20.482] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:18:20.482] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:18:20.482] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:18:20.482] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=scene:0 active=B_B_ChBJ inThread(2)=[B_B_ChBJ,b_b_adogff] pending=b_b_adogff(sent)
+[22:18:20.482] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_active_registry":"b_b_adogff","_reseed_defaults":1}]}
+[22:18:20.482] [38684] [I] [skyrimnet_sexlab_scene.WebUI_SwitchToRegistry] sid:0 DEBUG before B_B_ADogFF len:1 forced:0 [B_B_ChBJ]
+[22:18:20.482] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:18:20.499] [38684] [I] [skyrimnet_sexlab_scene.WebUI_SwitchToRegistry] sid:0 DEBUG after rebuild idx:1 len:2 forced:0 [B_B_ChBJ,B_B_ADogFF]
+[22:18:20.499] [38684] [I] [skyrimnet_sexlab_scene.WebUI_SwitchToRegistry] sid:0 SetAnimation idx:1 stage:2
+[22:18:20.499] [38684] [I] [skyrimnet_sexlab_scene.RestartStageOnAnimationChange] sid:0 WebUI switch: stage 2 -> 1
+[22:18:21.070] [70604] [I] [skyrimnet_sexlab_scene.WebUI_SwitchToRegistry] sid:0 DEBUG after SetAnimation active:B_B_ADogFF len:2 forced:0 [B_B_ChBJ,B_B_ADogFF]
+[22:18:21.070] [70604] [I] [skyrimnet_sexlab_scene.SyncAnimationDefaults] sid:0 animation B_B_ADogFF first:False, reloading its defaults
+[22:18:21.517] [70492] [I] [skyrimnet_sexlab_scene.SetPosition] sid:0 end index:0 name: Skadi no_orgasm: 1 speaking_modifiers: []
+[22:18:21.866] [71052] [I] [skyrimnet_sexlab_scene.SetPosition] sid:0 end index:1 name: Bob no_orgasm: 0 speaking_modifiers: ["_pleasure_"]
+[22:18:21.883] [70492] [I] [skyrimnet_sexlab_scene.ApplyDressedToActor] sid:0 Skadi clothed:False stage:1
+[22:18:22.025] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.6109527 cost=6.6666665 -> 7.1852202
+[22:18:22.025] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.6109527 share=0.016109528 prepay=false
+[22:18:22.325] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:22.350] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:18:23.331] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:23.351] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:18:23.547] [70492] [I] [skyrimnet_sexlab_scene.ApplyDressedToActor] sid:0 Bob clothed:False stage:1
+[22:18:23.684] [71052] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:1/5 last:0 state:animating anim:B_B_ADogFF leadIn:False status:active
+[22:18:23.850] [70492] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:18:24.039] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.1837027 cost=6.6666665 -> 7.2670727
+[22:18:24.039] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.1837027 share=0.011837027 prepay=false
+[22:18:24.300] [70604] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:18:24.450] [72856] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:18:24.567] [72856] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:18:24.883] [70604] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:18:24.917] [70492] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:18:25.033] [71052] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:18:25.233] [72856] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:18:25.400] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:18:25.567] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:25.650] [56888] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:direct msg:Scene changes to Bob kneels on the ground and pulls Skadi to Skadi's knees between Bob's legs. Bob pulls Skadi's head between Bob's legs and Skadi begins to bob up and down on Bob's cock. source:Bob target:Skadi
+[22:18:25.766] [70492] [I] [skyrimnet_sexlab_scene.WebUI_SwitchToRegistry] sid:0 B_B_ADogFF idx:1 anims:2 reseed:TRUE
+[22:18:25.860] [43660] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"23","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":7,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":0,"sl_mirror_set":-100000,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":24,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":14,"sl_mirror_set":-100000,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob kneels on the ground and pulls Skadi to Skadi's knees between Bob's legs. Bob pulls Skadi's head between Bob's legs and Skadi begins to bob up and down on Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:18:26.288] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.0508878 cost=6.6666665 -> 7.3100367
+[22:18:26.288] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.0508878 share=0.010508878 prepay=false
+[22:18:26.584] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:26.600] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:28.538] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.5598024 cost=6.6666665 -> 7.4056883
+[22:18:28.538] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.5598024 share=0.015598024 prepay=false
+[22:18:28.586] [70492] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.00s speaker=Skadi(FE04C83C) busy=0 extra=0 "Scene changes to Bob kneels on the ground and pulls Skadi to..." | clean n=4 mean 3.99 median 3.03 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 0 missed 0
+[22:18:29.584] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:29.601] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:30.296] [70492] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=mutual options=9
+[22:18:30.296] [70492] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 4 complete speaker=FE04C83C
+[22:18:30.298] [72104] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"25","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":7,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":5,"sl_mirror_set":7,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":25,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":24,"sl_mirror_set":25,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob kneels on the ground and pulls Skadi to Skadi's knees between Bob's legs. Bob pulls Skadi's head between Bob's legs and Skadi begins to bob up and down on Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:18:30.543] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.3108196 cost=6.6666665 -> 7.4828854
+[22:18:30.543] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.3108196 share=0.013108197 prepay=false
+[22:18:30.559] [71052] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer deny_p2 p=0.47 (low confidence, kept current)
+[22:18:30.585] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:30.834] [72856] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 7.5374193
+[22:18:31.081] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:32.558] [72856] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.4871848 cost=6.6666665 -> 7.5374193
+[22:18:32.558] [72856] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.4871848 share=0.014871848 prepay=false
+[22:18:33.585] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:34.102] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:34.560] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.94344425 cost=6.6666665 -> 7.6727834
+[22:18:34.560] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.94344425 share=0.009434443 prepay=false
+[22:18:34.604] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:34.969] [70604] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be respectful. source:Bob target:Skadi
+[22:18:35.502] [26576] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"28","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":7,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":7,"sl_mirror_set":8,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":26,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":25,"sl_mirror_set":26,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob kneels on the ground and pulls Skadi to Skadi's knees between Bob's legs. Bob pulls Skadi's head between Bob's legs and Skadi begins to bob up and down on Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:18:36.176] [72856] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 1.27s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Be respectful." | clean n=5 mean 3.45 median 3.00 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 0 missed 0
+[22:18:36.295] [70696] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=mutual options=9
+[22:18:36.295] [70696] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 5 complete speaker=FE04C83C
+[22:18:36.297] [30204] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"30","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":7,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":8,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":27,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":26,"sl_mirror_set":27,"sl_mirror_stage":1,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob kneels on the ground and pulls Skadi to Skadi's knees between Bob's legs. Bob pulls Skadi's head between Bob's legs and Skadi begins to bob up and down on Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:18:36.530] [70696] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.45 (low confidence, kept current)
+[22:18:36.810] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.2100883 cost=6.6666665 -> 7.6938787
+[22:18:36.810] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.2100883 share=0.012100883 prepay=false
+[22:18:37.085] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:37.835] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:39.058] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.505046 cost=6.6666665 -> 7.7392445
+[22:18:39.058] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.505046 share=0.01505046 prepay=false
+[22:18:39.119] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:40.101] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:41.075] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.9391657 cost=6.6666665 -> 7.8762336
+[22:18:41.075] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.9391657 share=0.009391657 prepay=false
+[22:18:42.109] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:43.075] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.4884124 cost=6.6666665 -> 7.8969398
+[22:18:43.075] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.4884124 share=0.014884124 prepay=false
+[22:18:43.121] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:45.102] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:45.325] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.8754374 cost=6.6666665 -> 7.9676385
+[22:18:45.325] [70492] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.8754374 share=0.0087543735 prepay=false
+[22:18:46.153] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:46.168] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:47.341] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.6267644 cost=6.6666665 -> 8.04732
+[22:18:47.341] [70492] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.6267644 share=0.016267644 prepay=false
+[22:18:49.136] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:49.152] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:49.343] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.3443875 cost=6.6666665 -> 8.130611
+[22:18:49.343] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.3443875 share=0.013443875 prepay=false
+[22:18:50.134] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:51.345] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.5626675 cost=6.6666665 -> 8.252977
+[22:18:51.345] [70492] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.5626675 share=0.015626675 prepay=false
+[22:18:52.132] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:53.119] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:53.594] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.6745983 cost=6.6666665 -> 8.330435
+[22:18:53.594] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.6745983 share=0.016745983 prepay=false
+[22:18:54.119] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:55.136] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:55.152] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:18:55.606] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.1779753 cost=6.6666665 -> 8.41808
+[22:18:55.606] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.1779753 share=0.011779753 prepay=false
+[22:18:55.852] [70492] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 8.525299
+[22:18:56.136] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:18:56.253] [70604] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:2/5 last:1 state:animating anim:B_B_ADogFF leadIn:False status:active
+[22:18:56.452] [56888] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:18:56.919] [70492] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:18:57.052] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:18:57.135] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:18:57.185] [70604] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:18:57.452] [70492] [I] [OrgasmEngine::SetStage] OrgasmEngine: scene 0 stage 2/5 stage spike +5
+[22:18:57.486] [72856] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:18:57.519] [70604] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:18:57.607] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.8636717 cost=6.6666665 -> 8.525299
+[22:18:57.608] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.8636717 share=0.008636717 prepay=false
+[22:18:57.840] [71052] [I] [InjuryEngine::Installed] InjuryEngine: installed=true
+[22:18:57.898] [70696] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9412, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3859, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:18:57.899] [70696] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:18:57.899] [70696] [I] [InitWebUI::<lambda_1>::] onMainPanelChange key=
+[22:18:57.899] [70696] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:18:58.007] [38684] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:2 anims:2 actors:2
+[22:18:58.135] [38684] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:Event msg:Scene changes to 'Bob raises to Bob's and starts to fuck Skadi's mouth both hands in Skadi's hair.' source:Bob target:Skadi
+[22:18:58.718] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:2/5
+[22:18:58.768] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:18:58.768] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:18:59.002] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:2/5
+[22:18:59.052] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a12 actor_count=2 gender_match=true has_description=0 results=127 total=762
+[22:18:59.055] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:18:59.055] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:19:05.586] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:19:05.586] [38684] [I] [InitWebUI::<lambda_1>::] onAidResult subject=0x14 target=0xfe04c83c option=0x4d3f2 location='left arm' points=27
+[22:19:05.586] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:19:05.586] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:19:05.586] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:19:05.586] [38684] [I] [Aid::StartChannel] Aid: channel 0x14 -> 0xfe04c83c 'Healing Hands' on 'left arm' 27 health every 1.00s injuryEngine true
+[22:19:05.586] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:19:05.586] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:19:05.586] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:19:05.586] [38684] [I] [skyrimnet_sexlab_scene.WebUI_RestoreCancelSnapshot] sid:0 nothing to restore valid:TRUE dirty:False
+[22:19:05.653] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:05.841] [70604] [I] [InjuryEngine::Heal] InjuryEngine: heal 0xfe04c83c 10 part 'left arm' -> 'left arm'
+[22:19:05.841] [70604] [I] [Aid::`anonymous-namespace'::PlaySpellVisuals] Aid: visuals 'Healing Hands' 0x14 -> 0xfe04c83c art 4 shaders 2 sounds 2 (1.2s)
+[22:19:06.461] [6376 ] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"39","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":8,"sl_mirror_set":-100000,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":37,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":42,"sl_mirror_set":-100000,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob raises to Bob's and starts to fuck Skadi's mouth both hands in Skadi's hair.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:06.841] [70696] [I] [InjuryEngine::Heal] InjuryEngine: heal 0xfe04c83c 10 part 'left arm' -> 'left arm'
+[22:19:06.841] [70696] [I] [Aid::`anonymous-namespace'::PlaySpellVisuals] Aid: visuals 'Healing Hands' 0x14 -> 0xfe04c83c art 4 shaders 2 sounds 2 (1.2s)
+[22:19:06.907] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:07.375] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.2699156 cost=6.6666665 -> 8.539134
+[22:19:07.375] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.2699156 share=0.012699156 prepay=false
+[22:19:07.857] [70604] [I] [InjuryEngine::Heal] InjuryEngine: heal 0xfe04c83c 7 part 'left arm' -> 'left arm'
+[22:19:07.857] [70604] [I] [Aid::`anonymous-namespace'::PlaySpellVisuals] Aid: visuals 'Healing Hands' 0x14 -> 0xfe04c83c art 4 shaders 2 sounds 2 (1.2s)
+[22:19:07.857] [70604] [I] [] Aid: channel 0x14 -> 0xfe04c83c stopped (target reached) restored 27/27
+[22:19:08.337] [72856] [I] [SkyrimNet_SexLab_Utilities.SilenceNudge] speaker:Skadi partner:Bob
+[22:19:08.670] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:09.178] [70604] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 0.91s speaker=Skadi(FE04C83C) busy=0 extra=0 "continue scene" | clean n=6 mean 3.03 median 2.14 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 0 missed 0
+[22:19:09.395] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +0.9994038 cost=6.6666665 -> 8.589945
+[22:19:09.395] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=0.9994038 share=0.009994037 prepay=false
+[22:19:09.954] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:09.977] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:10.357] [72856] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=mutual options=9
+[22:19:10.357] [72856] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 6 complete speaker=FE04C83C
+[22:19:10.358] [71036] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"41","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":9,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":38,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":32,"sl_mirror_set":38,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob raises to Bob's and starts to fuck Skadi's mouth both hands in Skadi's hair.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:10.579] [70604] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.38 (low confidence, kept current)
+[22:19:11.396] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.6513382 cost=6.6666665 -> 8.68091
+[22:19:11.396] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.6513382 share=0.016513383 prepay=false
+[22:19:12.954] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:12.971] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:13.400] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.3564835 cost=6.6666665 -> 8.7664385
+[22:19:13.400] [70492] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.3564835 share=0.013564834 prepay=false
+[22:19:14.183] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:15.645] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.5002466 cost=6.6666665 -> 8.889906
+[22:19:15.645] [56888] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.5002466 share=0.015002467 prepay=false
+[22:19:15.921] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:16.088] [71052] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Skadi is getting angry source:Skadi
+[22:19:16.504] [70604] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Skadi feels Angry. source:Skadi
+[22:19:17.185] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:17.662] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.3516248 cost=6.6666665 -> 8.961681
+[22:19:17.662] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.3516248 share=0.013516248 prepay=false
+[22:19:18.941] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:19.471] [71052] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be respectful. source:Bob target:Skadi
+[22:19:19.908] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0xfe04c83c +1.2761109 cost=6.6666665 -> 9.01993
+[22:19:19.908] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=1.2761109 share=0.012761109 prepay=false
+[22:19:20.191] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:20.463] [50772] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"46","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":9,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":9,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":41,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":40,"sl_mirror_set":41,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob raises to Bob's and starts to fuck Skadi's mouth both hands in Skadi's hair.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:21.076] [70696] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 1.67s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Be respectful." | clean n=7 mean 2.83 median 1.67 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 0 missed 0
+[22:19:21.197] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:21.248] [71052] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=mutual options=9
+[22:19:21.248] [71052] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 7 complete speaker=FE04C83C
+[22:19:21.249] [72104] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"47","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":9,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":10,"sl_mirror_set":9,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on mutual enjoyment","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":41,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":42,"sl_mirror_set":41,"sl_mirror_stage":2,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob raises to Bob's and starts to fuck Skadi's mouth both hands in Skadi's hair.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:21.514] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ApplyStrategy] OrgasmEngine: 0xfe04c83c strategy passive target 0x0
+[22:19:21.514] [70492] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.68 (changed)
+[22:19:21.605] [70604] [I] [SkyrimNet_SexLab_Utilities.RegisterEventForce] event_name:sexlab_strategy msg:Skadi appears to be just letting things happen. source:Skadi
+[22:19:21.953] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:24.214] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:24.532] [56888] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=12 listed=2 distSkip=11 [Fox@9714, Ramati The bandit@9033, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3832, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:19:24.534] [56888] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:19:24.535] [56888] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:19:24.538] [70696] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:2 anims:2 actors:2
+[22:19:25.304] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:2/5
+[22:19:25.353] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:19:25.353] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:19:30.538] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:19:30.538] [38684] [I] [InitWebUI::<lambda_1>::] onAidResult subject=0x14 target=0xfe04c83c option=0x4d3f2 location='left leg' points=3
+[22:19:30.539] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:19:30.539] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:19:30.539] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:19:30.539] [38684] [I] [Aid::StartChannel] Aid: channel 0x14 -> 0xfe04c83c 'Healing Hands' on 'left leg' 3 health every 1.00s injuryEngine true
+[22:19:30.539] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:19:30.539] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:19:30.539] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:19:30.539] [38684] [I] [skyrimnet_sexlab_scene.WebUI_RestoreCancelSnapshot] sid:0 nothing to restore valid:TRUE dirty:False
+[22:19:30.796] [72856] [I] [InjuryEngine::Heal] InjuryEngine: heal 0xfe04c83c 3 part 'left leg' -> 'left leg'
+[22:19:30.796] [72856] [I] [Aid::`anonymous-namespace'::PlaySpellVisuals] Aid: visuals 'Healing Hands' 0x14 -> 0xfe04c83c art 4 shaders 2 sounds 2 (1.2s)
+[22:19:30.796] [72856] [I] [] Aid: channel 0x14 -> 0xfe04c83c stopped (target reached) restored 3/3
+[22:19:31.009] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:31.254] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:31.302] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:19:33.273] [70604] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:3/5 last:2 state:animating anim:B_B_ADogFF leadIn:False status:active
+[22:19:33.422] [56888] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:19:33.905] [71052] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:19:34.056] [56888] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:19:34.172] [56888] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:19:34.235] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:34.472] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:34.655] [70604] [I] [OrgasmEngine::SetStage] OrgasmEngine: scene 0 stage 3/5 stage spike +5
+[22:19:34.705] [70492] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:19:34.772] [56888] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:19:35.305] [70492] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:Event msg:Scene changes to Bob sits down hand pulling Skadi's head on Bob's cock with him, forcing Skadi to Skadi's side. With Bob's hand still in Skadi's hair, Bob moves Skadi's head and mouth up and down Bob's cock. source:Bob target:Skadi
+[22:19:35.729] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:37.238] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:38.738] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:38.943] [66236] [D] [Decorators::GetThreads] speaker:Bob json:{"counter":"52","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":9,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":49,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":44,"sl_mirror_set":49,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob sits down hand pulling Skadi's head on Bob's cock with him, forcing Skadi to Skadi's side. With Bob's hand still in Skadi's hair, Bob moves Skadi's head and mouth up and down Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Bob","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:38.980] [66236] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"53","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":9,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":49,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":44,"sl_mirror_set":49,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob sits down hand pulling Skadi's head on Bob's cock with him, forcing Skadi to Skadi's side. With Bob's hand still in Skadi's hair, Bob moves Skadi's head and mouth up and down Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:40.739] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:41.239] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:41.278] [56888] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9041, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3982, Elk@6423, Rabbit@7392, Rabbit@6490]
+[22:19:41.279] [56888] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:19:41.279] [56888] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:19:41.308] [72856] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:3 anims:2 actors:2
+[22:19:42.005] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:3/5
+[22:19:42.054] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:19:42.054] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:19:44.889] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:19:44.889] [38684] [I] [InitWebUI::<lambda_1>::] onAidResult subject=0x14 target=0xfe04c83c option=0x4d3f2 location='lips' points=1
+[22:19:44.889] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:19:44.889] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:19:44.889] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:19:44.889] [38684] [I] [Aid::StartChannel] Aid: channel 0x14 -> 0xfe04c83c 'Healing Hands' on 'lips' 1 health every 1.00s injuryEngine true
+[22:19:44.889] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:19:44.889] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:19:44.889] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:19:44.889] [38684] [I] [skyrimnet_sexlab_scene.WebUI_RestoreCancelSnapshot] sid:0 nothing to restore valid:TRUE dirty:False
+[22:19:45.142] [70604] [I] [InjuryEngine::Heal] InjuryEngine: heal 0xfe04c83c 1 part 'lips' -> 'lips'
+[22:19:45.143] [70604] [I] [Aid::`anonymous-namespace'::PlaySpellVisuals] Aid: visuals 'Healing Hands' 0x14 -> 0xfe04c83c art 4 shaders 2 sounds 2 (1.2s)
+[22:19:45.143] [70604] [I] [] Aid: channel 0x14 -> 0xfe04c83c stopped (full) restored 0/1
+[22:19:47.256] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:47.263] [11500] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"55","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":9,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":50,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":49,"sl_mirror_set":50,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob sits down hand pulling Skadi's head on Bob's cock with him, forcing Skadi to Skadi's side. With Bob's hand still in Skadi's hair, Bob moves Skadi's head and mouth up and down Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:47.606] [70696] [I] [SkyrimNet_SexLab_Utilities.SilenceNudge] speaker:Skadi partner:Bob
+[22:19:47.756] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:48.506] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:50.112] [56888] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 2.57s speaker=Skadi(FE04C83C) busy=0 extra=0 "continue scene" | clean n=8 mean 2.80 median 2.12 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 0 missed 0
+[22:19:50.756] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:51.199] [56888] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=passive options=9
+[22:19:51.199] [56888] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 8 complete speaker=FE04C83C
+[22:19:51.200] [67272] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"58","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":10,"sl_mirror_set":9,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":51,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":51,"sl_mirror_set":51,"sl_mirror_stage":3,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob sits down hand pulling Skadi's head on Bob's cock with him, forcing Skadi to Skadi's side. With Bob's hand still in Skadi's hair, Bob moves Skadi's head and mouth up and down Bob's cock.","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:19:51.431] [72856] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.43 (kept)
+[22:19:51.535] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:53.774] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:53.790] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:19:54.524] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:54.574] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:19:54.774] [70696] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:4/5 last:3 state:animating anim:B_B_ADogFF leadIn:False status:active
+[22:19:55.090] [70696] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:19:55.533] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:55.607] [56888] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:19:55.757] [72856] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:19:55.874] [56888] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:19:56.157] [72856] [I] [OrgasmEngine::SetStage] OrgasmEngine: scene 0 stage 4/5 stage spike +5
+[22:19:56.223] [56888] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:19:56.258] [71052] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:19:56.807] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:56.807] [56888] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:Event msg:Scene changes to Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat.  source:Bob target:Skadi
+[22:19:56.824] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:19:59.294] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:19:59.790] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:00.997] [70492] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9411, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3703, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:20:00.998] [70492] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:20:00.998] [70492] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:20:01.007] [70696] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:4 anims:2 actors:2
+[22:20:01.656] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:4/5
+[22:20:01.705] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:20:01.705] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:20:11.857] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:20:11.857] [38684] [I] [InitWebUI::<lambda_1>::] onPunishResult verb=punish subject=0x14 object=0xfe04c83c request='' text='' method='slap' location='face' reason='Skadi was raising their voice disrespectfully to Bob' amount=1
+[22:20:11.857] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:20:11.857] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:20:11.857] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:20:11.857] [38684] [I] [OrgasmEngine::`anonymous-namespace'::PunishLocked] OrgasmEngine: 0x14 punishes 0xfe04c83c by 'slap' on 'face' because 'Skadi was raising their voice disrespectfully to Bob'
+[22:20:11.857] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:20:11.857] [38684] [I] [InjuryEngine::PunishText] InjuryEngine: torture text slapping 0xfe04c83c x1 part 'face' -> 'face'
+[22:20:11.858] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:20:11.858] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:20:11.858] [38684] [I] [skyrimnet_sexlab_scene.WebUI_RestoreCancelSnapshot] sid:0 nothing to restore valid:TRUE dirty:False
+[22:20:12.012] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ContinuePunish] OrgasmEngine: punishment of 0xfe04c83c narrated: Bob punishes Skadi by slapping Skadi's face, because Skadi was raising their voice disrespectfully to Bob. Bob hits Skadi with a stinging open hand hitting Skadi's face, a loud crack of skin on skin. The sting blooms hot and bright, more shock and insult than pain, and leaves Skadi flushed, blinking and trembling as Skadi's body scrambles to react.
+[22:20:12.015] [71052] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=punished current=passive options=9
+[22:20:12.030] [36116] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"63","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":10,"sl_mirror_set":9,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":58,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":53,"sl_mirror_set":58,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:20:12.124] [70604] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob punishes Skadi by slapping Skadi's face, because Skadi was raising their voice disrespectfully to Bob. Bob hits Skadi with a stinging open hand hitting Skadi's face, a loud crack of skin on skin. The sting blooms hot and bright, more shock and insult than pain, and leaves Skadi flushed, blinking and trembling as Skadi's body scrambles to react. source:Bob target:Skadi
+[22:20:12.262] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ApplyStrategy] OrgasmEngine: 0xfe04c83c strategy deny target 0x14
+[22:20:12.262] [71052] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer deny_p2 p=0.64 (changed)
+[22:20:12.278] [56888] [I] [OrgasmEngine::`anonymous-namespace'::CalmLocked] OrgasmEngine: calm 0xfe04c83c->0x14 cost=8.8 58.94813 -> 57.737534
+[22:20:12.358] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:12.374] [70696] [I] [SkyrimNet_SexLab_Utilities.RegisterEventForce] event_name:sexlab_strategy msg:Skadi appears to be resisting giving Bob pleasure or letting Bob cum. source:Skadi target:Bob
+[22:20:12.625] [70696] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 8.4883175
+[22:20:12.812] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:13.274] [72856] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be respectful. source:Bob target:Skadi
+[22:20:14.295] [56888] [I] [OrgasmEngine::`anonymous-namespace'::CalmLocked] OrgasmEngine: calm 0xfe04c83c->0x14 cost=8.8 58.24773 -> 57.278625
+[22:20:14.328] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:14.579] [14920] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"65","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":8,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":9,"sl_mirror_set":9,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"resists giving pleasure to Bob or letting Bob cum","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":57,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":59,"sl_mirror_set":58,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:20:15.334] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:15.825] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:15.863] [70604] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.80s speaker=Skadi(FE04C83C) busy=0 extra=1 "Bob punishes Skadi by slapping Skadi's face, because Skadi w..." | clean n=8 mean 2.80 median 2.12 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 1 missed 0
+[22:20:16.137] [70492] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=deny options=9
+[22:20:16.138] [70492] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 9 complete speaker=FE04C83C
+[22:20:16.317] [56888] [I] [OrgasmEngine::`anonymous-namespace'::CalmLocked] OrgasmEngine: calm 0xfe04c83c->0x14 cost=8.8 57.78553 -> 56.83443
+[22:20:16.364] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:16.395] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ApplyStrategy] OrgasmEngine: 0xfe04c83c strategy passive target 0x0
+[22:20:16.395] [70696] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.63 (changed)
+[22:20:16.459] [70492] [I] [SkyrimNet_SexLab_Utilities.RegisterEventForce] event_name:sexlab_strategy msg:Skadi appears to be just letting things happen. source:Skadi
+[22:20:18.871] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:18.893] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:21.860] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:21.876] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:21.893] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:20:21.927] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:20:23.092] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:23.109] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:20:23.440] [70604] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9029, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3903, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:20:23.442] [70604] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:20:23.442] [70604] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:20:23.507] [70696] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:5/5 last:4 state:animating anim:B_B_ADogFF leadIn:False status:active
+[22:20:23.528] [38684] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:5 anims:2 actors:2
+[22:20:23.858] [38684] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:20:24.305] [38684] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:20:24.392] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:5/5
+[22:20:24.457] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:20:24.457] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:20:24.458] [38684] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:20:24.575] [38684] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:20:24.791] [38684] [I] [skyrimnet_sexlab_scene.Engine_SetStage] sid:0 OrgasmStart hook stage:5/5
+[22:20:24.808] [38684] [I] [OrgasmEngine::SetStage] OrgasmEngine: scene 0 stage 5/5 stage spike +5
+[22:20:24.874] [38684] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:20:24.908] [38684] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:20:26.042] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:5/5
+[22:20:26.113] [38684] [I] [PapyrusBindings_WebUI::HandleAnimDbQuery] HandleAnimDbQuery anims id=a13 actor_count=2 gender_match=true has_description=0 results=127 total=762
+[22:20:26.121] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:20:26.121] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneConnectionsRefresh
+[22:20:26.191] [38684] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:This was unexpected! It looks like it was Skadi's first oral sex source:Skadi
+[22:20:26.641] [38684] [I] [InitWebUI::<lambda_1>::] Escape key pressed.
+[22:20:26.659] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:20:26.659] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:20:26.659] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:20:26.659] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:20:26.659] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:20:26.659] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:20:26.659] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:20:26.659] [38684] [I] [skyrimnet_sexlab_scene.WebUI_RestoreCancelSnapshot] sid:0 nothing to restore valid:TRUE dirty:False
+[22:20:27.609] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:28.109] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:28.425] [56888] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 11.019644
+[22:20:28.829] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0xfe04c83c +2.4 cost=8 -> 11.019644
+[22:20:29.079] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=2.4 share=0.024 prepay=false
+[22:20:29.359] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:29.896] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0xfe04c83c +2.4 cost=8 -> 11.173315
+[22:20:30.079] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=2.4 share=0.024 prepay=false
+[22:20:30.080] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0xfe04c83c +2.4 cost=8 -> 11.173315
+[22:20:30.112] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:30.230] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0xfe04c83c +2.4 cost=8 -> 11.173315
+[22:20:30.329] [70696] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=4.8 share=0.048 prepay=false
+[22:20:30.396] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0xfe04c83c +2.4 cost=8 -> 11.391763
+[22:20:30.563] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0xfe04c83c +2.4 cost=8 -> 11.391763
+[22:20:30.581] [70604] [I] [OrgasmEngine::`anonymous-namespace'::Tick] OrgasmEngine: dom step 0xfe04c83c steps=0 progress=0.2 daring=0 naivety=0 mini=4.8 share=0.048 prepay=false
+[22:20:30.612] [70696] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 11.828658
+[22:20:30.863] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:31.909] [70696] [I] [SkyrimNet_SexLab_OrgasmEngine.Effect_Narrate] short-lived SexLab_Arouse_20_-33241028 msg:Bob arouses Skadi, pushing them closer to orgasm.
+[22:20:33.363] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:33.879] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:34.410] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:35.993] [70604] [I] [skyrimnet_sexlab_menu.Hud_OnKey] Previous as Bob
+[22:20:36.010] [72856] [I] [skyrimnet_sexlab_actions.TM_StagePrev] Bob
+[22:20:36.026] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:36.093] [72856] [I] [skyrimnet_sexlab_actions.TM_StagePrev] stage 5 -> 4
+[22:20:36.880] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:36.910] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:20:37.381] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:37.410] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:20:37.976] [70604] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:4/5 last:5 state:animating anim:B_B_ADogFF leadIn:False status:active ** stage went backwards **
+[22:20:38.176] [70492] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:20:38.379] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:38.629] [70604] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:20:38.776] [70604] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:20:38.926] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:20:39.193] [70492] [I] [skyrimnet_sexlab_scene.Engine_SetStage] sid:0 OrgasmEnd hook stage:4/5
+[22:20:39.293] [71052] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:20:39.326] [72856] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:20:40.146] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:41.235] [71052] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9300, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3815, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:20:41.236] [71052] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:20:41.236] [71052] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:20:41.243] [70604] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:4 anims:2 actors:2
+[22:20:41.926] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:4/5
+[22:20:41.975] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:20:41.975] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:20:49.929] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:20:49.929] [38684] [I] [InitWebUI::<lambda_1>::] onPunishResult verb=order subject=0x14 object=0xfe04c83c request='selfless' text='' method='' location='' reason='' amount=1
+[22:20:49.929] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:20:49.929] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:20:49.929] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:20:49.929] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:20:49.931] [38684] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=ordered current=passive options=9
+[22:20:49.932] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:20:49.932] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:20:49.932] [38684] [I] [skyrimnet_sexlab_scene.WebUI_RestoreCancelSnapshot] sid:0 nothing to restore valid:TRUE dirty:False
+[22:20:49.949] [38436] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"74","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":12,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":3,"sl_mirror_set":-100000,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":67,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":66,"sl_mirror_set":-100000,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:20:50.044] [70604] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to be selfless, focus on pleasing others. source:Bob target:Skadi
+[22:20:50.160] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:50.182] [56888] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer selfless p=0.58 (low confidence, kept current)
+[22:20:50.182] [56888] [I] [OrgasmEngine::`anonymous-namespace'::FinishRequest] OrgasmEngine: request answer: Skadi refuses Bob's request to be selfless, focus on pleasing others.
+[22:20:50.248] [6376 ] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"75","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":12,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":3,"sl_mirror_set":-100000,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"lets things happen","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":67,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":66,"sl_mirror_set":-100000,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:20:50.293] [56888] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Skadi refuses Bob's request to be selfless, focus on pleasing others. source:Skadi target:Bob
+[22:20:51.160] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:51.911] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:53.249] [72856] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.27s speaker=Skadi(FE04C83C) busy=0 extra=1 "Bob orders Skadi to be selfless, focus on pleasing others." | clean n=8 mean 2.80 median 2.12 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 2 missed 0
+[22:20:54.161] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:54.522] [71052] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=passive options=9
+[22:20:54.522] [71052] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 10 complete speaker=FE04C83C
+[22:20:54.801] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ApplyStrategy] OrgasmEngine: 0xfe04c83c strategy selfless target 0x0
+[22:20:54.802] [56888] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer selfless p=0.62 (changed)
+[22:20:54.861] [72856] [I] [SkyrimNet_SexLab_Utilities.RegisterEventForce] event_name:sexlab_strategy msg:Skadi appears to be focused on pleasing the others. source:Skadi
+[22:20:54.884] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.2454687 cost=6.6666665 -> 69.80154
+[22:20:54.931] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:55.161] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:56.462] [72856] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob orders Skadi to Be respectful. source:Bob target:Skadi
+[22:20:56.901] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.0664219 cost=6.6666665 -> 71.37917
+[22:20:56.943] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:57.929] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:20:58.178] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:59.151] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.0233432 cost=6.6666665 -> 72.97087
+[22:20:59.193] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:20:59.474] [56740] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"80","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":11,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":12,"sl_mirror_set":12,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on the enjoyment of others","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":73,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":71,"sl_mirror_set":72,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:21:00.068] [72856] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.67s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob orders Skadi to Be respectful." | clean n=9 mean 2.90 median 2.57 p90 9.01 min 0.91 max 9.01 | busy 0 overlapped 2 missed 0
+[22:21:00.238] [70604] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=selfless options=9
+[22:21:00.238] [70604] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 11 complete speaker=FE04C83C
+[22:21:00.240] [72688] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"81","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":11,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":12,"sl_mirror_set":12,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on the enjoyment of others","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":73,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":71,"sl_mirror_set":72,"sl_mirror_stage":4,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":0,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:21:00.503] [56888] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer selfless p=0.57 (kept)
+[22:21:00.928] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:01.194] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:01.401] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.3002446 cost=6.6666665 -> 74.8405
+[22:21:02.211] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:03.420] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +0.8949109 cost=6.6666665 -> 76.24306
+[22:21:03.458] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:03.479] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:21:03.946] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:03.962] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:21:04.407] [70696] [I] [PapyrusBindings_WebUI::PopulateNearbyActors] PopulateNearbyActors: radius=1600 considered=13 listed=2 distSkip=12 [Fox@9714, Ramati The bandit@9302, Tamij af-Owlin@3634, Razzamin af-Ganet@4715, Frodya@3805, Elk@6424, Rabbit@7392, Rabbit@6490]
+[22:21:04.409] [70696] [I] [WebUI_ShowNow] WebUI Show + Focus. anyFocus=false ourFocus=false
+[22:21:04.410] [70696] [I] [] DispatchMenuNoArg: WebUI_SeedSceneInfos
+[22:21:04.412] [71052] [I] [skyrimnet_sexlab_scene.WebUI_TakeCancelSnapshot] sid:0 anim:B_B_ADogFF stage:5 anims:2 actors:2
+[22:21:05.145] [38684] [I] [skyrimnet_sexlab_scene.BuildWebUISceneMenuState] sid:0 --- sid:0 positions:2 names:[Skadi, Bob] active:B_B_ADogFF stage:5/5
+[22:21:05.193] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed scene:0 active=B_B_ADogFF in_thread(2)=[B_B_ChBJ,B_B_ADogFF]
+[22:21:05.193] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] seed after bind pick=none active=- inThread(0)=[] pending=none
+[22:21:09.978] [38684] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=true
+[22:21:09.978] [38684] [I] [InitWebUI::<lambda_1>::] onAidResult subject=0x14 target=0xfe04c83c option=0x4d3f2 location='lips' points=1
+[22:21:09.978] [38684] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:21:09.978] [38684] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] discardSceneInfos (cancel) pick=none active=- inThread(0)=[] pending=none
+[22:21:09.978] [38684] [I] [InitWebUI::<lambda_1>::] onSceneInfoCommit bytes=86
+[22:21:09.979] [38684] [I] [Aid::StartChannel] Aid: channel 0x14 -> 0xfe04c83c 'Healing Hands' on 'lips' 1 health every 1.00s injuryEngine true
+[22:21:09.979] [38684] [I] [] DispatchManagerMethodStrOnly: WebUI_OnSceneInfoCommit
+[22:21:09.979] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
+[22:21:09.979] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] {"_scenes":[{"_key":"scene:0","_mode":"active","_scene_sid":0,"_restore_snapshot":1}]}
+[22:21:09.979] [38684] [I] [skyrimnet_sexlab_scene.GetThreadActive] sid:0 thread is not animating or prepare `Advancing'
+[22:21:09.979] [38684] [I] [SkyrimNet_SexLab_Scene_Manager.WebUI_OnSceneInfoCommit] dropped (thread not active) sid:0
+[22:21:10.113] [70696] [I] [skyrimnet_sexlab_scene.StageStart] sid:0 stage:5/5 last:4 state:animating anim:B_B_ADogFF leadIn:False status:active
+[22:21:10.196] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:10.235] [70604] [I] [InjuryEngine::Heal] InjuryEngine: heal 0xfe04c83c 1 part 'lips' -> 'lips'
+[22:21:10.235] [70604] [I] [Aid::`anonymous-namespace'::PlaySpellVisuals] Aid: visuals 'Healing Hands' 0x14 -> 0xfe04c83c art 4 shaders 2 sounds 2 (1.2s)
+[22:21:10.235] [70604] [I] [] Aid: channel 0x14 -> 0xfe04c83c stopped (full) restored 0/1
+[22:21:10.263] [70604] [I] [OrgasmEngine::BeginScene] OrgasmEngine: resumed scene 0 actors=2 player=true
+[22:21:10.779] [70604] [I] [OrgasmEngine::SetSceneActs] OrgasmEngine: scene 0 acts vaginal false anal false oral true
+[22:21:10.929] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0xfe04c83c bonus -0.318 (role 0 ranks -4/-4 act 3 skilled true)
+[22:21:11.063] [71052] [I] [OrgasmEngine::SetBonusInputs] OrgasmEngine: 0x14 bonus -0.138 (role 0 ranks -4/-4 act 3 skilled true)
+[22:21:11.186] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.6793859 cost=6.6666665 -> 78.49058
+[22:21:11.227] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:11.396] [70604] [I] [skyrimnet_sexlab_scene.Engine_SetStage] sid:0 OrgasmStart hook stage:5/5
+[22:21:11.412] [70492] [I] [OrgasmEngine::SetStage] OrgasmEngine: scene 0 stage 5/5 stage spike +5
+[22:21:11.478] [72856] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Skadi speaking: voiced:False
+[22:21:11.513] [70604] [I] [skyrimnet_sexlab_scene.ApplySexLabVoice] sid:0 Bob speaking:_pleasure_ voiced:TRUE
+[22:21:12.212] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:12.713] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:13.186] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.1759112 cost=6.6666665 -> 85.176735
+[22:21:13.463] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:14.066] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 87.82884
+[22:21:14.250] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 90.291885
+[22:21:14.383] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 92.69189
+[22:21:14.516] [72856] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 95.155136
+[22:21:14.667] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 97.55514
+[22:21:14.716] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:14.750] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 100
+[22:21:14.883] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 100
+[22:21:14.934] [71052] [I] [OrgasmEngine::`anonymous-namespace'::Fire] OrgasmEngine: orgasm 0x14 source=engine individual=true forced=false count=1
+[22:21:14.965] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:15.013] [70492] [I] [skyrimnet_sexlab_scene.sla_relief] sid:0 active:TRUE sexlab_plugin:TRUE
+[22:21:15.067] [56888] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0x14->0x14 +2.4 cost=8 -> 2.4
+[22:21:15.433] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +0.9570305 cost=6.6666665 -> 3.4204917
+[22:21:15.546] [70696] [I] [skyrimnet_sexlab_scene.sla_relief] sid:0 Bob pending (stage 5)
+[22:21:15.646] [70604] [I] [skyrimnet_sexlab_scene.StashOrgasm] sid:0 Bob slot:1 kind:1 total:1 text:Bob is orgasming. 
+[22:21:15.746] [56888] [I] [skyrimnet_sexlab_scene.ArmOrgasmWindow] sid:0 --- delay:5.000000
+[22:21:15.813] [72856] [I] [skyrimnet_sexlab_scene.Ending_Check] sid:0 Bob reached target 1/1, final stage
+[22:21:15.879] [70696] [I] [skyrimnet_sexlab_scene.Ending_Hold] sid:0 holding final stage:5 max:30.000000
+[22:21:15.966] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:16.216] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:17.451] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.3908246 cost=6.6666665 -> 5.321307
+[22:21:17.513] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:18.733] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:18.983] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:19.699] [70604] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.2038748 cost=6.6666665 -> 7.094447
+[22:21:19.983] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:21.134] [20984] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"87","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":11,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":12,"sl_mirror_set":12,"sl_mirror_stage":5,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on the enjoyment of others","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":7,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":0,"sl_mirror_set":4,"sl_mirror_stage":5,"sl_mirror_wait":2,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":1,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:21:21.179] [70604] [I] [skyrimnet_sexlab_scene.OnUpdate] sid:0 --- flushing orgasm window
+[22:21:21.233] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:21.329] [71052] [I] [OrgasmEngine::AddEnjoyment] OrgasmEngine: SexLab added -4 to 0x14 -> 3.5371952
+[22:21:21.379] [70492] [I] [skyrimnet_sexlab_scene.Mirror_Apply] sid:0 Bob external SexLab change -4 -> engine 3
+[22:21:21.700] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +0.88852906 cost=6.6666665 -> 4.4893675
+[22:21:21.813] [71052] [I] [SkyrimNet_SexLab_Utilities.RenderSlPrompt] --- template:helpers/sexlab/cum json:{"Name":"Skadi","places":"mouth"} result:Skadi's mouth is dripping with warm sticky cum.
+[22:21:21.983] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:22.097] [70604] [I] [skyrimnet_sexlab_scene.NarrateOrgasmStash] sid:0 --- Bob is orgasming. Skadi's mouth is dripping with warm sticky cum. Skadi is not orgasming right now.  | overflow: 
+[22:21:22.233] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:22.263] [70492] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Bob is orgasming. Skadi's mouth is dripping with warm sticky cum. Skadi is not orgasming right now.  source:Bob target:Skadi
+[22:21:22.431] [39660] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"88","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":11,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":12,"sl_mirror_set":12,"sl_mirror_stage":5,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on the enjoyment of others","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":4,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":1,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":0,"sl_mirror_set":3,"sl_mirror_stage":5,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":1,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:21:23.700] [70696] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.1046546 cost=6.6666665 -> 6.0998306
+[22:21:23.732] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:24.579] [70492] [I] [OrgasmEngine::SetDomMeter] OrgasmEngine: dom meter 0xfe04c83c -> 11.488236
+[22:21:24.750] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:25.250] [70492] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:25.535] [71052] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.37s speaker=Skadi(FE04C83C) busy=0 extra=0 "Bob is orgasming. Skadi's mouth is dripping with warm sticky..." | clean n=10 mean 2.94 median 2.79 p90 3.67 min 0.91 max 9.01 | busy 0 overlapped 2 missed 0
+[22:21:25.706] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.5082897 cost=6.6666665 -> 8.118416
+[22:21:26.261] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:26.364] [70604] [I] [OrgasmEngine::AddEnjoyment] OrgasmEngine: SexLab added -3 to 0x14 -> 5.310316
+[22:21:26.414] [56888] [I] [skyrimnet_sexlab_scene.Mirror_Apply] sid:0 Bob external SexLab change -3 -> engine 5
+[22:21:27.514] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:27.720] [71052] [I] [OrgasmEngine::`anonymous-namespace'::ArouseLocked] OrgasmEngine: arouse 0xfe04c83c->0x14 +1.5384287 cost=6.6666665 -> 7.164271
+[22:21:27.766] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:28.157] [56888] [I] [StrategyDecision::`anonymous-namespace'::Request] StrategyDecision: send 0xfe04c83c trigger=dialogue current=selfless options=9
+[22:21:28.158] [56888] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 12 complete speaker=FE04C83C
+[22:21:28.160] [11500] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"92","threads":[{"active":1,"actors":[{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":1,"dressed":0,"dressed_locked":0,"enjoyment":11,"formid":"-33241028","has_penis":1,"has_pussy":1,"is_hermaphrodiate":1,"name":"Skadi","no_orgasm":1,"notice_level":"active","orgasm_expected":0,"orgasm_locked":0,"orgasm_mode":0,"orgasm_narrated":0,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":12,"sl_mirror_set":11,"sl_mirror_stage":5,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":[],"stamina_regen":100,"strategy":"focuses on the enjoyment of others","total_orgasm":0,"uuid":"1649350245772434271","victim":0,"voice_gate":0,"wearing_strapon":0},{"arousal":-1,"assailant":0,"creature_description":"","dom_slave":0,"dressed":0,"dressed_locked":0,"enjoyment":7,"formid":"20","has_penis":1,"has_pussy":0,"is_hermaphrodiate":0,"name":"Bob","no_orgasm":0,"notice_level":"active","orgasm_expected":1,"orgasm_locked":0,"orgasm_mode":1,"orgasm_narrated":1,"sl_mirror_anim":"B_B_ADogFF","sl_mirror_pre":0,"sl_mirror_set":5,"sl_mirror_stage":5,"sl_mirror_wait":0,"sla_floor_last":-1,"speaking_locked":0,"speaking_modifiers":["_pleasure_"],"stamina_regen":100,"strategy":"","total_orgasm":1,"uuid":"4581553741539567915","victim":0,"wearing_strapon":0}],"description":"Bob finger tighten on Skadi's hair, then Bob lays back pulling Skadi's head and body along, then holds Skadi's had in place and  fuck Skadi's mouth shallow thrust, but deep and fast down Skadi's throat. ","location":"the floor ","names":["Skadi","Bob"],"speaker_distance":0.0,"speaker_los":1,"speaker_name":"Skadi","speed":"normal","status":"active","style":"normally","victims":[]}]}
+[22:21:28.197] [70696] [I] [skyrimnet_sexlab_actions.CleanCum_Apply] Skadi -> Skadi part:mouth style:normally
+[22:21:28.420] [70492] [I] [OrgasmEngine::`anonymous-namespace'::ApplyStrategy] OrgasmEngine: 0xfe04c83c strategy passive target 0x0
+[22:21:28.420] [70492] [I] [StrategyDecision::`anonymous-namespace'::OnAnswer] StrategyDecision: 0xfe04c83c answer passive p=0.61 (changed)
+[22:21:28.480] [70696] [I] [SkyrimNet_SexLab_Utilities.RegisterEventForce] event_name:sexlab_strategy msg:Skadi appears to be just letting things happen. source:Skadi
+[22:21:28.760] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:28.848] [70492] [I] [SkyrimNet_SexLab_Decorators.ClearCumPart] Skadi part:mouth left mouth:False pussy:False ass:False
+[22:21:28.898] [70604] [I] [SkyrimNet_SexLab_Utilities.RegisterEvent] event_name:clean_cum msg:Skadi normally cleans the cum from their own mouth. source:Skadi
+[22:21:28.931] [70492] [I] [PapyrusBindings_WebUI::Target_Menu_Refresh] Target_Menu_Refresh hasStrippedItems=false
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=undress
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=Clean Cum
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=praise all
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=scold all
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=insult all
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=flatter all
+[22:21:28.932] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=threaten all
+[22:21:28.933] [70492] [I] [ActionCatalog::`anonymous-namespace'::ResolveOptionsArray] eligibility omit type=papyrus label=promise all (freedom)
+[22:21:29.748] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:30.764] [72856] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:32.781] [70696] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:32.847] [70696] [I] [OrgasmEngine::AddEnjoyment] OrgasmEngine: SexLab added -5 to 0x14 -> 3.496605
+[22:21:32.881] [70696] [I] [skyrimnet_sexlab_scene.Mirror_Apply] sid:0 Bob external SexLab change -5 -> engine 3
+[22:21:33.781] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Bob
+[22:21:33.797] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.GetThread] actor:Skadi
+[22:21:33.814] [56888] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Bob sid:0 tid:0
+[22:21:33.848] [70604] [I] [SkyrimNet_SexLab_Scene_Manager.FindSceneByActorInThreadScene] --- Skadi sid:0 tid:0
+[22:21:35.566] [70604] [I] [skyrimnet_sexlab_scene.AnimationEnd] sid:0 thread id:0 status:Frozen
+[22:21:36.048] [70696] [I] [skyrimnet_sexlab_scene.sla_relief] sid:0 Bob SLO covers at OrgasmEnd
+[22:21:36.065] [72856] [I] [OrgasmEngine::EndScene] OrgasmEngine: ended scene 0
+[22:21:36.065] [70492] [I] [skyrimnet_sexlab_scene.AnimationEnd] sid:0 --- afterglow positions:2 position_objs:2 engine_managed:TRUE separate:False
+[22:21:36.098] [56888] [I] [SkyrimNet_SexLab_Utilities.RenderSlPrompt] --- template:helpers/sexlab/afterglow json:{"expected":1,"Name":"Bob","total_orgasms":1} result:Bob finished having orgasmed 1 times.
+[22:21:36.215] [72856] [I] [SkyrimNet_SexLab_Utilities.DirectNarration] Skadi and Bob finish sexual activities. Bob finished having orgasmed 1 times. source:Bob target:Skadi
+[22:21:36.448] [71052] [I] [SkyrimNet_SexLab_Scene_Manager.ReleaseIdlePackageHolds] Skadi restored:1
+[22:21:36.532] [71052] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Bob is crushed source:Bob
+[22:21:36.544] [66236] [D] [Decorators::GetThreads] speaker:Skadi json:{"counter":"96","threads":[]}
+[22:21:36.631] [71052] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Teaching an angry Skadi how to be a good Boy source:Skadi
+[22:21:36.715] [56888] [I] [SkyrimNet_SexLab_Utilities.DirectNarration_Optional] type:dropped msg:Bob feels crushed. source:Bob
+[22:21:39.573] [71052] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechStarted] NarrationTiming: DN->speech 3.44s speaker=Skadi(FE04C83C) busy=0 extra=0 "Skadi and Bob finish sexual activities. Bob finished having ..." | clean n=11 mean 2.99 median 3.00 p90 3.67 min 0.91 max 9.01 | busy 0 overlapped 2 missed 0
+[22:21:39.721] [70492] [I] [NarrationTiming::`anonymous-namespace'::OnSpeechComplete] NarrationTiming: response 13 complete speaker=FE04C83C
+[22:21:52.709] [71052] [I] [InitWebUI::<lambda_1>::] Escape key pressed.
+[22:21:52.775] [70696] [I] [InitWebUI::<lambda_1>::] onWebUIHide commit=true endSession=true
+[22:21:52.776] [70696] [I] [WebUI_Visibility_HideImpl] WebUI Unfocus + Hide. anyFocus=false
+[22:21:52.776] [70696] [I] [] DispatchHandlerBondageClosed: dispatched
+[22:21:52.776] [70696] [I] [InitWebUI::<lambda_1>::] [JS DEBUG] flushSceneInfos pick=none active=- inThread(0)=[] pending=none
+[22:21:52.785] [38684] [I] [SkyrimNet_SexLab_Handler_UDNG.TM_BondageOnWebUIClosed] --- release session
