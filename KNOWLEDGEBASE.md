@@ -129,6 +129,10 @@ Pyro compile: `RaceMenu\scripts\source` is not in this mods tree. `skyrimse.ppj`
 
 **One bad quote disables every setting.** If `config/plugins/SkyrimNet_DOM/manifest.yaml` does not parse, SkyrimNet logs `PluginConfig.cpp:198 ... yaml-cpp: error at line N, column M` and `PluginConfigDiscovery.cpp:95 Failed to load plugin config 'Plugin_SkyrimNet_DOM'` at startup. The config is never registered. Later, every Papyrus `GetConfigInt/Bool` logs `ConfigManager.h:236 Configuration 'Plugin_SkyrimNet_DOM' not found` and returns the default value, and the WebUI shows no DOM settings. The cause was an unescaped `"..."` inside a double-quoted `description:`. Use single quotes inside, or escape them as `\"`. When you see "not found", search the startup log for `PluginConfig`.
 
+## Slave idle gestures need an engine hook (2026-10-24)
+
+**DOM gestures fire no event.** `DOM_Mind.ChooseIdle` calls `DOM_Actor.Anim_Salute/LookDown/CrossArms/CoverSelf/...`, which use `Debug.SendAnimationEvent` or `PlayIdle` and nothing else. We do not override `DOM_Actor.pex` (it runs past 23k lines, and every DOM update would break the override). `SkyrimNet_DOM.dll` instead hooks vfunc 1 on `VTABLE_Character[3]` (`IAnimationGraphManagerHolder::NotifyAnimationGraph`, NPCs only). It checks a pointer-keyed whitelist of event names and defers the faction check, cooldown and ModEvent to the main thread. Not yet verified: that `PlayIdle` gestures reach this vfunc with `TESIdleForm::animEventName`. Check with `dom.events.gesture_debug`. Held poses need no hook, because `DOM_Actor.poseId` is a public auto property.
+
 ## Shared engine gotchas
 
 See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves a SE/VR or Papyrus quirk for this project.

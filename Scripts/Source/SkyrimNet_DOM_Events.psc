@@ -9,6 +9,9 @@ Actor Property player  Auto
 String Property player_name Auto
 
 String Property behaviour_current_key = "DOM_behaviour_current" Auto
+String Property pose_last_key = "DOM_pose_last" Auto
+String Property gesture_last_key = "DOM_gesture_last" Auto
+String Property gesture_time_key = "DOM_gesture_time" Auto
 int Property lastSeenMap = 0 Auto 
 
 float Property timeLastEvent = 0.0 Auto 
@@ -178,6 +181,8 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("HookAnimationStart", "SexLab_AnimationStart")
     RegisterForModEvent("HookAnimationEnd", "SexLab_AnimationEnd")
 
+    Register_Gestures()
+
     SeedCaptureNarrated()
     UnregisterForUpdate()
     RegisterForUpdate(2.0)
@@ -207,6 +212,7 @@ int Function ScanCaptureAliases(bool narrate)
         if domActor && domActor.GetActorRef()
             filled += 1
             MarkCaptureNarrated(domActor, narrate)
+            CheckPoseChange(domActor, narrate)
         endif
         i += 1
     endwhile
@@ -240,6 +246,118 @@ EndFunction
 
 Event OnUpdate()
     ScanCaptureAliases(true)
+EndEvent
+
+; Held pose (DOM_Actor.poseId) is always in the bio via Get_Actor_Info "pose"; when a player slave starts
+; one, DirectNarration if SkyrimNet is idle, else an event. narrate=false only records the current pose.
+Function CheckPoseChange(DOM_Actor domActor, bool narrate)
+    Actor slave = domActor.GetActorRef()
+    if slave == None || slave == player
+        return
+    endif
+    DOM_Mind mind = domActor.mind
+    if mind == None || !mind.is_player_slave
+        return
+    endif
+    int pose_id = domActor.poseId
+    if StorageUtil.GetIntValue(slave, pose_last_key, -1) == pose_id
+        return
+    endif
+    StorageUtil.SetIntValue(slave, pose_last_key, pose_id)
+    if !narrate || !main.pose_events_enabled
+        return
+    endif
+    String phrase = SkyrimNet_DOM_Decorators.PoseToString(pose_id)
+    if phrase == ""
+        return
+    endif
+    Trace("CheckPoseChange", slave.GetDisplayName()+" poseId:"+pose_id+" "+phrase)
+    DirectNarration_Optional("dom_pose", slave.GetDisplayName()+" starts "+phrase, slave)
+EndFunction
+
+; ----------------------------------
+; Gestures (SkyrimNet_DOM.dll NotifyAnimationGraph hook)
+; ----------------------------------
+; DOM ChooseIdle gestures fire no event; the DLL matches the anim event names registered here.
+Function Register_Gestures()
+    UnregisterForModEvent("SkyrimNet_DOM_Gesture")
+    if !SkyrimNet_DOM_Obedience.NativeReady()
+        Trace("Register_Gestures", "SkyrimNet_DOM.dll missing, gestures off")
+        return
+    endif
+    DOM_Core core = main.d_core
+    SkyrimNet_DOM_Native.GestureClear()
+    SkyrimNet_DOM_Native.GestureSetFaction(main.d_api.DOMPlayerSlaveFaction)
+
+    ; DOM_Actor.Anim_* PlayIdle forms
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleOffsetArmsCrossedStart, "cross_arms")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleCivilWarCheer, "aggressive")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleNervous, "nervous")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleCoweringLoose, "cower")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleChildCryingStart, "cry")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleWipeBrow, "wipe_brow")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleDialogueDefensiveHandGesture, "please_stop")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleWarmArms, "warm_arms")
+    ; DOM_Actor.Anim_* SendAnimationEvent names (DOM MCM can change these)
+    SkyrimNet_DOM_Native.GestureRegisterEvent(core.salutePose, "salute")
+    SkyrimNet_DOM_Native.GestureRegisterEvent(core.kneelPose, "kneel")
+    SkyrimNet_DOM_Native.GestureRegisterEvent(core.attentionPose, "attention")
+
+    ; DOM_Animator Get*Pose lists from DOM's Animations.json, plus literal names
+    int gestures = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/gestures.json")
+    int dom_anims = JValue.readFromFile("Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/Animations.json")
+    int lists = JMap.getObj(gestures, "animation_lists")
+    String list_name = JMap.nextKey(lists)
+    while list_name != ""
+        String gesture_key = JMap.getStr(lists, list_name)
+        int anims = JValue.solveObj(dom_anims, ".animationsList."+list_name+".animations1")
+        int n = JArray.count(anims)
+        int i = 0
+        while i < n
+            SkyrimNet_DOM_Native.GestureRegisterEvent(JArray.getStr(anims, i), gesture_key)
+            i += 1
+        endwhile
+        list_name = JMap.nextKey(lists, list_name)
+    endwhile
+    int events = JMap.getObj(gestures, "animation_events")
+    String anim_event = JMap.nextKey(events)
+    while anim_event != ""
+        SkyrimNet_DOM_Native.GestureRegisterEvent(anim_event, JMap.getStr(events, anim_event))
+        anim_event = JMap.nextKey(events, anim_event)
+    endwhile
+
+    ApplyGestureConfig()
+    RegisterForModEvent("SkyrimNet_DOM_Gesture", "OnGesture")
+    Trace("Register_Gestures", "registered")
+EndFunction
+
+Function ApplyGestureConfig()
+    if !main || !SkyrimNet_DOM_Obedience.NativeReady()
+        return
+    endif
+    SkyrimNet_DOM_Native.GestureSetEnabled(main.gesture_events_enabled, main.gesture_cooldown * 1000)
+    SkyrimNet_DOM_Native.GestureSetDebug(main.gesture_debug)
+EndFunction
+
+Event OnGesture(String eventName, String gesture_key, Float numArg, Form sender)
+    Actor slave = sender as Actor
+    if slave == None || !main.gesture_events_enabled
+        return
+    endif
+    int gestures = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/gestures.json")
+    String phrase = JValue.solveStr(gestures, ".text."+gesture_key, "")
+    if phrase == ""
+        Trace("OnGesture", slave.GetDisplayName()+" unknown gesture "+gesture_key)
+        return
+    endif
+    if OnNotifcationSkip(phrase, slave)
+        return
+    endif
+    Trace("OnGesture", slave.GetDisplayName()+" "+gesture_key)
+    ; Get_Actor_Info "gesture" shows it in the bio for a short while
+    StorageUtil.SetStringValue(slave, gesture_last_key, phrase)
+    StorageUtil.SetFloatValue(slave, gesture_time_key, Utility.GetCurrentGameTime())
+    DirectNarration_Optional("dom_gesture", slave.GetDisplayName()+" "+phrase, slave)
 EndEvent
 
 Function ApplyExt2Events()

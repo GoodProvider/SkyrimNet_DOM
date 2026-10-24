@@ -31,6 +31,36 @@ schema:
       defaultValue: 100000
       category: "Events"
 
+    - name: "Slave pose events"
+      path: "dom.events.poses"
+      type: "bool"
+      description: "When one of your slaves starts a held pose (dancing, serving drinks, human chair, cleaning, a cute or sexy pose, ...), narrate it (DirectNarration when SkyrimNet is idle, otherwise a plain event). The current pose is always shown in the slave's bio either way."
+      defaultValue: true
+      category: "Events"
+
+    - name: "Slave gesture events"
+      path: "dom.events.gestures"
+      type: "bool"
+      description: "Narrate when one of your slaves plays a DOM idle gesture (salutes, crosses arms, covers self in shame, cowers, cries, ...): DirectNarration when SkyrimNet is idle, otherwise a plain event. The latest gesture also shows in the slave's bio. Needs SkyrimNet_DOM.dll."
+      defaultValue: true
+      category: "Events"
+
+    - name: "Gesture cooldown (s)"
+      path: "dom.events.gesture_cooldown"
+      type: "int"
+      description: "Minimum seconds between gesture events for the same slave."
+      min: 5
+      max: 300
+      defaultValue: 20
+      category: "Events"
+
+    - name: "Log slave animation events"
+      path: "dom.events.gesture_debug"
+      type: "bool"
+      description: "Debug: write every animation event sent to your slaves to SkyrimNet_DOM.log, to find gesture names that are not listed in gestures.json yet."
+      defaultValue: false
+      category: "Events"
+
     - name: "When player tortures let player choose"
       path: "dom.punish.torture_choose_reason"
       type: "bool"

@@ -1,5 +1,6 @@
 #include "Papyrus/Bridge.h"
 
+#include "Gestures/GestureWatch.h"
 #include "Obedience/DomObedience.h"
 
 namespace SkyrimNetDOM::Papyrus {
@@ -52,6 +53,30 @@ namespace SkyrimNetDOM::Papyrus {
             const char* action = a_action.c_str() ? a_action.c_str() : "";
             return RE::BSFixedString{Obedience::MakeSexOrder(superior, slave, action).c_str()};
         }
+
+        void GestureRegisterEvent(RE::StaticFunctionTag*, RE::BSFixedString a_animEvent, RE::BSFixedString a_key) {
+            Gestures::RegisterEvent(a_animEvent.c_str() ? a_animEvent.c_str() : "", a_key.c_str() ? a_key.c_str() : "");
+        }
+
+        void GestureRegisterIdle(RE::StaticFunctionTag*, RE::TESIdleForm* a_idle, RE::BSFixedString a_key) {
+            Gestures::RegisterIdle(a_idle, a_key.c_str() ? a_key.c_str() : "");
+        }
+
+        void GestureClear(RE::StaticFunctionTag*) {
+            Gestures::ClearEvents();
+        }
+
+        void GestureSetFaction(RE::StaticFunctionTag*, RE::TESFaction* a_faction) {
+            Gestures::SetFaction(a_faction);
+        }
+
+        void GestureSetEnabled(RE::StaticFunctionTag*, bool a_enabled, std::int32_t a_cooldownMs) {
+            Gestures::SetEnabled(a_enabled, a_cooldownMs > 0 ? static_cast<std::uint32_t>(a_cooldownMs) : 0u);
+        }
+
+        void GestureSetDebug(RE::StaticFunctionTag*, bool a_debug) {
+            Gestures::SetDebug(a_debug);
+        }
     }
 
     bool Register(RE::BSScript::IVirtualMachine* a_vm) {
@@ -67,6 +92,12 @@ namespace SkyrimNetDOM::Papyrus {
         a_vm->RegisterFunction("MakeRefuseNarration", kScriptName, MakeRefuseNarration);
         a_vm->RegisterFunction("MakeObeyNarration", kScriptName, MakeObeyNarration);
         a_vm->RegisterFunction("MakeSexOrderEvent", kScriptName, MakeSexOrderEvent);
+        a_vm->RegisterFunction("GestureRegisterEvent", kScriptName, GestureRegisterEvent);
+        a_vm->RegisterFunction("GestureRegisterIdle", kScriptName, GestureRegisterIdle);
+        a_vm->RegisterFunction("GestureClear", kScriptName, GestureClear);
+        a_vm->RegisterFunction("GestureSetFaction", kScriptName, GestureSetFaction);
+        a_vm->RegisterFunction("GestureSetEnabled", kScriptName, GestureSetEnabled);
+        a_vm->RegisterFunction("GestureSetDebug", kScriptName, GestureSetDebug);
         SKSE::log::info("Registered {} Papyrus functions", kScriptName);
         return true;
     }

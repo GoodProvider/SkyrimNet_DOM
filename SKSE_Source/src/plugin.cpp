@@ -1,5 +1,6 @@
 #include "PCH.h"
 
+#include "Gestures/GestureWatch.h"
 #include "Obedience/DomObedience.h"
 #include "Papyrus/Bridge.h"
 
@@ -12,6 +13,7 @@ namespace {
             case SKSE::MessagingInterface::kPreLoadGame:
             case SKSE::MessagingInterface::kNewGame:
                 SkyrimNetDOM::Obedience::ClearSkipTable();
+                SkyrimNetDOM::Gestures::ClearCooldowns();
                 break;
             default:
                 break;
@@ -34,6 +36,8 @@ SKSEPluginLoad(const SKSE::LoadInterface* a_skse) {
         SKSE::log::error("Failed to register Papyrus functions");
         return false;
     }
+
+    SkyrimNetDOM::Gestures::Install();
 
     SKSE::log::info("{} loaded", SKSE::PluginDeclaration::GetSingleton()->GetName());
     return true;

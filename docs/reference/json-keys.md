@@ -21,7 +21,7 @@ Paused actor JSON: Events `SaveActorInfo` under `SKSE/Plugins/SkyrimNet_DOM/acto
 
 ### Thin (every loaded DOMActor)
 
-`loaded`, `source`, `name`, `is_slave`, `is_slaver`, `dom_faction` (`slave` \| `slaver` \| `other`), `history_rank`, `notifications`, `mood_sentence`, `behaviour`, arousal triad, `known_fetishes`, `hidden_fetishes`, gear/`has_*` / `is_naked` / dirty/wet / tears/mark, `virgin.{vaginal,oral,anal,same,gangbang}`.
+`loaded`, `source`, `name`, `is_slave`, `is_slaver`, `dom_faction` (`slave` \| `slaver` \| `other`), `history_rank`, `notifications`, `mood_sentence`, `behaviour`, `pose` (held DOM pose phrase or empty), `gesture` (latest idle gesture phrase or empty), arousal triad, `known_fetishes`, `hidden_fetishes`, gear/`has_*` / `is_naked` / dirty/wet / tears/mark, `virgin.{vaginal,oral,anal,same,gangbang}`.
 
 ### Slaver (`dom_faction == "slaver"`)
 

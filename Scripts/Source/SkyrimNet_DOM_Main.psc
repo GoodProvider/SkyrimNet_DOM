@@ -28,6 +28,11 @@ int Property short_lived_ttl = 100000 Auto
 bool Property torture_choose_reason = true Auto
 ; Healing Hands / SexLab Aid by the player on a non-shocked slave: true = WebUI praise reason list, false = DOM picks
 bool Property heal_choose_reason = true Auto
+; Slave pose / gesture short-lived events (Events.CheckPoseChange, SkyrimNet_DOM_Native.Gesture*)
+bool Property pose_events_enabled = true Auto
+bool Property gesture_events_enabled = true Auto
+int Property gesture_cooldown = 20 Auto
+bool Property gesture_debug = false Auto
 
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
@@ -115,12 +120,24 @@ Function ApplyPluginConfig()
     torture_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.punish.torture_choose_reason", true)
     heal_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.praise.heal_choose_reason", true)
 
+    pose_events_enabled = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.poses", true)
+    gesture_events_enabled = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.gestures", true)
+    int cooldown = SkyrimNetApi.GetConfigInt(PLUGIN_CONFIG, "dom.events.gesture_cooldown", 20)
+    if cooldown < 5
+        cooldown = 5
+    elseif cooldown > 300
+        cooldown = 300
+    endif
+    gesture_cooldown = cooldown
+    gesture_debug = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.gesture_debug", false)
+
     SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
     if events
         events.notifications_size = notification_ring
         events.ApplyExt2Events()
+        events.ApplyGestureConfig()
     endif
-    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl+" torture_choose_reason:"+torture_choose_reason+" heal_choose_reason:"+heal_choose_reason)
+    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl+" torture_choose_reason:"+torture_choose_reason+" heal_choose_reason:"+heal_choose_reason+" poses:"+pose_events_enabled+" gestures:"+gesture_events_enabled+" gesture_cooldown:"+gesture_cooldown+" gesture_debug:"+gesture_debug)
 EndFunction
 
 Event OnPluginConfigSaved(string eventName, string strArg, float numArg, Form sender)
