@@ -17,7 +17,7 @@ Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go throu
 | `SKSE_Source/` | `SkyrimNet_DOM.dll` (DomObedience); CMake `--preset release` |
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + dialogue_actions blacklist) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`dom.events.*`) |
-| `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu (`0800_dom_*`) + Status/Slaves MainPanels |
+| `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu (`0800_dom_*`) + **DOM Info** MainPanel (`MainPanels/0850_dom_info.json`, type `actor_profile`) |
 
 Repo root: `c:\Skyrim\dev\mods\SkyrimNet_DOM`.
 

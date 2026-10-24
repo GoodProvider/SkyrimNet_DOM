@@ -12,7 +12,7 @@ Do **not** call any `DOM_Keys` function that `OpenMenu()` / `UIWheelMenu` / `Mes
 
 | Control | Role |
 |---------|------|
-| Views pulldown | SexLab MainPanels plus DOM **Status** / **Slaves** when `SkyrimNet_DOM.esp` is loaded. **None** clears the right host. Non-`sexlab` `source` shows as a leading superscript on the view label (`DOM` Status). |
+| Views pulldown | SexLab MainPanels plus DOM **DOM Info** (`0850_dom_info.json`, `actor_profile`) when `SkyrimNet_DOM.esp` is loaded. (Status / Slaves below were removed in `978fdce`.) **None** clears the right host. Non-`sexlab` `source` shows as a leading superscript on the view label (`DOM` Status). |
 | Target pulldown | Nearby actors as SexLab today, plus sentinel **All Slaves** (`id: all_slaves`, no FormID) from the Slaves MainPanel JSON. Player stays a normal actor. Do **not** treat player focus as group. |
 | Crosshair | Still seeds the default actor on overlay open. All Slaves is an explicit pick. |
 
@@ -196,6 +196,19 @@ Open / Open and tie / Take **or** put in bag, from `TM_ListSackOptions` based on
 ## Main panels
 
 Install under `SKSE/Plugins/SkyrimNet_SexLab/webui/MainPanels/` (this repo overlays into SexLab’s Data path). `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"` on each file.
+
+### DOM Info — `0850_dom_info.json` (`actor_profile`)
+
+`openFunction` `SkyrimNet_DOM_Menu.WebUI_DomInfoOpen` → `SkyrimNet_DOM_InfoPanel.BuildPanelJson(core, events, WebUI_GetFocusActor())` → `WebUI_PushMainPanelData`. SexLab re-runs it on every target change. Same data and role rules as PrismaUI-for-DOM 0.158 `DOMPrismController`:
+
+| Role | Pills | Sections (in order) |
+|------|-------|---------------------|
+| slave | Status (`GetTrainingStatusName`), Mood | Recommended, Personality (bipolar 12-axis), Training (14 bars, combat ×100/127), Love (6 bars), Events, notes |
+| trainer | School (dominant slaver skill + method tip), Mood | as slave + Slaver Skills (unipolar 6-axis) |
+| slaver | School, Mood | Recommended, Personality, Slaver Skills, Events, notes |
+| free person | — | Personality from `DOMGenerator.GetNPCTraits`, live Events, notes |
+
+Events: the last 3 diary memories (`memory_abuse_*`) plus the last 3 live notifications (`SkyrimNet_DOM_Events.GetNotifications`), oldest → newest, with a relative age and the game date as the tooltip. Notes: virginity (faction rank 0), easy/difficult to train, good trainer, market worth (slaves only), trainee roster or trainer sentence. No target (All Slaves sentinel) → `empty` text.
 
 ### Status — `0300_dom_status.json` (`actor_detail`)
 

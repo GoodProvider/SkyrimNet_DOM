@@ -20,7 +20,7 @@ For agent policy (safety, confidence), see [AGENTS.md](AGENTS.md). For protocol 
 
 ## WebUI overlay (2026-09-16)
 
-DOM does not ship a PrismaUI view. Player commands go through SexLab’s overlay. TargetMenu/MainPanels overlay into `SKSE/Plugins/SkyrimNet_SexLab/webui/` (`0800_dom_*.json`–`0880_dom_sack.json`, `0300_dom_status.json`, `0400_dom_slaves.json`, plus Scene `0810_dom_abuse.json`) with `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"`. There is no ControlPanel mode switch. Obedience gating is `SKSE/Plugins/SkyrimNet_DOM.dll` (`SkyrimNet_DOM_Native` / `SkyrimNet_DOM_Obedience`).
+DOM does not ship a PrismaUI view. Player commands go through SexLab’s overlay. TargetMenu/MainPanels overlay into `SKSE/Plugins/SkyrimNet_SexLab/webui/` (`0800_dom_*.json`–`0880_dom_sack.json`, MainPanel `0850_dom_info.json`, plus Scene `0810_dom_abuse.json`) with `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"`. There is no ControlPanel mode switch. Obedience gating is `SKSE/Plugins/SkyrimNet_DOM.dll` (`SkyrimNet_DOM_Native` / `SkyrimNet_DOM_Obedience`).
 
 - **Actor → Scene catalog swap:** SexLab shows `TargetMenu/Actor` when focus is not animating and `TargetMenu/Scene` when it is (`SexLabAnimatingFaction`). Per-leaf sex locks on Actor JSON do not help mid-scene — Actor options are not loaded. Mid-scene verbal abuse lives under `webui/TargetMenu/Scene/options/0810_dom_abuse.json` (praise live cascade, scold/insult/flatter/threaten/promise, comfort care/guilt/threat/insult). Omits punish/upkeeping/comfort sex|rape. Scene **comfort → pain** uses `TM_ListComfortPainActions` / `TM_DoComfortByPain` (`*{speaker} comforts {target} by {painAction}*` TransformDialogue; param must not be named `action` — Papyrus reserved).
 - **Pause:** SexLab `Focus(..., pause=true)` blocks DOM packages and SexLab `StartThread`. TargetMenu `closeWebUI: true`. Status/Slaves and live punish/praise openers stay open (`false`).
@@ -132,6 +132,17 @@ Pyro compile: `RaceMenu\scripts\source` is not in this mods tree. `skyrimse.ppj`
 ## Slave idle gestures need an engine hook (2026-10-24)
 
 **DOM gestures fire no event.** `DOM_Mind.ChooseIdle` calls `DOM_Actor.Anim_Salute/LookDown/CrossArms/CoverSelf/...`, which use `Debug.SendAnimationEvent` or `PlayIdle` and nothing else. We do not override `DOM_Actor.pex` (it runs past 23k lines, and every DOM update would break the override). `SkyrimNet_DOM.dll` instead hooks vfunc 1 on `VTABLE_Character[3]` (`IAnimationGraphManagerHolder::NotifyAnimationGraph`, NPCs only). It checks a pointer-keyed whitelist of event names and defers the faction check, cooldown and ModEvent to the main thread. Not yet verified: that `PlayIdle` gestures reach this vfunc with `TESIdleForm::animEventName`. Check with `dom.events.gesture_debug`. Held poses need no hook, because `DOM_Actor.poseId` is a public auto property.
+
+## DOM Info view = SexLab `actor_profile` (2026-10-24)
+
+**What**: `MainPanels/0850_dom_info.json` (type `actor_profile`) shows PrismaUI-for-DOM's profile inside the SexLab ControlPanel. `SkyrimNet_DOM_Menu.WebUI_DomInfoOpen` → `SkyrimNet_DOM_InfoPanel.BuildPanelJson`. SexLab draws it with the generic `renderActorProfile` (pills / bars / radar / recs / events / lines). SexLab re-runs the open foreign panel's `openFunction` on every ControlPanel target change (`ActionCatalog::RefreshForeignMainPanel`), so the view follows the target.
+
+**Quirks**:
+- The DOM stub headers in `Headers_Source\DOM` (gitignored, local only) win over the full `PAH Diary Of Mine\Scripts\Source` import. Every new DOM member needs its exact signature copied into the stub (`DOM_Mind` HEXACO/PRISM/MOD_*/memory_abuse_*, `DOM_Core` factions + `DOMGenerator` + `GetDifficultyLevel`, the new `DOM_Generator.psc`).
+- `key` cannot be used as a Papyrus identifier ("key is not a variable").
+- SKSE `StringUtil` has no `ToUpper`. Use `AsOrd` / `AsChar`.
+- Enum string values (`bars`, `live`, `bipolar`) can come back with another casing from the Papyrus string pool, so SexLab JS lowercases them (`apKey`).
+- The Prisma mood tips are keyed by mood code, but DOM pushes the mood display name: strip it to letters, then alias `inshock→shocked`, `nothappy→depressed`, `annoyed→jealous`, `outraged→defiant`, `offended→proud`.
 
 ## Shared engine gotchas
 

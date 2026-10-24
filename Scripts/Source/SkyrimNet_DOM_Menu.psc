@@ -540,6 +540,12 @@ Function TM_SlavesPanelOpen()
     PushJson(TM_BuildSlavesTableJson())
 EndFunction
 
+; MainPanels 0850_dom_info.json openFunction (also re-run by SexLab on a ControlPanel target change).
+Function WebUI_DomInfoOpen()
+    SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
+    PushJson(SkyrimNet_DOM_InfoPanel.BuildPanelJson(GetCore(), events, FocusActor()))
+EndFunction
+
 String Function TM_BuildGroupStatusJson()
     int owned = 0
     int nearby = 0
