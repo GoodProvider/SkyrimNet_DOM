@@ -5,8 +5,8 @@
 - New dashboard setting "When player tortures let player choose" (on by default). When you start torturing a slave, a list of the slave's open punishment reasons appears. Pick one, "random", "no reason", or "custom" to type your own (it trains like "being a bad slave"). "Being a bad slave" and "didnt obey" are always listed, for things the AI missed. With the setting off, a reason is chosen at random.
 - SkyrimNet hears why, for example: "Bob is punishing Nina because she refused to comply with the sexual demands of Bob."
 - The SexLab Punish panel lists the slave's Diary of Mine reasons. Punishing for a SexLab reason (a refused request or the slave's own agenda) counts as "didnt obey".
-- Casting Healing Hands on a slave praises them. A slave in shock is comforted with care instead (no hug animation plays).
-- New dashboard setting "Ask player praise reason when healing" (off by default). When you heal a slave, a list of their praise reasons appears, plus "custom" to type your own. Closing the list gives no praise. "Being a good slave" is always first in the list, and it is the reason used with the setting off.
+- Casting Healing Hands on a slave, or healing them with SexLab Aid (spell or potion), praises them. A slave in shock is comforted with care instead (no hug animation plays).
+- New dashboard setting "Ask player praise reason when healing" (on by default). When you heal a slave, a list of their praise reasons appears, plus "custom" to type your own. Closing the list gives no praise. "Being a good slave" is always first in the list, and it is the reason used with the setting off.
 
 ## 0.1.1
 

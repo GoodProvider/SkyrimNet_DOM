@@ -2377,57 +2377,52 @@ Function TM_DoTortureReason(Actor speaker, String reason, String slaveId)
     SkyrimNet_DOM_API.ApplyTortureReason(speaker, slave, reason)
 EndFunction
 
-; Healing Hands by the player (SkyrimNet_DOM_Events.OnInjuryHealStart, dom.praise.heal_choose_reason): the slave's
-; praise reasons + custom as a solo list (SkyrimNet_SexLab Choice_Open). Close sends nothing: no praise.
+; Healing Hands / SexLab Aid by the player (SkyrimNet_DOM_Events.HealSlave, dom.praise.heal_choose_reason): "being a
+; good slave" (always), the slave's other praise reasons, custom, as a solo list (SkyrimNet_SexLab Choice_Open). Close
+; sends nothing: no praise. JSON is built as a string, like OpenTortureReasonList: the JContainers serializer dropped
+; the options array when called from the Aid / heal event (empty list).
 Function OpenHealPraiseList(Actor healer, Actor slave)
     DOM_Actor sl_alias = SlaveOf(slave)
-    if !sl_alias
-        Trace("OpenHealPraiseList", "no DOM actor")
-        return
+    DOM_Mind sl_mind = None
+    if sl_alias
+        sl_mind = sl_alias.mind
     endif
-    int root = JMap.object()
-    JMap.setStr(root, "title", "praise " + TargetName(slave) + " for")
-    int options = JArray.object()
-    JMap.setObj(root, "options", options)
     String slaveId = slave.GetFormID() as String
-    int reasons = PraiseReasonList(sl_alias.mind)
-    int i = 0
-    while i < JArray.count(reasons)
-        int opt = HealPraiseChoice(slaveId)
-        ChoiceStatic(opt, "reason", JArray.getStr(reasons, i))
-        JMap.setStr(opt, "label", JArray.getStr(reasons, i))
-        JArray.addObj(options, opt)
-        i += 1
-    endwhile
-    int customOpt = HealPraiseChoice(slaveId)
-    ChoiceDynamic(customOpt, "reason")
-    JMap.setInt(customOpt, "opensText", 1)
-    JArray.addObj(options, customOpt)
-    String json = SkyrimNet_SexLab_Utilities.ObjectToLowerCaseKeyJson(root)
-    JValue.release(root)
-    Trace("OpenHealPraiseList", TargetName(slave) + " reasons=" + JArray.count(reasons))
-    JValue.release(reasons)
+    String opts = HealPraiseChoice(DefaultPraiseReason(sl_mind), slaveId, false)
+    int count = 0
+    if sl_mind
+        int reasons = PraiseReasonList(sl_mind)
+        count = JArray.count(reasons)
+        int i = 1 ; 0 is the default, already listed
+        while i < count
+            opts += "," + HealPraiseChoice(JArray.getStr(reasons, i), slaveId, false)
+            i += 1
+        endwhile
+        JValue.release(reasons)
+    endif
+    opts += "," + HealPraiseChoice("custom", slaveId, true)
+    String json = "{\"title\":" + SkyrimNet_SexLab_Utilities.JsonQuote("praise " + TargetName(slave) + " for") \
+        + ",\"options\":[" + opts + "]}"
+    Trace("OpenHealPraiseList", TargetName(slave) + " reasons=" + count + " json(" \
+        + StringUtil.GetLength(json) + ")=" + StringUtil.Substring(json, 0, 200))
     SkyrimNet_SexLab_WebUI.Choice_Open(json)
 EndFunction
 
-; Speaker (the player) + static slaveId; the caller adds the reason (static, or dynamic for custom).
-int Function HealPraiseChoice(String slaveId)
-    int opt = JMap.object()
-    JMap.setStr(opt, "type", "papyrus")
-    JMap.setStr(opt, "label", "custom")
-    JMap.setStr(opt, "plugin", "SkyrimNet_DOM.esp")
-    JMap.setStr(opt, "questFormId", "0x800")
-    JMap.setStr(opt, "scriptName", "SkyrimNet_DOM_Menu")
-    JMap.setStr(opt, "executionFunctionName", "TM_DoHealPraise")
-    JMap.setInt(opt, "closeWebUI", 1)
-    int maps = JArray.object()
-    JMap.setObj(opt, "parameterMapping", maps)
-    int m1 = JMap.object()
-    JMap.setStr(m1, "type", "speaker")
-    JMap.setStr(m1, "name", "speaker")
-    JArray.addObj(maps, m1)
-    ChoiceStatic(opt, "slaveId", slaveId)
-    return opt
+; One papyrus option as JSON: speaker (the player) + static slaveId + reason (static; custom: dynamic text box).
+; Mapping order matches TM_DoHealPraise(speaker, slaveId, reason).
+String Function HealPraiseChoice(String reason, String slaveId, bool isCustom)
+    String reasonMap = "{\"type\":\"static\",\"name\":\"reason\",\"value\":" + SkyrimNet_SexLab_Utilities.JsonQuote(reason) + "}"
+    String extra = ""
+    if isCustom
+        reasonMap = "{\"type\":\"dynamic\",\"name\":\"reason\"}"
+        extra = ",\"opensText\":1"
+    endif
+    return "{\"type\":\"papyrus\",\"label\":" + SkyrimNet_SexLab_Utilities.JsonQuote(reason) + extra \
+        + ",\"plugin\":\"SkyrimNet_DOM.esp\",\"questFormId\":\"0x800\",\"scriptName\":\"SkyrimNet_DOM_Menu\"" \
+        + ",\"executionFunctionName\":\"TM_DoHealPraise\",\"closeWebUI\":1,\"parameterMapping\":[" \
+        + "{\"type\":\"speaker\",\"name\":\"speaker\"}" \
+        + ",{\"type\":\"static\",\"name\":\"slaveId\",\"value\":" + SkyrimNet_SexLab_Utilities.JsonQuote(slaveId) + "}" \
+        + "," + reasonMap + "]}"
 EndFunction
 
 Function TM_DoHealPraise(Actor speaker, String slaveId, String reason)

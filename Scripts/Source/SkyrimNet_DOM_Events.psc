@@ -147,9 +147,11 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
     RegisterForModEvent("DOMOnBehaviourChange", "OnBehaviourChange")
     RegisterForModEvent("DOMOnNotificationSent", "OnNotificationSent")
-    ; Injury Engine (soft): torture of a slave is a DOM pain punishment; Healing Hands on a slave is care comfort
+    ; Injury Engine (soft): torture of a slave is a DOM pain punishment; Healing Hands or SexLab Aid on a slave
+    ; is praise (care when shocked)
     RegisterForModEvent("Injury_Engine_Torture", "OnInjuryTorture")
     RegisterForModEvent("Injury_Engine_HealStart", "OnInjuryHealStart")
+    RegisterForModEvent("SkyrimNet_SexLab_AidStart", "OnSexLabAidStart")
     ;  -------
     ; will be handled (if at all) by decorators
     ;  -------
@@ -931,9 +933,7 @@ Function StartTortureReason(Actor attacker, Actor victim, DOM_Mind mind)
     SkyrimNet_DOM_API.ApplyTortureReason(attacker, victim, reason)
 EndFunction
 
-; A healing source opened a heal session. Healing Hands cast on a slave: a shocked slave gets DOM "care" comfort,
-; otherwise praise ("tell"). The player picks the reason when dom.praise.heal_choose_reason is on (Close: no praise);
-; otherwise, or with no reason picked, "being a good slave" / "being a good slaver".
+; A healing source opened a heal session. Healing Hands cast on a slave goes to HealSlave.
 Event OnInjuryHealStart(Form akCaster, Form akTarget, Int source)
     Actor caster = akCaster as Actor
     Actor target = akTarget as Actor
@@ -944,7 +944,30 @@ Event OnInjuryHealStart(Form akCaster, Form akTarget, Int source)
     if hands == None || (caster.GetEquippedSpell(0) != hands && caster.GetEquippedSpell(1) != hands)
         return
     endif
-    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", "OnInjuryHealStart", target)
+    HealSlave(caster, target, "OnInjuryHealStart")
+EndEvent
+
+; SkyrimNet_SexLab Aid (HUD, Aid panel, potion, SexLab_Aid action) restored health: Aid casts nothing, so Injury Engine
+; sends no HealStart. sender = target; strArg "<spell|potion>|<caster FormID>"; numArg = health.
+Event OnSexLabAidStart(String eventName, String strArg, Float numArg, Form sender)
+    Actor target = sender as Actor
+    String[] parts = StringUtil.Split(strArg, "|")
+    if target == None || parts.Length < 2 || !main || !main.d_core
+        return
+    endif
+    Actor caster = Game.GetFormEx(parts[1] as Int) as Actor
+    if caster == None || caster == target
+        return
+    endif
+    Trace("OnSexLabAidStart", caster.GetDisplayName() + " " + parts[0] + " -> " + target.GetDisplayName() + " health:" + numArg)
+    HealSlave(caster, target, "OnSexLabAidStart")
+EndEvent
+
+; A shocked slave gets DOM "care" comfort, otherwise praise ("tell"). The player picks the reason when
+; dom.praise.heal_choose_reason is on (Close: no praise); otherwise, or with no reason picked, "being a good slave" /
+; "being a good slaver".
+Function HealSlave(Actor caster, Actor target, String fn)
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", fn, target)
     if !slave || !slave.mind
         return
     endif
@@ -960,8 +983,8 @@ Event OnInjuryHealStart(Form akCaster, Form akTarget, Int source)
         endif
     endif
     slave.StartPraising(caster, SkyrimNet_DOM_Menu.DefaultPraiseReason(slave.mind), "tell")
-    Trace("OnInjuryHealStart", caster.GetDisplayName() + " heals and praises " + target.GetDisplayName())
-EndEvent
+    Trace(fn, caster.GetDisplayName() + " heals and praises " + target.GetDisplayName())
+EndFunction
 
 ; DOM_Mind.StartComfortingWith(caster, "care") without its Anim_GetPlayerHug (DOM's abuse_type is private and
 ; stays as it was).

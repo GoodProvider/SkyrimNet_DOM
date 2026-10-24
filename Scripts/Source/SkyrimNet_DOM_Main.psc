@@ -26,8 +26,8 @@ int Property notification_ring = 20 Auto
 int Property short_lived_ttl = 100000 Auto
 ; Injury Engine torture by the player: true = WebUI reason list, false = random open reason
 bool Property torture_choose_reason = true Auto
-; Healing Hands by the player on a non-shocked slave: true = WebUI praise reason list, false = DOM picks
-bool Property heal_choose_reason = false Auto
+; Healing Hands / SexLab Aid by the player on a non-shocked slave: true = WebUI praise reason list, false = DOM picks
+bool Property heal_choose_reason = true Auto
 
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
@@ -113,7 +113,7 @@ Function ApplyPluginConfig()
     short_lived_ttl = ttl
 
     torture_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.punish.torture_choose_reason", true)
-    heal_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.praise.heal_choose_reason", false)
+    heal_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.praise.heal_choose_reason", true)
 
     SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
     if events

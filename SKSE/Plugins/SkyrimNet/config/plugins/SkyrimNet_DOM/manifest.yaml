@@ -41,6 +41,6 @@ schema:
     - name: "Ask player praise reason when healing"
       path: "dom.praise.heal_choose_reason"
       type: "bool"
-      description: "Healing Hands on a slave who is not in shock praises them (a shocked slave gets care comfort instead). On: when you heal, the WebUI lists the slave's praise reasons plus custom; closing the list gives no praise. 'Being a good slave' (or slaver) is always listed first and is the reason used when the setting is off."
-      defaultValue: false
+      description: "Healing Hands or a SkyrimNet_SexLab Aid heal on a slave who is not in shock praises them (a shocked slave gets care comfort instead). On: when you heal, the WebUI lists the slave's praise reasons plus custom; closing the list gives no praise. 'Being a good slave' (or slaver) is always listed first and is the reason used when the setting is off."
+      defaultValue: true
       category: "Praise"
