@@ -142,16 +142,30 @@ Function MarkTortureDamage(Actor slaveActor, DOM_Mind mind) global
     StorageUtil.SetIntValue(slaveActor, KEY_TORTURE_DAMAGE(), mind.whipping_pain_damage)
 EndFunction
 
-; StorageUtil float on the slave: game time (days) the bridge first saw the running pain punishment (EndStalePainPunishment)
+; StorageUtil float on the slave: game time (days) of the running pain punishment's last batch (MarkPainActivity, EndStalePainPunishment)
 String Function KEY_PAIN_START() global
     return "skyrimnet_dom.pain_start"
 EndFunction
 
-Float Function PAIN_PUNISH_TIMEOUT_SECONDS() global
-    return 60.0
+; StorageUtil form on the slave: who is running the pain punishment (MarkPainActivity). DOM keeps no abuser on the mind.
+String Function KEY_PAIN_ABUSER() global
+    return "skyrimnet_dom.pain_abuser"
 EndFunction
 
-; Ends a pain punishment older than PAIN_PUNISH_TIMEOUT_SECONDS (real seconds, via TimeScale). DOM's tick never ends one
+; The actor that started the slave's running pain punishment, else fallback.
+Actor Function PainAbuserOr(Actor slaveActor, Actor fallback) global
+    Actor abuser = StorageUtil.GetFormValue(slaveActor, KEY_PAIN_ABUSER(), None) as Actor
+    if abuser
+        return abuser
+    endif
+    return fallback
+EndFunction
+
+Float Function PAIN_PUNISH_TIMEOUT_SECONDS() global
+    return 20.0
+EndFunction
+
+; Ends a pain punishment with no further batch for PAIN_PUNISH_TIMEOUT_SECONDS (real seconds, via TimeScale). DOM's tick never ends one
 ; started by a DOM-mind actor (whipping_by_trainer), and such a punishment survives in the save: every later lash then
 ; looked "already named" (TortureReasonNamed), so no reason list / dom_torture_punish ever came. EndWhipping is DOM's
 ; normal close (training + "Punishing ... strokes" notice). Clears the bridge markers so the next batch is fresh.
@@ -166,36 +180,42 @@ Bool Function EndStalePainPunishment(Actor slaveActor, DOM_Actor slave, Actor ab
     endif
     Float now = Utility.GetCurrentGameTime()
     Float start = StorageUtil.GetFloatValue(slaveActor, KEY_PAIN_START(), -1.0)
-    if start < 0.0 || start > now
-        StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), now)
-        return false
-    endif
-    Float timescale = 20.0
-    GlobalVariable ts = Game.GetFormFromFile(0x3A, "Skyrim.esm") as GlobalVariable
-    if ts && ts.GetValue() > 0.0
-        timescale = ts.GetValue()
-    endif
-    Float elapsed = (now - start) * 86400.0 / timescale
-    if elapsed <= PAIN_PUNISH_TIMEOUT_SECONDS()
-        return false
+    Float elapsed = 0.0
+    Bool legacy = start < 0.0 && TortureReasonNamed(slaveActor, mind)
+    if !legacy
+        if start < 0.0 || start > now
+            StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), now)
+            return false
+        endif
+        Float timescale = 20.0
+        GlobalVariable ts = Game.GetFormFromFile(0x3A, "Skyrim.esm") as GlobalVariable
+        if ts && ts.GetValue() > 0.0
+            timescale = ts.GetValue()
+        endif
+        elapsed = (now - start) * 86400.0 / timescale
+        if elapsed <= PAIN_PUNISH_TIMEOUT_SECONDS()
+            return false
+        endif
     endif
     if abuser == None
         abuser = Game.GetPlayer()
     endif
     Trace("EndStalePainPunishment", slaveActor.GetDisplayName() + " reason:" + mind.whipping_reason + " '" \
-        + mind.whipping_reason_name + "' trainer:" + mind.whipping_by_trainer + " elapsed:" + elapsed + "s by " \
-        + abuser.GetDisplayName())
+        + mind.whipping_reason_name + "' trainer:" + mind.whipping_by_trainer + " legacy:" + legacy + " elapsed:" + elapsed \
+        + "s by " + abuser.GetDisplayName())
     slave.EndWhipping(abuser)
     StorageUtil.UnsetFloatValue(slaveActor, KEY_PAIN_START())
+    StorageUtil.UnsetFormValue(slaveActor, KEY_PAIN_ABUSER())
     StorageUtil.UnsetIntValue(slaveActor, KEY_TORTURE_REASON_INDEX())
     StorageUtil.UnsetIntValue(slaveActor, KEY_TORTURE_DAMAGE())
     return true
 EndFunction
 
-; A new pain punishment's first batch (OnInjuryTorture fresh): its timeout counts from now, not from one that ended
-; between two scans.
-Function MarkPainStart(Actor slaveActor) global
+; Every torture batch (OnInjuryTorture): restarts the idle timeout, so the punishment ends only after
+; PAIN_PUNISH_TIMEOUT_SECONDS without another batch.
+Function MarkPainActivity(Actor slaveActor, Actor abuser) global
     StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), Utility.GetCurrentGameTime())
+    StorageUtil.SetFormValue(slaveActor, KEY_PAIN_ABUSER(), abuser)
 EndFunction
 
 ; Names the running pain punishment (no event) and marks it named for TortureReasonNamed.

@@ -42,9 +42,9 @@ Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
     SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, superior, speaker)
 EndFunction
 
-Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc)
-    ; LLM chose the action: no WillObey roll
-    return SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, false)
+Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc, Bool rollObedience=false)
+    ; LLM chose the action: no WillObey roll. Player menu clicks pass rollObedience=true.
+    return SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, rollObedience)
 EndFunction
 
 String Function SexOrderDesc(Actor ordered, Actor superior, Actor speaker, Actor target, String method, Actor participate=None)
@@ -65,7 +65,7 @@ EndFunction
 ;------------------------------------
 ;  Action Functions 
 ;------------------------------------
-Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, String position="")
+Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, String position="", Bool rollObedience=false)
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Start", speaker, True) 
     if slave == None 
         return 
@@ -75,7 +75,7 @@ Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, Str
     if position != ""
         desc = "masturbate "+position
     endif
-    Int gate = GateSlave(superior, speaker, "masturbate", desc)
+    Int gate = GateSlave(superior, speaker, "masturbate", desc, rollObedience)
     if gate == 0
         return
     endif
@@ -93,14 +93,14 @@ Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, Str
     endif
     SaveThreadsJson()
 EndFunction 
-Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool allowed=false)
+Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool allowed=false, Bool rollObedience=false)
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Stop", speaker, True) 
     if slave == None 
         return 
     endif 
 
     if allowed
-        Int gate = GateSlave(superior, speaker, "masturbate_stop", "stop masturbating")
+        Int gate = GateSlave(superior, speaker, "masturbate_stop", "stop masturbating", rollObedience)
         if gate == 0
             return
         endif
@@ -265,7 +265,7 @@ Function WebUI_StartScene_Consensual_One(String intent, Actor speaker, string st
     Actor ordered = WebUI_OrderedSlave(speaker, None)
     if ordered
         String sexDesc = SexOrderDesc(ordered, superior, speaker, None, method)
-        Int gate = GateSlave(superior, ordered, "sex", sexDesc)
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
         if gate == 0
             return
         endif
@@ -283,7 +283,7 @@ Function WebUI_StartScene_Consensual_Two(String intent, Actor speaker, Actor tar
     String target_name = GetDisplayname(target)
     String sexDesc = SexOrderDesc(ordered, superior, speaker, target, method)
     if ordered
-        Int gate = GateSlave(superior, ordered, "sex", sexDesc)
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
         if gate == 0
             return
         endif
@@ -302,7 +302,7 @@ Function WebUI_StartScene_Consensual_Three(String intent, Actor speaker, Actor t
     String target_name = GetDisplayname(target)
     String sexDesc = SexOrderDesc(ordered, superior, speaker, target, method, participate)
     if ordered
-        Int gate = GateSlave(superior, ordered, "sex", sexDesc)
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
         if gate == 0
             return
         endif
@@ -312,11 +312,11 @@ Function WebUI_StartScene_Consensual_Three(String intent, Actor speaker, Actor t
 EndFunction
 
 ; Abuse comfort:sex / comfort:rape — transform + mind (no DOM Anim_Sexlab) then SexLab scene.
-Function ComfortTransform(Actor speaker, Actor target, String line)
+Function ComfortTransform(Actor speaker, Actor target, String line, Bool registerObey=true)
     if line != ""
         SkyrimNetApi.TransformDialogue(line)
     endif
-    if target && speaker
+    if registerObey && target && speaker
         RegisterObeyCommand(target, speaker, line)
     endif
 EndFunction
@@ -395,16 +395,17 @@ Function WebUI_StartScene_Comfort_Sex(String intent, Actor speaker, Actor target
     endif
     String spName = GetDisplayname(speaker)
     String tgName = GetDisplayname(target)
-    ComfortTransform(speaker, target, spName+" comforts "+tgName+" with loving sex.")
-    ApplyComfortMindSex(speaker, target)
+    ; Roll first: a refusal must leave no comfort on the mind. A gated order registers the obey command itself.
     Actor ordered = WebUI_OrderedSlave(speaker, target)
     String sexDesc = SexOrderDesc(ordered, superior, speaker, target, method)
     if ordered
-        Int gate = GateSlave(superior, ordered, "sex", sexDesc)
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
         if gate == 0
             return
         endif
     endif
+    ComfortTransform(speaker, target, spName+" comforts "+tgName+" with loving sex.", ordered == None)
+    ApplyComfortMindSex(speaker, target)
     Trace("WebUI_StartScene_Comfort_Sex", "intent:"+intent+" speaker:"+spName+" target:"+tgName)
     actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name)
 EndFunction
@@ -568,6 +569,11 @@ Function DOMOrder_Execute(Actor akTarget, String kind, String actionDesc, String
     Int gate = GateSlave(superior, akTarget, kind, actionDesc)
     if gate == 0
         return
+    endif
+    if gate < 0
+        ; no DLL / unknown kind: gate said nothing, so narrate the order like Menu.FinishOrder
+        DirectNarration(superior.GetDisplayName()+" orders "+akTarget.GetDisplayName()+" to "+actionDesc+".", superior, akTarget)
+        RegisterObeyCommand(akTarget, superior, actionDesc)
     endif
     DOM_Keys keys = GetKeys()
     if !keys

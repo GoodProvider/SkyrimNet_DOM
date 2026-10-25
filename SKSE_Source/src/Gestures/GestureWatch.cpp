@@ -79,16 +79,22 @@ namespace SkyrimNetDOM::Gestures {
                     }
                 }
 
-                auto* actor = static_cast<RE::Character*>(a_this);
-                if (debug && IsWatched(actor)) {
-                    SKSE::log::info("AnimEvent {:08X} {} -> {}", actor->GetFormID(), a_eventName.c_str(), key.empty() ? "-" : key);
-                }
-                if (key.empty()) {
+                if (key.empty() && !debug) {
                     return result;
                 }
-                // Faction check, cooldown and ModEvent run on the main thread.
-                SKSE::GetTaskInterface()->AddTask([handle = actor->GetHandle(), key = std::move(key)]() mutable {
-                    SendGesture(handle, std::move(key));
+                // Faction check, debug log, cooldown and ModEvent run on the main thread.
+                auto* actor = static_cast<RE::Character*>(a_this);
+                SKSE::GetTaskInterface()->AddTask([handle = actor->GetHandle(), key = std::move(key),
+                                                   event = std::string{a_eventName.c_str()}, debug]() mutable {
+                    if (debug) {
+                        const auto watched = handle.get();
+                        if (watched && IsWatched(watched.get())) {
+                            SKSE::log::info("AnimEvent {:08X} {} -> {}", watched->GetFormID(), event, key.empty() ? "-" : key);
+                        }
+                    }
+                    if (!key.empty()) {
+                        SendGesture(handle, std::move(key));
+                    }
                 });
                 return result;
             }

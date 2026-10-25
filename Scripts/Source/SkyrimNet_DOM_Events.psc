@@ -216,7 +216,8 @@ int Function ScanCaptureAliases(bool narrate)
             endif
             CheckPoseChange(domActor, narrate)
             if domActor.mind
-                SkyrimNet_DOM_API.EndStalePainPunishment(domActor.GetActorRef(), domActor, domActor.mind.actor_owner)
+                ; stored abuser first; the owner is only the fallback (a save from before the abuser was stored)
+                SkyrimNet_DOM_API.EndStalePainPunishment(domActor.GetActorRef(), domActor, SkyrimNet_DOM_API.PainAbuserOr(domActor.GetActorRef(), domActor.mind.actor_owner))
             endif
         endif
         i += 1
@@ -1007,7 +1008,7 @@ int Property HEALING_HANDS = 0x04D3F2 AutoReadOnly ; Skyrim.esm
 ; starts it before this event arrives); the first batch of each punishment picks its reason (TortureReasonNamed).
 ; Every batch counts as a punishment hit (hand / spell torture fires no OnHit, so DOM would end it at once).
 ; DOM ends the punishment after a tick without hits and trains (EndPunishing -> TrainAfterPunished); the bridge ends
-; one older than a minute itself (EndStalePainPunishment). Leash trips / drags (falling, leash_dragging) are not torture.
+; one with no batch for 20 s itself (EndStalePainPunishment). Leash trips / drags (falling, leash_dragging) are not torture.
 Event OnInjuryTorture(Form akAttacker, Form akVictim, String source, Int hits, String cause)
     Actor attacker = akAttacker as Actor
     Actor victim = akVictim as Actor
@@ -1036,8 +1037,8 @@ Event OnInjuryTorture(Form akAttacker, Form akVictim, String source, Int hits, S
     Trace("OnInjuryTorture", attacker.GetDisplayName() + " -> " + victim.GetDisplayName() + " " + source + " hits:" + hits \
         + " active:" + mind.whipping_active + " reason:" + mind.whipping_reason + " trainer:" + mind.whipping_by_trainer \
         + " fresh:" + fresh)
+    SkyrimNet_DOM_API.MarkPainActivity(victim, attacker)
     if fresh
-        SkyrimNet_DOM_API.MarkPainStart(victim)
         StartTortureReason(attacker, victim, mind)
     endif
     mind.HandlePunishmentOnHit(attacker, None)

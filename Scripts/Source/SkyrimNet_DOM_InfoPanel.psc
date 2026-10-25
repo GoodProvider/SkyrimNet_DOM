@@ -43,7 +43,7 @@ String Function BuildPanelJson(DOM_Core core, SkyrimNet_DOM_Events events, Actor
     Bool skills = (mode == "trainer" || mode == "slaver")
 
     if mind
-        if skills
+        if mode == "trainer"
             int dom = DominantSkill(mind, core, akActor)
             AddPill(pills, "School", SkillSchool(dom), SkillMethod(dom), "status")
         elseif mode == "slaver"
@@ -279,9 +279,6 @@ Function AddEnjoyment(int sections, DOM_Mind m, SkyrimNet_SexLab_Handler_DOM han
     endif
     if m.MOD_Oral > act
         act = m.MOD_Oral
-    endif
-    if m.DOM01 && m.DOM01.DOMSexlab && m.DOM01.DOMSexlab.separateOrgasmToggle
-        act = 1000.0
     endif
     AddBar(en, "Best act modifier", act * 50.0, "x" + Fmt2(act))
     AddBar(en, "Orgasm modifier", m.MOD_Orgasm * 50.0, "x" + Fmt2(m.MOD_Orgasm))

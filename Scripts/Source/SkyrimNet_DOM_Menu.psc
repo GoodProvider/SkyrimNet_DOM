@@ -1879,7 +1879,7 @@ Function TM_DoMasturbate(Actor speaker, Actor target, String kind)
         return
     endif
     if kind == "stop"
-        act.StopScene_Masturbate("", target, speaker, true)
+        act.StopScene_Masturbate("", target, speaker, true, true)
         return
     elseif kind == "harder"
         String orderDesc = "masturbate harder"
@@ -1894,7 +1894,7 @@ Function TM_DoMasturbate(Actor speaker, Actor target, String kind)
         FinishOrder(speaker, target, orderDesc, gate)
         return
     endif
-    act.StartScene_masturbate("", target, speaker, kind)
+    act.StartScene_masturbate("", target, speaker, kind, true)
 EndFunction
 
 Function TM_DoPunish(Actor speaker, Actor target, String reason, String type)
