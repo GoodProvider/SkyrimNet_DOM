@@ -1,0 +1,857 @@
+{
+  "type": "pulldown",
+  "label": "clothes",
+  "source": "dom",
+  "requiresPlugin": "SkyrimNet_DOM.esp",
+  "eligibilityRules": [
+    {
+      "required": true,
+      "logicalOperator": "OR",
+      "conditions": [
+        {
+          "decoratorName": "webui_focus_kind",
+          "comparisonOperator": "==",
+          "expectedValue": "all_slaves"
+        },
+        {
+          "decoratorName": "get_faction_rank",
+          "comparisonOperator": ">",
+          "expectedValue": 0,
+          "arguments": [
+            "currentActor",
+            "DOMPlayerSlaveFaction"
+          ]
+        }
+      ]
+    }
+  ],
+  "options": [
+    {
+      "type": "papyrus",
+      "label": "you rip-off",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "rip"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "you rip-off everything",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "ripall"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to strip",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "strip"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to strip all (actor)",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "stripall"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to be naked",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "naked"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to dress",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoDress",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to re-equip inventory",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "equip"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to no weapons",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "noweapons"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to hold weapons",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "weapons"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to no armor",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "noarmor"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "order to wear armor",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "armor"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "be naked all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "naked"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "wear clothes all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "clothed"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "strip all slaves",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "strip"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "strip entirely all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "stripall"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "equip inventory all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "equip"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "no weapons all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "noweapons"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "no armor all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoNamed",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "fn",
+          "value": "noarmor"
+        },
+        {
+          "type": "static",
+          "name": "type",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

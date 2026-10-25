@@ -1,0 +1,2 @@
+136986 2026-10-23 21:22:57 /c/Users/bhuff/OneDrive/Documents/my games/Skyrim Special Edition/Logs/Script/Papyrus.0.log - empty-list test (Choice_Open options=0)
+19031 2026-10-23 21:22:58 /c/Users/bhuff/OneDrive/Documents/my games/Skyrim Special Edition/SKSE/SkyrimNet_SexLab.log - empty-list test (Choice_Open options=0)

@@ -1,16 +1,28 @@
 name: DOMSlave_Kneel
 description: Kneel down.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoEntertain
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The NPC who will kneel
+    description: The slave being ordered
   - type: static
+    name: kind
+    value: kneel
+  - type: static
+    name: actionDesc
+    value: kneel
+  - type: static
+    name: op
+    value: entertain
+  - type: static
+    name: arg
     value: Kneel
-    name: type
-    description: The entertain type - "Kneel" for kneeling pose
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -46,4 +58,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} kneels down"

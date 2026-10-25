@@ -33,22 +33,52 @@ EndFunction
 Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
     String speaker_name = GetDisplayname(speaker)
     String superior_name = GetDisplayname(superior)
-    String msg = speaker_name+" obeys "+superior_name+" and does "+action_desc
+    ; speaker arg is the slave; superior is the order-giver
+    String msg = superior_name+" orders "+speaker_name+" to "+action_desc
     int ttl = 100000
     if dom_main
         ttl = dom_main.short_lived_ttl
     endif
-    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, speaker, superior)
+    SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, superior, speaker)
+EndFunction
+
+Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc, Bool rollObedience=false)
+    ; LLM chose the action: no WillObey roll. Player menu clicks pass rollObedience=true.
+    return SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, rollObedience)
+EndFunction
+
+String Function SexOrderDesc(Actor ordered, Actor superior, Actor speaker, Actor target, String method, Actor participate=None)
+    Actor partner = SkyrimNet_DOM_Obedience.SexCommandPartner(ordered, superior, speaker, target, participate)
+    return SkyrimNet_DOM_Obedience.FormatSexCommand(method, partner)
+EndFunction
+
+DOM_Keys Function GetKeys()
+    if !dom_main
+        Setup()
+    endif
+    if dom_main && dom_main.d_keys
+        return dom_main.d_keys
+    endif
+    return None
 EndFunction
 
 ;------------------------------------
 ;  Action Functions 
 ;------------------------------------
-Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, String position="")
+Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, String position="", Bool rollObedience=false)
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Start", speaker, True) 
     if slave == None 
         return 
     endif 
+
+    String desc = "masturbate"
+    if position != ""
+        desc = "masturbate "+position
+    endif
+    Int gate = GateSlave(superior, speaker, "masturbate", desc, rollObedience)
+    if gate == 0
+        return
+    endif
 
     if !slave.is_behaviour_masturbate
         if position == "standing"
@@ -63,13 +93,18 @@ Function StartScene_masturbate(String intent, Actor speaker, Actor Superior, Str
     endif
     SaveThreadsJson()
 EndFunction 
-Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool allowed=false)
+Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool allowed=false, Bool rollObedience=false)
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Actions", "masturbate_Stop", speaker, True) 
     if slave == None 
         return 
     endif 
 
-    if !allowed
+    if allowed
+        Int gate = GateSlave(superior, speaker, "masturbate_stop", "stop masturbating", rollObedience)
+        if gate == 0
+            return
+        endif
+    else
         SkyrimNet_DOM_API.AddPunishmentReason("SkyrimNet_DOM_Actions", "StopScene_Masturbate", superior, speaker, slave, "didnt obey")
     endif 
 
@@ -85,7 +120,8 @@ Function StopScene_Masturbate(String intent, Actor speaker, Actor Superior, bool
     SaveThreadsJson()
 EndFunction
 
-; Dump after masturbate start/stop so paused 0050 does not keep the previous threads.json.
+; Push DOM threads after masturbate start/stop so sexlab_get_threads / threads.json stay current.
+; SaveThreadsJson is SexLab's shim for DOM (-> Scene_Manager.PushDomThreads); works on older SexLab too.
 Function SaveThreadsJson()
     SkyrimNet_SexLab_Scene_Manager sm = manager
     if sm == None
@@ -97,7 +133,7 @@ Function SaveThreadsJson()
         return
     endif
     sm.SaveThreadsJson()
-    Trace("SaveThreadsJson", "--- dumped threads.json")
+    Trace("SaveThreadsJson", "--- pushed DOM threads")
 EndFunction 
 
 
@@ -129,7 +165,14 @@ Function StartScene_Consensual_Two(String intent, Actor speaker, Actor Superior,
         Trace("StartScene_Consensual_Two", "actions is None, aborting")
         return
     endif
-    RegisterObeyCommand(speaker, superior, style+" "+direction+" "+method+" with "+target_name)
+    String sexDesc = SexOrderDesc(speaker, superior, speaker, target, method)
+    Int gate = GateSlave(superior, speaker, "sex", sexDesc)
+    if gate == 0
+        return
+    endif
+    if gate < 0
+        RegisterObeyCommand(speaker, superior, sexDesc)
+    endif
     actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name) 
 EndFunction
 
@@ -178,9 +221,217 @@ Function StartScene_Consensual_Three(String intent, Actor speaker, Actor Superio
         Trace("StartScene_Consensual_Three", "actions is None, aborting")
         return
     endif
-    RegisterObeyCommand(speaker, superior, direction+" "+method+" with "+target_name)
+    String sexDesc = SexOrderDesc(speaker, superior, speaker, target, method, participate)
+    Int gate = GateSlave(superior, speaker, "sex", sexDesc)
+    if gate == 0
+        return
+    endif
+    if gate < 0
+        RegisterObeyCommand(speaker, superior, sexDesc)
+    endif
     actions.StartScene_Consensual_Three(intent, speaker, target, style="", method=method, direction=direction, setting_name=setting_name, participate=participate) 
 EndFunction
+
+;------------------------------------
+;  WebUI TargetMenu scene_start (SexLab arg order; tags arrive as method)
+;  Superior is always the player. Gate the ordered DOM slave (target when speaker is player).
+;------------------------------------
+Actor Function WebUI_OrderedSlave(Actor speaker, Actor target, Actor participate=None)
+    Actor superior = Game.GetPlayer()
+    if target && target != superior && SkyrimNet_DOM_API.IsDOMSlave(target)
+        return target
+    endif
+    if speaker && speaker != superior && SkyrimNet_DOM_API.IsDOMSlave(speaker)
+        return speaker
+    endif
+    if participate && participate != superior && SkyrimNet_DOM_API.IsDOMSlave(participate)
+        return participate
+    endif
+    if target && SkyrimNet_DOM_API.IsDOMSlave(target)
+        return target
+    endif
+    if speaker && SkyrimNet_DOM_API.IsDOMSlave(speaker)
+        return speaker
+    endif
+    return None
+EndFunction
+
+Function WebUI_StartScene_Consensual_One(String intent, Actor speaker, string style="", string method="", String setting_name="")
+    if actions == None
+        Trace("WebUI_StartScene_Consensual_One", "actions is None, aborting")
+        return
+    endif
+    Actor superior = Game.GetPlayer()
+    Actor ordered = WebUI_OrderedSlave(speaker, None)
+    if ordered
+        String sexDesc = SexOrderDesc(ordered, superior, speaker, None, method)
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
+        if gate == 0
+            return
+        endif
+    endif
+    actions.StartScene_Consensual_One(intent, speaker, style=style, method=method, setting_name=setting_name)
+EndFunction
+
+Function WebUI_StartScene_Consensual_Two(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="")
+    if actions == None
+        Trace("WebUI_StartScene_Consensual_Two", "actions is None, aborting")
+        return
+    endif
+    Actor superior = Game.GetPlayer()
+    Actor ordered = WebUI_OrderedSlave(speaker, target)
+    String target_name = GetDisplayname(target)
+    String sexDesc = SexOrderDesc(ordered, superior, speaker, target, method)
+    if ordered
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
+        if gate == 0
+            return
+        endif
+    endif
+    Trace("WebUI_StartScene_Consensual_Two", "intent:"+intent+" speaker:"+GetDisplayname(speaker)+" target:"+target_name+" style:"+style+" method:"+method)
+    actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name)
+EndFunction
+
+Function WebUI_StartScene_Consensual_Three(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="", Actor participate)
+    if actions == None
+        Trace("WebUI_StartScene_Consensual_Three", "actions is None, aborting")
+        return
+    endif
+    Actor superior = Game.GetPlayer()
+    Actor ordered = WebUI_OrderedSlave(speaker, target, participate)
+    String target_name = GetDisplayname(target)
+    String sexDesc = SexOrderDesc(ordered, superior, speaker, target, method, participate)
+    if ordered
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
+        if gate == 0
+            return
+        endif
+    endif
+    Trace("WebUI_StartScene_Consensual_Three", "intent:"+intent+" speaker:"+GetDisplayname(speaker)+" target:"+target_name+" participate:"+GetDisplayname(participate))
+    actions.StartScene_Consensual_Three(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name, participate=participate)
+EndFunction
+
+; Abuse comfort:sex / comfort:rape — transform + mind (no DOM Anim_Sexlab) then SexLab scene.
+Function ComfortTransform(Actor speaker, Actor target, String line, Bool registerObey=true)
+    if line != ""
+        SkyrimNetApi.TransformDialogue(line)
+    endif
+    if registerObey && target && speaker
+        RegisterObeyCommand(target, speaker, line)
+    endif
+EndFunction
+
+Function ApplyComfortMindSex(Actor abuser, Actor target)
+    if !dom_main
+        Setup()
+    endif
+    DOM_Actor slave = Get_Slave("ApplyComfortMindSex", target, false)
+    if !slave || !slave.mind
+        return
+    endif
+    DOM_Mind mind = slave.mind
+    DOM_Core core = None
+    if dom_main
+        core = dom_main.d_core
+    endif
+    Float mod = 1.0
+    Float speed = 100.0
+    if core
+        mod = core.GetPredatorModifier(abuser)
+        speed = core.train_speed_tell
+    endif
+    if mind.StartGuilt()
+        mind.TrainHumiliation(speed * 0.1 * mod)
+        mind.number_of_comfort = mind.number_of_comfort + 1
+        mind.SendNotificationAbuse("Comforting "+GetDisplayname(target)+" with sex")
+        if core
+            core.TrainSkillPredator(abuser, 0.5)
+        endif
+    else
+        Trace("ApplyComfortMindSex", GetDisplayname(target)+" refused comfort guilt")
+    endif
+EndFunction
+
+Function ApplyComfortMindRape(Actor abuser, Actor target)
+    if !dom_main
+        Setup()
+    endif
+    DOM_Actor slave = Get_Slave("ApplyComfortMindRape", target, false)
+    if !slave || !slave.mind
+        return
+    endif
+    DOM_Mind mind = slave.mind
+    DOM_Core core = None
+    if dom_main
+        core = dom_main.d_core
+    endif
+    Float mod = 1.0
+    Float speed = 100.0
+    if core
+        mod = core.GetPredatorModifier(abuser)
+        speed = core.train_speed_tell
+    endif
+    mind.TrainSubmission(speed * 0.1 * mod)
+    mind.SendNotificationAbuse("Pretending to comfort "+GetDisplayname(target)+" with rape")
+    if core
+        core.TrainSkillPredator(abuser, 0.5)
+    endif
+EndFunction
+
+Function WebUI_StartScene_Comfort_Sex(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="")
+    if !dom_main || actions == None
+        Setup()
+    endif
+    if actions == None
+        Trace("WebUI_StartScene_Comfort_Sex", "actions is None, aborting")
+        return
+    endif
+    if intent == ""
+        intent = "comfort with sex"
+    endif
+    Actor superior = Game.GetPlayer()
+    if !speaker
+        speaker = superior
+    endif
+    String spName = GetDisplayname(speaker)
+    String tgName = GetDisplayname(target)
+    ; Roll first: a refusal must leave no comfort on the mind. A gated order registers the obey command itself.
+    Actor ordered = WebUI_OrderedSlave(speaker, target)
+    String sexDesc = SexOrderDesc(ordered, superior, speaker, target, method)
+    if ordered
+        Int gate = GateSlave(superior, ordered, "sex", sexDesc, true)
+        if gate == 0
+            return
+        endif
+    endif
+    ComfortTransform(speaker, target, spName+" comforts "+tgName+" with loving sex.", ordered == None)
+    ApplyComfortMindSex(speaker, target)
+    Trace("WebUI_StartScene_Comfort_Sex", "intent:"+intent+" speaker:"+spName+" target:"+tgName)
+    actions.StartScene_Consensual_Two(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name)
+EndFunction
+
+Function WebUI_StartScene_Comfort_Rape(String intent, Actor speaker, Actor target, string style="", string method="", String direction="", String setting_name="")
+    if !dom_main || actions == None
+        Setup()
+    endif
+    if actions == None
+        Trace("WebUI_StartScene_Comfort_Rape", "actions is None, aborting")
+        return
+    endif
+    if intent == ""
+        intent = "pretend to comfort by sexual assault"
+    endif
+    if !speaker
+        speaker = Game.GetPlayer()
+    endif
+    String spName = GetDisplayname(speaker)
+    String tgName = GetDisplayname(target)
+    ComfortTransform(speaker, target, spName+" pretends to comfort "+tgName+" by sexual assault.")
+    ApplyComfortMindRape(speaker, target)
+    Trace("WebUI_StartScene_Comfort_Rape", "intent:"+intent+" speaker:"+spName+" target:"+tgName)
+    actions.StartScene_Nonconsensual_Two_TargetVictim(intent, speaker, target, style=style, method=method, direction=direction, setting_name=setting_name)
+EndFunction
+
 ;------------------------------------
 ;  Refused Functions 
 ;------------------------------------
@@ -211,7 +462,13 @@ Function UndressDress_Execute(Actor speaker, Actor superior)
     if !superior
         superior = Game.GetPlayer()
     endif
-    RegisterObeyCommand(speaker, superior, "undress")
+    Int gate = GateSlave(superior, speaker, "undress", "undress")
+    if gate == 0
+        return
+    endif
+    if gate < 0
+        RegisterObeyCommand(speaker, superior, "undress")
+    endif
     if !slave.mind
         Trace("UndressDress_Execute", GetDisplayname(speaker)+" mind is None, aborting")
         return
@@ -230,7 +487,13 @@ Function Dress_Execute(Actor speaker, Actor superior)
     if !superior
         superior = Game.GetPlayer()
     endif
-    RegisterObeyCommand(speaker, superior, "dress")
+    Int gate = GateSlave(superior, speaker, "dress", "dress")
+    if gate == 0
+        return
+    endif
+    if gate < 0
+        RegisterObeyCommand(speaker, superior, "dress")
+    endif
     slave.UnsetShouldBeNaked(superior)
 EndFunction
 
@@ -294,4 +557,43 @@ Function Praise_Tell_Execute(Actor speaker, Actor superior)
         return
     endif
     slave.StartPraising(superior, "", "tell")
+EndFunction
+
+; YAML wrapper: gate then DOM_Keys. op=entertain|action|follow|stand|display
+Function DOMOrder_Execute(Actor akTarget, String kind, String actionDesc, String op, String arg, String arg2="")
+    if !akTarget
+        Trace("DOMOrder_Execute", "akTarget is None")
+        return
+    endif
+    Actor superior = Game.GetPlayer()
+    Int gate = GateSlave(superior, akTarget, kind, actionDesc)
+    if gate == 0
+        return
+    endif
+    if gate < 0
+        ; no DLL / unknown kind: gate said nothing, so narrate the order like Menu.FinishOrder
+        DirectNarration(superior.GetDisplayName()+" orders "+akTarget.GetDisplayName()+" to "+actionDesc+".", superior, akTarget)
+        RegisterObeyCommand(akTarget, superior, actionDesc)
+    endif
+    DOM_Keys keys = GetKeys()
+    if !keys
+        Trace("DOMOrder_Execute", "d_keys is None kind="+kind)
+        return
+    endif
+    if op == "entertain"
+        keys.DOMDoEntertain(akTarget, arg)
+    elseif op == "follow"
+        keys.DOMDoFollowMe(akTarget)
+    elseif op == "stand"
+        keys.DOMDoStandStill(akTarget)
+    elseif op == "display"
+        keys.DOMDoDisplay(akTarget)
+    else
+        Bool theFlag = arg2 == "1" || arg2 == "true"
+        String typeArg = arg2
+        if theFlag
+            typeArg = ""
+        endif
+        keys.DOMDoActionActor(akTarget, arg, typeArg, theFlag)
+    endif
 EndFunction

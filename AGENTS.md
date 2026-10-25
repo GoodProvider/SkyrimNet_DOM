@@ -14,12 +14,16 @@ Bridge mod between SkyrimNet (LLM) and Diary of Mine. Sex/punish scenes go throu
 | `Scripts/` | Compiled `.pex` |
 | `Headers/` | Papyrus headers |
 | `skyrimse.ppj` | Pyro project |
-| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + triggers) |
+| `SKSE_Source/` | `SkyrimNet_DOM.dll` (DomObedience); CMake `--preset release` |
+| `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Beta 25 LLM plugin (actions + prompts + dialogue_actions blacklist) |
 | `SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/` | Settings schema (`dom.events.*`) |
+| `SKSE/Plugins/SkyrimNet_SexLab/webui/` | Overlay TargetMenu (`0800_dom_*`) + **DOM Info** MainPanel (`MainPanels/0850_dom_info.json`, type `actor_profile`) |
 
 Repo root: `c:\Skyrim\dev\mods\SkyrimNet_DOM`.
 
 Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_SexLab/docs/) and [README](../SkyrimNet_SexLab/README.md).
+
+SkyrimNet C++ API (`PublicAPI.h`, `PublicAPIMemoryQuery.h`): `c:\Skyrim\dev\mods\SkyrimNet devkit\CppAPI`. If `SKSE_Source` ever needs it, add `"${CMAKE_CURRENT_SOURCE_DIR}/../../SkyrimNet devkit/CppAPI"` to `target_include_directories` (same as SexLab). Modding docs: `..\SkyrimNet devkit\docs\modding\`.
 
 ## Documentation map
 
@@ -33,6 +37,7 @@ Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_
 | Punishment | [docs/authors/punishment.md](docs/authors/punishment.md) |
 | Content | [docs/authors/content.md](docs/authors/content.md) |
 | Papyrus | [docs/developers/papyrus.md](docs/developers/papyrus.md) |
+| WebUI (SexLab overlay) | [manifest/DOM.md](manifest/DOM.md), [docs/players/overview.md](docs/players/overview.md) |
 | Release docs | [release-guide.xml](release-guide.xml) + [release-checkpoint.xml](release-checkpoint.xml) |
 
 ### Canonical contracts (do not restate elsewhere)
@@ -46,6 +51,7 @@ Sibling: `c:\Skyrim\dev\mods\SkyrimNet_SexLab` — see its [docs/](../SkyrimNet_
 ## Compile
 
 - Papyrus: VS Code/Cursor task **`compile: pyro`** / `skyrimse.ppj` only (unless maintainer asks otherwise).
+- SKSE plugin: `SKSE_Source` CMake `--preset release` from a VS 2022 x64 Developer Prompt.
 
 Tools under game `tools/`: Champollion, Caprica, XEditLib, Spriggit (see notes in historical sessions / sibling repo).
 

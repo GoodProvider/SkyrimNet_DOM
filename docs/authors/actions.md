@@ -13,7 +13,6 @@ SkyrimNet Beta 25+ reads this mod's LLM content from the **external plugin** fol
 | `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/` | Plugin root (`manifest.json`) |
 | `…/actions/` | Action YAML (filename stem must equal in-file `name`) |
 | `…/prompts/` | Bio / helper / user_final_instructions prompts |
-| `…/triggers/` | Healing Hands trigger |
 
 Do **not** use `SKSE/Plugins/SkyrimNet_DOM/actions.json` — that file is legacy and is no longer registered.
 
@@ -26,9 +25,7 @@ Start from an existing file in the same family:
 | Family | Examples | Typical executor |
 |--------|----------|------------------|
 | `Be_` | flatter, insult, praise-tell, promises, scold, refuse | `DOM_Keys` / `DOMDoActionActor` |
-| `Act*` | `ActSilent`, `ActRespectful`, `BeMyMaid` | `DOM_Keys` |
-| `Pose_` | display, dance, chair, presentations | `DOM_Keys` |
-| FightForMe / chores / movement / drink | Follow, Kneel, DoFlowers, DrinkAlcohol | `DOM_Keys` |
+| `Act*` / pose / chores / follow / drink | `ActSilent`, kneel, dance, Follow, DrinkAlcohol | `SkyrimNet_DOM_Actions.DOMOrder_Execute` |
 | Dress / Undress | `DOMSlave_Dress.yaml`, `DOMSlave_Undress.yaml` | `SkyrimNet_DOM_Actions` |
 | `sex_` / masturbate / stop-masturbate | 2P penis / no_penis, 3P, refuse, harder, stop allowed/disallowed | `SkyrimNet_DOM_Actions` |
 | `punish_` | spanking, whipping/oral, refused, other | `SkyrimNet_DOM_Actions` |
@@ -65,22 +62,23 @@ SkyrimNet has a **hard limit of 8 parameters** on action YAMLs (`parameterMappin
 
 ## Two execution styles
 
-### 1. DOM_Keys (social / pose / chore)
+### 1. DOM_Keys (social only)
 
-Calls Diary of Mine directly. Example: [`DOMSlave_Be_PraisedTell.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_Be_PraisedTell.yaml)
+Player-performed social (praise, insult, promise, inspect, scold). Example: [`DOMSlave_Be_PraisedTell.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_Be_PraisedTell.yaml)
 
 - `scriptName: DOM_Keys`
 - `executionFunctionName: DOMDoActionActor`
 - Static params usually include `the_event` (e.g. `Praise`), `type` (e.g. `tell`), and `the_flag`
 
-Copy a `Be_` or `Pose_` sibling and change the static event/type values to match DOM’s expected strings.
+Copy a `Be_` sibling and change the static event/type values to match DOM’s expected strings.
 
-### 2. SkyrimNet_DOM_Actions (sex / punish / dress)
+### 2. SkyrimNet_DOM_Actions (orders / sex / punish / dress)
 
-Calls our bridge, which talks to DOM and/or SkyrimNet_SexLab. Example: [`DOMSlave_punish_spanking.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_punish_spanking.yaml)
+Orders that tell a slave to **do** something go through `DOMOrder_Execute` (DomObedience then `DOM_Keys`). Sex/punish/masturbate/dress call other Actions functions. Example order: [`DOMSlave_Kneel.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_Kneel.yaml)
 
 Common execute functions:
 
+- `DOMOrder_Execute` — gated `DOM_Keys` wrapper (`op`: `entertain` / `action` / `follow` / `stand` / `display`)
 - `StartScene_Consensual_Two` / `StartScene_Nonconsensual_Two`
 - `StartScene_masturbate` / `StopScene_Masturbate`
 - `UndressDress_Execute` / `Dress_Execute`

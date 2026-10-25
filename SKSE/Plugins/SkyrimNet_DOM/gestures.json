@@ -1,0 +1,26 @@
+{
+  "animation_lists": {
+    "DOMIdleFemaleCovering": "cover_self",
+    "DOMIdleMaleCovering": "cover_self",
+    "DOMIdleFemaleShamed": "cover_self",
+    "DOMIdleMaleShamed": "cover_self",
+    "DOMIdleFemaleShocked": "shocked",
+    "DOMIdleMaleShocked": "shocked"
+  },
+  "animation_events": {},
+  "text": {
+    "salute": "stands with hands clasped behind their back, eyes lowered respectfully.",
+    "kneel": "kneels submissively.",
+    "attention": "kneels on display, at attention.",
+    "cross_arms": "crosses their arms resentfully.",
+    "aggressive": "makes an angry, defiant gesture.",
+    "nervous": "fidgets nervously.",
+    "cower": "cowers in fear.",
+    "cry": "breaks down crying.",
+    "wipe_brow": "wipes their brow wearily.",
+    "please_stop": "raises their hands defensively, pleading.",
+    "warm_arms": "rubs their bare arms against the cold.",
+    "cover_self": "tries to cover their naked body in shame.",
+    "shocked": "trembles, still in shock."
+  }
+}

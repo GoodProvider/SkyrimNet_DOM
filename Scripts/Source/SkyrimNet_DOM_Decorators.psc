@@ -28,6 +28,20 @@ String Function BehaviourToString(String behavior) global
     return ""
 EndFunction
 
+; DOM_Actor.poseId -> phrase. <=3 (none/reset/tied/furniture) is covered by behaviour; 1000+ masturbate is
+; hidden like the "masturbating." behaviour.
+String Function PoseToString(int poseId) global
+    if poseId <= 3 || poseId >= 1000
+        return ""
+    endif
+    int key_value = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/slave_poses.json")
+    String pose_key = poseId as String
+    if JMap.hasKey(key_value, pose_key)
+        return JMap.getStr(key_value, pose_key)
+    endif
+    return ""
+EndFunction
+
 int Function PromiseOathToRank(String oath) global
     if oath == "freedom"
         return 1
@@ -305,13 +319,22 @@ String Function Get_Actor_Info(Actor akActor) global
     JMap.setStr(actor_obj, "mood_sentence", events.mood_to_Sentence(akActor.GetDisplayName(), DOM01.GetMood(akActor)))
 
     String behaviour = BehaviourToString(slave.behaviour)
+    String pose = PoseToString(slave.poseId)
     SkyrimNet_SexLab_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Main
     if main != None && main.sexLab != None
         if main.sexLab.IsActorActive(akActor) || SkyrimNet_DOM_API.Ostim_IsInOstim(akActor)
             behaviour = "having a sexual experience."
+            pose = ""
         endif
     endif
     JMap.setStr(actor_obj, "behaviour", behaviour)
+    JMap.setStr(actor_obj, "pose", pose)
+    ; Last DOM idle gesture (Events.OnGesture), kept ~30 game minutes
+    String gesture = ""
+    if Utility.GetCurrentGameTime() - StorageUtil.GetFloatValue(akActor, "DOM_gesture_time", 0.0) < 0.02
+        gesture = StorageUtil.GetStringValue(akActor, "DOM_gesture_last", "")
+    endif
+    JMap.setStr(actor_obj, "gesture", gesture)
 
     FillGearFields(actor_obj, slave)
 

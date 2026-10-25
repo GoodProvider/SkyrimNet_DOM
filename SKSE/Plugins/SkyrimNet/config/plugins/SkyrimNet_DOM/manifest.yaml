@@ -1,6 +1,6 @@
 plugin:
   name: "SkyrimNet_DOM"
-  version: "0.1.0"
+  version: "0.2.0"
   description: "Diary of Mine-SkyrimNet integration"
   icon: "⛓️"
 
@@ -30,3 +30,54 @@ schema:
       max: 600000
       defaultValue: 100000
       category: "Events"
+
+    - name: "Slave pose events"
+      path: "dom.events.poses"
+      type: "bool"
+      description: "When one of your slaves starts a held pose (dancing, serving drinks, human chair, cleaning, a cute or sexy pose, ...), narrate it (DirectNarration when SkyrimNet is idle, otherwise a plain event). The current pose is always shown in the slave's bio either way."
+      defaultValue: true
+      category: "Events"
+
+    - name: "Slave gesture events"
+      path: "dom.events.gestures"
+      type: "bool"
+      description: "Narrate when one of your slaves plays a DOM idle gesture (salutes, crosses arms, covers self in shame, cowers, cries, ...): DirectNarration when SkyrimNet is idle, otherwise a plain event. The latest gesture also shows in the slave's bio. Needs SkyrimNet_DOM.dll."
+      defaultValue: true
+      category: "Events"
+
+    - name: "Gesture cooldown (s)"
+      path: "dom.events.gesture_cooldown"
+      type: "int"
+      description: "Minimum seconds between gesture events for the same slave."
+      min: 5
+      max: 300
+      defaultValue: 20
+      category: "Events"
+
+    - name: "Log slave animation events"
+      path: "dom.events.gesture_debug"
+      type: "bool"
+      description: "Debug: write every animation event sent to your slaves to SkyrimNet_DOM.log, to find gesture names that are not listed in gestures.json yet."
+      defaultValue: false
+      category: "Events"
+
+    - name: "When player tortures let player choose"
+      path: "dom.punish.torture_choose_reason"
+      type: "bool"
+      description: "Injury Engine torture of a slave is a DOM punishment. On: when you start torturing a slave, the WebUI lists being a bad slave, didnt obey, the slave's other open punishment reasons, random, custom and no reason. Off: an open reason is chosen at random."
+      defaultValue: true
+      category: "Punishment"
+
+    - name: "Ask player praise reason when healing"
+      path: "dom.praise.heal_choose_reason"
+      type: "bool"
+      description: "Healing Hands or a SkyrimNet_SexLab Aid heal on a slave who is not in shock praises them (a shocked slave gets care comfort instead). On: when you heal, the WebUI lists the slave's praise reasons plus custom; closing the list gives no praise. 'Being a good slave' (or slaver) is always listed first and is the reason used when the setting is off."
+      defaultValue: true
+      category: "Praise"
+
+    - name: "Show enjoyment"
+      path: "dom.info.show_enjoyment"
+      type: "bool"
+      description: "DOM Info view (slaves and trainers): adds an Enjoyment section with everything that feeds DOM's orgasm meter (arousal, aroused state, act and orgasm modifiers, mood bonus, past orgasms, submission, desire), the orgasm chance per roll and the final enjoyment score shown on the SexLab HUD. Needs SkyrimNet_SexLab_Handler_DOM.esp."
+      defaultValue: false
+      category: "Info panel"

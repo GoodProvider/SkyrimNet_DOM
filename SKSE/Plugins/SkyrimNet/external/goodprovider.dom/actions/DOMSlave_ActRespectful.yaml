@@ -1,24 +1,28 @@
 name: DOMSlave_ActRespectful
 description: Start being respectful to {{ player.name }}.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoActionActor
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will be commanded to be respectful
+    description: The slave being ordered
   - type: static
+    name: kind
+    value: respectful
+  - type: static
+    name: actionDesc
+    value: be respectful
+  - type: static
+    name: op
+    value: action
+  - type: static
+    name: arg
     value: BeRespectful
-    name: the_event
-    description: The action name for respectful command
   - type: static
-    value: ''
-    name: type
-    description: Action type parameter (empty for respectful)
-  - type: static
-    value: false
-    name: the_flag
-    description: Boolean flag parameter (false for respectful)
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:

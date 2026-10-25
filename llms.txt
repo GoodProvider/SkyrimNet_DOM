@@ -1,6 +1,6 @@
 # SkyrimNet_DOM
 
-> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items/triggers. LLM content ships as `goodprovider.dom`.
+> SkyrimNet ↔ Diary of Mine bridge (with SkyrimNet_SexLab). Papyrus + DOMSlave YAML + prompts + items. LLM content ships as `goodprovider.dom`.
 
 ## Read by job
 
@@ -11,10 +11,11 @@
 | Author prompts | docs/authors/prompts.md + docs/reference/{json-keys,protocol-tokens}.md |
 | Author events / punishment / content | docs/authors/events.md, docs/authors/punishment.md, docs/authors/content.md |
 | Develop Papyrus | docs/developers/papyrus.md, docs/reference/papyrus-rules.md |
+| Player WebUI (SexLab overlay) | docs/players/overview.md, manifest/DOM.md |
 | Agent policy | AGENTS.md (safety, confidence, commits) |
 | Quirks | KNOWLEDGEBASE.md |
 | Release documentation | release-guide.xml, release-checkpoint.xml |
-| Changelog | CHANGELOG.md, CHANGELOG-user.md |
+| Changelog | CHANGELOG.md, CHANGELOG-developer.md, CHANGELOG-player.md |
 | Short examples | Prefer snippets pointing at SKSE/Plugins/... shipped files |
 
 ## Optional examples (in-tree)
@@ -35,4 +36,5 @@
 ## Compile reminders
 
 - Papyrus: Cursor task `compile: pyro` / `skyrimse.ppj` (preferred)
+- SKSE plugin: `SKSE_Source` CMake `--preset release` (`SkyrimNet_DOM.dll`)
 - Packaging: `make release` (maintainer-owned; see release-guide.xml)

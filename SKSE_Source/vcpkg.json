@@ -1,0 +1,8 @@
+{
+  "name": "skyrimnet-dom",
+  "version-string": "0.2.0",
+  "dependencies": [
+    "commonlibsse-ng-fork",
+    "directxtk"
+  ]
+}

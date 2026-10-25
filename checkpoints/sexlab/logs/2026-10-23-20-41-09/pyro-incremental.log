@@ -1,0 +1,62 @@
+2026-10-23 20:40:04,379 [INFO] Using working directory: "C:\Skyrim\dev\mods\SkyrimNet_DOM"
+2026-10-23 20:40:04,379 [INFO] Using input path: "C:\Skyrim\dev\mods\SkyrimNet_DOM\skyrimse.ppj"
+2026-10-23 20:40:04,380 [INFO] Successfully validated XML Schema.
+2026-10-23 20:40:04,383 [INFO] Implicitly imported folder paths found:
+2026-10-23 20:40:04,383 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source"
+2026-10-23 20:40:04,386 [INFO] 9 unique script paths resolved to absolute paths.
+2026-10-23 20:40:04,399 [INFO] Using game type: Skyrim Special Edition (determined from Papyrus Project)
+2026-10-23 20:40:04,401 [INFO] Imports found:
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SKSE64\Scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Headers_Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Headers_Source\DOM"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Headers_Source\OStim"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Headers_Source\Devious Devices"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet\Source\Scripts"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\JContainers\scripts\source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\UIExtensions\scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_SexLab\Scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_SexLab\Headers_Source\OStimNet"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_SexLab\Headers_Source\SLO Aroused NG"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SexLab Separate Orgasm\Scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SexLabFrameworkAE\scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\MfgFix\Source\Scripts"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\FNIS Behavior SE 7_6\source\scripts"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\FNIS Creature Pack SE\scripts\source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\Papyrus MessageBox - SKSE NG\Scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyUI\scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_UDNG\Scripts\Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\powerofthree's Papyrus Extender\Source\Scripts"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_SexLab\Headers_Source"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_SexLab\Headers_Source\LoversLedger"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\skyrim\Data\Source\Scripts"
+2026-10-23 20:40:04,401 [INFO] Scripts found:
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Actions.psc"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_API.psc"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Decorators.psc"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Events.psc"
+2026-10-23 20:40:04,401 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Main.psc"
+2026-10-23 20:40:04,402 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Menu.psc"
+2026-10-23 20:40:04,402 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Native.psc"
+2026-10-23 20:40:04,402 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_Obedience.psc"
+2026-10-23 20:40:04,402 [INFO] + "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\Source\SkyrimNet_DOM_PlayerRef.psc"
+2026-10-23 20:40:04,715 [INFO] Compiling "SkyrimNet_DOM_Menu"...
+2026-10-23 20:40:04,715 [INFO] Compiling "SkyrimNet_DOM_Obedience"...
+2026-10-23 20:40:04,715 [INFO] Compiling "SkyrimNet_DOM_Actions"...
+2026-10-23 20:40:09,445 [INFO] Anonymized "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Actions.pex"...
+2026-10-23 20:40:09,445 [WARN] Cannot anonymize script again: "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_API.pex"
+2026-10-23 20:40:09,445 [WARN] Cannot anonymize script again: "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Decorators.pex"
+2026-10-23 20:40:09,446 [WARN] Cannot anonymize script again: "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Events.pex"
+2026-10-23 20:40:09,446 [WARN] Cannot anonymize script again: "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Main.pex"
+2026-10-23 20:40:09,446 [INFO] Anonymized "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Menu.pex"...
+2026-10-23 20:40:09,446 [WARN] Cannot anonymize script again: "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Native.pex"
+2026-10-23 20:40:09,447 [INFO] Anonymized "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_Obedience.pex"...
+2026-10-23 20:40:09,447 [WARN] Cannot anonymize script again: "C:\Skyrim\dev\mods\SkyrimNet_DOM\Scripts\SkyrimNet_DOM_PlayerRef.pex"
+2026-10-23 20:40:09,447 [INFO] Cannot create Packages because Package is disabled in project
+2026-10-23 20:40:09,447 [INFO] Cannot create ZipFile because Zip is disabled in project
+2026-10-23 20:40:09,447 [INFO] Compile time: 5.038s (1.679s/script) - 3 succeeded, 0 failed (0 scripts)
+2026-10-23 20:40:09,447 [INFO] No files were packaged.
+2026-10-23 20:40:09,447 [INFO] No files were zipped.
+2026-10-23 20:40:09,447 [INFO] DONE!
+2026-10-23 20:40:09,448 [INFO] Post-Build Remove BSA Files
+2026-10-23 20:40:09,491 [INFO] Could Not Find C:\Skyrim\dev\mods\SkyrimNet_DOM\*.bsa

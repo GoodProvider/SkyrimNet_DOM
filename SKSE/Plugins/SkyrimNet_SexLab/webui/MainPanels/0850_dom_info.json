@@ -1,0 +1,11 @@
+{
+  "type": "actor_profile",
+  "id": "dom_info",
+  "label": "DOM Info",
+  "source": "dom",
+  "requiresPlugin": "SkyrimNet_DOM.esp",
+  "plugin": "SkyrimNet_DOM.esp",
+  "questFormId": "0x800",
+  "scriptName": "SkyrimNet_DOM_Menu",
+  "openFunction": "WebUI_DomInfoOpen"
+}

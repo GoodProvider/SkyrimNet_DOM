@@ -1,0 +1,1950 @@
+{
+  "type": "pulldown",
+  "label": "restrain",
+  "source": "dom",
+  "requiresPlugin": "SkyrimNet_DOM.esp",
+  "eligibilityRules": [
+    {
+      "required": true,
+      "logicalOperator": "OR",
+      "conditions": [
+        {
+          "decoratorName": "webui_focus_kind",
+          "comparisonOperator": "==",
+          "expectedValue": "all_slaves"
+        },
+        {
+          "decoratorName": "get_faction_rank",
+          "comparisonOperator": ">",
+          "expectedValue": 0,
+          "arguments": [
+            "currentActor",
+            "DOMPlayerSlaveFaction"
+          ]
+        }
+      ]
+    }
+  ],
+  "options": [
+    {
+      "type": "pulldown",
+      "label": "tie",
+      "layout": "buttons",
+      "options": [
+        {
+          "type": "papyrus",
+          "label": "kneeling",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "0"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "standing",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "1"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "laying",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "2"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "hogtied",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "3"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "struggle rope",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "4"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "hands behind back",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "5"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "head down",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "6"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "random",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "tie"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "random"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "untie",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoRestrain",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "untie"
+        },
+        {
+          "type": "static",
+          "name": "flag",
+          "value": ""
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "tie all",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_DoRestrain",
+      "closeWebUI": true,
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "tie"
+        },
+        {
+          "type": "static",
+          "name": "flag",
+          "value": "all"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "==",
+              "expectedValue": "all_slaves"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "chains",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_ListRestrainVariants",
+      "closeWebUI": false,
+      "panel": "fields",
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "chains"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "post",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_ListRestrainVariants",
+      "closeWebUI": false,
+      "panel": "fields",
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "post"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "cage",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_ListRestrainVariants",
+      "closeWebUI": false,
+      "panel": "fields",
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "cage"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "cross",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_ListRestrainVariants",
+      "closeWebUI": false,
+      "panel": "fields",
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "cross"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "pillory",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_ListRestrainVariants",
+      "closeWebUI": false,
+      "panel": "fields",
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "pillory"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "papyrus",
+      "label": "wheel",
+      "plugin": "SkyrimNet_DOM.esp",
+      "questFormId": "0x800",
+      "scriptName": "SkyrimNet_DOM_Menu",
+      "executionFunctionName": "TM_ListRestrainVariants",
+      "closeWebUI": false,
+      "panel": "fields",
+      "parameterMapping": [
+        {
+          "type": "speaker",
+          "name": "speaker"
+        },
+        {
+          "type": "target",
+          "name": "target"
+        },
+        {
+          "type": "static",
+          "name": "kind",
+          "value": "wheel"
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "pulldown",
+      "label": "gag / plug",
+      "layout": "buttons",
+      "options": [
+        {
+          "type": "papyrus",
+          "label": "gag cloth",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "gag"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "cloth"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "ball gag",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "gag"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "ball"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "ring gag",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "gag"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "ring"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "log bit",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "gag"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "log"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "vaginal plug",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "plug"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "vaginal"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "anal plug",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "plug"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "anal"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "pulldown",
+      "label": "blindfold",
+      "layout": "buttons",
+      "options": [
+        {
+          "type": "papyrus",
+          "label": "leather",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "0"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "dd",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "1"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "black",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "2"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "cloth",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "3"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "hood",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "4"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "db",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "5"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "remove",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "remove"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "random",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "blindfold"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "random"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "pulldown",
+      "label": "cuffing",
+      "layout": "buttons",
+      "options": [
+        {
+          "type": "papyrus",
+          "label": "cuffs back",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "cuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "0"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "cuffs front",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "cuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "1"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "cuffs crossed",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "cuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "2"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "cuffs boxtied",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "cuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "3"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "yoke",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "cuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "4"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "armbinder",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "cuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": "5"
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "papyrus",
+          "label": "uncuff",
+          "plugin": "SkyrimNet_DOM.esp",
+          "questFormId": "0x800",
+          "scriptName": "SkyrimNet_DOM_Menu",
+          "executionFunctionName": "TM_DoRestrain",
+          "closeWebUI": true,
+          "parameterMapping": [
+            {
+              "type": "speaker",
+              "name": "speaker"
+            },
+            {
+              "type": "target",
+              "name": "target"
+            },
+            {
+              "type": "static",
+              "name": "kind",
+              "value": "uncuff"
+            },
+            {
+              "type": "static",
+              "name": "flag",
+              "value": ""
+            }
+          ],
+          "eligibilityRules": [
+            {
+              "required": true,
+              "conditions": [
+                {
+                  "decoratorName": "webui_focus_kind",
+                  "comparisonOperator": "!=",
+                  "expectedValue": "all_slaves"
+                },
+                {
+                  "decoratorName": "get_faction_rank",
+                  "comparisonOperator": ">",
+                  "expectedValue": 0,
+                  "arguments": [
+                    "currentActor",
+                    "DOMPlayerSlaveFaction"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "eligibilityRules": [
+        {
+          "required": true,
+          "conditions": [
+            {
+              "decoratorName": "webui_focus_kind",
+              "comparisonOperator": "!=",
+              "expectedValue": "all_slaves"
+            },
+            {
+              "decoratorName": "get_faction_rank",
+              "comparisonOperator": ">",
+              "expectedValue": 0,
+              "arguments": [
+                "currentActor",
+                "DOMPlayerSlaveFaction"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

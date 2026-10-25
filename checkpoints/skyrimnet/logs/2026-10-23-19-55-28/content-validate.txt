@@ -1,0 +1,1 @@
+goodprovider.dom: 0 error(s), 0 warning(s), 37 unresolved, 0 shadow(s)

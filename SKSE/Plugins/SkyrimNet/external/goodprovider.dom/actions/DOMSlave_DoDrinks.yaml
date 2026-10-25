@@ -1,16 +1,28 @@
 name: DOMSlave_DoDrinks
 description: Start serving drinks.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoEntertain
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will hold drinks
+    description: The slave being ordered
   - type: static
+    name: kind
     value: drinks
-    name: type
-    description: The entertain type - "drinks" for drinks pose
+  - type: static
+    name: actionDesc
+    value: serve drinks
+  - type: static
+    name: op
+    value: entertain
+  - type: static
+    name: arg
+    value: drinks
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -46,4 +58,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} starts serving drinks"

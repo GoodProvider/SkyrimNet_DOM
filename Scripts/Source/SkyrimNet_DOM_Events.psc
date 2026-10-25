@@ -9,6 +9,9 @@ Actor Property player  Auto
 String Property player_name Auto
 
 String Property behaviour_current_key = "DOM_behaviour_current" Auto
+String Property pose_last_key = "DOM_pose_last" Auto
+String Property gesture_last_key = "DOM_gesture_last" Auto
+String Property gesture_time_key = "DOM_gesture_time" Auto
 int Property lastSeenMap = 0 Auto 
 
 float Property timeLastEvent = 0.0 Auto 
@@ -74,6 +77,10 @@ Function DirectNarration_Optional(String event_type, String msg, Actor slave, bo
     SaveActorInfo(slave)
     String slave_name = Actor_name(slave)
     Trace("DirectNarration_Optional", "event_type:"+event_type+" msg:"+msg+" slave:"+slave_name+" optional:"+optional)
+    if SkyrimNet_DOM_Obedience.ShouldSkipEventNarration(slave)
+        Trace("DirectNarration_Optional", "skip armed for "+slave_name)
+        return
+    endif
     if !SkyrimNet_SexLab_Utilities.DirectNarration_Optional(event_type, msg, slave, None, optional) 
         AddNotification(msg, slave)
     endif
@@ -143,6 +150,11 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("DOMOnMoodChange", "OnMoodChange")
     RegisterForModEvent("DOMOnBehaviourChange", "OnBehaviourChange")
     RegisterForModEvent("DOMOnNotificationSent", "OnNotificationSent")
+    ; Injury Engine (soft): torture of a slave is a DOM pain punishment; Healing Hands or SexLab Aid on a slave
+    ; is praise (care when shocked)
+    RegisterForModEvent("Injury_Engine_Torture", "OnInjuryTorture")
+    RegisterForModEvent("Injury_Engine_HealStart", "OnInjuryHealStart")
+    RegisterForModEvent("SkyrimNet_SexLab_AidStart", "OnSexLabAidStart")
     ;  -------
     ; will be handled (if at all) by decorators
     ;  -------
@@ -169,6 +181,8 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("HookAnimationStart", "SexLab_AnimationStart")
     RegisterForModEvent("HookAnimationEnd", "SexLab_AnimationEnd")
 
+    Register_Gestures()
+
     SeedCaptureNarrated()
     UnregisterForUpdate()
     RegisterForUpdate(2.0)
@@ -186,7 +200,7 @@ int Function ScanCaptureAliases(bool narrate)
         return 0
     endif
     DOM_SlaveManager slaveManager = main.d_core.DOM02
-    if slaveManager == None || capture_narrated == 0
+    if slaveManager == None
         return 0
     endif
     ; Walk actorAliases (filled at ForceRefTo). GetActorCount/actorArray update only after Mind AfterAssign.
@@ -197,7 +211,14 @@ int Function ScanCaptureAliases(bool narrate)
         DOM_Actor domActor = slaveManager.actorAliases[i] as DOM_Actor
         if domActor && domActor.GetActorRef()
             filled += 1
-            MarkCaptureNarrated(domActor, narrate)
+            if capture_narrated != 0
+                MarkCaptureNarrated(domActor, narrate)
+            endif
+            CheckPoseChange(domActor, narrate)
+            if domActor.mind
+                ; stored abuser first; the owner is only the fallback (a save from before the abuser was stored)
+                SkyrimNet_DOM_API.EndStalePainPunishment(domActor.GetActorRef(), domActor, SkyrimNet_DOM_API.PainAbuserOr(domActor.GetActorRef(), domActor.mind.actor_owner))
+            endif
         endif
         i += 1
     endwhile
@@ -231,6 +252,118 @@ EndFunction
 
 Event OnUpdate()
     ScanCaptureAliases(true)
+EndEvent
+
+; Held pose (DOM_Actor.poseId) is always in the bio via Get_Actor_Info "pose"; when a player slave starts
+; one, DirectNarration if SkyrimNet is idle, else an event. narrate=false only records the current pose.
+Function CheckPoseChange(DOM_Actor domActor, bool narrate)
+    Actor slave = domActor.GetActorRef()
+    if slave == None || slave == player
+        return
+    endif
+    DOM_Mind mind = domActor.mind
+    if mind == None || !mind.is_player_slave
+        return
+    endif
+    int pose_id = domActor.poseId
+    if StorageUtil.GetIntValue(slave, pose_last_key, -1) == pose_id
+        return
+    endif
+    StorageUtil.SetIntValue(slave, pose_last_key, pose_id)
+    if !narrate || !main.pose_events_enabled
+        return
+    endif
+    String phrase = SkyrimNet_DOM_Decorators.PoseToString(pose_id)
+    if phrase == ""
+        return
+    endif
+    Trace("CheckPoseChange", slave.GetDisplayName()+" poseId:"+pose_id+" "+phrase)
+    DirectNarration_Optional("dom_pose", slave.GetDisplayName()+" starts "+phrase, slave)
+EndFunction
+
+; ----------------------------------
+; Gestures (SkyrimNet_DOM.dll NotifyAnimationGraph hook)
+; ----------------------------------
+; DOM ChooseIdle gestures fire no event; the DLL matches the anim event names registered here.
+Function Register_Gestures()
+    UnregisterForModEvent("SkyrimNet_DOM_Gesture")
+    if !SkyrimNet_DOM_Obedience.NativeReady()
+        Trace("Register_Gestures", "SkyrimNet_DOM.dll missing, gestures off")
+        return
+    endif
+    DOM_Core core = main.d_core
+    SkyrimNet_DOM_Native.GestureClear()
+    SkyrimNet_DOM_Native.GestureSetFaction(main.d_api.DOMPlayerSlaveFaction)
+
+    ; DOM_Actor.Anim_* PlayIdle forms
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleOffsetArmsCrossedStart, "cross_arms")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleCivilWarCheer, "aggressive")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleNervous, "nervous")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleCoweringLoose, "cower")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleChildCryingStart, "cry")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleWipeBrow, "wipe_brow")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleDialogueDefensiveHandGesture, "please_stop")
+    SkyrimNet_DOM_Native.GestureRegisterIdle(core.IdleWarmArms, "warm_arms")
+    ; DOM_Actor.Anim_* SendAnimationEvent names (DOM MCM can change these)
+    SkyrimNet_DOM_Native.GestureRegisterEvent(core.salutePose, "salute")
+    SkyrimNet_DOM_Native.GestureRegisterEvent(core.kneelPose, "kneel")
+    SkyrimNet_DOM_Native.GestureRegisterEvent(core.attentionPose, "attention")
+
+    ; DOM_Animator Get*Pose lists from DOM's Animations.json, plus literal names
+    int gestures = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/gestures.json")
+    int dom_anims = JValue.readFromFile("Data/SKSE/Plugins/StorageUtilData/Diary Of Mine/Animations.json")
+    int lists = JMap.getObj(gestures, "animation_lists")
+    String list_name = JMap.nextKey(lists)
+    while list_name != ""
+        String gesture_key = JMap.getStr(lists, list_name)
+        int anims = JValue.solveObj(dom_anims, ".animationsList."+list_name+".animations1")
+        int n = JArray.count(anims)
+        int i = 0
+        while i < n
+            SkyrimNet_DOM_Native.GestureRegisterEvent(JArray.getStr(anims, i), gesture_key)
+            i += 1
+        endwhile
+        list_name = JMap.nextKey(lists, list_name)
+    endwhile
+    int events = JMap.getObj(gestures, "animation_events")
+    String anim_event = JMap.nextKey(events)
+    while anim_event != ""
+        SkyrimNet_DOM_Native.GestureRegisterEvent(anim_event, JMap.getStr(events, anim_event))
+        anim_event = JMap.nextKey(events, anim_event)
+    endwhile
+
+    ApplyGestureConfig()
+    RegisterForModEvent("SkyrimNet_DOM_Gesture", "OnGesture")
+    Trace("Register_Gestures", "registered")
+EndFunction
+
+Function ApplyGestureConfig()
+    if !main || !SkyrimNet_DOM_Obedience.NativeReady()
+        return
+    endif
+    SkyrimNet_DOM_Native.GestureSetEnabled(main.gesture_events_enabled, main.gesture_cooldown * 1000)
+    SkyrimNet_DOM_Native.GestureSetDebug(main.gesture_debug)
+EndFunction
+
+Event OnGesture(String eventName, String gesture_key, Float numArg, Form sender)
+    Actor slave = sender as Actor
+    if slave == None || !main.gesture_events_enabled
+        return
+    endif
+    int gestures = JValue.readFromFile("Data/SKSE/Plugins/SkyrimNet_DOM/gestures.json")
+    String phrase = JValue.solveStr(gestures, ".text."+gesture_key, "")
+    if phrase == ""
+        Trace("OnGesture", slave.GetDisplayName()+" unknown gesture "+gesture_key)
+        return
+    endif
+    if OnNotifcationSkip(phrase, slave)
+        return
+    endif
+    Trace("OnGesture", slave.GetDisplayName()+" "+gesture_key)
+    ; Get_Actor_Info "gesture" shows it in the bio for a short while
+    StorageUtil.SetStringValue(slave, gesture_last_key, phrase)
+    StorageUtil.SetFloatValue(slave, gesture_time_key, Utility.GetCurrentGameTime())
+    DirectNarration_Optional("dom_gesture", slave.GetDisplayName()+" "+phrase, slave)
 EndEvent
 
 Function ApplyExt2Events()
@@ -375,7 +508,17 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
     Actor slave = akRef as Actor
     String slave_name = Actor_name(slave)
 
-    if OnNotifcationSkip(description)
+    ; Melt/climax only — do not match bare "orgasm" (player-orgasm tease, orgasm-control HUD).
+    ; Runs before the DomObedience skip window so a gated order cannot swallow melt.
+    if IsDomMeltOrgasm(description)
+        Trace("OnNotificationSent", slave_name+" melt orgasm: "+description)
+        if handler
+            handler.DOMSlave_Orgasmed(slave, description)
+        endif
+        return
+    endif
+
+    if OnNotifcationSkip(description, slave)
         Trace("OnNotificationSent", "skipping notification: "+description)
         return
     endif
@@ -392,15 +535,6 @@ Event OnNotificationSent(Form akRef, String notificationType, bool is_player_sla
         ;Trace("OnNotificationSent", GetDisplayName(slave)+" is not a DOM actor, skipping: "+description)
         ;return
     ;endif
-
-    ; Melt/climax only — do not match bare "orgasm" (player-orgasm tease, orgasm-control HUD).
-    if IsDomMeltOrgasm(description)
-        Trace("OnNotificationSent", slave_name+" melt orgasm: "+description)
-        if handler
-            handler.DOMSlave_Orgasmed(slave, description)
-        endif
-        return
-    endif
 
     ; replace you and your
     description = ReplaceWord(description, "your", player_name+"'s")
@@ -535,7 +669,12 @@ Function AddNotificationActor(String description, Actor akActor)
     Trace("AddNotification", GetDisplayName(akActor)+" description: '" + description)
 EndFunction
 
-bool Function OnNotifcationSkip(String description)
+bool Function OnNotifcationSkip(String description, Actor slave=None)
+    ; DomObedience skip window: drop vanilla SendNotificationOrder / Ext2 order DN for this command.
+    ; SexLab StageStart DN is not on this path.
+    if SkyrimNet_DOM_Obedience.ShouldSkipEventNarration(slave)
+        return true
+    endif
     ; Player-orgasm tease (DOM_Mind handleSexOrgasm / handleSeparateOrgasmEvent).
     ; Not a slave climax — do not DN, ring, or feed Handler_DOM.
     if StringUtil.Find(description, "squirms under your grasp") >= 0
@@ -707,7 +846,7 @@ Event OnBehaviourChange(Form akRef, String type)
     endif 
     String name_msg = Actor_name(slave)+" "+msg
     Trace("OnBehaviourChange",current+"->"+type+" "+name_msg)
-    if msg != "" && !OnNotifcationSkip(name_msg)
+    if msg != "" && !OnNotifcationSkip(name_msg, slave)
         DirectNarration_Optional(type, name_msg, slave, true)
     endif
     StorageUtil.SetStringValue(akRef, behaviour_current_key, type)
@@ -858,6 +997,169 @@ Event OnKissed(Form sender, string kissType, string kissResults, bool isObedient
     endif 
     DirectNarration_Optional("kissed", msg, slave)
 EndEvent 
+
+; --------------------------
+; Injury Engine
+; --------------------------
+int Property HEAL_SOURCE_SPELL = 1 AutoReadOnly ; Injury_Engine_Main.HealSyncSourceMethod: spell
+int Property HEALING_HANDS = 0x04D3F2 AutoReadOnly ; Skyrim.esm
+
+; Every torture batch Injury Engine lands. Starts DOM's pain punishment unless DOM already did (a weapon whip's OnHit
+; starts it before this event arrives); the first batch of each punishment picks its reason (TortureReasonNamed).
+; Every batch counts as a punishment hit (hand / spell torture fires no OnHit, so DOM would end it at once).
+; DOM ends the punishment after a tick without hits and trains (EndPunishing -> TrainAfterPunished); the bridge ends
+; one with no batch for 20 s itself (EndStalePainPunishment). Leash trips / drags (falling, leash_dragging) are not torture.
+Event OnInjuryTorture(Form akAttacker, Form akVictim, String source, Int hits, String cause)
+    Actor attacker = akAttacker as Actor
+    Actor victim = akVictim as Actor
+    if attacker == None || victim == None || attacker == victim || !main || !main.d_core
+        return
+    endif
+    if source == "falling" || source == "leash_dragging"
+        return
+    endif
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", "OnInjuryTorture", victim)
+    if !slave || !slave.mind
+        return
+    endif
+    if attacker != player && !main.d_core.IsAllowedToPunish(attacker)
+        return
+    endif
+    if main.d_core.IsFleeing(victim)
+        return
+    endif
+    DOM_Mind mind = slave.mind
+    SkyrimNet_DOM_API.EndStalePainPunishment(victim, slave, attacker)
+    if !mind.whipping_active
+        mind.StartPunishingByIndex(attacker, 0, "pain")
+    endif
+    Bool fresh = !SkyrimNet_DOM_API.TortureReasonNamed(victim, mind)
+    Trace("OnInjuryTorture", attacker.GetDisplayName() + " -> " + victim.GetDisplayName() + " " + source + " hits:" + hits \
+        + " active:" + mind.whipping_active + " reason:" + mind.whipping_reason + " trainer:" + mind.whipping_by_trainer \
+        + " fresh:" + fresh)
+    SkyrimNet_DOM_API.MarkPainActivity(victim, attacker)
+    if fresh
+        StartTortureReason(attacker, victim, mind)
+    endif
+    mind.HandlePunishmentOnHit(attacker, None)
+    SkyrimNet_DOM_API.MarkTortureDamage(victim, mind)
+EndEvent
+
+; Panel reason (SkyrimNet_SexLab Punish), else the player's list (dom.punish.torture_choose_reason; always offers
+; custom / no reason), else a random open reason ("being a bad slave" when none). While the list is up the punishment
+; carries that random reason (no event), so later batches don't reopen it and Esc / Close still trains on a real reason.
+Function StartTortureReason(Actor attacker, Actor victim, DOM_Mind mind)
+    String reason = SkyrimNet_DOM_API.TakePanelReason(victim)
+    if reason == ""
+        reason = SkyrimNet_DOM_API.RandomOpenReason(victim)
+        if attacker == player && main.torture_choose_reason
+            SkyrimNet_DOM_Menu menu = (self as Quest) as SkyrimNet_DOM_Menu
+            if menu
+                SkyrimNet_DOM_API.NameRunningPunishment(victim, mind, reason)
+                menu.OpenTortureReasonList(attacker, victim, SkyrimNet_DOM_API.OpenPunishReasons(victim))
+                return
+            endif
+        endif
+    endif
+    SkyrimNet_DOM_API.ApplyTortureReason(attacker, victim, reason)
+EndFunction
+
+; A healing source opened a heal session. Healing Hands cast on a slave goes to HealSlave.
+Event OnInjuryHealStart(Form akCaster, Form akTarget, Int source)
+    Actor caster = akCaster as Actor
+    Actor target = akTarget as Actor
+    if source != HEAL_SOURCE_SPELL || caster == None || target == None || caster == target || !main || !main.d_core
+        return
+    endif
+    Spell hands = Game.GetFormFromFile(HEALING_HANDS, "Skyrim.esm") as Spell
+    if hands == None || (caster.GetEquippedSpell(0) != hands && caster.GetEquippedSpell(1) != hands)
+        return
+    endif
+    HealSlave(caster, target, "OnInjuryHealStart")
+EndEvent
+
+; SkyrimNet_SexLab Aid (HUD, Aid panel, potion, SexLab_Aid action) restored health: Aid casts nothing, so Injury Engine
+; sends no HealStart. sender = target; strArg "<spell|potion>|<caster FormID>"; numArg = health.
+Event OnSexLabAidStart(String eventName, String strArg, Float numArg, Form sender)
+    Actor target = sender as Actor
+    String[] parts = StringUtil.Split(strArg, "|")
+    if target == None || parts.Length < 2 || !main || !main.d_core
+        return
+    endif
+    Actor caster = Game.GetFormEx(parts[1] as Int) as Actor
+    if caster == None || caster == target
+        return
+    endif
+    Trace("OnSexLabAidStart", caster.GetDisplayName() + " " + parts[0] + " -> " + target.GetDisplayName() + " health:" + numArg)
+    HealSlave(caster, target, "OnSexLabAidStart")
+EndEvent
+
+; A shocked slave gets DOM "care" comfort, otherwise praise ("tell"). The player picks the reason when
+; dom.praise.heal_choose_reason is on (Close: no praise); otherwise, or with no reason picked, "being a good slave" /
+; "being a good slaver".
+Function HealSlave(Actor caster, Actor target, String fn)
+    DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", fn, target)
+    if !slave || !slave.mind
+        return
+    endif
+    if slave.mind.mood == "shocked"
+        ComfortCareNoHug(caster, slave, target)
+        return
+    endif
+    if caster == player && main.heal_choose_reason
+        SkyrimNet_DOM_Menu menu = (self as Quest) as SkyrimNet_DOM_Menu
+        if menu
+            menu.OpenHealPraiseList(caster, target)
+            return
+        endif
+    endif
+    slave.StartPraising(caster, SkyrimNet_DOM_Menu.DefaultPraiseReason(slave.mind), "tell")
+    Trace(fn, caster.GetDisplayName() + " heals and praises " + target.GetDisplayName())
+EndFunction
+
+; DOM_Mind.StartComfortingWith(caster, "care") without its Anim_GetPlayerHug (DOM's abuse_type is private and
+; stays as it was).
+Function ComfortCareNoHug(Actor caster, DOM_Actor slave, Actor target)
+    DOM_Core core = main.d_core
+    DOM_Mind mind = slave.mind
+    String name = target.GetDisplayName()
+    int broken = 0
+    float mod = core.GetPredatorModifier(caster)
+    if !mind.IsComforted()
+        mind.SetNextPunishmentReasonForceMessage(17, "doesn't want to be comforted") ; "didnt listen"
+    endif
+    if !mind.StartGuilt()
+        mind.SetNextPunishmentReasonForceMessage(17, "doesn't care about being healed") ; "didnt listen"
+    else
+        float amount = core.train_speed_tell * 0.1 * mind.MOD_Ease * mod
+        mind.TrainRespect(amount)
+        mind.TrainAnger(amount)
+        mind.number_of_comfort += 1
+        mind.SendNotificationAbuse("Comforting " + name + " with care")
+        if core.DOMPlayerAlias
+            core.DOMPlayerAlias.HasChatWith(slave)
+        endif
+        broken = 2
+    endif
+    if broken > 0
+        float now = Utility.GetCurrentGameTime()
+        mind.time_last_abused = now
+        mind.time_last_resilience = now
+    endif
+    DOM_Mind casterMind = core.GetActorMind(caster)
+    if casterMind != None
+        casterMind.TrainSkillPredator(0.5)
+        casterMind.SetNextPraiseReasonSilent(47) ; "being a perverted trainer"
+        casterMind.CheckAndRegisterKink(100, 1.0) ; "taking advantage of slaves"
+    else
+        if caster == player
+            core.DOM04.NotifyEndComforted(slave, "care", broken > 0)
+            slave.SendExternalEventSSB("Comforted", "care", broken > 0)
+        endif
+        core.TrainSkillPredator(caster, 0.5)
+    endif
+    Trace("ComfortCareNoHug", caster.GetDisplayName() + " heals " + name + " broken:" + broken)
+EndFunction
 
 Event OnPunished(Form akRef, string punish_method, string punish_reason, bool is_obedient)
     Actor slave = akRef as Actor 

@@ -85,6 +85,302 @@ Function AddPunishmentReason(String file, String func, Actor superior, Actor sla
     RegisterEvent("Reason to Punish", msg, slaveActor, superior) 
 EndFunction
 
+; ------------------------------------------------------------
+; Injury Engine torture as DOM punishment
+; ------------------------------------------------------------
+String Function REASON_BAD_SLAVE() global
+    return "being a bad slave"
+EndFunction
+
+String Function REASON_DISOBEY() global
+    return "didnt obey"
+EndFunction
+
+; StorageUtil on the slave: panel-picked reason (PanelPunished) and when (real time)
+String Function KEY_PANEL_REASON() global
+    return "skyrimnet_dom.panel_reason"
+EndFunction
+
+String Function KEY_PANEL_REASON_TIME() global
+    return "skyrimnet_dom.panel_reason_time"
+EndFunction
+
+; StorageUtil string lists on the slave: Punish panel text -> DOM reason (PanelPunishReasons)
+String Function KEY_PANEL_TEXT() global
+    return "skyrimnet_dom.panel_reason_text"
+EndFunction
+
+String Function KEY_PANEL_NAME() global
+    return "skyrimnet_dom.panel_reason_name"
+EndFunction
+
+; StorageUtil on the slave: the whipping_reason the bridge named the running pain punishment with, and
+; whipping_pain_damage after its last batch (TortureReasonNamed)
+String Function KEY_TORTURE_REASON_INDEX() global
+    return "skyrimnet_dom.torture_reason_index"
+EndFunction
+
+String Function KEY_TORTURE_DAMAGE() global
+    return "skyrimnet_dom.torture_damage"
+EndFunction
+
+; True when the running pain punishment is the one the bridge already named. DOM may start a punishment itself
+; (its OnHit, before Injury Engine's event) with its own reason; StartPunishingByIndex resets whipping_pain_damage
+; and EndPunishing resets whipping_reason, so either one changing means a new punishment.
+Bool Function TortureReasonNamed(Actor slaveActor, DOM_Mind mind) global
+    if !mind.whipping_active
+        return false
+    endif
+    int index = StorageUtil.GetIntValue(slaveActor, KEY_TORTURE_REASON_INDEX(), -1)
+    if index < 0 || mind.whipping_reason != index
+        return false
+    endif
+    return mind.whipping_pain_damage >= StorageUtil.GetIntValue(slaveActor, KEY_TORTURE_DAMAGE(), 0)
+EndFunction
+
+Function MarkTortureDamage(Actor slaveActor, DOM_Mind mind) global
+    StorageUtil.SetIntValue(slaveActor, KEY_TORTURE_DAMAGE(), mind.whipping_pain_damage)
+EndFunction
+
+; StorageUtil float on the slave: game time (days) of the running pain punishment's last batch (MarkPainActivity, EndStalePainPunishment)
+String Function KEY_PAIN_START() global
+    return "skyrimnet_dom.pain_start"
+EndFunction
+
+; StorageUtil form on the slave: who is running the pain punishment (MarkPainActivity). DOM keeps no abuser on the mind.
+String Function KEY_PAIN_ABUSER() global
+    return "skyrimnet_dom.pain_abuser"
+EndFunction
+
+; The actor that started the slave's running pain punishment, else fallback.
+Actor Function PainAbuserOr(Actor slaveActor, Actor fallback) global
+    Actor abuser = StorageUtil.GetFormValue(slaveActor, KEY_PAIN_ABUSER(), None) as Actor
+    if abuser
+        return abuser
+    endif
+    return fallback
+EndFunction
+
+Float Function PAIN_PUNISH_TIMEOUT_SECONDS() global
+    return 20.0
+EndFunction
+
+; Ends a pain punishment with no further batch for PAIN_PUNISH_TIMEOUT_SECONDS (real seconds, via TimeScale). DOM's tick never ends one
+; started by a DOM-mind actor (whipping_by_trainer), and such a punishment survives in the save: every later lash then
+; looked "already named" (TortureReasonNamed), so no reason list / dom_torture_punish ever came. EndWhipping is DOM's
+; normal close (training + "Punishing ... strokes" notice). Clears the bridge markers so the next batch is fresh.
+Bool Function EndStalePainPunishment(Actor slaveActor, DOM_Actor slave, Actor abuser) global
+    if slaveActor == None || !slave || !slave.mind
+        return false
+    endif
+    DOM_Mind mind = slave.mind
+    if !mind.whipping_active
+        StorageUtil.UnsetFloatValue(slaveActor, KEY_PAIN_START())
+        return false
+    endif
+    Float now = Utility.GetCurrentGameTime()
+    Float start = StorageUtil.GetFloatValue(slaveActor, KEY_PAIN_START(), -1.0)
+    Float elapsed = 0.0
+    Bool legacy = start < 0.0 && TortureReasonNamed(slaveActor, mind)
+    if !legacy
+        if start < 0.0 || start > now
+            StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), now)
+            return false
+        endif
+        Float timescale = 20.0
+        GlobalVariable ts = Game.GetFormFromFile(0x3A, "Skyrim.esm") as GlobalVariable
+        if ts && ts.GetValue() > 0.0
+            timescale = ts.GetValue()
+        endif
+        elapsed = (now - start) * 86400.0 / timescale
+        if elapsed <= PAIN_PUNISH_TIMEOUT_SECONDS()
+            return false
+        endif
+    endif
+    if abuser == None
+        abuser = Game.GetPlayer()
+    endif
+    Trace("EndStalePainPunishment", slaveActor.GetDisplayName() + " reason:" + mind.whipping_reason + " '" \
+        + mind.whipping_reason_name + "' trainer:" + mind.whipping_by_trainer + " legacy:" + legacy + " elapsed:" + elapsed \
+        + "s by " + abuser.GetDisplayName())
+    slave.EndWhipping(abuser)
+    StorageUtil.UnsetFloatValue(slaveActor, KEY_PAIN_START())
+    StorageUtil.UnsetFormValue(slaveActor, KEY_PAIN_ABUSER())
+    StorageUtil.UnsetIntValue(slaveActor, KEY_TORTURE_REASON_INDEX())
+    StorageUtil.UnsetIntValue(slaveActor, KEY_TORTURE_DAMAGE())
+    return true
+EndFunction
+
+; Every torture batch (OnInjuryTorture): restarts the idle timeout, so the punishment ends only after
+; PAIN_PUNISH_TIMEOUT_SECONDS without another batch.
+Function MarkPainActivity(Actor slaveActor, Actor abuser) global
+    StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), Utility.GetCurrentGameTime())
+    StorageUtil.SetFormValue(slaveActor, KEY_PAIN_ABUSER(), abuser)
+EndFunction
+
+; Names the running pain punishment (no event) and marks it named for TortureReasonNamed.
+Function NameRunningPunishment(Actor slaveActor, DOM_Mind mind, String reason) global
+    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+    if main == None || !mind.whipping_active
+        return
+    endif
+    ; "no reason" is DOM index 0; free text (the list's custom) counts as "being a bad slave" and keeps its own name
+    ; (the default index 0 makes DOM keep the provisional reason for the summary / training).
+    if reason == "no reason"
+        mind.whipping_reason = 0
+    elseif main.Has_Punishment_Reason(reason)
+        mind.whipping_reason = main.Get_Punishment_To_Index(reason)
+    else
+        mind.whipping_reason = main.Get_Punishment_To_Index(REASON_BAD_SLAVE())
+    endif
+    mind.whipping_reason_name = reason
+    StorageUtil.SetIntValue(slaveActor, KEY_TORTURE_REASON_INDEX(), mind.whipping_reason)
+    MarkTortureDamage(slaveActor, mind)
+EndFunction
+
+; The slave's open DOM punishment reasons (DOM_Mind next reasons), no duplicates / "no reason".
+String[] Function OpenPunishReasons(Actor slaveActor) global
+    String[] reasons = PapyrusUtil.StringArray(0)
+    DOM_Actor slave = GetSlave("SkyrimNet_DOM_API", "OpenPunishReasons", slaveActor)
+    if !slave || !slave.mind
+        return reasons
+    endif
+    DOM_Mind mind = slave.mind
+    int n = mind.GetNumberOfNextPunishmentReasons()
+    int i = 0
+    while i < n
+        String reason = mind.GetNextPunishmentReason(i)
+        if reason != "" && reason != "no reason" && reasons.Find(reason) < 0
+            reasons = PapyrusUtil.PushString(reasons, reason)
+        endif
+        i += 1
+    endwhile
+    return reasons
+EndFunction
+
+; A random open reason; "being a bad slave" when the slave has none.
+String Function RandomOpenReason(Actor slaveActor) global
+    String[] reasons = OpenPunishReasons(slaveActor)
+    if reasons.Length == 0
+        return REASON_BAD_SLAVE()
+    endif
+    return reasons[Utility.RandomInt(0, reasons.Length - 1)]
+EndFunction
+
+; subject + punishment_reason.json description + superior ("she refused to comply with the sexual demands of Bob");
+; "" when the reason has no description.
+String Function ReasonClause(Actor superior, Actor slaveActor, String reason, String subject) global
+    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+    if main == None || superior == None
+        return ""
+    endif
+    String desc = main.Get_Punishment_Description_Exact(reason)
+    if desc == ""
+        return ""
+    endif
+    return subject + desc + superior.GetDisplayName()
+EndFunction
+
+; Names the reason on the running pain punishment and tells SkyrimNet:
+; "Bob is punishing Nina because she refused to comply with the sexual demands of Bob."
+Function ApplyTortureReason(Actor torturer, Actor slaveActor, String reason) global
+    SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main
+    DOM_Actor slave = GetSlave("SkyrimNet_DOM_API", "ApplyTortureReason", slaveActor)
+    if main == None || !slave || !slave.mind || torturer == None
+        Trace("ApplyTortureReason", "missing main, slave or torturer")
+        return
+    endif
+    if reason == ""
+        reason = REASON_BAD_SLAVE()
+    endif
+    DOM_Mind mind = slave.mind
+    NameRunningPunishment(slaveActor, mind, reason)
+    String pronoun = "he"
+    if slaveActor.GetLeveledActorBase().GetSex() == 1
+        pronoun = "she"
+    endif
+    String why = " for no reason"
+    if reason != "no reason"
+        why = ReasonClause(torturer, slaveActor, reason, pronoun)
+        if why == ""
+            why = "of " + reason
+        endif
+        why = " because " + why
+    endif
+    String msg = torturer.GetDisplayName() + " is punishing " + slaveActor.GetDisplayName() + why + "."
+    Trace("ApplyTortureReason", "index:" + mind.whipping_reason + " active:" + mind.whipping_active + " " + msg)
+    SkyrimNetApi.RegisterEvent("dom_torture_punish", msg, torturer, slaveActor)
+EndFunction
+
+; SkyrimNet_SexLab scene start (Handler_DOM.SeedPunishReasons): the slave's open DOM reasons join the
+; Punish panel's reason list ("Nina refused to comply with the sexual demands of Bob").
+Function PanelPunishReasons(Actor slaveActor) global
+    if slaveActor == None
+        return
+    endif
+    StorageUtil.StringListClear(slaveActor, KEY_PANEL_TEXT())
+    StorageUtil.StringListClear(slaveActor, KEY_PANEL_NAME())
+    DOM_Actor slave = GetSlave("SkyrimNet_DOM_API", "PanelPunishReasons", slaveActor)
+    if !slave || !slave.mind
+        return
+    endif
+    String[] reasons = OpenPunishReasons(slaveActor)
+    Actor superior = slave.mind.actor_owner
+    if superior == None
+        superior = Game.GetPlayer()
+    endif
+    String slave_name = slaveActor.GetDisplayName()
+    int i = 0
+    while i < reasons.Length
+        String text = ReasonClause(superior, slaveActor, reasons[i], slave_name)
+        if text == ""
+            text = slave_name + " is to be punished for " + reasons[i]
+        endif
+        StorageUtil.StringListAdd(slaveActor, KEY_PANEL_TEXT(), text)
+        StorageUtil.StringListAdd(slaveActor, KEY_PANEL_NAME(), reasons[i])
+        SkyrimNet_SexLab_OrgasmEngine.AddPunishReason(superior, slaveActor, text)
+        i += 1
+    endwhile
+    Trace("PanelPunishReasons", slave_name + " reasons:" + reasons.Length)
+EndFunction
+
+; SkyrimNet_SexLab Punish panel (C++ OrgasmEngine::PunishNarrated, before the hit): a DOM text -> that reason,
+; a SexLab strategy / request reason -> "didnt obey", anything else -> "being a bad slave".
+; Kept on the slave for the torture handler (TakePanelReason).
+Function PanelPunished(Actor by, Actor slaveActor, String reason, Bool isStrategy) global
+    if slaveActor == None || !IsDOMSlave(slaveActor)
+        return
+    endif
+    String name
+    int i = -1
+    if reason != ""
+        i = StorageUtil.StringListFind(slaveActor, KEY_PANEL_TEXT(), reason)
+    endif
+    if i >= 0
+        name = StorageUtil.StringListGet(slaveActor, KEY_PANEL_NAME(), i)
+    elseif isStrategy
+        name = REASON_DISOBEY()
+    else
+        name = REASON_BAD_SLAVE()
+    endif
+    StorageUtil.SetStringValue(slaveActor, KEY_PANEL_REASON(), name)
+    StorageUtil.SetFloatValue(slaveActor, KEY_PANEL_REASON_TIME(), Utility.GetCurrentRealTime())
+    Trace("PanelPunished", slaveActor.GetDisplayName() + " '" + reason + "' strategy:" + isStrategy + " -> " + name)
+EndFunction
+
+; The Punish panel's reason when it was picked in the last 10 real seconds ("" otherwise); cleared once taken.
+String Function TakePanelReason(Actor slaveActor) global
+    String name = StorageUtil.GetStringValue(slaveActor, KEY_PANEL_REASON(), "")
+    float stamp = StorageUtil.GetFloatValue(slaveActor, KEY_PANEL_REASON_TIME(), -1000.0)
+    StorageUtil.UnsetStringValue(slaveActor, KEY_PANEL_REASON())
+    StorageUtil.UnsetFloatValue(slaveActor, KEY_PANEL_REASON_TIME())
+    float now = Utility.GetCurrentRealTime()
+    if name == "" || now - stamp > 10.0 || now < stamp
+        return ""
+    endif
+    return name
+EndFunction
+
 int Function GetThreads() global
     SkyrimNet_SexLab_Scene_Manager scene_manager = Game.GetFormFromFile(0x800, "SkyrimNet_SexLab.esp") as SkyrimNet_SexLab_Scene_Manager
     if scene_manager == None

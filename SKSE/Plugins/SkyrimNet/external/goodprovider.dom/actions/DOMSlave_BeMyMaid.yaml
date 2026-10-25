@@ -1,16 +1,28 @@
 name: DOMSlave_BeMyMaid
 description: Start cleaning and tidying the area.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoEntertain
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will perform the cleaning/maid action
+    description: The slave being ordered
   - type: static
+    name: kind
+    value: maid
+  - type: static
+    name: actionDesc
+    value: clean the mess
+  - type: static
+    name: op
+    value: entertain
+  - type: static
+    name: arg
     value: cleaning
-    name: type
-    description: The entertain type - "cleaning" for maid/cleaning behavior
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -40,4 +52,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} starts cleaning the area"

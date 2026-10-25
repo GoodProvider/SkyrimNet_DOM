@@ -1,12 +1,28 @@
 name: DOMSlave_DOMSlaveFollow
 description: Follow {{ player.name }} when ordered.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoFollowMe
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The slave that will follow
+    description: The slave being ordered
+  - type: static
+    name: kind
+    value: follow
+  - type: static
+    name: actionDesc
+    value: follow
+  - type: static
+    name: op
+    value: follow
+  - type: static
+    name: arg
+    value: 
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -42,4 +58,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} follows {{ player.name }}"

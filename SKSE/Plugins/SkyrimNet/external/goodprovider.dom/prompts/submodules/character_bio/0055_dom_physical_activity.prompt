@@ -3,7 +3,12 @@
 {% if (show_external_only or show_internal) and dom_actor.loaded %} 
     {% if dom_actor.is_slave and existsIn(dom_actor, "punishment") and dom_actor.punishment.whipping_active %} 
        - {{dom_actor.name}} is being whipped as punishment for {{dom_actor.punishment.whipping_reason_name}}.
+    {% else if existsIn(dom_actor, "pose") and dom_actor.pose != "" %}
+        - {{dom_actor.name}} is {{ dom_actor.pose }}
     {% else if dom_actor.behaviour != "" and dom_actor.behaviour != "masturbating." %}
         - {{dom_actor.name}} is {{ dom_actor.behaviour }}
     {% endif %} 
+    {% if existsIn(dom_actor, "gesture") and dom_actor.gesture != "" %}
+        - A moment ago, {{dom_actor.name}} {{ dom_actor.gesture }}
+    {% endif %}
 {% endif %}

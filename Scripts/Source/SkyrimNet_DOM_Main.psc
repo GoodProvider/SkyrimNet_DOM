@@ -24,6 +24,17 @@ String PLUGIN_CONFIG = "Plugin_SkyrimNet_DOM"
 bool Property ext2_enabled = false Auto
 int Property notification_ring = 20 Auto
 int Property short_lived_ttl = 100000 Auto
+; Injury Engine torture by the player: true = WebUI reason list, false = random open reason
+bool Property torture_choose_reason = true Auto
+; Healing Hands / SexLab Aid by the player on a non-shocked slave: true = WebUI praise reason list, false = DOM picks
+bool Property heal_choose_reason = true Auto
+; Slave pose / gesture short-lived events (Events.CheckPoseChange, SkyrimNet_DOM_Native.Gesture*)
+bool Property pose_events_enabled = true Auto
+bool Property gesture_events_enabled = true Auto
+int Property gesture_cooldown = 20 Auto
+bool Property gesture_debug = false Auto
+; DOM Info view: Enjoyment section (Handler_DOM orgasm-meter inputs, chance, score)
+bool Property show_enjoyment = false Auto
 
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
@@ -108,12 +119,28 @@ Function ApplyPluginConfig()
     endif
     short_lived_ttl = ttl
 
+    torture_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.punish.torture_choose_reason", true)
+    heal_choose_reason = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.praise.heal_choose_reason", true)
+
+    pose_events_enabled = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.poses", true)
+    gesture_events_enabled = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.gestures", true)
+    int cooldown = SkyrimNetApi.GetConfigInt(PLUGIN_CONFIG, "dom.events.gesture_cooldown", 20)
+    if cooldown < 5
+        cooldown = 5
+    elseif cooldown > 300
+        cooldown = 300
+    endif
+    gesture_cooldown = cooldown
+    gesture_debug = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.gesture_debug", false)
+    show_enjoyment = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.info.show_enjoyment", false)
+
     SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
     if events
         events.notifications_size = notification_ring
         events.ApplyExt2Events()
+        events.ApplyGestureConfig()
     endif
-    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl)
+    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl+" torture_choose_reason:"+torture_choose_reason+" heal_choose_reason:"+heal_choose_reason+" poses:"+pose_events_enabled+" gestures:"+gesture_events_enabled+" gesture_cooldown:"+gesture_cooldown+" gesture_debug:"+gesture_debug+" show_enjoyment:"+show_enjoyment)
 EndFunction
 
 Event OnPluginConfigSaved(string eventName, string strArg, float numArg, Form sender)
@@ -153,6 +180,11 @@ int Function Get_Punishment_To_Index(String reason)
         return punishment_default_index
     endif
     return index
+EndFunction
+
+; True when reason is a loaded punishment token (free text is not).
+bool Function Has_Punishment_Reason(String reason)
+    return JMap.hasKey(punishment_to_index, reason)
 EndFunction
 
 Function Register_Punishment_Reason(String name, int index, String description)
@@ -203,6 +235,11 @@ Function Load_Punishment_Reasons(String fname)
         endif
         i += 1
     endwhile
+EndFunction
+
+; Description of reason only ("" when punishment_reason.json does not know it; no default fallback)
+String Function Get_Punishment_Description_Exact(String reason)
+    return JMap.getStr(punishment_to_description, reason, "")
 EndFunction
 
 String Function Get_Punishment_To_Description(String reason)

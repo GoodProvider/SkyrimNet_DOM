@@ -1,16 +1,28 @@
 name: DOMSlave_DoFlowers
 description: Start holding flowers pose.
-questEditorId: DOM02Topic
-scriptName: DOM_Keys
-executionFunctionName: DOMDoEntertain
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: DOMOrder_Execute
 parameterMapping:
   - type: speaker
     name: akTarget
-    description: The person that will hold flowers
+    description: The slave being ordered
   - type: static
+    name: kind
     value: flowers
-    name: type
-    description: The entertain type - "flowers" for flowers pose
+  - type: static
+    name: actionDesc
+    value: hold flowers
+  - type: static
+    name: op
+    value: entertain
+  - type: static
+    name: arg
+    value: flowers
+  - type: static
+    name: arg2
+    value: ""
+
 enabled: true
 eligibilityRules:
   - conditions:
@@ -46,4 +58,3 @@ eligibilityRules:
     logicalOperator: AND
     required: true
 
-eventString: "{{ actor.name }} holds flowers"

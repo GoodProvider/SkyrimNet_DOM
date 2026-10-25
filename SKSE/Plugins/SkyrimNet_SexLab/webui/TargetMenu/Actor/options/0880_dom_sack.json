@@ -1,0 +1,39 @@
+{
+  "type": "papyrus",
+  "label": "sack",
+  "plugin": "SkyrimNet_DOM.esp",
+  "questFormId": "0x800",
+  "scriptName": "SkyrimNet_DOM_Menu",
+  "executionFunctionName": "TM_ListSackOptions",
+  "closeWebUI": false,
+  "parameterMapping": [
+    {
+      "type": "speaker",
+      "name": "speaker"
+    },
+    {
+      "type": "target",
+      "name": "target"
+    }
+  ],
+  "source": "dom",
+  "requiresPlugin": "SkyrimNet_DOM.esp",
+  "eligibilityRules": [
+    {
+      "required": true,
+      "logicalOperator": "OR",
+      "conditions": [
+        {
+          "decoratorName": "webui_focus_kind",
+          "comparisonOperator": "==",
+          "expectedValue": "all_slaves"
+        },
+        {
+          "decoratorName": "webui_focus_kind",
+          "comparisonOperator": "!=",
+          "expectedValue": "all_slaves"
+        }
+      ]
+    }
+  ]
+}

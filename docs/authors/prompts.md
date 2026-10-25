@@ -98,3 +98,4 @@ Do not invent ad-hoc JSON keys for data Skyrim emits. Keys: [../reference/json-k
 - Prefer small, ordered bio files over one giant prompt
 - Test both live (decorator) and paused (JSON file) paths when changing `dom_actor` loading
 - After changing action names or categories in YAML, update user instructions that mention them
+- To see what the LLM actually receives, read the latest `openrouter_input.log` (path in [../reference/papyrus-rules.md](../reference/papyrus-rules.md))

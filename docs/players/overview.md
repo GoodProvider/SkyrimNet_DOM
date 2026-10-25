@@ -6,6 +6,18 @@ Requirements: [requirements.md](requirements.md). Authoring: [../authors/actions
 
 LLM actions and prompts ship as SkyrimNet plugin `goodprovider.dom` (External on the Plugins page). Requires SkyrimNet 0.25.0+. Tune Ext2 / notification ring / short-lived TTL in the SkyrimNet dashboard (`dom.events.*`), not an in-game MCM.
 
+## In-game WebUI
+
+Open the SkyrimNet SexLab overlay hotkey (`\` by default). There is no separate DOM mode.
+
+- **Target** pulldown: nearby actors plus **All Slaves** (group orders; opens the Slaves roster).
+- **Views:** SexLab’s views plus **DOM Info** (DOM superscript): the focused actor’s DOM profile in the same layout as PrismaUI-for-DOM — status (or slaver School) and mood, recommended actions, the HEXACO+PRISM personality web, Training and Love bars (slaves and trainers), the Slaver Skills web (trainers and slavers), recent diary and live events, and notes (virginity, training difficulty, worth, trainees / trainer). Turn on **Show enjoyment** (dashboard, Info panel) to add an Enjoyment section for slaves and trainers: everything that feeds DOM's orgasm meter, the orgasm chance per roll, and the final enjoyment score from the SexLab HUD. The view follows the Target pulldown without re-selecting the view.
+- Left **TargetMenu:** SexLab rows plus DOM pulldowns that can be used on the focused actor (order / abuse / training / restrain / clothes, plus management / trainees for trainers, services for NPCs, sack when a burlap sack is under the crosshair). DOM options show a **DOM** badge above the label. Slave-only pulldowns are omitted for non-slaves. Child wheels open as button panels on the right (poses, gag/plug, blindfold, cuffing, live praise reasons). Furniture (chains / post / cage / cross / pillory / wheel) opens a Parameter Panel of named variants from `restrains/{kind}.json` plus random. **Order → Follow** shows **follow** or **follow: tight|close|short|long** from the slave’s current distance; picking a distance starts/sets follow (modes 0–3). **Walking** applies gait as soon as you pick a type (walking / follow on four / follow on hands and knees). **Wait** is a single button. Insult, flatter, threaten, promise, and non-sex comfort are spoken as transformed player dialogue. **Comfort → sex / rape** open SexLab Scene Parameter Panels (comforting transform + mind, then scene). **Punish** is a Parameter Panel (Start plus reason and method); reason always includes **custom** (text panel) and **no reason**. **Sack** shows put-in-bag or open/take from the focused slave’s bag state. Leash lives in SkyrimNet_Leashed. **Restrain** owns all bondage (tie poses, furniture, gag/plug, blindfold, cuffs, untie). **Training → Sex** and **Rape** open SexLab Scene Parameter Panels. Masturbate shows pose buttons when idle, Stop/Harder when already masturbating.
+- **During a sex scene** the TargetMenu switches to Scene options (stop / stage / position / animation). DOM still offers **abuse** speech there: live praise, scold, insult, flatter, threaten, promise, and comfort (care / guilt / threat / insult). **Comfort → pain** opens slap face / slap ass / twist nipple / slap breasts / custom and narrates `*{player} comforts {slave} by {gesture}*` (asterisks mark narrative for the LLM). Punish, upkeeping, and comfort sex/rape stay Actor-only.
+- TargetMenu execute closes the overlay so DOM packages can run. DOM Info and the live punish/praise choosers stay open. Each order is Direct Narrated as the player ordering the target (or “the slaves”).
+
+Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_SexLab’s overlay.
+
 ## What it does
 
 - Converts most DOM activity into Direct Narration or SkyrimNet events
@@ -18,8 +30,9 @@ LLM actions and prompts ship as SkyrimNet plugin `goodprovider.dom` (External on
   - Punish (+ refused / other → punishment reasons)
 - Character bio prompts for DOM actors (slaves, slavers, and others — appearance, bondages, skills, aged notifications, and more)
 - Punishment reason mapping (`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`)
+- Injury Engine torture of a slave is a DOM punishment. Dashboard setting **When player tortures let player choose** (on by default) lists "being a bad slave", "didnt obey" and the slave's other open reasons, plus random, custom (type your own; it trains like "being a bad slave") and no reason. Off: a random one.
+- Healing Hands cast on a slave, or a SexLab Aid heal (spell or potion), praises them. A slave in shock is comforted with care instead (no hug animation). Setting "Ask player praise reason when healing" lets you pick the reason or type your own. Closing the list gives no praise.
 - Item descriptions for DOM ropes (`config/items/`)
-- Healing Hands trigger — cleanup / comfort Direct Narration when healing is cast
 
 ## Notes / FAQ
 
@@ -35,9 +48,9 @@ DOM has its own arousal system. Arousal-changing mods (including SLSO) are ignor
 
 DOM emits far more events than we send to the LLM. Much lands in history or aged notifications. Use Direct Narration or dialogue to frame context when needed.
 
-### LLM says yes, DOM says no
+### Ordered slaves may refuse
 
-DOM has its own obedience logic. Roll with the mismatch.
+Hotkey orders and DOM YAML commands roll Diary of Mine `DOM_Mind.WillObey` through `SkyrimNet_DOM.dll` **before** the command runs. Refuse is narrated (`{slave} refuses {superior}'s command to {action}.`). Obey is `{superior} orders {slave} to {action}.`; DOM Ext2 / HUD order text is suppressed for that command. DOM sex orders register an Order event with the same sentence (e.g. `Bob orders Nina to have vaginal sex with …`), then SexLab StageStart narrates the scene. SexLab overlay sex/rape is not gated.
 
 ### Occasional Direct Narration
 

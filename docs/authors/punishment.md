@@ -14,6 +14,18 @@ See also: [actions.md](actions.md) · [prompts.md](prompts.md) · [../developers
 
 Unknown reason tokens resolve to the default (`"no reason"` / index 0). Check the Papyrus log for `unknown reason token`.
 
+## Injury Engine torture
+
+Injury Engine torture of a DOM slave is a DOM pain punishment (`SkyrimNet_DOM_Events.OnInjuryTorture`, mod event `Injury_Engine_Torture`). The reason is picked once per DOM punishment, even when DOM started it from a weapon hit. It comes from the first source that applies:
+
+1. **SexLab Punish panel**: the panel lists the slave's open reasons as `"<slave>" + description + "<owner>"` (`PanelPunishReasons`). A DOM text picked there is used. A SexLab strategy or request reason becomes `didnt obey`; anything else becomes `being a bad slave`.
+2. **Player, setting `dom.punish.torture_choose_reason` on**: a WebUI list: "random", `being a bad slave` and `didnt obey` (always listed, for what the LLM missed), the other open reasons, "custom" (UIExtensions text box; the text is the event reason, the DOM index is `being a bad slave`) and "no reason" (DOM index 0). Until a pick, the punishment carries a random open reason. Closing the list, or an empty custom, keeps it and sends no event.
+3. **Otherwise**: a random open reason; `being a bad slave` when there are none (`DOM_Mind.GetNextPunishmentReason`).
+
+Then `SkyrimNet_DOM_API.ApplyTortureReason` names it on the punishment and sends `RegisterEvent("dom_torture_punish", "<torturer> is punishing <slave> because <she|he>" + description + "<torturer>.")`. A reason without a `description` reads "… because of <reason>." The pronoun comes from the slave's sex.
+
+A pain punishment lasts until 20 seconds pass with no further lash (every lash restarts the 20 s) (`SkyrimNet_DOM_API.EndStalePainPunishment`, checked every 2 s and on each batch). After that the bridge ends it through DOM (`EndWhipping`, normal training), and the next lash starts a new one with a new reason pick. A punishment already running at load that the bridge never timed (a save leftover, trace `legacy:true`) ends at once, not after the cap. Leash trips and drags (Injury Engine sources `falling`, `leash_dragging`) are not torture.
+
 ## JSON entry shape
 
 From [`punishment_reason.json`](../../SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json) (full file is source of truth):
