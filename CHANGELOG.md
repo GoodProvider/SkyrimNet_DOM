@@ -1,20 +1,34 @@
 # Changelog
 
-## Unreleased
+## [0.2.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0) — since [0.1.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.1.0)
 
-- Fix slave sex (and other LLM-ordered actions) always being refused. `SkyrimNet_DOM_Obedience.TryOrder` called DOM `WillObey` with 5 args; DOM now takes 6 (`choose_not`), so the call aborted and returned false. LLM actions (`SkyrimNet_DOM_Actions.GateSlave`) no longer roll `WillObey` (new `TryOrder` param `rollObedience`, default true). Menu and Scene Creator orders still roll and now pass all 6 args. `Headers_Source/DOM/DOM_Mind.psc`: `WillObey` gains `choose_not=true`.
+### Poses and gestures
+- LLM sees and narrates what slaves are visibly doing. `SKSE_Source/src/Gestures/GestureWatch.{h,cpp}` hooks `Character::NotifyAnimationGraph`; whitelisted DOM gesture events send ModEvent `SkyrimNet_DOM_Gesture` with a per-slave cooldown (natives `SkyrimNet_DOM_Native.Gesture*`). `Events`: `Register_Gestures`, `OnGesture`, `CheckPoseChange`, `DirectNarration_Optional` (DN when the queue is idle, else an event). `Decorators`: `PoseToString`; `Get_Actor_Info` gains `pose` and `gesture`. New settings `dom.events.poses` / `gestures` / `gesture_cooldown` / `gesture_debug`; data in `SKSE/Plugins/SkyrimNet_DOM/slave_poses.json` and `gestures.json`; `0055_dom_physical_activity.prompt` shows the held pose and latest gesture. Contract: [docs/reference/json-keys.md](docs/reference/json-keys.md).
+
+### Torture counts as punishment
 - Injury Engine torture of a DOM slave is a DOM pain punishment. `SkyrimNet_DOM_Events` registers `Injury_Engine_Torture` (`OnInjuryTorture`). The first hit runs `StartPunishingByIndex(attacker, 0, "pain")` unless DOM's own OnHit already started it (weapon whips). The first batch of each punishment picks the reason (`SkyrimNet_DOM_API.TortureReasonNamed`, a StorageUtil marker of `whipping_reason` + `whipping_pain_damage`). Every hit calls `mind.HandlePunishmentOnHit`, so hand and spell torture keep the punishment going. DOM ends it and trains (`EndPunishing` → `TrainAfterPunished`). The torturer is the player, or someone `DOM_Core.IsAllowedToPunish` allows.
 - Reason: the SkyrimNet_SexLab Punish panel's pick (`SkyrimNet_DOM_API.TakePanelReason`) if there is one, else the player's WebUI list (new setting `dom.punish.torture_choose_reason`, default on, through SexLab `Choice_Open`: random, "being a bad slave" and "didnt obey" always, the other open reasons, custom via UIExtensions `UITextEntryMenu`, no reason), else a random open reason ("being a bad slave" when none). The list JSON is built as a string (`Menu.TortureReasonChoice`): the JContainers serializer dropped the options from the hit event. `ApplyTortureReason` sets `whipping_reason` / `whipping_reason_name` and sends `RegisterEvent("dom_torture_punish", "Bob is punishing Nina because she refused to comply with the sexual demands of Bob.")`. The list callbacks (`TM_DoTortureReason`, the heal praise callback) resolve the slave with `Game.GetFormEx`: `Game.GetForm` missed ESL slaves. Custom text gets the "being a bad slave" index (`NameRunningPunishment`, new `Main.Has_Punishment_Reason`): the default index 0 made DOM summarize and train on the provisional reason.
 - Punish panel: `SkyrimNet_DOM_API.PanelPunishReasons` (called from SexLab `Handler_DOM.SeedPunishReasons` at scene start) adds the slave's open DOM reasons to the panel. `PanelPunished` (called from SexLab C++ before the hit) maps the pick: a DOM text → that reason, a SexLab strategy or request reason → "didnt obey", anything else → "being a bad slave".
+
+### Healing counts as praise
 - Healing Hands (Skyrim.esm `0x04D3F2`) cast on a DOM slave: a shocked slave (`DOM_Mind.mood == "shocked"`) gets DOM "care" comfort without the hug animation (`Injury_Engine_HealStart` → `ComfortCareNoHug`, which copies `StartComfortingWith` "care"). Any other slave is praised (`StartPraising(caster, reason, "tell")`). New setting `dom.praise.heal_choose_reason` (default on): the player gets a `Choice_Open` list of praise reasons (`Menu.PraiseReasonList`, shared with `TM_ListPraiseReasons`) plus custom → `Menu.TM_DoHealPraise`. The list always starts with `Menu.DefaultPraiseReason` ("being a good slave" / "being a good slaver"), which is also used with the setting off or a blank custom. Closing the list gives no praise. `TM_ListPraiseReasons` lists the default first too. The heal list JSON is a string too (`Menu.HealPraiseChoice`): from the Aid event the serialized list arrived empty.
 - SkyrimNet_SexLab Aid heals (HUD, Aid panel, potion give, `SexLab_Aid` action) route the same way. Aid casts nothing, so Injury Engine sends no HealStart for it: `Events` registers SexLab's `SkyrimNet_SexLab_AidStart` (`OnSexLabAidStart`; sender = target, strArg `"<spell|potion>|<caster FormID>"`, numArg = health). Any health spell or potion counts; stamina-only Aid sends nothing. `OnInjuryHealStart` and `OnSexLabAidStart` share `Events.HealSlave`.
+
+### Bug Fixes
+- Fix slave sex (and other LLM-ordered actions) always being refused. `SkyrimNet_DOM_Obedience.TryOrder` called DOM `WillObey` with 5 args; DOM now takes 6 (`choose_not`), so the call aborted and returned false. LLM actions (`SkyrimNet_DOM_Actions.GateSlave`) no longer roll `WillObey` (new `TryOrder` param `rollObedience`, default true). Menu and Scene Creator orders still roll and now pass all 6 args. `Headers_Source/DOM/DOM_Mind.psc`: `WillObey` gains `choose_not=true`.
+- Pain punishments no longer stick: `SkyrimNet_DOM_API.MarkPainActivity` is set on every Injury Engine torture batch, and a pain punishment idle for 20 s ends (`EndWhipping`) so the next hit reopens the reason list. Punishments left by an old save end at once. Player menu clicks roll `WillObey` (`rollObedience`); a refused comfort sex leaves no comfort on the mind. See [docs/authors/punishment.md](docs/authors/punishment.md).
+- Remove the Healing Hands `hit` trigger (`triggers/Healing_Hands.yaml`, `weapon_id` 316402); `goodprovider.dom` no longer ships `triggers/`. Bundle `manifest.json` version 0.2.0.
+
+### WebUI
+- SkyrimNet_SexLab WebUI: DOM TargetMenu entries `SKSE/Plugins/SkyrimNet_SexLab/webui/TargetMenu/{Actor,Scene}/options/08xx_dom_*.json` (order, abuse, training, restrain, clothes, management, trainees, services, sack) and the **DOM Info** MainPanel `MainPanels/0850_dom_info.json` (type `actor_profile`, `Menu.WebUI_DomInfoOpen`, `SkyrimNet_DOM_InfoPanel.BuildPanelJson`). New setting `dom.info.show_enjoyment` (default off) adds the orgasm-meter inputs. Comfort-by-pain actions added to the DOM menu.
+
+### Install
 - Needs SkyrimNet_SexLab whose `Choice_Open` list supports `opensText` rows (inline text → first dynamic mapping).
-- `Headers_Source/DOM` stubs: `DOM_Mind` (`IsComforted`, `TrainRespect`, `TrainAnger`, `MOD_Ease`, `HandlePunishmentOnHit`, `whipping_pain_damage`, `time_last_*`, `SetNextPraiseReasonSilent`, `CheckAndRegisterKink`, `TrainSkillPredator`), `DOM_Actor.SendExternalEventSSB`, `DOM_Core` (`IsAllowedToPunish`, `GetActorMind`, `DOMPlayerAlias`), `DOM_Diary.NotifyEndComforted`, new `DOM_PlayerAlias.psc`. `Headers_Source/` is not in git.
 - Needs Injury Engine with the `Injury_Engine_Torture` / `Injury_Engine_HealStart` mod events, and SkyrimNet_SexLab with `Choice_Open` and the `SkyrimNet_SexLab_AidStart` mod event.
 
-## 0.1.1 (since 0.1.0)
-
-- Remove Healing Hands `hit` trigger (`triggers/Healing_Hands.yaml`, `weapon_id` 316402). The `goodprovider.dom` bundle no longer ships `triggers/`; `manifest.json` version 0.1.1.
+### Build
+- Compiles against SkyrimNet_SexLab 0.36.5.
+- `Headers_Source/DOM` stubs: `DOM_Mind` (`IsComforted`, `TrainRespect`, `TrainAnger`, `MOD_Ease`, `HandlePunishmentOnHit`, `whipping_pain_damage`, `time_last_*`, `SetNextPraiseReasonSilent`, `CheckAndRegisterKink`, `TrainSkillPredator`), `DOM_Actor.SendExternalEventSSB`, `DOM_Core` (`IsAllowedToPunish`, `GetActorMind`, `DOMPlayerAlias`), `DOM_Diary.NotifyEndComforted`, new `DOM_PlayerAlias.psc`. `Headers_Source/` is not in git.
 
 ## 0.1.0 (since 0.0.6)
 

@@ -15,7 +15,7 @@
 | Agent policy | AGENTS.md (safety, confidence, commits) |
 | Quirks | KNOWLEDGEBASE.md |
 | Release documentation | release-guide.xml, release-checkpoint.xml |
-| Changelog | CHANGELOG.md, CHANGELOG-user.md |
+| Changelog | CHANGELOG.md, CHANGELOG-developer.md, CHANGELOG-player.md |
 | Short examples | Prefer snippets pointing at SKSE/Plugins/... shipped files |
 
 ## Optional examples (in-tree)

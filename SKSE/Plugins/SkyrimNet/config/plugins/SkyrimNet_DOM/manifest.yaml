@@ -1,6 +1,6 @@
 plugin:
   name: "SkyrimNet_DOM"
-  version: "0.1.0"
+  version: "0.2.0"
   description: "Diary of Mine-SkyrimNet integration"
   icon: "⛓️"
 
