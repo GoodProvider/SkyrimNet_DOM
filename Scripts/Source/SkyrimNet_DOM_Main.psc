@@ -33,6 +33,8 @@ bool Property pose_events_enabled = true Auto
 bool Property gesture_events_enabled = true Auto
 int Property gesture_cooldown = 20 Auto
 bool Property gesture_debug = false Auto
+; DOM Info view: Enjoyment section (Handler_DOM orgasm-meter inputs, chance, score)
+bool Property show_enjoyment = false Auto
 
 Event OnInit()
     ; Register for all SexLab events using the framework's RegisterForAllEvents function
@@ -130,6 +132,7 @@ Function ApplyPluginConfig()
     endif
     gesture_cooldown = cooldown
     gesture_debug = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.events.gesture_debug", false)
+    show_enjoyment = SkyrimNetApi.GetConfigBool(PLUGIN_CONFIG, "dom.info.show_enjoyment", false)
 
     SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
     if events
@@ -137,7 +140,7 @@ Function ApplyPluginConfig()
         events.ApplyExt2Events()
         events.ApplyGestureConfig()
     endif
-    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl+" torture_choose_reason:"+torture_choose_reason+" heal_choose_reason:"+heal_choose_reason+" poses:"+pose_events_enabled+" gestures:"+gesture_events_enabled+" gesture_cooldown:"+gesture_cooldown+" gesture_debug:"+gesture_debug)
+    Trace("ApplyPluginConfig", "ext2:"+ext2_enabled+" ring:"+notification_ring+" ttl:"+short_lived_ttl+" torture_choose_reason:"+torture_choose_reason+" heal_choose_reason:"+heal_choose_reason+" poses:"+pose_events_enabled+" gestures:"+gesture_events_enabled+" gesture_cooldown:"+gesture_cooldown+" gesture_debug:"+gesture_debug+" show_enjoyment:"+show_enjoyment)
 EndFunction
 
 Event OnPluginConfigSaved(string eventName, string strArg, float numArg, Form sender)

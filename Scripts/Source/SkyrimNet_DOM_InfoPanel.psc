@@ -4,7 +4,7 @@ Scriptname SkyrimNet_DOM_InfoPanel hidden
 ; Same information and role rules as PrismaUI-for-DOM's profile panel
 ; (DOMPrismController BuildStats / BuildAdditionalInfo / BuildDiaryNotif):
 ;   any role with a mind: status (or School), mood, recs, personality, events
-;   slave + trainer:      + Training, Love
+;   slave + trainer:      + Training, Love (+ Enjoyment when dom.info.show_enjoyment)
 ;   trainer + slaver:     + Slaver Skills
 ;   free person (no mind): personality from DOM_Generator.GetNPCTraits
 ; Payload contract: SkyrimNet_SexLab docs/developers/webui.md (actor_profile).
@@ -13,7 +13,7 @@ Function Trace(String func, String msg, Bool Notification = false) global
     SkyrimNet_DOM_API.Trace_Helper("SkyrimNet_DOM_InfoPanel", func, msg, Notification)
 EndFunction
 
-String Function BuildPanelJson(DOM_Core core, SkyrimNet_DOM_Events events, Actor akActor) global
+String Function BuildPanelJson(DOM_Core core, SkyrimNet_DOM_Events events, Actor akActor, Bool showEnjoyment = false) global
     int root = JMap.object()
     JMap.setStr(root, "panel", "actor_profile")
     JMap.setStr(root, "id", "dom_info")
@@ -57,6 +57,9 @@ String Function BuildPanelJson(DOM_Core core, SkyrimNet_DOM_Events events, Actor
         AddPersonalityFromMind(sections, mind)
         if mode == "slave" || mode == "trainer"
             AddTrainingLove(sections, mind)
+            if showEnjoyment && events && events.handler
+                AddEnjoyment(sections, mind, events.handler, akActor)
+            endif
         endif
     elseif mode == "npc"
         AddPersonalityFromTraits(sections, core, akActor)
@@ -134,11 +137,31 @@ int Function AddSection(int sections, String type, String title, String tone, St
     return items
 EndFunction
 
-Function AddBar(int items, String label, Float value) global
+; text (optional) is shown instead of the number; the fill still uses value.
+Function AddBar(int items, String label, Float value, String text = "") global
     int b = JMap.object()
     JMap.setStr(b, "label", label)
     JMap.setInt(b, "value", Math.Floor(value))
+    if text != ""
+        JMap.setStr(b, "text", text)
+    endif
     JArray.addObj(items, b)
+EndFunction
+
+; Two decimals ("1.25"); Papyrus float-to-string prints six.
+String Function Fmt2(Float x) global
+    String sign = ""
+    if x < 0.0
+        sign = "-"
+        x = -x
+    endif
+    int cents = Math.Floor(x * 100.0 + 0.5)
+    int whole = cents / 100
+    int frac = cents % 100
+    if frac < 10
+        return sign + whole + ".0" + frac
+    endif
+    return sign + whole + "." + frac
 EndFunction
 
 Function AddTrait(int axes, String lo, String hi, String pol, Float value) global
@@ -231,6 +254,51 @@ Function AddTrainingLove(int sections, DOM_Mind m) global
     AddBar(lv, "Absolution", m.loyal_absolution)
     AddBar(lv, "Devotion", m.loyal_devotion)
     AddBar(lv, "Admiration", m.love_admiration)
+EndFunction
+
+; ---- Enjoyment (slave + trainer, opt-in): the terms of Handler_DOM.EstimateChance, the
+; per-roll chance and the HUD's DOM meter (Handler_DOM.OrgasmMeter), so the numbers match the HUD.
+
+Function AddEnjoyment(int sections, DOM_Mind m, SkyrimNet_SexLab_Handler_DOM handler, Actor akActor) global
+    int en = AddSection(sections, "bars", "Enjoyment", "rose")
+    AddBar(en, "Arousal", m.arousal_factor)
+
+    String aroused = "No"
+    Float arousedFill = 0.0
+    if handler.IsRefractory(m, akActor)
+        aroused = "Refractory"
+    elseif m.is_aroused_for > 0
+        aroused = "Yes"
+        arousedFill = 100.0
+    endif
+    AddBar(en, "Aroused", arousedFill, aroused)
+
+    Float act = m.MOD_Vaginal
+    if m.MOD_Anal > act
+        act = m.MOD_Anal
+    endif
+    if m.MOD_Oral > act
+        act = m.MOD_Oral
+    endif
+    if m.DOM01 && m.DOM01.DOMSexlab && m.DOM01.DOMSexlab.separateOrgasmToggle
+        act = 1000.0
+    endif
+    AddBar(en, "Best act modifier", act * 50.0, "x" + Fmt2(act))
+    AddBar(en, "Orgasm modifier", m.MOD_Orgasm * 50.0, "x" + Fmt2(m.MOD_Orgasm))
+    Float bonus = m.getArousalBonus()
+    AddBar(en, "Mood bonus", bonus * 200.0, "+" + Fmt2(bonus))
+    AddBar(en, "Past orgasms", m.number_of_orgasm, "" + m.number_of_orgasm)
+    AddBar(en, "Submission", m.submission)
+    AddBar(en, "Desire", m.love_desire)
+
+    Float chance = handler.EstimateChance(m, akActor)
+    if chance < 0.0
+        chance = 0.0
+    elseif chance > 1.0
+        chance = 1.0
+    endif
+    AddBar(en, "Orgasm chance", chance * 100.0, Math.Floor(chance * 100.0 + 0.5) + "%")
+    AddBar(en, "Enjoyment", handler.OrgasmMeter(akActor))
 EndFunction
 
 ; ---- Slaver skills (trainer + slaver): mind values, faction ranks without a mind ----

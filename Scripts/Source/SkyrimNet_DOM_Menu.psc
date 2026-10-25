@@ -543,7 +543,9 @@ EndFunction
 ; MainPanels 0850_dom_info.json openFunction (also re-run by SexLab on a ControlPanel target change).
 Function WebUI_DomInfoOpen()
     SkyrimNet_DOM_Events events = (self as Quest) as SkyrimNet_DOM_Events
-    PushJson(SkyrimNet_DOM_InfoPanel.BuildPanelJson(GetCore(), events, FocusActor()))
+    SkyrimNet_DOM_Main main = (self as Quest) as SkyrimNet_DOM_Main
+    Bool showEnjoyment = main && main.show_enjoyment
+    PushJson(SkyrimNet_DOM_InfoPanel.BuildPanelJson(GetCore(), events, FocusActor(), showEnjoyment))
 EndFunction
 
 String Function TM_BuildGroupStatusJson()

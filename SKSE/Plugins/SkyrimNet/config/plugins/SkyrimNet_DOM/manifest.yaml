@@ -74,3 +74,10 @@ schema:
       description: "Healing Hands or a SkyrimNet_SexLab Aid heal on a slave who is not in shock praises them (a shocked slave gets care comfort instead). On: when you heal, the WebUI lists the slave's praise reasons plus custom; closing the list gives no praise. 'Being a good slave' (or slaver) is always listed first and is the reason used when the setting is off."
       defaultValue: true
       category: "Praise"
+
+    - name: "Show enjoyment"
+      path: "dom.info.show_enjoyment"
+      type: "bool"
+      description: "DOM Info view (slaves and trainers): adds an Enjoyment section with everything that feeds DOM's orgasm meter (arousal, aroused state, act and orgasm modifiers, mood bonus, past orgasms, submission, desire), the orgasm chance per roll and the final enjoyment score shown on the SexLab HUD. Needs SkyrimNet_SexLab_Handler_DOM.esp."
+      defaultValue: false
+      category: "Info panel"
