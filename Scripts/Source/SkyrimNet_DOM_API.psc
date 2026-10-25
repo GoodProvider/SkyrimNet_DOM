@@ -142,6 +142,62 @@ Function MarkTortureDamage(Actor slaveActor, DOM_Mind mind) global
     StorageUtil.SetIntValue(slaveActor, KEY_TORTURE_DAMAGE(), mind.whipping_pain_damage)
 EndFunction
 
+; StorageUtil float on the slave: game time (days) the bridge first saw the running pain punishment (EndStalePainPunishment)
+String Function KEY_PAIN_START() global
+    return "skyrimnet_dom.pain_start"
+EndFunction
+
+Float Function PAIN_PUNISH_TIMEOUT_SECONDS() global
+    return 60.0
+EndFunction
+
+; Ends a pain punishment older than PAIN_PUNISH_TIMEOUT_SECONDS (real seconds, via TimeScale). DOM's tick never ends one
+; started by a DOM-mind actor (whipping_by_trainer), and such a punishment survives in the save: every later lash then
+; looked "already named" (TortureReasonNamed), so no reason list / dom_torture_punish ever came. EndWhipping is DOM's
+; normal close (training + "Punishing ... strokes" notice). Clears the bridge markers so the next batch is fresh.
+Bool Function EndStalePainPunishment(Actor slaveActor, DOM_Actor slave, Actor abuser) global
+    if slaveActor == None || !slave || !slave.mind
+        return false
+    endif
+    DOM_Mind mind = slave.mind
+    if !mind.whipping_active
+        StorageUtil.UnsetFloatValue(slaveActor, KEY_PAIN_START())
+        return false
+    endif
+    Float now = Utility.GetCurrentGameTime()
+    Float start = StorageUtil.GetFloatValue(slaveActor, KEY_PAIN_START(), -1.0)
+    if start < 0.0 || start > now
+        StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), now)
+        return false
+    endif
+    Float timescale = 20.0
+    GlobalVariable ts = Game.GetFormFromFile(0x3A, "Skyrim.esm") as GlobalVariable
+    if ts && ts.GetValue() > 0.0
+        timescale = ts.GetValue()
+    endif
+    Float elapsed = (now - start) * 86400.0 / timescale
+    if elapsed <= PAIN_PUNISH_TIMEOUT_SECONDS()
+        return false
+    endif
+    if abuser == None
+        abuser = Game.GetPlayer()
+    endif
+    Trace("EndStalePainPunishment", slaveActor.GetDisplayName() + " reason:" + mind.whipping_reason + " '" \
+        + mind.whipping_reason_name + "' trainer:" + mind.whipping_by_trainer + " elapsed:" + elapsed + "s by " \
+        + abuser.GetDisplayName())
+    slave.EndWhipping(abuser)
+    StorageUtil.UnsetFloatValue(slaveActor, KEY_PAIN_START())
+    StorageUtil.UnsetIntValue(slaveActor, KEY_TORTURE_REASON_INDEX())
+    StorageUtil.UnsetIntValue(slaveActor, KEY_TORTURE_DAMAGE())
+    return true
+EndFunction
+
+; A new pain punishment's first batch (OnInjuryTorture fresh): its timeout counts from now, not from one that ended
+; between two scans.
+Function MarkPainStart(Actor slaveActor) global
+    StorageUtil.SetFloatValue(slaveActor, KEY_PAIN_START(), Utility.GetCurrentGameTime())
+EndFunction
+
 ; Names the running pain punishment (no event) and marks it named for TortureReasonNamed.
 Function NameRunningPunishment(Actor slaveActor, DOM_Mind mind, String reason) global
     SkyrimNet_DOM_Main main = Game.GetFormFromFile(0x800, "SkyrimNet_DOM.esp") as SkyrimNet_DOM_Main

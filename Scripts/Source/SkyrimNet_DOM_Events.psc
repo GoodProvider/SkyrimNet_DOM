@@ -200,7 +200,7 @@ int Function ScanCaptureAliases(bool narrate)
         return 0
     endif
     DOM_SlaveManager slaveManager = main.d_core.DOM02
-    if slaveManager == None || capture_narrated == 0
+    if slaveManager == None
         return 0
     endif
     ; Walk actorAliases (filled at ForceRefTo). GetActorCount/actorArray update only after Mind AfterAssign.
@@ -211,8 +211,13 @@ int Function ScanCaptureAliases(bool narrate)
         DOM_Actor domActor = slaveManager.actorAliases[i] as DOM_Actor
         if domActor && domActor.GetActorRef()
             filled += 1
-            MarkCaptureNarrated(domActor, narrate)
+            if capture_narrated != 0
+                MarkCaptureNarrated(domActor, narrate)
+            endif
             CheckPoseChange(domActor, narrate)
+            if domActor.mind
+                SkyrimNet_DOM_API.EndStalePainPunishment(domActor.GetActorRef(), domActor, domActor.mind.actor_owner)
+            endif
         endif
         i += 1
     endwhile
@@ -1001,11 +1006,15 @@ int Property HEALING_HANDS = 0x04D3F2 AutoReadOnly ; Skyrim.esm
 ; Every torture batch Injury Engine lands. Starts DOM's pain punishment unless DOM already did (a weapon whip's OnHit
 ; starts it before this event arrives); the first batch of each punishment picks its reason (TortureReasonNamed).
 ; Every batch counts as a punishment hit (hand / spell torture fires no OnHit, so DOM would end it at once).
-; DOM ends the punishment after a tick without hits and trains (EndPunishing -> TrainAfterPunished).
+; DOM ends the punishment after a tick without hits and trains (EndPunishing -> TrainAfterPunished); the bridge ends
+; one older than a minute itself (EndStalePainPunishment). Leash trips / drags (falling, leash_dragging) are not torture.
 Event OnInjuryTorture(Form akAttacker, Form akVictim, String source, Int hits, String cause)
     Actor attacker = akAttacker as Actor
     Actor victim = akVictim as Actor
     if attacker == None || victim == None || attacker == victim || !main || !main.d_core
+        return
+    endif
+    if source == "falling" || source == "leash_dragging"
         return
     endif
     DOM_Actor slave = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Events", "OnInjuryTorture", victim)
@@ -1019,13 +1028,16 @@ Event OnInjuryTorture(Form akAttacker, Form akVictim, String source, Int hits, S
         return
     endif
     DOM_Mind mind = slave.mind
+    SkyrimNet_DOM_API.EndStalePainPunishment(victim, slave, attacker)
     if !mind.whipping_active
         mind.StartPunishingByIndex(attacker, 0, "pain")
     endif
     Bool fresh = !SkyrimNet_DOM_API.TortureReasonNamed(victim, mind)
     Trace("OnInjuryTorture", attacker.GetDisplayName() + " -> " + victim.GetDisplayName() + " " + source + " hits:" + hits \
-        + " active:" + mind.whipping_active + " reason:" + mind.whipping_reason + " fresh:" + fresh)
+        + " active:" + mind.whipping_active + " reason:" + mind.whipping_reason + " trainer:" + mind.whipping_by_trainer \
+        + " fresh:" + fresh)
     if fresh
+        SkyrimNet_DOM_API.MarkPainStart(victim)
         StartTortureReason(attacker, victim, mind)
     endif
     mind.HandlePunishmentOnHit(attacker, None)

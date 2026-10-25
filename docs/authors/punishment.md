@@ -24,6 +24,8 @@ Injury Engine torture of a DOM slave is a DOM pain punishment (`SkyrimNet_DOM_Ev
 
 Then `SkyrimNet_DOM_API.ApplyTortureReason` names it on the punishment and sends `RegisterEvent("dom_torture_punish", "<torturer> is punishing <slave> because <she|he>" + description + "<torturer>.")`. A reason without a `description` reads "… because of <reason>." The pronoun comes from the slave's sex.
 
+A pain punishment lasts at most one minute (`SkyrimNet_DOM_API.EndStalePainPunishment`, checked every 2 s and on each batch). After that the bridge ends it through DOM (`EndWhipping`, normal training), and the next lash starts a new one with a new reason pick. Leash trips and drags (Injury Engine sources `falling`, `leash_dragging`) are not torture.
+
 ## JSON entry shape
 
 From [`punishment_reason.json`](../../SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json) (full file is source of truth):

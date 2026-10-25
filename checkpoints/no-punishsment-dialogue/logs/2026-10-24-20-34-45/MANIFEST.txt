@@ -1,0 +1,4 @@
+208768	10/24/2026 20:23:31	C:\Users\bhuff\OneDrive\Documents\my games\Skyrim Special Edition\Logs\Script\Papyrus.0.log
+199198	10/24/2026 15:52:20	C:\Users\bhuff\OneDrive\Documents\my games\Skyrim Special Edition\Logs\Script\Papyrus.3.log
+75366	10/24/2026 20:23:22	C:\Users\bhuff\OneDrive\Documents\my games\Skyrim Special Edition\SKSE\SkyrimNet_SexLab.log
+303	10/24/2026 20:18:12	C:\Users\bhuff\OneDrive\Documents\my games\Skyrim Special Edition\SKSE\SkyrimNet_DOM.log
