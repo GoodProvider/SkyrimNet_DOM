@@ -150,6 +150,14 @@ A save-leftover pain punishment must end at once, not after the 20 s cap: it is 
 - The Prisma mood tips are keyed by mood code, but DOM pushes the mood display name: strip it to letters, then alias `inshock→shocked`, `nothappy→depressed`, `annoyed→jealous`, `outraged→defiant`, `offended→proud`.
 - **Enjoyment section** (`dom.info.show_enjoyment`, default off): `InfoPanel.AddEnjoyment` calls `events.handler` (`SkyrimNet_SexLab_Handler_DOM`) `IsRefractory` / `EstimateChance` / `OrgasmMeter` and does not copy their formulas, so the panel matches the SexLab HUD's DOM bar. If the handler esp is missing, the section is skipped. Bars carry an optional `text` (`x1.25`, `37%`, `Refractory`) that is shown in place of the number.
 
+## Leash Framework leash on a just-captured slave fights DOM (2026-10-26)
+
+**Symptom**: Right after capture, with SkyrimNet_Leashed active, the slave flips between being yanked up (leash) and lying on her back (DOM). Pressing E fires DOM `OnActivate` → `HandleDialogueOnActivate` but no dialogue opens. Leash Framework logs repeated "Interrupting forced-recovery get-up", and Leashed logs `stuck knockdown … knock=6; BleedOutStop` and then `ResetStuckActor` (Disable/Enable).
+
+**Cause**: The capture DN makes the slave's LLM pick `leashed_leash_speaker`. That puts on a tight Leash Framework leash, and the Framework ragdoll-pulls her while she is still on the floor. DOM's own `OnLeashRagdollPulled` → `EnterFollowTarget` does nothing, because `GetActor` fails while Actor/Mind `AfterAssign` runs (~20 s). When `AfterAssign` ends, DOM starts `flee_and_cower` (`is_restrained`; its default quietPose is `Anim_BleedOutStart`). Leashed's watchdog then sends `BleedOutStop` at that pose. Knock state 6 = kGetUp, stuck. The LLM re-picked the leash action every ~20 s, so each "replaced" leash yanked her again.
+
+**Fix**: `SkyrimNet_DOM_Events` registers `LeashFramework_OnLeash` when `Leash.esm`/`.esp` is loaded. A holder leash marks the actor pending for 60 s (JMap `leash_sync_pending`). The 2 s capture scan (`SyncLeashFollow`) calls `DOM_Actor.EnterFollowTarget(holder)` once `is_initializing` is false and DOM is not already following. This is what DOM's own `DOMDoLeash` does. It skips SexLab scenes and furniture. After the window ends, kneel/wait orders while leashed are left alone. Wall/floor ties (no holder) are ignored. Compile-only stub `Headers_Source/LeashFramework.psc` (`IsLeashed`, `GetLeashHolder`); the `is_initializing` property was added to the `Headers_Source/DOM/DOM_Actor.psc` stub. SkyrimNet_Leashed side: `AnimationController` returns "Diary of Mine" for `DOMActionPosing` / `DOMActionTied` / `DOMActionFleeing`, `TickDowned` treats that as not stuck, and `leashed_leash_speaker` / `leashed_leashLeashed` need `speaker_is_leashed == "unavailable"`.
+
 ## Shared engine gotchas
 
 See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves a SE/VR or Papyrus quirk for this project.

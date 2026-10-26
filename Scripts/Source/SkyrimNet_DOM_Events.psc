@@ -26,7 +26,8 @@ String events_log = "Data/SKSE/Plugins/SkyrimNet_DOM/events-log.json"
 int Property notifications_size = 20 Auto
 int actor_to_notifications = 0 
 int actor_to_notifications_next = 0 
-int capture_narrated = 0 
+int capture_narrated = 0
+int leash_sync_pending = 0 ; slave FormID -> real-time deadline for SyncLeashFollow
 
 ; --------------------------
 ; Helper functions 
@@ -155,6 +156,16 @@ Function Register_Events(Quest DOM01)
     RegisterForModEvent("Injury_Engine_Torture", "OnInjuryTorture")
     RegisterForModEvent("Injury_Engine_HealStart", "OnInjuryHealStart")
     RegisterForModEvent("SkyrimNet_SexLab_AidStart", "OnSexLabAidStart")
+    ; Leash Framework (soft): a holder leash from another mod (SkyrimNet_Leashed) makes the slave follow, as DOMDoLeash does
+    if Game.GetModByName("Leash.esm") != 255 || Game.GetModByName("Leash.esp") != 255
+        if leash_sync_pending == 0
+            leash_sync_pending = JMap.object()
+            JValue.retain(leash_sync_pending)
+        endif
+        ; real-time deadlines do not survive a load
+        JValue.clear(leash_sync_pending)
+        RegisterForModEvent("LeashFramework_OnLeash", "OnLeashFrameworkLeash")
+    endif
     ;  -------
     ; will be handled (if at all) by decorators
     ;  -------
@@ -215,6 +226,7 @@ int Function ScanCaptureAliases(bool narrate)
                 MarkCaptureNarrated(domActor, narrate)
             endif
             CheckPoseChange(domActor, narrate)
+            SyncLeashFollow(domActor)
             if domActor.mind
                 ; stored abuser first; the owner is only the fallback (a save from before the abuser was stored)
                 SkyrimNet_DOM_API.EndStalePainPunishment(domActor.GetActorRef(), domActor, SkyrimNet_DOM_API.PainAbuserOr(domActor.GetActorRef(), domActor.mind.actor_owner))
@@ -253,6 +265,52 @@ EndFunction
 Event OnUpdate()
     ScanCaptureAliases(true)
 EndEvent
+
+; A Leash Framework holder leash from another mod (SkyrimNet_Leashed) on a DOM slave. Unless DOM follows the
+; holder (what DOMDoLeash does), its restrained floor pose fights the Framework pull and get-up. A just-captured
+; slave stays initializing for ~20s and then starts flee_and_cower, so the 2s capture scan retries for a window.
+Event OnLeashFrameworkLeash(String eventName, String strArg, Float numArg, Form sender)
+    Actor slave = sender as Actor
+    if slave == None || leash_sync_pending == 0
+        return
+    endif
+    if LeashFramework.GetLeashHolder(slave) == None
+        return
+    endif
+    JMap.setFlt(leash_sync_pending, slave.GetFormID() as String, Utility.GetCurrentRealTime() + 60.0)
+    Trace("OnLeashFrameworkLeash", slave.GetDisplayName()+" reason:"+strArg)
+EndEvent
+
+Function SyncLeashFollow(DOM_Actor domActor)
+    if leash_sync_pending == 0 || domActor == None
+        return
+    endif
+    Actor slave = domActor.GetActorRef()
+    if slave == None
+        return
+    endif
+    String uuid = slave.GetFormID() as String
+    if !JMap.hasKey(leash_sync_pending, uuid)
+        return
+    endif
+    Actor holder = LeashFramework.GetLeashHolder(slave)
+    if holder == None || slave.IsDead() || Utility.GetCurrentRealTime() > JMap.getFlt(leash_sync_pending, uuid)
+        JMap.removeKey(leash_sync_pending, uuid)
+        return
+    endif
+    if domActor.is_initializing
+        return
+    endif
+    String behaviour = domActor.behaviour
+    if behaviour == "follow_player" || behaviour == "follow_trainer" || behaviour == "follow_target"
+        return
+    endif
+    if slave.GetSitState() != 0 || (sexlab_main && sexlab_main.sexlab.IsActorActive(slave))
+        return
+    endif
+    Trace("SyncLeashFollow", slave.GetDisplayName()+" behaviour:"+behaviour+" -> follow "+holder.GetDisplayName())
+    domActor.EnterFollowTarget(holder)
+EndFunction
 
 ; Held pose (DOM_Actor.poseId) is always in the bio via Get_Actor_Info "pose"; when a player slave starts
 ; one, DirectNarration if SkyrimNet is idle, else an event. narrate=false only records the current pose.

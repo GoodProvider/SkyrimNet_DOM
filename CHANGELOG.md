@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1 (since 0.2.0)
+
+- Fix a just-captured slave fighting a SkyrimNet_Leashed leash: she was yanked up, then forced back onto her back, and could not be talked to. A Leash Framework holder leash on a DOM slave now makes DOM follow the holder (`SkyrimNet_DOM_Events`: `OnLeashFrameworkLeash`, `SyncLeashFollow` in the 2s alias scan, 60 s window, waits for DOM `is_initializing`). Needs the matching SkyrimNet_Leashed update (DOM poses count as animation-owned; no re-leash of an already leashed speaker).
+
 ## [0.2.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0) — since [0.1.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.1.0)
 
 ### Poses and gestures
