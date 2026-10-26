@@ -1,4 +1,4 @@
-VERSION=0.2.0
+VERSION=0.2.1
 NAME=SkyrimNet_DOM
 RELEASE_FILE=versions/SkyrimNet_DOM ${VERSION}.zip
 
@@ -19,5 +19,5 @@ release:
 	powershell.exe -NoProfile -Command " \
 		python3 ./python_scripts/fomod-info.py -v ${VERSION} -n '${NAME}' -o fomod/info.xml fomod-source/info.xml ; \
 		if (Test-Path '${RELEASE_FILE}') { Remove-Item -Path '${RELEASE_FILE}' -Recurse -Force } ; \
-		7z a '${RELEASE_FILE}' fomod Scripts SkyrimNet_DOM.esp SKSE \
+		7z a '${RELEASE_FILE}' fomod Scripts SkyrimNet_DOM.esp SKSE '-xr!*.pdb' \
 	"

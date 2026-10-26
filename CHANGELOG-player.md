@@ -1,6 +1,21 @@
-https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0
+https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1
 
 Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and heal features need Injury Engine.
+
+## 0.2.1
+
+### Items
+- Diary of Mine item names and descriptions now come with the DOM plugin
+- DOM Training Info no longer shows in what NPCs are carrying, so the AI won't mention it
+
+### Bug Fixes
+- Fixed: a just-captured slave fought a SkyrimNet_Leashed leash and could not be talked to
+
+### Install
+- Needs the matching SkyrimNet_Leashed update for the leash fix
+- Delete old `SkyrimNet/config/items/diaryofmine_*.yaml` if still there
+- Also delete `SkyrimNet/overlay/items/diaryofmine-esm_*.yaml`; old copies override the new ones
+- Smaller download: debug symbols (`.pdb`) are no longer included
 
 ## 0.2.0
 

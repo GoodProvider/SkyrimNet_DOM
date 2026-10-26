@@ -1,8 +1,20 @@
 # Changelog
 
-## 0.2.1 (since 0.2.0)
+## [0.2.1](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1) — since [0.2.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0)
 
-- Fix a just-captured slave fighting a SkyrimNet_Leashed leash: she was yanked up, then forced back onto her back, and could not be talked to. A Leash Framework holder leash on a DOM slave now makes DOM follow the holder (`SkyrimNet_DOM_Events`: `OnLeashFrameworkLeash`, `SyncLeashFollow` in the 2s alias scan, 60 s window, waits for DOM `is_initializing`). Needs the matching SkyrimNet_Leashed update (DOM poses count as animation-owned; no re-leash of an already leashed speaker).
+### Items
+- Diary of Mine item YAMLs ship from the content plugin: `SKSE/Plugins/SkyrimNet/external/goodprovider.dom/items/diaryofmine-esm_EB8659.yaml` (Wrist Rope → Rope cuffs) and `diaryofmine-esm_BB1B47.yaml` (DOM Training Info, `show_in_prompts: false`; was `enabled: false`, which items refuse). Records use `form: "DiaryOfMine.esm|0x…"`; `config/items/diaryofmine_*.yaml` is removed. See [docs/authors/content.md](docs/authors/content.md).
+
+### Bug Fixes
+- Fixed: a just-captured slave fought a SkyrimNet_Leashed leash: she was yanked up, then forced back onto her back, and could not be talked to. A Leash Framework holder leash on a DOM slave now makes DOM follow the holder (`SkyrimNet_DOM_Events`: `OnLeashFrameworkLeash`, `SyncLeashFollow` in the 2s alias scan, 60 s window, waits for DOM `is_initializing`). Needs the matching SkyrimNet_Leashed update (DOM poses count as animation-owned; no re-leash of an already leashed speaker).
+
+### Install
+- Upgrading: delete any leftover `SKSE/Plugins/SkyrimNet/config/items/diaryofmine_*.yaml`. If SkyrimNet already migrated them into `overlay/items/diaryofmine-esm_*.yaml`, that copy overrides the shipped record; delete it to use the plugin's version.
+- Needs the matching SkyrimNet_Leashed update for the leash fix.
+
+### Build
+- Bundle `manifest.json` and settings `config/plugins/SkyrimNet_DOM/manifest.yaml` version 0.2.1.
+- `make release` no longer packs `SKSE/Plugins/SkyrimNet_DOM.pdb` (`7z -xr!*.pdb`); the 0.2.0 zip carried 32 MB of debug symbols.
 
 ## [0.2.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0) — since [0.1.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.1.0)
 
@@ -39,7 +51,7 @@
 - Ship LLM actions, prompts, and the Healing Hands trigger as SkyrimNet Beta 25 external plugin `goodprovider.dom` (`SKSE/Plugins/SkyrimNet/external/goodprovider.dom/`). Loose `config/actions/`, `config/triggers/`, and `prompts/` are removed; Beta 25 does not read those folders.
 - Action YAML filenames now equal in-file `name` (e.g. `DOMSlave_Sex_Two_Fucking.yaml`); `name` values unchanged. Trigger `Healing Hands` → `Healing_Hands`.
 - Settings schema at [`config/plugins/SkyrimNet_DOM/manifest.yaml`](SKSE/Plugins/SkyrimNet/config/plugins/SkyrimNet_DOM/manifest.yaml) (`plugin.name` SkyrimNet_DOM, `dom.events.ext2` / `notification_ring` / `short_lived_ttl`). Papyrus `ApplyPluginConfig` reads `Plugin_SkyrimNet_DOM`.
-- Requires SkyrimNet **0.25.0+**. Plugin should appear under Installed Plugins with an **External** badge. Item YAML stays at `config/items/`.
+- Requires SkyrimNet **0.25.0+**. Plugin should appear under Installed Plugins with an **External** badge. Item YAML stays at `config/items/` (moved to the content plugin in 0.2.1).
 - Ext toggles (`SetSendExternalEvents*`) via `main.d_api` (`DOM_API`), not `d_core` — calling them on `DOM_Core` is a runtime no-op (HUD still shows; SkyrimNet never gets the ModEvent).
 - Capture / abduction Direct Narration: Events `OnUpdate` (2s) walks `DOM02.actorAliases` (`GetMaxActorCount`); new player-owned aliases (`mind.is_player_slave`) get required `DirectNarration` once per FormID (`OnCaptureAssigned`). `GetActorCount` / `actorArray` stay empty until `UpdateActorArray` after Mind `AfterAssign`.
 - Melt / climax routing: `IsDomMeltOrgasm` (`brain melts` / `mind melts` / `overwhelmed by orgasm` / `submerged by orgasm`; reject `your orgasm`). Player-climax tease (`squirms under your grasp` / `your orgasm submerges you`) is `OnNotifcationSkip` (no DN, no ring, no `DOMSlave_Orgasmed`).

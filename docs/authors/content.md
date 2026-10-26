@@ -6,17 +6,16 @@ See also: [events.md](events.md) · [../players/overview.md](../players/overview
 
 ## Items
 
-Path:
+Path (content plugin, SkyrimNet Beta 25+):
 
 ```
-SKSE/Plugins/SkyrimNet/config/items/
+SKSE/Plugins/SkyrimNet/external/goodprovider.dom/items/
 ```
 
-Example — Wrist Rope ([`diaryofmine_EB8659.yaml`](../../SKSE/Plugins/SkyrimNet/config/items/diaryofmine_EB8659.yaml)):
+Example — Wrist Rope ([`diaryofmine-esm_EB8659.yaml`](../../SKSE/Plugins/SkyrimNet/external/goodprovider.dom/items/diaryofmine-esm_EB8659.yaml)):
 
 ```yaml
-plugin: DiaryOfMine.esm
-formID: 0xEB8659
+form: "DiaryOfMine.esm|0xEB8659"
 originalName: Wrist Rope
 customName: Rope cuffs
 customDescription: A rough rope binding the wrists together and making arms useless.
@@ -24,13 +23,15 @@ customDescription: A rough rope binding the wrists together and making arms usel
 
 | Field | Role |
 |-------|------|
-| `plugin` + `formID` | Resolve the base form (DOM items use `DiaryOfMine.esm`) |
+| `form` | `"Plugin.esm\|0x<id>"`, quoted (DOM items use `DiaryOfMine.esm`) |
 | `originalName` | Sanity check / docs |
 | `customName` | Optional display rename |
 | `customDescription` | LLM-facing item text |
-| `enabled` | `false` to ship a stub without applying it |
+| `show_in_prompts` | `false` hides the item from NPC equipment lists in prompts (default `true`). `enabled` is refused on items. |
 
-`diaryofmine_BB1B47.yaml` (DOM Training Info) is an example stub with `enabled: false`.
+The filename must be the form stem of `form`, compared exactly: `DiaryOfMine.esm|0xEB8659` → `diaryofmine-esm_EB8659.yaml` (see SkyrimNet `docs/modding/CONTENT_ROOTS.md`). That simple rule only holds for plugin names made of `a-z0-9_`. A name with other characters (spaces, dots) or longer than 40 bytes gets a hash suffix, e.g. `Mod A.esp|0x000123` → `mod_a-a44f2ca6_000123.yaml`. Let the dashboard name those files. The SkyrimNet dashboard's Items page can export a record in this shape.
+
+`diaryofmine-esm_BB1B47.yaml` (DOM Training Info) is shipped with `show_in_prompts: false`.
 
 If you write more Diary of Mine item descriptions, please share them.
 
@@ -62,6 +63,5 @@ SkyrimNet ships examples in `SKSE/Plugins/SkyrimNet/library/skyrimnet.base/dialo
 
 ## Tips
 
-- Copy a sibling item YAML; keep `plugin`/`formID` exact.
-- Prefer `enabled: false` over deleting unfinished entries.
+- Copy a sibling item YAML for Diary of Mine items; for other plugins, export from the dashboard's Items page so the filename stem is right.
 - Triggers are independent of `DOMSlave_*.yaml` eligibility — they key off SkyrimNet event criteria only.

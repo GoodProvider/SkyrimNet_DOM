@@ -1,6 +1,22 @@
-https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0
+https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1
 
 Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or later.
+
+## 0.2.1
+
+### Items
+- Item YAMLs ship in the content plugin: `external/goodprovider.dom/items/diaryofmine-esm_EB8659.yaml` and `diaryofmine-esm_BB1B47.yaml`; `config/items/` copies removed
+- DOM Training Info uses `show_in_prompts: false` (was `enabled: false`, which items refuse) and is now hidden from NPC equipment in prompts
+
+### Bug Fixes
+- Fixed: a Leash Framework holder leash on a DOM slave makes DOM follow the holder (`SkyrimNet_DOM_Events.OnLeashFrameworkLeash`, `SyncLeashFollow`)
+
+### Install
+- A legacy file SkyrimNet migrated into `overlay/items/` overrides the plugin record; users must delete it
+- The leash fix needs the matching SkyrimNet_Leashed update
+
+### Build
+- Manifests at 0.2.1; the release zip no longer includes the 32 MB `SkyrimNet_DOM.pdb`
 
 ## 0.2.0
 

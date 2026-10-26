@@ -22,7 +22,7 @@
 
 - Action YAML: SKSE/Plugins/SkyrimNet/external/goodprovider.dom/actions/DOMSlave_Sex_Two_Fucking.yaml
 - Punishment map: SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json
-- Item YAML: SKSE/Plugins/SkyrimNet/config/items/diaryofmine_EB8659.yaml
+- Item YAML: SKSE/Plugins/SkyrimNet/external/goodprovider.dom/items/diaryofmine-esm_EB8659.yaml
 
 ## Do not ingest (unless debugging that area)
 

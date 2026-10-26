@@ -12,10 +12,10 @@
     <project>SkyrimNet_DOM</project>
     <summary>Bridge mod between SkyrimNet (LLM) and Diary of Mine (with SkyrimNet_SexLab).</summary>
     <repository_root>c:\Skyrim\dev\mods\SkyrimNet_DOM</repository_root>
-    <updated>2026-10-24</updated>
-    <base_tag>0.1.0</base_tag>
-    <next_version>0.2.0</next_version>
-    <version_status>Makefile / fomod / plugin manifests VERSION=0.2.0; zip versions/SkyrimNet_DOM 0.2.0.zip; shipping git tag 0.2.0 and GitHub Release</version_status>
+    <updated>2026-10-26</updated>
+    <base_tag>0.2.0</base_tag>
+    <next_version>0.2.1</next_version>
+    <version_status>Makefile / fomod / plugin manifests VERSION=0.2.1; zip versions/SkyrimNet_DOM 0.2.1.zip (no .pdb); git tag 0.2.1 and GitHub Release</version_status>
     <related_artifacts>
       <artifact role="release rules / persona">release-guide.xml</artifact>
       <artifact role="agent router">llms.txt</artifact>
@@ -59,9 +59,10 @@
     <note>2026-07-27: docs migrated guides/ → docs/ (players, authors, developers, reference); llms.txt and release-checkpoint added; AGENTS thinned; KNOWLEDGEBASE stub created. documentation-guide.xml not kept in this repo.</note>
     <note>2026-07-27: release-doc pass for 0.0.5 complete (CHANGELOG* retargeted since 0.0.3; Makefile 0.0.5; docs spot-check OK). Shipped: tag 0.0.5 + zip.</note>
     <note>2026-08-01: release-doc pass for 0.0.6 complete (base_tag 0.0.5; committed delta only — decorator buckets, bio prompts, notification fan-out/skip). Open: commit when asked → make release → git tag 0.0.6 → GitHub Release.</note>
-    <note>2026-09-13: Beta 25 content plugin `goodprovider.dom` (external layer). Actions renamed to match in-file `name`. Trigger Healing_Hands. Settings schema at config/plugins/SkyrimNet_DOM. Item YAML stays at config/items. Papyrus GetConfig* on Plugin_SkyrimNet_DOM.</note>
+    <note>2026-09-13: Beta 25 content plugin `goodprovider.dom` (external layer). Actions renamed to match in-file `name`. Trigger Healing_Hands. Settings schema at config/plugins/SkyrimNet_DOM. Item YAML stays at config/items (moved to the plugin's items/ in 0.2.1). Papyrus GetConfig* on Plugin_SkyrimNet_DOM.</note>
     <note>2026-09-14: 0.1.0 ship (base_tag 0.0.6). Zip versions/SkyrimNet_DOM 0.1.0.zip. Tag 0.1.0 and GitHub Release.</note>
     <note>2026-10-24: 0.2.0 release (base_tag 0.1.0): gestures/poses, WebUI DOM menus + DOM Info, Injury Engine torture/heal, pain-punishment 20 s cap. Open: commit when asked → git tag 0.2.0 → GitHub Release.</note>
+    <note>2026-10-26: 0.2.1 ship (base_tag 0.2.0): item YAMLs ship in goodprovider.dom/items/ (config/items removed); Leash Framework follow fix; make release excludes *.pdb. Tag 0.2.1 + GitHub Release. Known: tag 0.2.0 points at 6abb060 (the 0.1.0 commit); left as is by maintainer choice.</note>
   </status>
 
   <conventions>

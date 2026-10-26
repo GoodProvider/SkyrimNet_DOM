@@ -1,5 +1,4 @@
-plugin: DiaryOfMine.esm
-formID: 0xBB1B47
+form: "DiaryOfMine.esm|0xBB1B47"
 originalName: DOM Training Info
 customName: DOM Training Info
-enabled: false
+show_in_prompts: false

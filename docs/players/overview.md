@@ -32,7 +32,7 @@ Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_Sex
 - Punishment reason mapping (`SKSE/Plugins/SkyrimNet_DOM/punishment_reason.json`)
 - Injury Engine torture of a slave is a DOM punishment. Dashboard setting **When player tortures let player choose** (on by default) lists "being a bad slave", "didnt obey" and the slave's other open reasons, plus random, custom (type your own; it trains like "being a bad slave") and no reason. Off: a random one.
 - Healing Hands cast on a slave, or a SexLab Aid heal (spell or potion), praises them. A slave in shock is comforted with care instead (no hug animation). Setting "Ask player praise reason when healing" lets you pick the reason or type your own. Closing the list gives no praise.
-- Item descriptions for DOM ropes (`config/items/`)
+- Item descriptions for DOM ropes (`external/goodprovider.dom/items/`)
 
 ## Notes / FAQ
 

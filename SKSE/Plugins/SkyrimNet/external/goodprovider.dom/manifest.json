@@ -3,12 +3,12 @@
   "type": "bundle",
   "title": "SkyrimNet DOM",
   "tagline": "LLM actions and prompts for Diary of Mine.",
-  "description": "Ships DOMSlave actions, bio/helper prompts, and a Dialogue Actions blacklist that hides Diary of Mine's `DOM01` command menu from quest dialogue. Requires `SkyrimNet_DOM.esp`.\n\nPlugin menu settings stay in `config/plugins/SkyrimNet_DOM/` (`dom.*` keys). Punishment JSON and runtime actor dumps stay in this mod's `SKSE/Plugins/SkyrimNet_DOM/`. Item YAML stays at `config/items/`. Decorators and Papyrus execute in this mod's scripts, not in this content folder.",
+  "description": "Ships DOMSlave actions, bio/helper prompts, and a Dialogue Actions blacklist that hides Diary of Mine's `DOM01` command menu from quest dialogue. Requires `SkyrimNet_DOM.esp`.\n\nPlugin menu settings stay in `config/plugins/SkyrimNet_DOM/` (`dom.*` keys). Punishment JSON and runtime actor dumps stay in this mod's `SKSE/Plugins/SkyrimNet_DOM/`. Diary of Mine item names and descriptions ship in this folder's `items/`. Decorators and Papyrus execute in this mod's scripts, not in this content folder.",
   "author": "goodprovider",
   "tags": ["dom", "nsfw"],
   "nsfw": true,
   "icon": "sparkles",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "min_skyrimnet_version": "0.25.0",
   "mods": [
     {
