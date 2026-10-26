@@ -2,7 +2,10 @@
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/goodprovider) 
 
+![SkyrimNet Diary of Mine title next to cyring woman](images/skyrim_dom-banner.png)
+
 SkyrimNet support for Diary of Mine.
+
 
 # (Alpha) SkyrimNet_DOM
 Basic SkyrimNet support for Diary of Mine. 
