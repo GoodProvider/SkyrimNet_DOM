@@ -209,6 +209,14 @@ See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves 
 
 **DOM baths have no stage signal.** `Interact_BathClient` / `Interact_BathActor` send no per-stage event and `JSONanim_*` is private to `DOM_Actor`. `DOMBathingMode` rank tells the roles (1 hose, 2 self, 3 washer, 4 washed). `behaviour` never changes for the player, so `DOMOnBehaviourChange` fires only for the slave, and not at all when a non-DOM NPC bathes with the player. In a 09:13 test the three stages took about 15s each against DOM's 8s timer, so timers alone run early.
 
+**DOM's self-wash makes its own obedience roll (2026-11-08).** `DOM_Interactor.Interact_Bathing` calls `DOM_Mind.StartBathing`, which rolls `WillObey(28,-15,2)`, the same values as the bridge's `shower` kind. Rolling in `TryOrder` as well means two chances to refuse. `Interact_Bathing` also returns early with `Actor is busy with animation` while a punishment runs, so check `CanAnimateActor` before narrating an order. It sets `DOMBathingMode` rank 2 just before `SetBehaviour("bathing")`, so rank 2 identifies a self-wash in `OnBehaviourChange`.
+
+**DOM can't redress the player (2026-11-08).** `RedressAfterBathing` sets `bypass_player_noequip`, but `DOM_Actor.OnEquipInventory` clears it on its first line and `EquipInventory` then returns 0 for the player. The log still shows `RegisterForOrder event=EquipInventory`, so that line doesn't mean anything was equipped. DOM's own partnered bath has the same bug.
+
+**Orders during a DOM dual animation break the scene (2026-11-08).** `Interact_ComeHere` calls `FrontActor` (`MoveTo` + `SetAngle`), and `ChooseAnswerYes` sends a dialogue idle to the slave. Narrating each bath stage invites LLM actions, and a 10:07 test had four orders in one bath where a 09:41 test with none held position. `Anim_IdleReset` has several silent early returns, and `LogAnim` output isn't in `Papyrus.0.log`.
+
+**`DbSkseFunctions` is missing from the test profile (2026-11-08).** `DOM_Animator` calls `DbSkseFunctions.SetCollision` for dual animations and logs `Cannot open store for class "dbsksefunctions"`, so collision stays on. It comes from Dylbill's Papyrus Functions.
+
 ## Blank static action value fails registration (2026-11-07)
 
 A `static` entry in `parameterMapping` with a blank `value:` is YAML null. SkyrimNet (seen on 0.30.0) still logs `Successfully loaded action` and `Cached action` for the file, then refuses it at registration: `ActionLibrary.cpp:599 RegisterPapyrusQuestAction: Static parameter N missing 'value' field`, followed by `CustomActionManager.cpp:214 Failed to register action`. The index N counts every `parameterMapping` entry from 0. The action never reaches the LLM. Write `value: ""` for an empty string, which registers normally. Search the action folder for lines where `value:` has nothing after it before shipping.

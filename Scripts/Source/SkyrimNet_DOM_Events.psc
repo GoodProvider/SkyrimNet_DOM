@@ -888,9 +888,14 @@ Event OnBehaviourChange(Form akRef, String type)
     String current = StorageUtil.GetStringValue(akRef, behaviour_current_key, "")
     if type == "bathing" && main.d_core
         int bath_rank = slave.GetFactionRank(main.d_core.DOMBathingMode)
-        if bath_rank == 3 || bath_rank == 4
-            ; A bath with a partner narrates its own stages; rank 1/2 (shower, self) falls through.
+        if bath_rank == 2
             StorageUtil.SetStringValue(akRef, behaviour_current_key, type)
+            SkyrimNet_DOM_Bath.NarrateSelfWash(slave)
+            return
+        endif
+        if bath_rank == 3 || bath_rank == 4
+            ; A bath with a partner narrates its own stages, including the end, so it must not store "bathing".
+            StorageUtil.SetStringValue(akRef, behaviour_current_key, "bathing_partner")
             if !SkyrimNet_DOM_Bath.IsDriven(slave)
                 SkyrimNet_DOM_Bath.FollowDomBath(main.d_core, slave)
             endif
@@ -910,7 +915,9 @@ Event OnBehaviourChange(Form akRef, String type)
         last_order_refused = False
     elseif current == "masturbate"
         msg = "stops masturbating."
-    else 
+    elseif current == "bathing"
+        msg = "stops washing."
+    else
         msg = "is "+SkyrimNet_DOM_Decorators.BehaviourToString(type)
     endif 
     String name_msg = Actor_name(slave)+" "+msg

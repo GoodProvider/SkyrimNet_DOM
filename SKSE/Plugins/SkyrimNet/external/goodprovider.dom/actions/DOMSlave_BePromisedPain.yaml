@@ -41,5 +41,11 @@ eligibilityRules:
           - SexLabAnimatingFaction
         comparisonOperator: <
         expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionBathing
+        comparisonOperator: <
+        expectedValue: 0
     logicalOperator: AND
     required: true

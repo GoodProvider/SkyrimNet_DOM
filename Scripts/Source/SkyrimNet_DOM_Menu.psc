@@ -1158,7 +1158,15 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
 
     Int gate = -1
     if kind != ""
-        gate = GateOrder(speaker, target, kind, orderDesc)
+        if fn == "shower"
+            ; DOM's StartBathing makes this same roll and handles the refusal, so only narrate the order here.
+            if !SkyrimNet_DOM_Bath.CanSelfWash(GetCore(), target, slave)
+                return
+            endif
+            gate = SkyrimNet_DOM_Obedience.TryOrder(speaker, target, kind, orderDesc, false)
+        else
+            gate = GateOrder(speaker, target, kind, orderDesc)
+        endif
         if gate == 0
             return
         endif

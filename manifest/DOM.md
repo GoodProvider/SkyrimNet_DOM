@@ -275,7 +275,7 @@ Trace tag: `SkyrimNet_DOM_Menu` (not `SkyrimNet_DOM_Event`).
 | `TM_DoFollowDistance(speaker, target, distance)` | Order Follow distance buttons: tight/close/short/long → modes 0–3; DN includes distance; no walk-on-four |
 | `TM_DoFollowApply(speaker, target, distance, walk4)` | Legacy Follow fields Start (walk 0 walking / 1 crawling) |
 | `TM_DoWalkingApply(speaker, target, walkType)` | Walking type pick: `walking` / `four` / `knees` |
-| `TM_DoNamed` | Poses, kiss, clothes extras, NPC shower/feed, group event names; `bath_me` / `bath_you` run `SkyrimNet_DOM_Bath.Drive` (blocks until the bath ends); insult/flatter/threaten/comfort (non-sex) use `SpeakAsPlayer` |
+| `TM_DoNamed` | Poses, kiss, clothes extras, NPC shower/feed, group event names; `bath_me` / `bath_you` run `SkyrimNet_DOM_Bath.Drive` (blocks until the bath ends); `shower` stops if the slave is busy and leaves the obedience roll to DOM; insult/flatter/threaten/comfort (non-sex) use `SpeakAsPlayer` |
 | `TM_DoRestrain(speaker, target, kind, flag)` | tie / furniture `*ByIndex` / gag / plug / blindfold / cuff; group `DOMAllOrderSlaves` event strings |
 | `TM_ListRestrainVariants(speaker, target, kind)` | Live furniture names from `restrains/{kind}.json` as `panel: fields` variant select + Start → `TM_DoRestrain` |
 | `TM_DoMasturbate(speaker, target, kind)` | pose start / `harder` / `stop` |

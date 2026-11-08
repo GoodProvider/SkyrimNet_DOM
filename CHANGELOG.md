@@ -12,6 +12,11 @@
 ### Baths
 - TargetMenu bath me and bath you now run through `SkyrimNet_DOM_Bath.Drive`. Each of the three animation stages gets its own DirectNarration and holds until SkyrimNet's speech queue is empty.
 - Baths started from DOM's own menu are narrated too: DirectNarration for the first stage, `DirectNarration_Optional` for the next two. A partnered bath no longer also narrates "is bathing".
+- A finished partnered bath now ends with the `DirectNarration_Optional` line "{washer} stops washing {washed}, both stand up."
+- A slave washing themselves now gets the DirectNarration "{slave} begins to wash body with a rag." from the TargetMenu shower and DOM's spell, replacing "is bathing". When it ends, the `DirectNarration_Optional` line "{slave} stops washing." follows.
+- TargetMenu shower now rolls obedience once, using DOM's roll, as the spell does. A slave busy with an animation shows a notification and no order is narrated.
+- TargetMenu baths ignore orders from the LLM and the menu until the bath ends, so they can't pull the slave out of position. 12 actions that call DOM directly are ineligible while `DOMActionBathing` is set.
+- After a TargetMenu bath, non-player unbound participants are forced back to the default idle, and bath me re-equips what the player was wearing.
 
 ### Diary of Mine 8.5.6d
 - **Requires Diary of Mine 8.5.6d or later**, the only version tested against.

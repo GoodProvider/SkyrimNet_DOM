@@ -30,6 +30,11 @@ Int Function TryOrder(Actor superior, Actor slave, String kind, String actionDes
     if !slave
         return -1
     endif
+    ; An order during a bath moves or re-animates the slave and breaks the scene.
+    if SkyrimNet_DOM_Bath.IsDriven(slave)
+        Trace("TryOrder", GetDisplayName(slave)+" is in a bath, ignoring kind="+kind)
+        return 0
+    endif
     if !NativeReady()
         return -1
     endif

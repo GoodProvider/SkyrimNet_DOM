@@ -22,5 +22,11 @@ eligibilityRules:
           - currentActor
         comparisonOperator: ==
         expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionBathing
+        comparisonOperator: <
+        expectedValue: 0
     logicalOperator: AND
     required: true

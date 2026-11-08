@@ -15,7 +15,13 @@ Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or late
 - New `SkyrimNet_DOM_Bath` (Hidden, global; no ESP change). `Drive` reimplements `DOM_Interactor.Interact_BathClient` / `Interact_BathActor` with `WaitForQuiet` between stages (`GetSpeechQueueSize`, minimum DOM's `8.0 + perfectionism`, 12s no-speech grace, 60s cap). Unlike DOM, it restores the speaker's follower pose instead of the target's twice.
 - `SkyrimNet_DOM_Menu.TM_DoNamed`: `bath_me` / `bath_you` call `Drive`, after `FinishOrder` because `Drive` blocks.
 - `SkyrimNet_DOM_Events.OnBehaviourChange`: `bathing` at `DOMBathingMode` rank 3/4 calls `FollowDomBath` unless `DOM_bath_driven` is set. Stage timing there is an estimate from DOM's timer.
-- `Headers_Source/DOM` (local stubs): added `DOM_Interactor`, `DOM_Bathing`, `DOM_EquipUtil`, and the JSON animation calls on `DOM_Actor`.
+- `SkyrimNet_DOM_Bath`: `StageText` stage 4 is the optional end line. `Drive` sends it after `EndJSONAnimation` unless interrupted; `FollowDomBath` sends it when `DOMBathingMode` is removed, within a 60s cap.
+- `SkyrimNet_DOM_Events.OnBehaviourChange`: `bathing` at rank 2 calls `SkyrimNet_DOM_Bath.NarrateSelfWash` instead of narrating "is bathing". Leaving `bathing` narrates "stops washing." through the same `current` check as "stops masturbating."; partnered baths store `bathing_partner` so they skip it.
+- `SkyrimNet_DOM_Menu.TM_DoNamed`: `shower` checks `SkyrimNet_DOM_Bath.CanSelfWash`, then calls `TryOrder` with `rollObedience=false`, because `DOM_Mind.StartBathing` makes the same `WillObey(28,-15,2)` roll.
+- `Headers_Source/DOM` (local stubs): added `DOM_Interactor`, `DOM_Bathing`, `DOM_EquipUtil`, the JSON animation calls on `DOM_Actor`, and `DOM_Interactor.CanAnimateActor`.
+- `SkyrimNet_DOM_Bath.Drive`: `DOM_bath_driven` is set before the strip and cleared on refusal. `StandUp` sends `IdleForceDefaultState` to non-player, unbound participants after `EndJSONAnimation`. `WornGear` / `RestoreGear` re-equip the player's own gear for bath me, on refusal too, because DOM's redress can't equip the player.
+- `SkyrimNet_DOM_Obedience.TryOrder`: returns 0 while `SkyrimNet_DOM_Bath.IsDriven(slave)`, with no refusal or punishment.
+- 12 actions that call `DOM_Keys` directly (`DOMSlave_BePromised*`, `DOMSlave_Be_PromisedFreedom`, `DOMSlave_BeScolded`, `DOMSlave_Be_FlatteredSexy`, `DOMSlave_Be_InsultedDegrading`, `DOMSlave_Be_PraisedGropeAss`, `DOMSlave_Be_PraisedHoldChin`, `DOMSlave_Be_PraisedKissDominant`, `DOMSlave_InspectFront`): eligibility requires `DOMActionBathing` rank < 0.
 
 ### Diary of Mine 8.5.6d
 - Minimum DOM is now 8.5.6d (the only version verified).

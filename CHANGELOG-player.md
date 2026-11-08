@@ -14,6 +14,12 @@ Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and h
 - Bath me and bath you are now described as they happen, with a different description at each stage
 - From the WebUI, the bath waits for the current line to finish before moving to the next stage
 - Baths started from DOM's own menu are described too, for slaves only
+- The end of a finished bath is now described
+- A slave washing themselves is now described when they start and when they stop, from the WebUI or DOM's spell
+- The WebUI shower is no longer refused more often than DOM's spell, and a slave who is busy now shows a message instead of being ordered to wash
+- Fixed: during bath me and bath you, the AI could give the slave other orders that moved them out of position
+- Fixed: the slave could stay in the washing animation after a bath
+- Fixed: the player stayed undressed after bath me
 
 ### Diary of Mine 8.5.6d
 - Now requires Diary of Mine 8.5.6d or later

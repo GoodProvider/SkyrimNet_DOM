@@ -36,5 +36,7 @@
   "travel": "traveling.",
   "nothing": "",
   "flee_and_cower": "fleeing in fear and cowering.",
-  "showering": "showering."
+  "on_duty_restrained": "restrained while on duty.",
+  "jail_restrained": "restrained in a jail.",
+  "bathing": "bathing."
 }

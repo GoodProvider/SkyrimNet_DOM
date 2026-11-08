@@ -13,6 +13,55 @@ Bool Function IsDriven(Actor akActor) global
     return StorageUtil.GetIntValue(akActor, "DOM_bath_driven", 0) > 0
 EndFunction
 
+; DOM can't redress the player: OnEquipInventory clears bypass_player_noequip before EquipInventory checks it.
+; Entries 0-31 are armor slots, 32 is the right hand and 33 the left.
+Form[] Function WornGear(Actor who) global
+    Form[] gear = new Form[34]
+    Int i = 0
+    while i < 32
+        gear[i] = who.GetWornForm(Math.LeftShift(1, i))
+        i += 1
+    endwhile
+    gear[32] = who.GetEquippedWeapon(false)
+    gear[33] = who.GetEquippedWeapon(true)
+    return gear
+EndFunction
+
+Bool Function NeedsEquip(Actor who, Form item) global
+    return item && !who.IsEquipped(item) && who.GetItemCount(item) > 0
+EndFunction
+
+Function RestoreGear(Actor who, Form[] gear) global
+    if !gear
+        return
+    endif
+    Int i = 0
+    while i < 32
+        if NeedsEquip(who, gear[i])
+            who.EquipItem(gear[i], false, true)
+        endif
+        i += 1
+    endwhile
+    if NeedsEquip(who, gear[32])
+        who.EquipItemEx(gear[32], 1, false, true)
+    endif
+    if NeedsEquip(who, gear[33])
+        who.EquipItemEx(gear[33], 2, false, true)
+    endif
+EndFunction
+
+; DOM's end-of-animation reset can return early and leave an NPC in the last idle. Bound actors keep DOM's pose.
+Function StandUp(Actor who, DOM_Actor whoAlias) global
+    if who == Game.GetPlayer()
+        return
+    endif
+    if whoAlias && (whoAlias.is_restrained || whoAlias.is_bounded)
+        return
+    endif
+    Trace("StandUp", who.GetDisplayName())
+    Debug.SendAnimationEvent(who, "IdleForceDefaultState")
+EndFunction
+
 String Function StageText(Int stage, Actor washer, Actor washed) global
     String washerName = washer.GetDisplayName()
     String washedName = washed.GetDisplayName()
@@ -24,6 +73,8 @@ String Function StageText(Int stage, Actor washer, Actor washed) global
             part = "breasts"
         endif
         return washerName+" puts away the rag, and washes "+washedName+"'s back with their "+part+"."
+    elseif stage == 4
+        return washerName+" stops washing "+washedName+", both stand up."
     endif
     return washerName+" rinses "+washedName+" off, pouring clean water over "+washedName+"'s shoulders."
 EndFunction
@@ -53,6 +104,22 @@ Function Narrate(Int stage, Actor washer, Actor washed, Bool optional) global
     else
         SkyrimNet_SexLab_Utilities.DirectNarration(msg, source, target)
     endif
+EndFunction
+
+; False = DOM would reject a self-wash as busy. Checked before the order is narrated.
+Bool Function CanSelfWash(DOM_Core core, Actor target, DOM_Actor slave) global
+    if !core || core.DOMInteract.CanAnimateActor(target, slave)
+        return true
+    endif
+    Trace("CanSelfWash", target.GetDisplayName()+" is busy with an animation", true)
+    return false
+EndFunction
+
+; Rank 2 bath. DOM sends DOMOnBehaviourChange for slaves only, so a non-DOM NPC is not narrated.
+Function NarrateSelfWash(Actor slave) global
+    String msg = slave.GetDisplayName()+" begins to wash body with a rag."
+    Trace("NarrateSelfWash", msg)
+    SkyrimNet_SexLab_Utilities.DirectNarration(msg, slave)
 EndFunction
 
 Bool Function StillBathing(Faction mode, Actor washer, Actor washed) global
@@ -140,6 +207,10 @@ Function Drive(DOM_Core core, Actor target, Actor speaker, Bool washTarget) glob
         return
     endif
 
+    ; Set before the strip, which takes many seconds: an order during it would move the slave.
+    StorageUtil.SetIntValue(target, "DOM_bath_driven", 1)
+    StorageUtil.SetIntValue(speaker, "DOM_bath_driven", 1)
+
     Actor washer = target
     Actor washed = speaker
     if washTarget
@@ -160,6 +231,10 @@ Function Drive(DOM_Core core, Actor target, Actor speaker, Bool washTarget) glob
 
     interact.SetIsBathing(target, sl_alias, true)
     interact.SetIsBathing(speaker, ab_alias, true)
+    Form[] playerGear
+    if !washTarget && speaker == Game.GetPlayer()
+        playerGear = WornGear(speaker)
+    endif
     DOM_EquipUtil.UnequipHandheld(target)
     DOM_EquipUtil.UnequipHandheld(speaker)
     interact.CheckRestrained(target, sl_alias, speaker, false)
@@ -205,12 +280,16 @@ Function Drive(DOM_Core core, Actor target, Actor speaker, Bool washTarget) glob
         interact.SetIsBathing(speaker, ab_alias, false)
         interact.SetBehaviour(target, sl_alias, speaker, sl_beh, None)
         interact.SetBehaviour(speaker, ab_alias, None, ab_beh, None)
+        StorageUtil.UnsetIntValue(target, "DOM_bath_driven")
+        StorageUtil.UnsetIntValue(speaker, "DOM_bath_driven")
+        if !washTarget
+            interact.ReDressAfterBathing(speaker, ab_alias)
+            RestoreGear(speaker, playerGear)
+        endif
         Trace("Drive", target.GetDisplayName()+" refused the bath")
         return
     endif
 
-    StorageUtil.SetIntValue(target, "DOM_bath_driven", 1)
-    StorageUtil.SetIntValue(speaker, "DOM_bath_driven", 1)
     washer.SetFactionRank(mode, 3)
     washed.SetFactionRank(mode, 4)
     interact.SetBehaviour(target, sl_alias, speaker, "bathing", None)
@@ -267,9 +346,14 @@ Function Drive(DOM_Core core, Actor target, Actor speaker, Bool washTarget) glob
     dirty_level -= 25.0 + perfection
     if active
         Narrate(3, washer, washed, false)
-        WaitForQuiet(mode, washer, washed, timer)
+        active = WaitForQuiet(mode, washer, washed, timer)
     endif
     center_actor.EndJSONAnimation()
+    StandUp(target, sl_alias)
+    StandUp(speaker, ab_alias)
+    if active
+        Narrate(4, washer, washed, true)
+    endif
 
     interact.SetDirtLevel(target, sl_alias, dirty_level)
     if washTarget
@@ -300,6 +384,7 @@ Function Drive(DOM_Core core, Actor target, Actor speaker, Bool washTarget) glob
     interact.ReDressAfterBathing(target, sl_alias)
     if !washTarget
         interact.ReDressAfterBathing(speaker, ab_alias)
+        RestoreGear(speaker, playerGear)
     endif
     Utility.Wait(timer)
     bath.UnsetDrip(speaker)
@@ -367,6 +452,10 @@ Function FollowDomBath(DOM_Core core, Actor slave) global
         Narrate(2, washer, washed, true)
         if HoldWhileBathing(mode, washer, washed, timer)
             Narrate(3, washer, washed, true)
+            ; DOM removes the faction when the bath ends. The cap stops a stuck bath from holding this thread.
+            if !HoldWhileBathing(mode, washer, washed, 60.0) && !washer.IsDead() && !washed.IsDead()
+                Narrate(4, washer, washed, true)
+            endif
         endif
     endif
 EndFunction
