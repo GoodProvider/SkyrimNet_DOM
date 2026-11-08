@@ -1,8 +1,8 @@
 <fomod>
   <!-- this file is generated from info.xml -->
-  <Name>SkyrimNet_DOM</Name>
+  <Name>SkyrimNet DOM</Name>
   <Version>0.2.1</Version>
   <Id></Id>
   <Author>Good Provider</Author>
-  <Description/> A simple plugin for SkyrimNet Dom supporty </Description>
+  <Description>A simple plugin for SkyrimNet Dom support</Description>
 </fomod>

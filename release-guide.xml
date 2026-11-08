@@ -100,7 +100,7 @@
     <source path="fomod/info.xml" field="Version">Generated from fomod-source/info.xml via python_scripts/fomod-info.py during make release</source>
     <source path="fomod-source/info.xml">Template ($name / $version); keep in sync with packaging intent</source>
     <source>git tag matching VERSION (e.g. 0.0.4) — created only when maintainer ships</source>
-    <source path="versions/SkyrimNet_DOM ${VERSION}.zip">Output of make release</source>
+    <source path="versions/SkyrimNet DOM ${VERSION}.zip">Output of make release</source>
   </version_sources>
 
   <changelog_structure note="Model: SkyrimNet_SexLab CHANGELOG-player.md 0.36.x. Applies to the version being released; older versions keep their format.">
@@ -175,7 +175,7 @@
     <command>make release</command>
     <effects>
       Writes fomod/info.xml from VERSION/NAME via python_scripts/fomod-info.py;
-      packs versions/SkyrimNet_DOM ${VERSION}.zip with fomod, Scripts, SkyrimNet_DOM.esp, SKSE.
+      packs versions/SkyrimNet DOM ${VERSION}.zip with fomod, Scripts, SkyrimNet_DOM.esp, SKSE.
     </effects>
     <prereqs>
       Compiled Scripts/*.pex current (compile: pyro / skyrimse.ppj);

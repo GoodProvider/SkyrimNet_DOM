@@ -1,6 +1,6 @@
 VERSION=0.2.1
-NAME=SkyrimNet_DOM
-RELEASE_FILE=versions/SkyrimNet_DOM ${VERSION}.zip
+NAME=SkyrimNet DOM
+RELEASE_FILE=versions/SkyrimNet DOM ${VERSION}.zip
 
 swap_headers:
 	powershell.exe -NoProfile -Command " \
