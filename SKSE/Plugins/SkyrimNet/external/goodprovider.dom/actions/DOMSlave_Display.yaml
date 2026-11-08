@@ -19,7 +19,7 @@ parameterMapping:
     value: display
   - type: static
     name: arg
-    value: 
+    value: ""
   - type: static
     name: arg2
     value: ""
