@@ -2,6 +2,29 @@ https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1
 
 Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or later.
 
+## Unreleased
+
+### Skyrim VR
+- No UI code in DOM: its overlays open on VR with SexLab's Magelight controller chord (`UiEngine::BindVrChord`, `sexlab.editor.vr_*`).
+- `GestureWatch::Install` logs `(VR: unverified)` on VR. Its thunk's `AddTask` (it can run on the main thread) is an open VR-hang audit item.
+
+### Bug Fixes
+- `actions/DOMSlave_StandHere.yaml`, `DOMSlave_DOMSlaveFollow.yaml`, `DOMSlave_Display.yaml`: static `arg` changed from blank `value:` (YAML null) to `value: ""`. SkyrimNet refused all three at `ActionLibrary.cpp:599` (`Static parameter 4 missing 'value' field`), then `CustomActionManager.cpp:214`.
+
+### Baths
+- New `SkyrimNet_DOM_Bath` (Hidden, global; no ESP change). `Drive` reimplements `DOM_Interactor.Interact_BathClient` / `Interact_BathActor` with `WaitForQuiet` between stages (`GetSpeechQueueSize`, minimum DOM's `8.0 + perfectionism`, 12s no-speech grace, 60s cap). Unlike DOM, it restores the speaker's follower pose instead of the target's twice.
+- `SkyrimNet_DOM_Menu.TM_DoNamed`: `bath_me` / `bath_you` call `Drive`, after `FinishOrder` because `Drive` blocks.
+- `SkyrimNet_DOM_Events.OnBehaviourChange`: `bathing` at `DOMBathingMode` rank 3/4 calls `FollowDomBath` unless `DOM_bath_driven` is set. Stage timing there is an estimate from DOM's timer.
+- `Headers_Source/DOM` (local stubs): added `DOM_Interactor`, `DOM_Bathing`, `DOM_EquipUtil`, and the JSON animation calls on `DOM_Actor`.
+
+### Diary of Mine 8.5.6d
+- Minimum DOM is now 8.5.6d (the only version verified).
+- `SkyrimNet_DOM_Menu`: removed `DoShower`, `DoBathMaster`, `DoBathMe`, `DOMDoNPCBathMe`, `DoBreastsPresentation` replaced by `Interact_Bathing`, `Interact_BathClient`, `Interact_BathActor`, `DOMDoNPCBathClient`, `DOMDoNPCBathActor`, `DoBreastPresentation`. The NPC bath-you call is now `(target, speaker)`.
+- `SkyrimNet_DOM_Events.OnWashSelf`: added `Form abuser` to match `SendExternalEventSASB("WashSelf", ...)`.
+- `punishment_reason.json`, `dom_punishment_reason.prompt`, `DOMSlave_AddPunishmentReason.yaml`: indices 28, 35-37, 39, 40 follow DOM's `PunishmentReasons.json`; index 20 stays because DOM's code still uses it.
+- `slave_behaviours.json`: `bathing`, `on_duty_restrained`, `jail_restrained`. `tied up` is only a `GetBehaviourString()` label; the behaviour value is `tied`.
+- `Headers_Source/DOM` (local stubs): stale members removed and new names added. SkyrimNet_SexLab builds against them and needs its matching `Handler_DOM` change.
+
 ## 0.2.1
 
 ### Items

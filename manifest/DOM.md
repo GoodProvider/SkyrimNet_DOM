@@ -199,7 +199,7 @@ Install under `SKSE/Plugins/SkyrimNet_SexLab/webui/MainPanels/` (this repo overl
 
 ### DOM Info — `0850_dom_info.json` (`actor_profile`)
 
-`openFunction` `SkyrimNet_DOM_Menu.WebUI_DomInfoOpen` → `SkyrimNet_DOM_InfoPanel.BuildPanelJson(core, events, WebUI_GetFocusActor())` → `WebUI_PushMainPanelData`. SexLab re-runs it on every target change. Same data and role rules as PrismaUI-for-DOM 0.158 `DOMPrismController`:
+`openFunction` `SkyrimNet_DOM_Menu.WebUI_DomInfoOpen` → `SkyrimNet_DOM_InfoPanel.BuildPanelJson(core, events, WebUI_GetFocusActor())` → `WebUI_PushMainPanelData`. SexLab re-runs it on every target change. Same data and role rules as the PrismaUI-for-DOM mod (0.158) `DOMPrismController`:
 
 | Role | Pills | Sections (in order) |
 |------|-------|---------------------|
@@ -275,7 +275,7 @@ Trace tag: `SkyrimNet_DOM_Menu` (not `SkyrimNet_DOM_Event`).
 | `TM_DoFollowDistance(speaker, target, distance)` | Order Follow distance buttons: tight/close/short/long → modes 0–3; DN includes distance; no walk-on-four |
 | `TM_DoFollowApply(speaker, target, distance, walk4)` | Legacy Follow fields Start (walk 0 walking / 1 crawling) |
 | `TM_DoWalkingApply(speaker, target, walkType)` | Walking type pick: `walking` / `four` / `knees` |
-| `TM_DoNamed` | Poses, kiss, clothes extras, NPC shower/bath/feed, group event names; insult/flatter/threaten/comfort (non-sex) use `SpeakAsPlayer` |
+| `TM_DoNamed` | Poses, kiss, clothes extras, NPC shower/feed, group event names; `bath_me` / `bath_you` run `SkyrimNet_DOM_Bath.Drive` (blocks until the bath ends); insult/flatter/threaten/comfort (non-sex) use `SpeakAsPlayer` |
 | `TM_DoRestrain(speaker, target, kind, flag)` | tie / furniture `*ByIndex` / gag / plug / blindfold / cuff; group `DOMAllOrderSlaves` event strings |
 | `TM_ListRestrainVariants(speaker, target, kind)` | Live furniture names from `restrains/{kind}.json` as `panel: fields` variant select + Start → `TM_DoRestrain` |
 | `TM_DoMasturbate(speaker, target, kind)` | pose start / `harder` / `stop` |
@@ -329,7 +329,7 @@ Out of overlay UI: `moveKey` bone tooling, debug test-pose, diary as a panel. Sa
 ## Do not
 
 - Edit Diary of Mine / PAH sources
-- Add a DOM SKSE DLL or second PrismaUI `CreateView`
+- Add a second UI view (DOM uses SexLab's Magelight view)
 - YAML parser for overlay catalogs
 - Duplicate SexLab DD bondage / SexLab leash / outfit StorageUtil
 - DOM leash UI (SkyrimNet_Leashed owns leash rows)

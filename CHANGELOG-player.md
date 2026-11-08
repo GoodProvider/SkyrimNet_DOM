@@ -2,6 +2,27 @@ https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1
 
 Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and heal features need Injury Engine.
 
+## Unreleased
+
+### Skyrim VR
+- DOM's menus open on VR with SkyrimNet_SexLab's controller button (Grip + A by default; needs the SexLab update that adds it). Untested in a headset.
+
+### Bug Fixes
+- NPC slaves can now act on "stand here", "follow me", and "display yourself" through the AI. These three actions failed to load and logged `Failed to register action` in SkyrimNet.log.
+
+### Baths
+- Bath me and bath you are now described as they happen, with a different description at each stage
+- From the WebUI, the bath waits for the current line to finish before moving to the next stage
+- Baths started from DOM's own menu are described too, for slaves only
+
+### Diary of Mine 8.5.6d
+- Now requires Diary of Mine 8.5.6d or later
+- Fixed: shower, bath me, bath you, and Pose > Breasts did nothing in the WebUI
+- Showering only works in water; out of water the slave dries off instead, as in DOM's own menu
+- Fixed: wash narration was lost with the extended DOM events option on
+- Punishment reasons match DOM's again, with new ones for refusing a kiss, refusing a body check, and being a useless trainer
+- The AI now knows when a slave is bathing or restrained on duty or in jail
+
 ## 0.2.1
 
 ### Items

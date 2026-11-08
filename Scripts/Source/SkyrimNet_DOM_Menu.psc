@@ -1241,22 +1241,15 @@ Function TM_DoNamed(Actor speaker, Actor target, String fn, String type)
         keys.DOMDoDrink(target, type)
     elseif fn == "shower"
         if slave
-            slave.DoShower(speaker)
+            slave.Interact_Bathing(speaker)
         else
             keys.DOMDoNPCShower(target)
         endif
-    elseif fn == "bath_me"
-        if slave
-            slave.DoBathMaster(speaker)
-        else
-            keys.DOMDoNPCBathMe(target, speaker)
-        endif
-    elseif fn == "bath_you"
-        if slave
-            slave.DoBathMe(speaker)
-        else
-            keys.DOMDoNPCBathMe(speaker, target)
-        endif
+    elseif fn == "bath_me" || fn == "bath_you"
+        ; Drive blocks for the whole bath, so the order narration has to go first.
+        FinishOrder(speaker, target, orderDesc, gate)
+        SkyrimNet_DOM_Bath.Drive(GetCore(), target, speaker, fn == "bath_you")
+        return
     elseif fn == "look"
         if slave
             slave.Interact_LookAtMe(speaker)
@@ -1473,7 +1466,7 @@ Function TM_DoPose(Actor speaker, Actor target, DOM_Actor slave, String typ)
     elseif typ == "ass"
         slave.DoAssPresentation(speaker)
     elseif typ == "breasts"
-        slave.DoBreastsPresentation(speaker)
+        slave.DoBreastPresentation(speaker)
     elseif typ == "pussy"
         slave.DoPussyPresentation(speaker)
     else

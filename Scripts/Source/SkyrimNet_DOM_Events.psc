@@ -886,6 +886,17 @@ Event OnBehaviourChange(Form akRef, String type)
         return
     endif
     String current = StorageUtil.GetStringValue(akRef, behaviour_current_key, "")
+    if type == "bathing" && main.d_core
+        int bath_rank = slave.GetFactionRank(main.d_core.DOMBathingMode)
+        if bath_rank == 3 || bath_rank == 4
+            ; A bath with a partner narrates its own stages; rank 1/2 (shower, self) falls through.
+            StorageUtil.SetStringValue(akRef, behaviour_current_key, type)
+            if !SkyrimNet_DOM_Bath.IsDriven(slave)
+                SkyrimNet_DOM_Bath.FollowDomBath(main.d_core, slave)
+            endif
+            return
+        endif
+    endif
     String msg = ""
     if current == "running_away"
         msg = "has been rundown and captured."
@@ -1393,7 +1404,7 @@ Event OnUndress(Form sender, string undressType, bool isObedient) ; If isObedien
     DirectNarration_Optional("undress", msg, slave)  
 EndEvent 
 
-Event OnWashSelf(Form sender, string washType, bool isObedient) ; If isObedient is false washing didn't occur
+Event OnWashSelf(Form sender, Form abuser, string washType, bool isObedient) ; If isObedient is false washing didn't occur
     last_order_refused = !isObedient
     Actor slave = sender as Actor 
     String name = slave.GetDisplayName()

@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased
+
+### Skyrim VR
+- DOM's menus open on VR through SkyrimNet_SexLab's Magelight controller chord (`sexlab.editor.vr_*`, default Grip + A). There is no DOM UI code.
+- `GestureWatch::Install` logs `(VR: unverified)` on VR. Its `AddTask` from the `NotifyAnimationGraph` thunk is an open VR-hang audit item (KNOWLEDGEBASE "DOM on Skyrim VR").
+
+### Bug Fixes
+- `DOMSlave_StandHere`, `DOMSlave_DOMSlaveFollow`, and `DOMSlave_Display` now register with SkyrimNet: their static `arg` had a blank `value:`, which SkyrimNet rejects as `Static parameter 4 missing 'value' field`. It is now `value: ""`.
+
+### Baths
+- TargetMenu bath me and bath you now run through `SkyrimNet_DOM_Bath.Drive`. Each of the three animation stages gets its own DirectNarration and holds until SkyrimNet's speech queue is empty.
+- Baths started from DOM's own menu are narrated too: DirectNarration for the first stage, `DirectNarration_Optional` for the next two. A partnered bath no longer also narrates "is bathing".
+
+### Diary of Mine 8.5.6d
+- **Requires Diary of Mine 8.5.6d or later**, the only version tested against.
+- WebUI shower, bath me, bath you and Pose > Breasts work again (`SkyrimNet_DOM_Menu`): they called functions DOM removed. They now call `Interact_Bathing`, `Interact_BathClient`, `Interact_BathActor`, `DOMDoNPCBathClient`, `DOMDoNPCBathActor` and `DoBreastPresentation`. Out of water, shower follows DOM's own dry-off path.
+- `OnWashSelf` takes DOM's new `abuser` argument, so wash narration fires again with `dom.events.ext2` on.
+- `punishment_reason.json` matches DOM's indices: 28 `refusing to bath`, new 35 `refusing to kiss`, 36 `refusing a bodycheck`, 37 `refusing to shower`, 39 `being a worthless slaver` (alias `being a bad slaver`), 40 `being a useless trainer`. The LLM token lists offer the new reasons.
+- `slave_behaviours.json`: `showering` becomes `bathing`; adds `on_duty_restrained` and `jail_restrained`.
+
 ## [0.2.1](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1) — since [0.2.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0)
 
 ### Items

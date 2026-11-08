@@ -20,7 +20,7 @@ For agent policy (safety, confidence), see [AGENTS.md](AGENTS.md). For protocol 
 
 ## WebUI overlay (2026-09-16)
 
-DOM does not ship a PrismaUI view. Player commands go through SexLab’s overlay. TargetMenu/MainPanels overlay into `SKSE/Plugins/SkyrimNet_SexLab/webui/` (`0800_dom_*.json`–`0880_dom_sack.json`, MainPanel `0850_dom_info.json`, plus Scene `0810_dom_abuse.json`) with `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"`. There is no ControlPanel mode switch. Obedience gating is `SKSE/Plugins/SkyrimNet_DOM.dll` (`SkyrimNet_DOM_Native` / `SkyrimNet_DOM_Obedience`).
+DOM ships no UI view; it runs on SexLab's Magelight view. (SexLab's `UiEngine` can still fall back to PrismaUI, but DOM neither supports nor tests that.) Player commands go through SexLab’s overlay. TargetMenu/MainPanels overlay into `SKSE/Plugins/SkyrimNet_SexLab/webui/` (`0800_dom_*.json`–`0880_dom_sack.json`, MainPanel `0850_dom_info.json`, plus Scene `0810_dom_abuse.json`) with `"source": "dom"` and `"requiresPlugin": "SkyrimNet_DOM.esp"`. There is no ControlPanel mode switch. Obedience gating is `SKSE/Plugins/SkyrimNet_DOM.dll` (`SkyrimNet_DOM_Native` / `SkyrimNet_DOM_Obedience`).
 
 - **Actor → Scene catalog swap:** SexLab shows `TargetMenu/Actor` when focus is not animating and `TargetMenu/Scene` when it is (`SexLabAnimatingFaction`). Per-leaf sex locks on Actor JSON do not help mid-scene — Actor options are not loaded. Mid-scene verbal abuse lives under `webui/TargetMenu/Scene/options/0810_dom_abuse.json` (praise live cascade, scold/insult/flatter/threaten/promise, comfort care/guilt/threat/insult). Omits punish/upkeeping/comfort sex|rape. Scene **comfort → pain** uses `TM_ListComfortPainActions` / `TM_DoComfortByPain` (`*{speaker} comforts {target} by {painAction}*` TransformDialogue; param must not be named `action` — Papyrus reserved).
 - **Pause:** SexLab `Focus(..., pause=true)` blocks DOM packages and SexLab `StartThread`. TargetMenu `closeWebUI: true`. Status/Slaves and live punish/praise openers stay open (`false`).
@@ -139,7 +139,7 @@ A save-leftover pain punishment must end at once, not after the 20 s cap: it is 
 
 ## DOM Info view = SexLab `actor_profile` (2026-10-24)
 
-**What**: `MainPanels/0850_dom_info.json` (type `actor_profile`) shows PrismaUI-for-DOM's profile inside the SexLab ControlPanel. `SkyrimNet_DOM_Menu.WebUI_DomInfoOpen` → `SkyrimNet_DOM_InfoPanel.BuildPanelJson`. SexLab draws it with the generic `renderActorProfile` (pills / bars / radar / recs / events / lines). SexLab re-runs the open foreign panel's `openFunction` on every ControlPanel target change (`ActionCatalog::RefreshForeignMainPanel`), so the view follows the target.
+**What**: `MainPanels/0850_dom_info.json` (type `actor_profile`) shows the PrismaUI-for-DOM mod's profile inside the SexLab ControlPanel. `SkyrimNet_DOM_Menu.WebUI_DomInfoOpen` → `SkyrimNet_DOM_InfoPanel.BuildPanelJson`. SexLab draws it with the generic `renderActorProfile` (pills / bars / radar / recs / events / lines). SexLab re-runs the open foreign panel's `openFunction` on every ControlPanel target change (`ActionCatalog::RefreshForeignMainPanel`), so the view follows the target.
 
 **Quirks**:
 - The DOM stub headers in `Headers_Source\DOM` (gitignored, local only) win over the full `PAH Diary Of Mine\Scripts\Source` import. Every new DOM member needs its exact signature copied into the stub (`DOM_Mind` HEXACO/PRISM/MOD_*/memory_abuse_*, `DOM_Core` factions + `DOMGenerator` + `GetDifficultyLevel`, the new `DOM_Generator.psc`).
@@ -147,7 +147,7 @@ A save-leftover pain punishment must end at once, not after the 20 s cap: it is 
 - SKSE `StringUtil` has no `ToUpper`. Use `AsOrd` / `AsChar`.
 - Enum string values (`bars`, `live`, `bipolar`) can come back with another casing from the Papyrus string pool, so SexLab JS lowercases them (`apKey`).
 - **Keys too:** `ObjectToLowerCaseKeyJson` does not lowercase in practice. `JsonLowerCaseKeys` returns a BSFixedString, and the case-insensitive pool hands back the still-live raw JSON with its original casing. `name` / `label` / `text` / `lo` / `hi` arrived as `Name` / `Label` / `Text` / `Lo` / `Hi`, so the name, pill captions, bar names, radar words and event text drew blank. The CSS/SVG rework in checkpoint 02 was a dead end. Fix: `renderActorProfile` runs `apLowerKeys` on the payload first.
-- The Prisma mood tips are keyed by mood code, but DOM pushes the mood display name: strip it to letters, then alias `inshock→shocked`, `nothappy→depressed`, `annoyed→jealous`, `outraged→defiant`, `offended→proud`.
+- PrismaUI-for-DOM's mood tips are keyed by mood code, but DOM pushes the mood display name: strip it to letters, then alias `inshock→shocked`, `nothappy→depressed`, `annoyed→jealous`, `outraged→defiant`, `offended→proud`.
 - **Enjoyment section** (`dom.info.show_enjoyment`, default off): `InfoPanel.AddEnjoyment` calls `events.handler` (`SkyrimNet_SexLab_Handler_DOM`) `IsRefractory` / `EstimateChance` / `OrgasmMeter` and does not copy their formulas, so the panel matches the SexLab HUD's DOM bar. If the handler esp is missing, the section is skipped. Bars carry an optional `text` (`x1.25`, `37%`, `Refractory`) that is shown in place of the number.
 
 ## Leash Framework leash on a just-captured slave fights DOM (2026-10-26)
@@ -158,6 +158,37 @@ A save-leftover pain punishment must end at once, not after the 20 s cap: it is 
 
 **Fix**: `SkyrimNet_DOM_Events` registers `LeashFramework_OnLeash` when `Leash.esm`/`.esp` is loaded. A holder leash marks the actor pending for 60 s (JMap `leash_sync_pending`). The 2 s capture scan (`SyncLeashFollow`) calls `DOM_Actor.EnterFollowTarget(holder)` once `is_initializing` is false and DOM is not already following. This is what DOM's own `DOMDoLeash` does. It skips SexLab scenes and furniture. After the window ends, kneel/wait orders while leashed are left alone. Wall/floor ties (no holder) are ignored. Compile-only stub `Headers_Source/LeashFramework.psc` (`IsLeashed`, `GetLeashHolder`); the `is_initializing` property was added to the `Headers_Source/DOM/DOM_Actor.psc` stub. SkyrimNet_Leashed side: `AnimationController` returns "Diary of Mine" for `DOMActionPosing` / `DOMActionTied` / `DOMActionFleeing`, `TickDowned` treats that as not stuck, and `leashed_leash_speaker` / `leashed_leashLeashed` need `speaker_is_leashed == "unavailable"`.
 
+## MO2 default mod name comes from the archive filename (2026-10-26)
+
+DOM ships `fomod/info.xml` without a `ModuleConfig.xml`, so MO2 uses its simple installer. That installer ignores `<Name>` and names the folder after the archive filename with the version removed. `RELEASE_FILE=versions/SkyrimNet DOM ${VERSION}.zip` gives the folder `SkyrimNet DOM`. Nexus downloads use the name on the mod page instead.
+
+**`Extracted failed: cannot create directory '...\SkyrimNet DOM\fomod': Cannot create a file when that file already exists`**: a regular file with the mod's name was already in the MO2 mods dir (`C:\Skyrim\dev\mods`). Here it was a 0-byte stray from an earlier unquoted command. Delete the file and reinstall.
+
+## CommonLibSSE vendored from MinLL/CommonLibVR 4.39.5 (2026-10-31)
+
+- `SKSE_Source/lib/CommonLibSSE-NG` is a vendored copy of `MinLL/CommonLibVR` v4.39.5 (`550cc4f`, MIT, adds SE 1.7.99/1.7.104), the same pin as SkyrimNet_SexLab. It's pulled in with `add_subdirectory`. It replaces the vcpkg overlay port `vcpkg-ports/commonlibsse-ng-fork` (alandtse/CommonLibVR 4.39.2, `e60c123`). Pin details and local changes are in `VENDORED.md`. Plugin source needed no changes.
+- **Don't copy SexLab's working tree via git.** The tree's upstream `.gitignore` has `*.cmake`, so SexLab's git lacks `cmake/Prebuilt.cmake` / `CommonLibSSE.cmake`. The OpenVR `headers/` dir is ignored too, because SexLab's and DOM's root `Headers` rule matches case-insensitively on Windows. The DOM copy comes from the GitHub archives with the nested `.gitignore`/`.gitmodules` removed, plus a `!…/extern/openvr/headers/` negation in the root `.gitignore`. OpenVR is trimmed to `headers/` + `lib/win64/` (its `samples/` alone are ~300 MB).
+- **Static CRT (/MT):** the preset uses `x64-windows-static` with overlay triplet `SKSE_Source/cmake/x64-windows-static.cmake`, which has `VCPKG_CRT_LINKAGE static`. SexLab's copy of that triplet says `dynamic`, and with /MT that fails to link with LNK2038 `MD_DynamicRelease` vs `MT_StaticRelease` (spdlog/fmt). SexLab's shipped DLL actually imports `MSVCP140`/`VCRUNTIME140`. Check with `dumpbin /dependents SKSE/Plugins/SkyrimNet_DOM.dll`: it should list no MSVCP/VCRUNTIME/ucrtbase.
+- `SKSE_SUPPORT_XBYAK` is OFF. `GestureWatch` uses `write_vfunc` only, with no trampoline.
+- Debug builds no longer copy into `SKSE/Plugins` (POST_BUILD echoes). Before this change the deployed `SkyrimNet_DOM.dll` was a Debug build (`MSVCP140D`/`ucrtbased`).
+
+## DOM UI under Magelight (2026-11-01, untested in game)
+
+DOM needs no code change to run under Magelight: its overlays and Papyrus only reach SexLab's `ActionCatalog` and `WebUI_*` natives, and SexLab picks the host. Magelight support is on SexLab `main` and is unreleased after 0.36.6.
+
+- **Magelight only (2026-11-07):** DOM's docs require Magelight UI 0.30.1+. SexLab's PrismaUI fallback may still work, but DOM docs don't offer it.
+- **Don't call `Magelight.psc` on SexLab's view from DOM.** SexLab registers through the C++ API, so its mod is plugin-owned and those Papyrus calls do nothing and return false. Use the `WebUI_*` natives.
+- **"PrismaUI-for-DOM" is a separate third-party mod** that DOM Info was ported from, not a UI host. Those references record the design's origin, so don't rename them to Magelight. Write "the PrismaUI-for-DOM mod", never a bare "Prisma".
+- **Magelight uses Ultralight 2.0 and PrismaUI uses 1.4.1.** DOM Info's radar and small text were only tuned under PrismaUI and need a visual check on Magelight.
+
+## DOM on Skyrim VR (2026-11-07, built, untested in a headset)
+
+The same approach as Injury_Engine and SkyrimNet_SexLab: one SE+AE+VR DLL (the vendored MinLL/CommonLibVR above), branch on `REL::Module::IsVR()` where the runtimes differ.
+
+- **UI:** nothing in DOM. Its menus are SexLab overlays, so on VR they open with SexLab's controller chord (`sexlab.editor.vr_*`, default Grip + A; SexLab KNOWLEDGEBASE "Skyrim VR: the WebUI opens with a controller chord"). Magelight places the view and drives the laser.
+- **`GestureWatch`:** `VTABLE_Character[3]` (IAnimationGraphManagerHolder) slot 0x1 has a VR address in CommonLib and is outside Actor's VR-shifted virtuals (from 0xA6), but it is unverified in a headset. `Install` logs `(VR: unverified)` there.
+- **Open audit:** `GestureWatch`'s thunk calls `AddTask` from inside `NotifyAnimationGraph`, which can run on the main thread. On VR, SKSE drains its task queue on job threads while holding the queue lock, so a main-thread `AddTask` can hang (`MagelightUI_API.h` threading contract). If a VR hang shows up during gestures, post from our own thread there (SexLab `include/TaskPost.h`). See SkyrimNet_Leashed `checkpoints/2026-11-07-vr-support/`.
+
 ## Shared engine gotchas
 
 See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves a SE/VR or Papyrus quirk for this project.
@@ -166,6 +197,18 @@ See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves 
 
 **Default args are filled in at the caller's compile time.** DOM added `bool choose_not=true` to `DOM_Mind.WillObey`, but `Headers_Source/DOM/DOM_Mind.psc` still had 5 params. `SkyrimNet_DOM_Obedience.TryOrder` compiled a 5-arg call. At runtime: `Incorrect number of arguments passed to function dom_mind.WillObey ... Expected 6, got 5`, the call returns None (false), and every gated order is refused. After a DOM update, diff `Headers_Source/DOM` against the installed DOM source. When you add a param to one of our own global functions (e.g. `TryOrder`), recompile every caller: Pyro incremental skips unchanged callers, and their old .pex fail the same way.
 
+**The stubs hide DOM renames from the compiler (2026-11-08).** `Headers_Source/DOM` declares what DOM used to have, so a call to a removed function still compiles and only fails at runtime. DOM 8.5.6d broke shower, bath and the breast pose this way, plus `FACET_Sensuality` and `MOD_Daring` in SkyrimNet_SexLab's `Handler_DOM` (now `PRISM_Sensuality` and `MOD_SocialBoldness`). After every DOM update, diff the stubs against DOM's source, fix callers in both repos, then delete the stale stubs: SexLab's `.ppj` files import this folder. Unknown-event signatures need the same diff, because a `DOMOn*` handler with the wrong arguments is not a compile error either.
+
+**Pyro exits 0 when scripts fail.** A failed script leaves its old `.pex` in place, so read the `N succeeded, M failed` line and any `[ERRO]` lines rather than the exit code. SexLab's `Handler_DOM` silently stayed stale this way because its project could not resolve `LeashFramework` (pulled in through `SkyrimNet_DOM_Events`) until `Leash Framework\Source\Scripts` was imported.
+
 **LLM actions skip WillObey.** `SkyrimNet_DOM_Actions.GateSlave` passes `rollObedience=false` because the LLM already decided the slave obeys. WebUI menu (`Menu.GateOrder`) and Scene Creator (`TryOrderSexCast`) orders still roll.
 
 **Unknown punishment reason tokens fall back to index 0.** `Main.Get_Punishment_To_Index` returns `punishment_default_index` (0) for free text. With `whipping_reason = 0`, DOM's end-of-punishment summary and training use the slave's queued/provisional reason instead ("custom: 'refusing sex'" → "6 strokes for being too slow", `Training: efficiency`). Map free text to a real token (`Main.Has_Punishment_Reason` check → `being a bad slave`) and keep the text on `whipping_reason_name`.
+
+**Two copies of this mod exist in MO2 (2026-11-08).** `mods/SkyrimNet_DOM` is this repo. `mods/SkyrimNet DOM` (space, no underscore) is an old install that profile `SkyrimNet SexLab` had enabled instead. A `Method ... not found on dom_actor` for a name already gone from the source means the game loaded the old folder: compare the error's `TM_DoNamed` line number with that folder's source.
+
+**DOM baths have no stage signal.** `Interact_BathClient` / `Interact_BathActor` send no per-stage event and `JSONanim_*` is private to `DOM_Actor`. `DOMBathingMode` rank tells the roles (1 hose, 2 self, 3 washer, 4 washed). `behaviour` never changes for the player, so `DOMOnBehaviourChange` fires only for the slave, and not at all when a non-DOM NPC bathes with the player. In a 09:13 test the three stages took about 15s each against DOM's 8s timer, so timers alone run early.
+
+## Blank static action value fails registration (2026-11-07)
+
+A `static` entry in `parameterMapping` with a blank `value:` is YAML null. SkyrimNet (seen on 0.30.0) still logs `Successfully loaded action` and `Cached action` for the file, then refuses it at registration: `ActionLibrary.cpp:599 RegisterPapyrusQuestAction: Static parameter N missing 'value' field`, followed by `CustomActionManager.cpp:214 Failed to register action`. The index N counts every `parameterMapping` entry from 0. The action never reaches the LLM. Write `value: ""` for an empty string, which registers normally. Search the action folder for lines where `value:` has nothing after it before shipping.
