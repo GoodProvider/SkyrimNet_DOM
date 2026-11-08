@@ -172,7 +172,7 @@
     "description": " experienced an unauthorized orgasm despite being forbidden by "
   },
   {
-    "reason": "refusing to shower",
+    "reason": "refusing to bath",
     "aliases": [],
     "index": 28,
     "description": " refused to clean themselves as commanded by "
@@ -218,9 +218,33 @@
     "description": " was failing in their duties as a whore for "
   },
   {
-    "reason": "being a bad slaver",
+    "reason": "refusing to kiss",
+    "aliases": [],
+    "index": 35,
+    "description": " refused to kiss when ordered by "
+  },
+  {
+    "reason": "refusing a bodycheck",
+    "aliases": [],
+    "index": 36,
+    "description": " refused to submit to a body inspection by "
+  },
+  {
+    "reason": "refusing to shower",
+    "aliases": [],
+    "index": 37,
+    "description": " refused to shower as commanded by "
+  },
+  {
+    "reason": "being a worthless slaver",
+    "aliases": ["being a bad slaver"],
+    "index": 39,
+    "description": " failed to properly manage or discipline other slaves for "
+  },
+  {
+    "reason": "being a useless trainer",
     "aliases": [],
     "index": 40,
-    "description": " failed to properly manage or discipline other slaves for "
+    "description": " failed to properly train other slaves for "
   }
 ]
