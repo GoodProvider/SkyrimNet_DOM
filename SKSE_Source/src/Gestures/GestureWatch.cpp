@@ -106,8 +106,10 @@ namespace SkyrimNetDOM::Gestures {
     void Install() {
         // VTABLE_Character[3] is the IAnimationGraphManagerHolder base; vfunc 0x1 is NotifyAnimationGraph.
         REL::Relocation<std::uintptr_t> vtbl{RE::VTABLE_Character[3]};
+        // VR: CommonLib has a VR address for this vtable and the holder's slot 0x1 is not in Actor's shifted range,
+        // but nobody has run it in a headset yet.
         NotifyAnimationGraphHook::func = vtbl.write_vfunc(0x1, NotifyAnimationGraphHook::Thunk);
-        SKSE::log::info("Installed Character::NotifyAnimationGraph hook");
+        SKSE::log::info("Installed Character::NotifyAnimationGraph hook{}", REL::Module::IsVR() ? " (VR: unverified)" : "");
     }
 
     void RegisterEvent(std::string_view a_animEvent, std::string_view a_key) {

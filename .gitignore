@@ -1,6 +1,8 @@
 temp
 ignore
 Headers
+# Vendored CommonLib needs its OpenVR headers (Headers matches case-insensitively on Windows)
+!SKSE_Source/lib/CommonLibSSE-NG/extern/openvr/headers/
 
 # SKSE plugin CMake / MSBuild artifacts
 SKSE_Source/build/

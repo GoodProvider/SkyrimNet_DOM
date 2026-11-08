@@ -1,8 +1,11 @@
 {
   "name": "skyrimnet-dom",
   "version-string": "0.2.0",
+  "builtin-baseline": "cc288af760054fa489574bd8e22d05aa8fa01e5c",
   "dependencies": [
-    "commonlibsse-ng-fork",
-    "directxtk"
+    "directxtk",
+    "nlohmann-json",
+    "rapidcsv",
+    "spdlog"
   ]
 }
