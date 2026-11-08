@@ -1,7 +1,7 @@
 Scriptname SkyrimNet_DOM_InfoPanel hidden
 
 ; DOM Info MainPanel (SkyrimNet_SexLab ControlPanel view, type actor_profile).
-; Same information and role rules as PrismaUI-for-DOM's profile panel
+; Same information and role rules as the PrismaUI-for-DOM mod's profile panel
 ; (DOMPrismController BuildStats / BuildAdditionalInfo / BuildDiaryNotif):
 ;   any role with a mind: status (or School), mood, recs, personality, events
 ;   slave + trainer:      + Training, Love (+ Enjoyment when dom.info.show_enjoyment)
@@ -211,7 +211,7 @@ Function AddPersonalityFromTraits(int sections, DOM_Core core, Actor akActor) gl
     AddPersonality(sections, t)
 EndFunction
 
-; Axis order and pole labels match Prisma ALL_TRAITS.
+; Axis order and pole labels match PrismaUI-for-DOM ALL_TRAITS.
 Function AddPersonality(int sections, float[] t) global
     int axes = AddRadar(sections, "Personality", "gold", "bipolar")
     AddTrait(axes, "Unlawful", "Honest", "pos", t[0])
@@ -356,7 +356,7 @@ String Function SkillLabel(int i) global
     return "Deceiver"
 EndFunction
 
-; Highest skill index; ties keep the first (enforcer), like Prisma dominantSkill.
+; Highest skill index; ties keep the first (enforcer), like PrismaUI-for-DOM dominantSkill.
 int Function DominantSkill(DOM_Mind m, DOM_Core core, Actor akActor) global
     Float[] v = SlaverSkillValues(m, core, akActor)
     int best = 0
@@ -400,7 +400,7 @@ String Function SkillMethod(int i) global
     return "Breaks slaves through brainwashing and deceit."
 EndFunction
 
-; ---- Recommendations (Prisma spike-data MOOD_TIPS + ACTION_GRAMMAR) ----
+; ---- Recommendations (PrismaUI-for-DOM spike-data MOOD_TIPS + ACTION_GRAMMAR) ----
 
 ; Mood display name -> tip code: letters only, then the display-name aliases.
 String Function MoodKey(String mood) global
@@ -605,7 +605,7 @@ Function AddEvents(int sections, DOM_Mind m, SkyrimNet_DOM_Events events, Actor 
     endwhile
 EndFunction
 
-; Prisma eventRelative: now / Xm / Xh Ym / Xd Yh ago; older than a week -> the game date.
+; PrismaUI-for-DOM eventRelative: now / Xm / Xh Ym / Xd Yh ago; older than a week -> the game date.
 String Function AgoText(Float d, Float at) global
     if d < 0.0
         d = 0.0
@@ -646,7 +646,7 @@ String Function CapFirst(String s) global
     return StringUtil.AsChar(c - 32) + StringUtil.Substring(s, 1)
 EndFunction
 
-; ---- Additional info (Prisma BuildAdditionalInfo + renderAdditionalInfo) ----
+; ---- Additional info (PrismaUI-for-DOM BuildAdditionalInfo + renderAdditionalInfo) ----
 
 Function AddAdditionalInfo(int sections, DOM_Core core, DOM_Mind m, Actor akActor, String name) global
     int lines = AddSection(sections, "lines", "", "")
