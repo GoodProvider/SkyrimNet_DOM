@@ -121,7 +121,7 @@ A save-leftover pain punishment must end at once, not after the 20 s cap: it is 
 
 **Care without the hug.** `StartComfortingWith(.., "care")` always plays `Anim_GetPlayerHug`. Healing Hands therefore copies the branch (`ComfortCareNoHug`). DOM's `abuse_type` is a private variable and is not set.
 
-**Heal = praise unless shocked.** DOM has no "reward". Its reward is praise (`DOM_Actor.StartPraising(abuser, reason, type)`), which fires `DOMOnPraised`. Healing Hands praises with type `"tell"` so no pat or kiss idle interrupts the cast. Care comfort applies only when `DOM_Mind.mood == "shocked"` (the token `DOMOnMoodChange` sends; inferred, as DOM's source is not available locally). Papyrus `parameterMapping` order must match the callback's signature (`TM_DoHealPraise(speaker, slaveId, reason)`).
+**Heal = praise unless shocked.** DOM has no "reward". Its reward is praise (`DOM_Actor.StartPraising(abuser, reason, type)`), which fires `DOMOnPraised`. Healing Hands praises with type `"tell"` so no pat or kiss idle interrupts the cast. Care comfort applies only when `DOM_Mind.mood == "shock"`, the value `DOMOnMoodChange` also sends. `DOM_Core.GetMood(actor)` returns `"shocked"` for the same state, so check which API a comparison reads from. Papyrus `parameterMapping` order must match the callback's signature (`TM_DoHealPraise(speaker, slaveId, reason)`).
 
 **SexLab Aid casts nothing.** `Aid.cpp` plays visuals and calls `Injury_Engine_Main.External_Heal`; no spell effect lands, so Injury Engine never sends `Injury_Engine_HealStart` for Aid. DOM listens to SexLab's `SkyrimNet_SexLab_AidStart` instead (caster FormID in strArg as a signed decimal so `as Int` parses ESL / FE ids).
 
@@ -218,6 +218,8 @@ See the short list in [AGENTS.md](AGENTS.md). Expand here when a session proves 
 **Orders during a DOM dual animation break the scene (2026-11-08).** `Interact_ComeHere` calls `FrontActor` (`MoveTo` + `SetAngle`), and `ChooseAnswerYes` sends a dialogue idle to the slave. Narrating each bath stage invites LLM actions, and a 10:07 test had four orders in one bath where a 09:41 test with none held position. `Anim_IdleReset` has several silent early returns, and `LogAnim` output isn't in `Papyrus.0.log`.
 
 **`DbSkseFunctions` is missing from the test profile (2026-11-08).** `DOM_Animator` calls `DbSkseFunctions.SetCollision` for dual animations and logs `Cannot open store for class "dbsksefunctions"`, so collision stays on. It comes from Dylbill's Papyrus Functions.
+
+**LLM actions execute seconds after the slave agrees (2026-11-08).** The reply and action selection finish first, then `ActionQueue` runs the action. In one test a slave started running away at 18:32:06, the selection finished at 18:32:06.467, `Runaway` registered at 18:32:07.05, and the sex action executed at 18:32:09. Check slave state at execution, as `GateSlave` does for fleeing, because the LLM can't have seen the change. SkyrimNet and Papyrus logs also rotate on each launch: earlier sessions are in `Papyrus.1.log` and up, and `SkyrimNet.<UTC timestamp>.log`.
 
 ## Blank static action value fails registration (2026-11-07)
 

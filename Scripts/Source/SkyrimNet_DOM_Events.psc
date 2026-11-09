@@ -1178,7 +1178,7 @@ Function HealSlave(Actor caster, Actor target, String fn)
     if !slave || !slave.mind
         return
     endif
-    if slave.mind.mood == "shocked"
+    if slave.mind.mood == "shock"
         ComfortCareNoHug(caster, slave, target)
         return
     endif

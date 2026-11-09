@@ -9,11 +9,13 @@
 ### Bug Fixes
 - `DOMSlave_StandHere`, `DOMSlave_DOMSlaveFollow`, and `DOMSlave_Display` now register with SkyrimNet: their static `arg` had a blank `value:`, which SkyrimNet rejects as `Static parameter 4 missing 'value' field`. It is now `value: ""`.
 - Fixed: `SkyrimNet_DOM.dll` failed with Error 126 on PCs without Visual Studio. The 0.2.1 zip (and, by matching size, 0.2.0) packed a Debug build importing `MSVCP140D`, `VCRUNTIME140D`, `VCRUNTIME140_1D` and `ucrtbased`. The Release build links the CRT statically and needs no VC++ Redistributable. `make release` now runs `python_scripts/check_release_dll.py` first.
+- Fixed: healing a slave in shock praised them instead of comforting them. `SkyrimNet_DOM_Events.HealSlave` compared `DOM_Mind.mood` to `"shocked"`, but DOM's value is `"shock"`, so `ComfortCareNoHug` never ran.
 
 ### Obedience
 - The LLM now knows how obedient a slave is. Final instructions describe each of DOM's moods (love, jealousy, fear, shame and so on) and, for slaves who can refuse, how likely they are to, from trained to defiant.
 - Long-term profiles: well-trained slaves can show as The Devoted, The Professional or The Hollowed.
 - When the LLM has a slave obey an order, the order now goes through. Before, Diary of Mine could roll again and refuse just after the slave agreed. Orders from the TargetMenu still roll.
+- A slave who is running away no longer starts a SexLab scene from a sex or masturbate order. The LLM's action can execute seconds after the slave agreed, and the scene used to override the escape.
 
 ### Baths
 - TargetMenu bath me and bath you now run through `SkyrimNet_DOM_Bath.Drive`. Each of the three animation stages gets its own DirectNarration and holds until SkyrimNet's speech queue is empty.
@@ -23,6 +25,7 @@
 - TargetMenu shower now rolls obedience once, using DOM's roll, as the spell does. A slave busy with an animation shows a notification and no order is narrated.
 - TargetMenu baths ignore orders from the LLM and the menu until the bath ends, so they can't pull the slave out of position. 12 actions that call DOM directly are ineligible while `DOMActionBathing` is set.
 - After a TargetMenu bath, non-player unbound participants are forced back to the default idle, and bath me re-equips what the player was wearing.
+- New action `DOMSlave_Wash`: the LLM can have a slave wash themselves or their master.
 
 ### Diary of Mine 8.5.6d
 - **Requires Diary of Mine 8.5.6d or later**, the only version tested against.

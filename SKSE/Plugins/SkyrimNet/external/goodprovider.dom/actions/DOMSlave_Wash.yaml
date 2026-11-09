@@ -1,0 +1,55 @@
+name: DOMSlave_Wash
+description: "Wash [yourself|master]"
+questEditorId: SkyrimNet_DOM
+scriptName: SkyrimNet_DOM_Actions
+executionFunctionName: Wash_Execute
+parameterMapping:
+  - type: speaker
+    name: speaker
+    description: The slave who is washing
+  - type: dynamic
+    name: superior
+    description: Actor who is superior to the speaker
+  - type: dynamic
+    name: who
+    description: yourself|master
+enabled: true
+eligibilityRules:
+  - conditions:
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMPlayerSlaveFaction
+        comparisonOperator: ==
+        expectedValue: 1
+      - decoratorName: is_in_combat
+        arguments:
+          - currentActor
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - SexLabAnimatingFaction
+        comparisonOperator: <
+        expectedValue: 1
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionTied
+        comparisonOperator: <
+        expectedValue: 0
+      - decoratorName: is_in_faction
+        arguments:
+          - currentActor
+          - dse_dm_FactionActorUsingDevice
+        comparisonOperator: ==
+        expectedValue: false
+      - decoratorName: get_faction_rank
+        arguments:
+          - currentActor
+          - DOMActionBathing
+        comparisonOperator: <
+        expectedValue: 0
+    logicalOperator: AND
+    required: true

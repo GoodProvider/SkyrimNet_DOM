@@ -42,9 +42,24 @@ Function RegisterObeyCommand(Actor speaker, Actor superior, String action_desc)
     SkyrimNetApi.RegisterShortLivedEvent("obey_command", "Obey Command", msg, "", ttl, superior, speaker)
 EndFunction
 
+Bool Function IsRunningAway(Actor slave)
+    if !dom_main
+        Setup()
+    endif
+    if slave && dom_main && dom_main.d_core
+        return dom_main.d_core.IsFleeing(slave)
+    endif
+    return false
+EndFunction
+
 Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc, Bool rollObedience=false)
+    ; LLM actions queue for seconds, so the slave can bolt after agreeing. A scene would override the escape.
+    if (kind == "sex" || kind == "masturbate") && IsRunningAway(slave)
+        Trace("GateSlave", GetDisplayname(slave)+" is running away, ignoring kind="+kind)
+        return 0
+    endif
     ; LLM chose the action: no WillObey roll. Player menu clicks pass rollObedience=true.
-    Int gate = SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, rollObedience)
+    Int gate =SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, rollObedience)
     ; Here, not in TryOrder: Menu's shower passes false but relies on DOM's own roll.
     if !rollObedience && gate != 0
         SkyrimNet_DOM_Obedience.PassDomRoll(slave)
@@ -188,6 +203,10 @@ Function StartScene_Nonconsensual_Two(String intent, Actor speaker, Actor superi
     endif
     if !victim
         victim = speaker
+    endif
+    if IsRunningAway(victim)
+        Trace("StartScene_Nonconsensual_Two", GetDisplayname(victim)+" is running away, ignoring")
+        return
     endif
     if !target
         Trace("StartScene_Nonconsensual_Two","target and superior are None, aborting")
@@ -500,6 +519,50 @@ Function Dress_Execute(Actor speaker, Actor superior)
         RegisterObeyCommand(speaker, superior, "dress")
     endif
     slave.UnsetShouldBeNaked(superior)
+EndFunction
+
+; who == "master": the slave washes the superior. Any other value is a self-wash.
+Function Wash_Execute(Actor speaker, Actor superior, String who="yourself")
+    DOM_Actor slave = Get_Slave("Wash_Execute", speaker, true)
+    if slave == None
+        return
+    endif
+    if !superior || superior == speaker
+        superior = Game.GetPlayer()
+    endif
+    if !dom_main
+        Setup()
+    endif
+    if !dom_main || !dom_main.d_core
+        Trace("Wash_Execute", "d_core is None")
+        return
+    endif
+    DOM_Core core = dom_main.d_core
+    if !SkyrimNet_DOM_Bath.CanSelfWash(core, speaker, slave)
+        return
+    endif
+
+    Bool washMaster = who == "master"
+    String kind = "shower"
+    String desc = "wash"
+    if washMaster
+        kind = "bath_me"
+        desc = "wash "+GetDisplayname(superior)
+    endif
+    Int gate = GateSlave(superior, speaker, kind, desc)
+    if gate == 0
+        return
+    endif
+    if gate < 0
+        DirectNarration(superior.GetDisplayName()+" orders "+speaker.GetDisplayName()+" to "+desc+".", superior, speaker)
+        RegisterObeyCommand(speaker, superior, desc)
+    endif
+
+    if washMaster
+        SkyrimNet_DOM_Bath.Drive(core, speaker, superior, false)
+    else
+        slave.Interact_Bathing(superior)
+    endif
 EndFunction
 
 Bool Function Dress_IsEligible(Actor slaveActor, string contextJson, string paramsJson) global

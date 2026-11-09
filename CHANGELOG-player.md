@@ -10,6 +10,13 @@ Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and h
 ### Bug Fixes
 - NPC slaves can now act on "stand here", "follow me", and "display yourself" through the AI. These three actions failed to load and logged `Failed to register action` in SkyrimNet.log.
 - Fixed: `SkyrimNet_DOM.dll` failed to load (Error 126) on PCs without Visual Studio
+- Fixed: healing a slave in shock praised them instead of comforting them
+
+### Obedience
+- The AI now knows how obedient a slave is, from trained to defiant, and how each mood feels
+- Well-trained slaves can show as The Devoted, The Professional or The Hollowed
+- When the AI has a slave obey, the order goes through. Menu orders can still be refused
+- A slave who starts running away keeps running, even if the AI had just agreed to a sex order
 
 ### Baths
 - Bath me and bath you are now described as they happen, with a different description at each stage
@@ -21,6 +28,7 @@ Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and h
 - Fixed: during bath me and bath you, the AI could give the slave other orders that moved them out of position
 - Fixed: the slave could stay in the washing animation after a bath
 - Fixed: the player stayed undressed after bath me
+- The AI can now have a slave wash themselves or their master
 
 ### Diary of Mine 8.5.6d
 - Now requires Diary of Mine 8.5.6d or later

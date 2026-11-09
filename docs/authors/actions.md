@@ -27,6 +27,7 @@ Start from an existing file in the same family:
 | `Be_` | flatter, insult, praise-tell, promises, scold, refuse | `DOM_Keys` / `DOMDoActionActor` |
 | `Act*` / pose / chores / follow / drink | `ActSilent`, kneel, dance, Follow, DrinkAlcohol | `SkyrimNet_DOM_Actions.DOMOrder_Execute` |
 | Dress / Undress | `DOMSlave_Dress.yaml`, `DOMSlave_Undress.yaml` | `SkyrimNet_DOM_Actions` |
+| Wash | `DOMSlave_Wash.yaml` (`who`: `yourself` or `master`) | `SkyrimNet_DOM_Actions` |
 | `sex_` / masturbate / stop-masturbate | 2P penis / no_penis, 3P, refuse, harder, stop allowed/disallowed | `SkyrimNet_DOM_Actions` |
 | `punish_` | spanking, whipping/oral, refused, other | `SkyrimNet_DOM_Actions` |
 
@@ -82,6 +83,7 @@ Common execute functions:
 - `StartScene_Consensual_Two` / `StartScene_Nonconsensual_Two`
 - `StartScene_masturbate` / `StopScene_Masturbate`
 - `UndressDress_Execute` / `Dress_Execute`
+- `Wash_Execute`
 - `AddPunishmentReason`
 
 **Parameter names in YAML must match the Papyrus function signature** (see [../developers/papyrus.md](../developers/papyrus.md)). Wrong names or counts fail at runtime. Stay within the **8-parameter** hard limit above.

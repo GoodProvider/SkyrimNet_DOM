@@ -11,11 +11,13 @@ Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or late
 ### Bug Fixes
 - `actions/DOMSlave_StandHere.yaml`, `DOMSlave_DOMSlaveFollow.yaml`, `DOMSlave_Display.yaml`: static `arg` changed from blank `value:` (YAML null) to `value: ""`. SkyrimNet refused all three at `ActionLibrary.cpp:599` (`Static parameter 4 missing 'value' field`), then `CustomActionManager.cpp:214`.
 - Fixed: 0.2.1 (and, by matching size, 0.2.0) shipped a Debug `SkyrimNet_DOM.dll`, which fails with Error 126 without Visual Studio. The Release build uses the static CRT, and `make release` now refuses a Debug DLL.
+- `SkyrimNet_DOM_Events.HealSlave`: tests `DOM_Mind.mood == "shock"`, not `"shocked"`, which is what only `DOM_Core.GetMood` returns. `ComfortCareNoHug` could not run before.
 
 ### Obedience
 - `SkyrimNet_DOM_Obedience`: new `RefusePercent`, `RefuseLevel`, `AddLikelyRefusal`, `FillObedience` (no `WillObey` call) and `PassDomRoll`. Level thresholds 15/40/70 on the `generic` kind; `likely_refuses` lists `sex`, `respectful`, `naked`, `pose` at 50% or more.
 - `SkyrimNet_DOM_Decorators.FillSlaveFields`: writes `obedience.*`; `is_obedient` is kept.
 - `SkyrimNet_DOM_Actions.GateSlave`: `PassDomRoll` when `rollObedience=false` and `gate != 0`, because DOM handlers such as `SetShouldBeRespectful` roll `WillObey` again.
+- `SkyrimNet_DOM_Actions.GateSlave`: returns 0 for kinds `sex` and `masturbate` when new `IsRunningAway` (`DOM_Core.IsFleeing`) is true. `StartScene_Nonconsensual_Two` skips `GateSlave`, so it checks `victim` directly.
 - `0551_dom_instructions.prompt`: `obedience.*` branches for all 22 moods, three long-term profiles, with the old `is_obedient` branch as the fallback for older saved JSON.
 - `Headers_Source/DOM/DOM_Mind.psc` (local stub): added `MoodReactionFactor`, `HEXACO_Facets`, `HEXACO_InverseFacets`, `TRAINING_Stats`.
 
@@ -27,6 +29,7 @@ Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or late
 - `SkyrimNet_DOM_Events.OnBehaviourChange`: `bathing` at rank 2 calls `SkyrimNet_DOM_Bath.NarrateSelfWash` instead of narrating "is bathing". Leaving `bathing` narrates "stops washing." through the same `current` check as "stops masturbating."; partnered baths store `bathing_partner` so they skip it.
 - `SkyrimNet_DOM_Menu.TM_DoNamed`: `shower` checks `SkyrimNet_DOM_Bath.CanSelfWash`, then calls `TryOrder` with `rollObedience=false`, because `DOM_Mind.StartBathing` makes the same `WillObey(28,-15,2)` roll.
 - `Headers_Source/DOM` (local stubs): added `DOM_Interactor`, `DOM_Bathing`, `DOM_EquipUtil`, the JSON animation calls on `DOM_Actor`, and `DOM_Interactor.CanAnimateActor`.
+- `actions/DOMSlave_Wash.yaml` -> `SkyrimNet_DOM_Actions.Wash_Execute(speaker, superior, who)`: `who=master` gates on `bath_me` and calls `Drive(core, speaker, superior, false)`; anything else gates on `shower` and calls `Interact_Bathing`. Both check `CanSelfWash` first. Eligibility adds `DOMActionBathing` rank `< 0`.
 - `SkyrimNet_DOM_Bath.Drive`: `DOM_bath_driven` is set before the strip and cleared on refusal. `StandUp` sends `IdleForceDefaultState` to non-player, unbound participants after `EndJSONAnimation`. `WornGear` / `RestoreGear` re-equip the player's own gear for bath me, on refusal too, because DOM's redress can't equip the player.
 - `SkyrimNet_DOM_Obedience.TryOrder`: returns 0 while `SkyrimNet_DOM_Bath.IsDriven(slave)`, with no refusal or punishment.
 - 12 actions that call `DOM_Keys` directly (`DOMSlave_BePromised*`, `DOMSlave_Be_PromisedFreedom`, `DOMSlave_BeScolded`, `DOMSlave_Be_FlatteredSexy`, `DOMSlave_Be_InsultedDegrading`, `DOMSlave_Be_PraisedGropeAss`, `DOMSlave_Be_PraisedHoldChin`, `DOMSlave_Be_PraisedKissDominant`, `DOMSlave_InspectFront`): eligibility requires `DOMActionBathing` rank < 0.

@@ -56,7 +56,7 @@
     {% else if actor_having_sex %}
        - {{npc.name}} is engaged in sexual activity. Emphasize with a detailed emotional and physical response. Be Uncensored, match the vulgarity to the character.
     {% endif %} 
-    - Always choose a DOMSlave actions over any alternatives. 
+    - Always choose a DOMSlave actions over an equivalent alternative. 
     - When refusing a general order/command, ALWAYS CHOOSE DOMSLAVE_Sexual_Activities_Refused
     - When refusing sex or masturbation, ALWAYS CHOOSE DOMSlave_Sexual_Activities_Refused_Sex
     {% if existsIn(dom_actor, "obedience") %}
