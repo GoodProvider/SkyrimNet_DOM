@@ -8,6 +8,7 @@
 
 ### Bug Fixes
 - `DOMSlave_StandHere`, `DOMSlave_DOMSlaveFollow`, and `DOMSlave_Display` now register with SkyrimNet: their static `arg` had a blank `value:`, which SkyrimNet rejects as `Static parameter 4 missing 'value' field`. It is now `value: ""`.
+- Fixed: `SkyrimNet_DOM.dll` failed with Error 126 on PCs without Visual Studio. The 0.2.1 zip (and, by matching size, 0.2.0) packed a Debug build importing `MSVCP140D`, `VCRUNTIME140D`, `VCRUNTIME140_1D` and `ucrtbased`. The Release build links the CRT statically and needs no VC++ Redistributable. `make release` now runs `python_scripts/check_release_dll.py` first.
 
 ### Obedience
 - The LLM now knows how obedient a slave is. Final instructions describe each of DOM's moods (love, jealousy, fear, shame and so on) and, for slaves who can refuse, how likely they are to, from trained to defiant.

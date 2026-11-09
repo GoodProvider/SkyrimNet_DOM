@@ -9,6 +9,7 @@ Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and h
 
 ### Bug Fixes
 - NPC slaves can now act on "stand here", "follow me", and "display yourself" through the AI. These three actions failed to load and logged `Failed to register action` in SkyrimNet.log.
+- Fixed: `SkyrimNet_DOM.dll` failed to load (Error 126) on PCs without Visual Studio
 
 ### Baths
 - Bath me and bath you are now described as they happen, with a different description at each stage

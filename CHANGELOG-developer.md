@@ -10,6 +10,7 @@ Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or late
 
 ### Bug Fixes
 - `actions/DOMSlave_StandHere.yaml`, `DOMSlave_DOMSlaveFollow.yaml`, `DOMSlave_Display.yaml`: static `arg` changed from blank `value:` (YAML null) to `value: ""`. SkyrimNet refused all three at `ActionLibrary.cpp:599` (`Static parameter 4 missing 'value' field`), then `CustomActionManager.cpp:214`.
+- Fixed: 0.2.1 (and, by matching size, 0.2.0) shipped a Debug `SkyrimNet_DOM.dll`, which fails with Error 126 without Visual Studio. The Release build uses the static CRT, and `make release` now refuses a Debug DLL.
 
 ### Obedience
 - `SkyrimNet_DOM_Obedience`: new `RefusePercent`, `RefuseLevel`, `AddLikelyRefusal`, `FillObedience` (no `WillObey` call) and `PassDomRoll`. Level thresholds 15/40/70 on the `generic` kind; `likely_refuses` lists `sex`, `respectful`, `naked`, `pose` at 50% or more.

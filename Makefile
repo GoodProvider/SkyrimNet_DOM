@@ -15,7 +15,10 @@ swap_headers:
 			& 'c:\Users\bhuff\.vscode\extensions\joelday.papyrus-lang-vscode-2024.578.1412\pyro\pyro.exe' --input-path skyrimse.ppj --game-path C:\Skyrim\dev\skyrim ; \
 		}"
 
-release: 
+check_dll:
+	python3 ./python_scripts/check_release_dll.py
+
+release: check_dll
 	powershell.exe -NoProfile -Command " \
 		python3 ./python_scripts/fomod-info.py -v ${VERSION} -n '${NAME}' -o fomod/info.xml fomod-source/info.xml ; \
 		if (Test-Path '${RELEASE_FILE}') { Remove-Item -Path '${RELEASE_FILE}' -Recurse -Force } ; \

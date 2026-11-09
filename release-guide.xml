@@ -174,7 +174,9 @@
   <packaging_reference note="Maintainer-owned; document only — do not run unless asked.">
     <command>make release</command>
     <effects>
-      Writes fomod/info.xml from VERSION/NAME via python_scripts/fomod-info.py;
+      Runs check_dll first (python_scripts/check_release_dll.py), which stops the release if
+      SKSE/Plugins/SkyrimNet_DOM.dll is a Debug build;
+      writes fomod/info.xml from VERSION/NAME via python_scripts/fomod-info.py;
       packs versions/SkyrimNet DOM ${VERSION}.zip with fomod, Scripts, SkyrimNet_DOM.esp, SKSE.
     </effects>
     <prereqs>
