@@ -1,16 +1,6 @@
 # Changelog
 
-## Unreleased
-
-### Skyrim VR
-- DOM's menus open on VR through SkyrimNet_SexLab's Magelight controller chord (`sexlab.editor.vr_*`, default Grip + A). There is no DOM UI code.
-- `GestureWatch::Install` logs `(VR: unverified)` on VR. Its `AddTask` from the `NotifyAnimationGraph` thunk is an open VR-hang audit item (KNOWLEDGEBASE "DOM on Skyrim VR").
-
-### Bug Fixes
-- `DOMSlave_StandHere`, `DOMSlave_DOMSlaveFollow`, and `DOMSlave_Display` now register with SkyrimNet: their static `arg` had a blank `value:`, which SkyrimNet rejects as `Static parameter 4 missing 'value' field`. It is now `value: ""`.
-- Fixed: `SkyrimNet_DOM.dll` failed with Error 126 on PCs without Visual Studio. The 0.2.1 zip (and, by matching size, 0.2.0) packed a Debug build importing `MSVCP140D`, `VCRUNTIME140D`, `VCRUNTIME140_1D` and `ucrtbased`. The Release build links the CRT statically and needs no VC++ Redistributable. `make release` now runs `python_scripts/check_release_dll.py` first.
-- Fixed: healing a slave in shock praised them instead of comforting them. `SkyrimNet_DOM_Events.HealSlave` compared `DOM_Mind.mood` to `"shocked"`, but DOM's value is `"shock"`, so `ComfortCareNoHug` never ran.
-
+## [0.3.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.3.0) — since [0.2.1](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1)
 ### Obedience
 - The LLM now knows how obedient a slave is. Final instructions describe each of DOM's moods (love, jealousy, fear, shame and so on) and, for slaves who can refuse, how likely they are to, from trained to defiant.
 - Long-term profiles: well-trained slaves can show as The Devoted, The Professional or The Hollowed.
@@ -23,16 +13,35 @@
 - A finished partnered bath now ends with the `DirectNarration_Optional` line "{washer} stops washing {washed}, both stand up."
 - A slave washing themselves now gets the DirectNarration "{slave} begins to wash body with a rag." from the TargetMenu shower and DOM's spell, replacing "is bathing". When it ends, the `DirectNarration_Optional` line "{slave} stops washing." follows.
 - TargetMenu shower now rolls obedience once, using DOM's roll, as the spell does. A slave busy with an animation shows a notification and no order is narrated.
-- TargetMenu baths ignore orders from the LLM and the menu until the bath ends, so they can't pull the slave out of position. 12 actions that call DOM directly are ineligible while `DOMActionBathing` is set.
-- After a TargetMenu bath, non-player unbound participants are forced back to the default idle, and bath me re-equips what the player was wearing.
+- Fixed: TargetMenu baths ignore orders from the LLM and the menu until the bath ends, so they can't pull the slave out of position. 12 actions that call DOM directly are ineligible while `DOMActionBathing` is set.
+- Fixed: after a TargetMenu bath, non-player unbound participants are forced back to the default idle, and bath me re-equips what the player was wearing.
 - New action `DOMSlave_Wash`: the LLM can have a slave wash themselves or their master.
 
 ### Diary of Mine 8.5.6d
 - **Requires Diary of Mine 8.5.6d or later**, the only version tested against.
-- WebUI shower, bath me, bath you and Pose > Breasts work again (`SkyrimNet_DOM_Menu`): they called functions DOM removed. They now call `Interact_Bathing`, `Interact_BathClient`, `Interact_BathActor`, `DOMDoNPCBathClient`, `DOMDoNPCBathActor` and `DoBreastPresentation`. Out of water, shower follows DOM's own dry-off path.
-- `OnWashSelf` takes DOM's new `abuser` argument, so wash narration fires again with `dom.events.ext2` on.
+- Fixed: WebUI shower, bath me, bath you and Pose > Breasts work again (`SkyrimNet_DOM_Menu`): they called functions DOM removed. They now call `Interact_Bathing`, `Interact_BathClient`, `Interact_BathActor`, `DOMDoNPCBathClient`, `DOMDoNPCBathActor` and `DoBreastPresentation`. Out of water, shower follows DOM's own dry-off path.
+- Fixed: `OnWashSelf` takes DOM's new `abuser` argument, so wash narration fires again with `dom.events.ext2` on.
 - `punishment_reason.json` matches DOM's indices: 28 `refusing to bath`, new 35 `refusing to kiss`, 36 `refusing a bodycheck`, 37 `refusing to shower`, 39 `being a worthless slaver` (alias `being a bad slaver`), 40 `being a useless trainer`. The LLM token lists offer the new reasons.
 - `slave_behaviours.json`: `showering` becomes `bathing`; adds `on_duty_restrained` and `jail_restrained`.
+
+### Skyrim VR (untested)
+- DOM's menus open on VR through SkyrimNet_SexLab's Magelight controller chord (`sexlab.editor.vr_*`, default Grip + A). There is no DOM UI code.
+- `GestureWatch::Install` logs `(VR: unverified)` on VR. Its `AddTask` from the `NotifyAnimationGraph` thunk is an open VR-hang audit item (KNOWLEDGEBASE "DOM on Skyrim VR").
+
+### Bug Fixes
+- Fixed: `DOMSlave_StandHere`, `DOMSlave_DOMSlaveFollow`, and `DOMSlave_Display` now register with SkyrimNet: their static `arg` had a blank `value:`, which SkyrimNet rejects as `Static parameter 4 missing 'value' field`. It is now `value: ""`.
+- Fixed: `SkyrimNet_DOM.dll` failed with Error 126 on PCs without Visual Studio. The 0.2.1 zip (and, by matching size, 0.2.0) packed a Debug build importing `MSVCP140D`, `VCRUNTIME140D`, `VCRUNTIME140_1D` and `ucrtbased`. The Release build links the CRT statically and needs no VC++ Redistributable. `make release` now runs `python_scripts/check_release_dll.py` first.
+- Fixed: healing a slave in shock praised them instead of comforting them. `SkyrimNet_DOM_Events.HealSlave` compared `DOM_Mind.mood` to `"shocked"`, but DOM's value is `"shock"`, so `ComfortCareNoHug` never ran.
+
+### Install
+- **Requires SkyrimNet_SexLab 0.37.2 or later.** That release has the Magelight VR chord (`sexlab.editor.vr_*`) and `SkyrimNet_SexLab_Handler_DOM` reading arousal under DOM 8.5.6d (`PRISM_Sensuality`, `MOD_SocialBoldness`).
+- **Requires Magelight UI 0.30.1 or later**, the host for SkyrimNet_SexLab's overlay. See [docs/players/requirements.md](docs/players/requirements.md).
+
+### Build
+- `SKSE_Source` builds on the vendored `lib/CommonLibSSE-NG` (MinLL/CommonLibVR, same pin as SkyrimNet_SexLab) with the static CRT; the `commonlibsse-ng-fork` vcpkg port is removed. A clean clone now builds (`cmake/x64-windows-static.cmake`).
+- `make release` writes `versions/SkyrimNet DOM ${VERSION}.zip` and names the FOMOD "SkyrimNet DOM"; the malformed FOMOD description is fixed.
+- `make release` stops at `check_dll` if `SKSE/Plugins/SkyrimNet_DOM.dll` links the Debug C++ runtime.
+- Bundle `manifest.json` and settings `config/plugins/SkyrimNet_DOM/manifest.yaml` version 0.3.0. The DLL's embedded file version is still 0.2.0.
 
 ## [0.2.1](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1) — since [0.2.0](https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.0)
 

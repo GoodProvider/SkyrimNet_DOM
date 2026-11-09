@@ -12,10 +12,10 @@
     <project>SkyrimNet_DOM</project>
     <summary>Bridge mod between SkyrimNet (LLM) and Diary of Mine (with SkyrimNet_SexLab).</summary>
     <repository_root>c:\Skyrim\dev\mods\SkyrimNet_DOM</repository_root>
-    <updated>2026-10-26</updated>
-    <base_tag>0.2.0</base_tag>
-    <next_version>0.2.1</next_version>
-    <version_status>Makefile / fomod / plugin manifests VERSION=0.2.1; zip versions/SkyrimNet_DOM 0.2.1.zip (no .pdb); git tag 0.2.1 and GitHub Release</version_status>
+    <updated>2026-11-08</updated>
+    <base_tag>0.2.1</base_tag>
+    <next_version>0.3.0</next_version>
+    <version_status>Makefile / fomod / plugin manifests VERSION=0.3.0; zip versions/SkyrimNet DOM 0.3.0.zip (no .pdb), local commit only; git tag 0.3.0 and GitHub Release not done. SkyrimNet_DOM.dll file version still 0.2.0</version_status>
     <related_artifacts>
       <artifact role="release rules / persona">release-guide.xml</artifact>
       <artifact role="agent router">llms.txt</artifact>
@@ -63,6 +63,7 @@
     <note>2026-09-14: 0.1.0 ship (base_tag 0.0.6). Zip versions/SkyrimNet_DOM 0.1.0.zip. Tag 0.1.0 and GitHub Release.</note>
     <note>2026-10-24: 0.2.0 release (base_tag 0.1.0): gestures/poses, WebUI DOM menus + DOM Info, Injury Engine torture/heal, pain-punishment 20 s cap. Open: commit when asked → git tag 0.2.0 → GitHub Release.</note>
     <note>2026-10-26: 0.2.1 ship (base_tag 0.2.0): item YAMLs ship in goodprovider.dom/items/ (config/items removed); Leash Framework follow fix; make release excludes *.pdb. Tag 0.2.1 + GitHub Release. Known: tag 0.2.0 points at 6abb060 (the 0.1.0 commit); left as is by maintainer choice.</note>
+    <note>2026-11-08: 0.3.0 prepared (base_tag 0.2.1): LLM obedience, staged bath narration, DOMSlave_Wash, Diary of Mine 8.5.6d minimum, vendored CommonLib. Zip and local commit only. Requires SkyrimNet_SexLab 0.37.2, which is unreleased: publish it first (commit 242e184d, Handler_DOM under DOM 8.5.6d). Open: push → git tag 0.3.0 → GitHub Release. SkyrimNet_DOM.dll shipped unchanged by maintainer choice, so its file version still reads 0.2.0.</note>
   </status>
 
   <conventions>

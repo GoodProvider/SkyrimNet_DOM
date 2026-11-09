@@ -1,17 +1,8 @@
-https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1
+https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.3.0
 
-Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and heal features need Injury Engine.
+Requires SkyrimNet 0.25.0+ (Beta 25), SkyrimNet_SexLab 0.37.2+ and Magelight UI 0.30.1+. Torture and heal features need Injury Engine.
 
-## Unreleased
-
-### Skyrim VR
-- DOM's menus open on VR with SkyrimNet_SexLab's controller button (Grip + A by default; needs the SexLab update that adds it). Untested in a headset.
-
-### Bug Fixes
-- NPC slaves can now act on "stand here", "follow me", and "display yourself" through the AI. These three actions failed to load and logged `Failed to register action` in SkyrimNet.log.
-- Fixed: `SkyrimNet_DOM.dll` failed to load (Error 126) on PCs without Visual Studio
-- Fixed: healing a slave in shock praised them instead of comforting them
-
+## 0.3.0
 ### Obedience
 - The AI now knows how obedient a slave is, from trained to defiant, and how each mood feels
 - Well-trained slaves can show as The Devoted, The Professional or The Hollowed
@@ -23,9 +14,10 @@ Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and h
 - From the WebUI, the bath waits for the current line to finish before moving to the next stage
 - Baths started from DOM's own menu are described too, for slaves only
 - The end of a finished bath is now described
-- A slave washing themselves is now described when they start and when they stop, from the WebUI or DOM's spell
-- The WebUI shower is no longer refused more often than DOM's spell, and a slave who is busy now shows a message instead of being ordered to wash
-- Fixed: during bath me and bath you, the AI could give the slave other orders that moved them out of position
+- A slave washing themselves is now described at start and stop, from the WebUI or DOM's spell
+- The WebUI shower is no longer refused more often than DOM's spell
+- A slave busy with an animation now shows a message instead of being ordered to wash
+- Fixed: during bath me and bath you, AI orders could move the slave out of position
 - Fixed: the slave could stay in the washing animation after a bath
 - Fixed: the player stayed undressed after bath me
 - The AI can now have a slave wash themselves or their master
@@ -35,8 +27,20 @@ Requires SkyrimNet 0.25.0+ (Beta 25) and SkyrimNet_SexLab 0.36.5+. Torture and h
 - Fixed: shower, bath me, bath you, and Pose > Breasts did nothing in the WebUI
 - Showering only works in water; out of water the slave dries off instead, as in DOM's own menu
 - Fixed: wash narration was lost with the extended DOM events option on
-- Punishment reasons match DOM's again, with new ones for refusing a kiss, refusing a body check, and being a useless trainer
+- Punishment reasons match DOM's again; new: refusing a kiss or body check, useless trainer
 - The AI now knows when a slave is bathing or restrained on duty or in jail
+
+### Skyrim VR (untested)
+- DOM's menus open on VR with SexLab's controller button (Grip + A by default; SexLab 0.37.2+)
+
+### Bug Fixes
+- Fixed: the AI's "stand here", "follow me" and "display yourself" actions failed to load
+- Fixed: `SkyrimNet_DOM.dll` failed to load (Error 126) on PCs without Visual Studio
+- Fixed: healing a slave in shock praised them instead of comforting them
+
+### Install
+- Needs SkyrimNet_SexLab 0.37.2 or later
+- Needs Magelight UI 0.30.1 or later, which hosts the SexLab menus DOM uses
 
 ## 0.2.1
 

@@ -26,8 +26,8 @@ https://github.com/GoodProvider/SkyrimNet_DOM/releases
 
 # Required
 - SkyrimNet (dependencies)
-- SkyrimNet Sexlab (dependencies) 
-- Magelight UI 0.30.1+ (UI host for SkyrimNet Sexlab's overlay; needs SkyrimNet Sexlab newer than 0.36.6). On Skyrim VR, DOM's menus open with SexLab's controller chord (Grip + A by default).
+- SkyrimNet Sexlab 0.37.2+ (dependencies) 
+- Magelight UI 0.30.1+ (UI host for SkyrimNet Sexlab's overlay). On Skyrim VR, DOM's menus open with SexLab's controller chord (Grip + A by default).
 - Injury Engine (dependencies) 
 
 # Recommanded

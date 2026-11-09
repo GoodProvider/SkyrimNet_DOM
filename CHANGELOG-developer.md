@@ -1,18 +1,8 @@
-https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.2.1
+https://github.com/GoodProvider/SkyrimNet_DOM/releases/tag/0.3.0
 
-Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or later.
+Requires SkyrimNet 0.25.0 (Beta 25) or later, SkyrimNet_SexLab 0.37.2 or later and Magelight UI 0.30.1 or later.
 
-## Unreleased
-
-### Skyrim VR
-- No UI code in DOM: its overlays open on VR with SexLab's Magelight controller chord (`UiEngine::BindVrChord`, `sexlab.editor.vr_*`).
-- `GestureWatch::Install` logs `(VR: unverified)` on VR. Its thunk's `AddTask` (it can run on the main thread) is an open VR-hang audit item.
-
-### Bug Fixes
-- `actions/DOMSlave_StandHere.yaml`, `DOMSlave_DOMSlaveFollow.yaml`, `DOMSlave_Display.yaml`: static `arg` changed from blank `value:` (YAML null) to `value: ""`. SkyrimNet refused all three at `ActionLibrary.cpp:599` (`Static parameter 4 missing 'value' field`), then `CustomActionManager.cpp:214`.
-- Fixed: 0.2.1 (and, by matching size, 0.2.0) shipped a Debug `SkyrimNet_DOM.dll`, which fails with Error 126 without Visual Studio. The Release build uses the static CRT, and `make release` now refuses a Debug DLL.
-- `SkyrimNet_DOM_Events.HealSlave`: tests `DOM_Mind.mood == "shock"`, not `"shocked"`, which is what only `DOM_Core.GetMood` returns. `ComfortCareNoHug` could not run before.
-
+## 0.3.0
 ### Obedience
 - `SkyrimNet_DOM_Obedience`: new `RefusePercent`, `RefuseLevel`, `AddLikelyRefusal`, `FillObedience` (no `WillObey` call) and `PassDomRoll`. Level thresholds 15/40/70 on the `generic` kind; `likely_refuses` lists `sex`, `respectful`, `naked`, `pose` at 50% or more.
 - `SkyrimNet_DOM_Decorators.FillSlaveFields`: writes `obedience.*`; `is_obedient` is kept.
@@ -41,6 +31,25 @@ Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or late
 - `punishment_reason.json`, `dom_punishment_reason.prompt`, `DOMSlave_AddPunishmentReason.yaml`: indices 28, 35-37, 39, 40 follow DOM's `PunishmentReasons.json`; index 20 stays because DOM's code still uses it.
 - `slave_behaviours.json`: `bathing`, `on_duty_restrained`, `jail_restrained`. `tied up` is only a `GetBehaviourString()` label; the behaviour value is `tied`.
 - `Headers_Source/DOM` (local stubs): stale members removed and new names added. SkyrimNet_SexLab builds against them and needs its matching `Handler_DOM` change.
+
+### Skyrim VR (untested)
+- No UI code in DOM: its overlays open on VR with SexLab's Magelight controller chord (`UiEngine::BindVrChord`, `sexlab.editor.vr_*`).
+- `GestureWatch::Install` logs `(VR: unverified)` on VR. Its thunk's `AddTask` (it can run on the main thread) is an open VR-hang audit item.
+
+### Bug Fixes
+- Fixed: `actions/DOMSlave_StandHere.yaml`, `DOMSlave_DOMSlaveFollow.yaml`, `DOMSlave_Display.yaml`: static `arg` changed from blank `value:` (YAML null) to `value: ""`. SkyrimNet refused all three at `ActionLibrary.cpp:599` (`Static parameter 4 missing 'value' field`), then `CustomActionManager.cpp:214`.
+- Fixed: 0.2.1 (and, by matching size, 0.2.0) shipped a Debug `SkyrimNet_DOM.dll`, which fails with Error 126 without Visual Studio. The Release build uses the static CRT, and `make release` now refuses a Debug DLL.
+- Fixed: `SkyrimNet_DOM_Events.HealSlave` tests `DOM_Mind.mood == "shock"`, not `"shocked"`, which is what only `DOM_Core.GetMood` returns. `ComfortCareNoHug` could not run before.
+
+### Install
+- SkyrimNet_SexLab 0.37.2 or later is required: it has the VR chord and the `Handler_DOM` that reads arousal under DOM 8.5.6d
+- Magelight UI 0.30.1 or later is required to host SexLab's overlay
+
+### Build
+- `SKSE_Source` now uses the vendored CommonLib with the static CRT, so a clean clone builds
+- The zip and FOMOD are named "SkyrimNet DOM"; the malformed FOMOD description is fixed
+- `make release` refuses a Debug `SkyrimNet_DOM.dll`
+- Manifests at 0.3.0; the DLL's embedded file version is still 0.2.0
 
 ## 0.2.1
 

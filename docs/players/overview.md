@@ -16,7 +16,7 @@ Open the SkyrimNet SexLab overlay hotkey (`\` by default). There is no separate 
 - **During a sex scene** the TargetMenu switches to Scene options (stop / stage / position / animation). DOM still offers **abuse** speech there: live praise, scold, insult, flatter, threaten, promise, and comfort (care / guilt / threat / insult). **Comfort → pain** opens slap face / slap ass / twist nipple / slap breasts / custom and narrates `*{player} comforts {slave} by {gesture}*` (asterisks mark narrative for the LLM). Punish, upkeeping, and comfort sex/rape stay Actor-only.
 - TargetMenu execute closes the overlay so DOM packages can run. DOM Info and the live punish/praise choosers stay open. Each order is Direct Narrated as the player ordering the target (or “the slaves”).
 
-Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_SexLab’s overlay, which runs on Magelight UI 0.30.1+ (SkyrimNet_SexLab newer than 0.36.6).
+Contract: [../../manifest/DOM.md](../../manifest/DOM.md). Requires SkyrimNet_SexLab’s overlay, which runs on Magelight UI 0.30.1+ (SkyrimNet_SexLab 0.37.2+).
 
 ## What it does
 
