@@ -151,6 +151,7 @@ Function FillSlaveFields(Int actor_obj, Actor akActor, DOM_Actor slave, DOM_Mind
     endif
     JMap.setStr(actor_obj, "owner", owner)
     JMap.setInt(actor_obj, "is_obedient", mind.isObedient() as Int)
+    SkyrimNet_DOM_Obedience.FillObedience(actor_obj, mind)
     JMap.setInt(actor_obj, "is_trainer", slave.is_trainer as Int)
     String title = slave.getTitle()
     if title != ""

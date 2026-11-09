@@ -9,6 +9,11 @@
 ### Bug Fixes
 - `DOMSlave_StandHere`, `DOMSlave_DOMSlaveFollow`, and `DOMSlave_Display` now register with SkyrimNet: their static `arg` had a blank `value:`, which SkyrimNet rejects as `Static parameter 4 missing 'value' field`. It is now `value: ""`.
 
+### Obedience
+- The LLM now knows how obedient a slave is. Final instructions describe each of DOM's moods (love, jealousy, fear, shame and so on) and, for slaves who can refuse, how likely they are to, from trained to defiant.
+- Long-term profiles: well-trained slaves can show as The Devoted, The Professional or The Hollowed.
+- When the LLM has a slave obey an order, the order now goes through. Before, Diary of Mine could roll again and refuse just after the slave agreed. Orders from the TargetMenu still roll.
+
 ### Baths
 - TargetMenu bath me and bath you now run through `SkyrimNet_DOM_Bath.Drive`. Each of the three animation stages gets its own DirectNarration and holds until SkyrimNet's speech queue is empty.
 - Baths started from DOM's own menu are narrated too: DirectNarration for the first stage, `DirectNarration_Optional` for the next two. A partnered bath no longer also narrates "is bathing".

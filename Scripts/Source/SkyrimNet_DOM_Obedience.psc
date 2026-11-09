@@ -105,6 +105,107 @@ Function RegisterRefusePunishment(Actor superior, Actor slave, String actionDesc
     SkyrimNetApi.RegisterEvent("Reason to Punish", msg, slave, superior)
 EndFunction
 
+; LLM orders: the LLM already chose to obey, but DOM's action handlers (e.g. SetShouldBeRespectful) roll WillObey
+; again. Inside the timer WillObey takes its IsObedient branch. 10 is what DOM sets after a successful roll.
+Function PassDomRoll(Actor slave) global
+    if !slave
+        return
+    endif
+    DOM_Actor da = SkyrimNet_DOM_API.GetSlave("SkyrimNet_DOM_Obedience", "PassDomRoll", slave, false)
+    if da && da.mind
+        da.mind.SetObedientTimer(10)
+        Trace("PassDomRoll", GetDisplayName(slave)+" obedient timer armed")
+    endif
+EndFunction
+
+; Estimated percent chance DOM_Mind.WillObey refuses this kind of order, -1 if unknown. Must stay free of side
+; effects, so it never calls WillObey. Ignores the "remembers the punishment/warning" second chances.
+Int Function RefusePercent(DOM_Mind mind, String kind) global
+    if !mind || !NativeReady()
+        return -1
+    endif
+    int ifacet = SkyrimNet_DOM_Native.KindFacet(kind)
+    int itraining = SkyrimNet_DOM_Native.KindTraining(kind)
+    Float[] facets
+    int idx
+    ; Same indexing as WillObey, which is not symmetric between the two arrays.
+    if ifacet > 0
+        facets = mind.HEXACO_InverseFacets
+        idx = ifacet - 1
+    else
+        facets = mind.HEXACO_Facets
+        idx = -ifacet + 1
+    endif
+    Float[] training = mind.TRAINING_Stats
+    if !facets || !training || idx < 0 || idx >= facets.length || itraining < 0 || itraining >= training.length
+        return -1
+    endif
+    Float chance = facets[idx] * (1.0 - training[itraining] / 100.0)
+    if chance < 0.0
+        chance = 0.0
+    elseif chance > 1.0
+        chance = 1.0
+    endif
+    Float moodChance = chance * mind.MoodReactionFactor()
+    if moodChance < 0.0
+        moodChance = 0.0
+    elseif moodChance > 1.0
+        moodChance = 1.0
+    endif
+    Float refuse = chance + (1.0 - chance) * moodChance
+    return (refuse * 100.0 + 0.5) as Int
+EndFunction
+
+String Function RefuseLevel(Int percent) global
+    if percent < 0
+        return "unknown"
+    elseif percent < 15
+        return "trained"
+    elseif percent < 40
+        return "reluctant"
+    elseif percent < 70
+        return "resistant"
+    endif
+    return "defiant"
+EndFunction
+
+String Function AddLikelyRefusal(String list, DOM_Mind mind, String kind, String label) global
+    if RefusePercent(mind, kind) < 50
+        return list
+    endif
+    if list == ""
+        return label
+    endif
+    return list+", "+label
+EndFunction
+
+; Writes actor_obj.obedience for the final instructions.
+; Timer-gated moods override both IsObedient and MoodReactionFactor, so a factor above 0 means IsObedient only
+; reflects a recent obeyed order. Those moods report their underlying odds, or the prompt would turn every order
+; the LLM obeys into standing compliance.
+Function FillObedience(Int actor_obj, DOM_Mind mind) global
+    Float moodFactor = mind.MoodReactionFactor()
+    Bool alwaysObeys = mind.IsObedient() && moodFactor <= 0.0
+    Int percent = 0
+    String level = "obedient"
+    String likely = ""
+    if !alwaysObeys
+        percent = RefusePercent(mind, "generic")
+        level = RefuseLevel(percent)
+        likely = AddLikelyRefusal(likely, mind, "sex", "sexual orders")
+        likely = AddLikelyRefusal(likely, mind, "respectful", "showing respect")
+        likely = AddLikelyRefusal(likely, mind, "naked", "undressing")
+        likely = AddLikelyRefusal(likely, mind, "pose", "posing")
+    endif
+    Int obedience = JMap.object()
+    JMap.setObj(actor_obj, "obedience", obedience)
+    JMap.setStr(obedience, "mood", mind.mood)
+    JMap.setInt(obedience, "always_obeys", alwaysObeys as Int)
+    JMap.setStr(obedience, "level", level)
+    JMap.setInt(obedience, "refuse_pct", percent)
+    JMap.setStr(obedience, "likely_refuses", likely)
+EndFunction
+
 ; First method/tag token; skip style/direction leftovers from older concatenations.
 String Function FirstSexToken(String raw) global
     if raw == ""

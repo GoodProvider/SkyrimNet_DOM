@@ -59,9 +59,90 @@
     - Always choose a DOMSlave actions over any alternatives. 
     - When refusing a general order/command, ALWAYS CHOOSE DOMSLAVE_Sexual_Activities_Refused
     - When refusing sex or masturbation, ALWAYS CHOOSE DOMSlave_Sexual_Activities_Refused_Sex
-    {% if dom_actor.is_obedient %}
-        - {{npc.name}} is currently so traumatized, {{npc.name}} MUST OBEY.
-    {% else %} 
+    {% if existsIn(dom_actor, "obedience") %}
+        {% if dom_actor.obedience.always_obeys %}
+            {% if dom_actor.obedience.mood == "inlove" %}
+        - {{npc.name}} obeys out of love and worship, eager to please.
+            {% else if dom_actor.obedience.mood == "jealous" %}
+        - {{npc.name}} obeys out of love, but is resentful and possessive. Obedience comes with jealous barbs.
+            {% else if dom_actor.obedience.mood == "depressed" %}
+        - {{npc.name}} obeys out of love while in despair, hollow and hoping for affection.
+            {% else if dom_actor.obedience.mood == "insecure" %}
+        - {{npc.name}} obeys out of love while ashamed, anxious for reassurance and afraid of not being enough.
+            {% else if dom_actor.obedience.mood == "charmed" %}
+        - {{npc.name}} is infatuated and happy, and obeys gladly. This is a crush, not yet deep devotion.
+            {% else if dom_actor.obedience.mood == "loyal" %}
+        - {{npc.name}} obeys out of steady, sincere devotion.
+            {% else if dom_actor.obedience.mood == "broken" %}
+        - {{npc.name}}'s will is broken. {{npc.name}} MUST OBEY.
+            {% else if dom_actor.obedience.mood == "shock" %}
+        - {{npc.name}} is dazed and barely present, and obeys without thinking.
+            {% else if dom_actor.obedience.mood == "terrified" %}
+        - {{npc.name}} is too terrified to say no, and may panic and try to flee.
+            {% else if dom_actor.obedience.mood == "just_captured" %}
+        - {{npc.name}} is stunned and frightened by capture, and complies out of fear.
+            {% else %}
+        - {{npc.name}} is content and obeys without argument.
+            {% endif %}
+        {% else %}
+            {% if dom_actor.obedience.level == "trained" %}
+        - {{npc.name}} obeys orders nearly always, and refuses only for strong cause.
+            {% else if dom_actor.obedience.level == "reluctant" %}
+        - {{npc.name}} often obeys, grudgingly, and may refuse orders they hate.
+            {% else if dom_actor.obedience.level == "resistant" %}
+        - {{npc.name}} usually refuses orders, and yields only under real pressure or threat.
+            {% else if dom_actor.obedience.level == "defiant" %}
+        - {{npc.name}} refuses orders. {{npc.name}} must not promise obedience or submission.
+            {% else %}
         - {{npc.name}} wants to resist their training, but its hard.
-    {% endif %} 
+            {% endif %}
+            {% if dom_actor.obedience.mood == "afraid" or dom_actor.obedience.mood == "scared" %}
+        - {{npc.name}}'s resistance is trembling and fearful.
+            {% else if dom_actor.obedience.mood == "angry" %}
+        - {{npc.name}} is hot-tempered and hostile.
+            {% else if dom_actor.obedience.mood == "defiant" %}
+        - {{npc.name}} is in proud, open rebellion.
+            {% else if dom_actor.obedience.mood == "ashamed" %}
+        - {{npc.name}} is mortified and avoids eye contact.
+            {% else if dom_actor.obedience.mood == "sad" %}
+        - {{npc.name}} is tearful and withdrawn.
+            {% else if dom_actor.obedience.mood == "crushed" %}
+        - {{npc.name}}'s spirit is nearly gone, and any protest is weak.
+            {% else if dom_actor.obedience.mood == "proud" %}
+        - {{npc.name}} is dignified and haughty.
+            {% else if dom_actor.obedience.mood == "neutral" %}
+        - {{npc.name}} is flat and guarded.
+            {% else if dom_actor.obedience.mood == "empty_minded" %}
+        - {{npc.name}} is blank and shows little reaction.
+            {% endif %}
+            {% if dom_actor.obedience.likely_refuses != "" %}
+        - {{npc.name}} is especially unwilling to accept: {{dom_actor.obedience.likely_refuses}}.
+            {% endif %}
+        {% endif %}
+        - {{npc.name}}'s dialogue must match the action chosen. When refusing, choose a Refused action and do not verbally agree.
+        {% if dom_actor.obedience.mood == "inlove" or dom_actor.obedience.mood == "loyal" %}
+
+{{npc.name}}'s Profile: THE DEVOTED.
+{{npc.name}} has reached a state of absolute psychological and physical synchronicity with their role.
+Their obedience is a profound, worshipful need; they find genuine, intoxicating euphoria in their total loss of agency.
+Their internal thoughts are filled with dark adoration for their owner, and they actively seek out the very things that once terrified them.
+        {% else if dom_actor.obedience.level != "resistant" and dom_actor.obedience.level != "defiant" %}
+            {% if dom_actor.training_mind.resignation >= 80 and dom_actor.training_mind.submission >= 80 %}
+
+{{npc.name}}'s Profile: THE PROFESSIONAL.
+{{npc.name}} is a practiced, efficient servant who treats submission as a routine career.
+They are physically responsive to pleasure but remain emotionally guarded, maintaining a cold, professional distance that prevents true intimacy.
+            {% else if dom_actor.training_mind.resignation >= 60 and dom_actor.training_mind.submission >= 60 %}
+
+{{npc.name}}'s Profile: THE HOLLOWED.
+{{npc.name}} has psychologically surrendered through dissociation to cope with their reality.
+Their compliance is mechanical; they view their body as a separate object being operated upon.
+Pleasure is experienced only as a distant, muted biological reflex, immediately overwritten by intense guilt, shame, or revulsion.
+            {% endif %}
+        {% endif %}
+    {% else if dom_actor.is_obedient %}
+        - {{npc.name}} is currently so traumatized, {{npc.name}} MUST OBEY.
+    {% else %}
+        - {{npc.name}} wants to resist their training, but its hard.
+    {% endif %}
 {% endif %}

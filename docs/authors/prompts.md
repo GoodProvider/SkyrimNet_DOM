@@ -70,7 +70,7 @@ Do not dump internal-only state into external dialogue modes.
 
 ## user_final_instructions
 
-`0551_dom_instructions.prompt` biases action selection for **slaves** (`DOMPlayerSlaveFaction` / `is_slave`). Prefer DOMSlave actions, gag/obedience context, etc.
+`0551_dom_instructions.prompt` biases action selection for **slaves** (`DOMPlayerSlaveFaction` / `is_slave`). Prefer DOMSlave actions, gag context, etc. Obedience comes from `obedience.*`: one line per always-obedient mood, or a refusal level (`trained` to `defiant`) plus a mood line, then a long-term profile (`THE DEVOTED`, `THE PROFESSIONAL`, `THE HOLLOWED`) when one applies. The LLM's choice decides LLM orders, so this text sets how often slaves refuse.
 
 Because each file is isolated:
 

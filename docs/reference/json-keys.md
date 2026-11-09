@@ -29,7 +29,7 @@ Paused actor JSON: Events `SaveActorInfo` under `SKSE/Plugins/SkyrimNet_DOM/acto
 
 ### Slave (`is_slave`)
 
-`owner`, `is_obedient`, `is_trainer`, `title`, `training_mind`, `training_sex`, `punishment`, love/devoted/ashamed, restrained/bound/jailed, `orders.*`, `is_walking_on_four`, `is_respectful`, `family_history_rank`, `promise_rank`, `promise_oath`, `experience.*`, `trauma_days`, `love.*`, `loyal.*`.
+`owner`, `is_obedient`, `obedience.*` (`mood`, `always_obeys`, `level`: `obedient`/`trained`/`reluctant`/`resistant`/`defiant`/`unknown`, `refuse_pct`, `likely_refuses`; can be absent in older saved JSON, so check `existsIn`), `is_trainer`, `title`, `training_mind`, `training_sex`, `punishment`, love/devoted/ashamed, restrained/bound/jailed, `orders.*`, `is_walking_on_four`, `is_respectful`, `family_history_rank`, `promise_rank`, `promise_oath`, `experience.*`, `trauma_days`, `love.*`, `loyal.*`.
 
 Prompts must not read slaver-only or slave-only keys without the matching gate (missing keys throw).
 

@@ -44,7 +44,12 @@ EndFunction
 
 Int Function GateSlave(Actor superior, Actor slave, String kind, String actionDesc, Bool rollObedience=false)
     ; LLM chose the action: no WillObey roll. Player menu clicks pass rollObedience=true.
-    return SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, rollObedience)
+    Int gate = SkyrimNet_DOM_Obedience.TryOrder(superior, slave, kind, actionDesc, rollObedience)
+    ; Here, not in TryOrder: Menu's shower passes false but relies on DOM's own roll.
+    if !rollObedience && gate != 0
+        SkyrimNet_DOM_Obedience.PassDomRoll(slave)
+    endif
+    return gate
 EndFunction
 
 String Function SexOrderDesc(Actor ordered, Actor superior, Actor speaker, Actor target, String method, Actor participate=None)

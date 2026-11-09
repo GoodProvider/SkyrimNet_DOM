@@ -11,6 +11,13 @@ Requires SkyrimNet 0.25.0 (Beta 25) or later and SkyrimNet_SexLab 0.36.5 or late
 ### Bug Fixes
 - `actions/DOMSlave_StandHere.yaml`, `DOMSlave_DOMSlaveFollow.yaml`, `DOMSlave_Display.yaml`: static `arg` changed from blank `value:` (YAML null) to `value: ""`. SkyrimNet refused all three at `ActionLibrary.cpp:599` (`Static parameter 4 missing 'value' field`), then `CustomActionManager.cpp:214`.
 
+### Obedience
+- `SkyrimNet_DOM_Obedience`: new `RefusePercent`, `RefuseLevel`, `AddLikelyRefusal`, `FillObedience` (no `WillObey` call) and `PassDomRoll`. Level thresholds 15/40/70 on the `generic` kind; `likely_refuses` lists `sex`, `respectful`, `naked`, `pose` at 50% or more.
+- `SkyrimNet_DOM_Decorators.FillSlaveFields`: writes `obedience.*`; `is_obedient` is kept.
+- `SkyrimNet_DOM_Actions.GateSlave`: `PassDomRoll` when `rollObedience=false` and `gate != 0`, because DOM handlers such as `SetShouldBeRespectful` roll `WillObey` again.
+- `0551_dom_instructions.prompt`: `obedience.*` branches for all 22 moods, three long-term profiles, with the old `is_obedient` branch as the fallback for older saved JSON.
+- `Headers_Source/DOM/DOM_Mind.psc` (local stub): added `MoodReactionFactor`, `HEXACO_Facets`, `HEXACO_InverseFacets`, `TRAINING_Stats`.
+
 ### Baths
 - New `SkyrimNet_DOM_Bath` (Hidden, global; no ESP change). `Drive` reimplements `DOM_Interactor.Interact_BathClient` / `Interact_BathActor` with `WaitForQuiet` between stages (`GetSpeechQueueSize`, minimum DOM's `8.0 + perfectionism`, 12s no-speech grace, 60s cap). Unlike DOM, it restores the speaker's follower pose instead of the target's twice.
 - `SkyrimNet_DOM_Menu.TM_DoNamed`: `bath_me` / `bath_you` call `Drive`, after `FinishOrder` because `Drive` blocks.
